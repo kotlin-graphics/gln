@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="gln" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$" external.system.id="GRADLE" external.system.module.group="com.github.kotlin-graphics" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="3" platform="JVM 1.6" useProjectSettings="false">
+        <compilerSettings />
+        <compilerArguments>
+          <option name="destination" value="$MODULE_DIR$/build/classes/kotlin/main" />
+          <option name="noStdlib" value="true" />
+          <option name="noReflect" value="true" />
+          <option name="moduleName" value="gln" />
+          <option name="addCompilerBuiltIns" value="true" />
+          <option name="loadBuiltInsFromDependencies" value="true" />
+          <option name="languageVersion" value="1.2" />
+          <option name="apiVersion" value="1.2" />
+          <option name="pluginOptions">
+            <array />
+          </option>
+          <option name="pluginClasspaths">
+            <array />
+          </option>
+          <option name="version" value="true" />
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/out/production/classes" />
+    <output-test url="file://$MODULE_DIR$/out/test/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/kotlin" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.kotlin-graphics:glm:09f8500f939187d29c28cc082a392af75c26dc4f" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.kotlin-graphics:kotlin-unsigned:2dd9c3c02957cc21fc9da154ad50646359e572ad" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.0-beta-31" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-openal:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-opengl:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl-stb:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.lwjgl:lwjgl:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.github.kotlin-graphics:glm:09f8500f939187d29c28cc082a392af75c26dc4f" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.github.kotlin-graphics:kotlin-unsigned:2dd9c3c02957cc21fc9da154ad50646359e572ad" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.0-beta-31" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-openal:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-opengl:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-opengl:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl-stb:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.lwjgl:lwjgl:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.github.kotlin-graphics:glm:09f8500f939187d29c28cc082a392af75c26dc4f" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.github.elect86:kotlintest:43281b7e1b" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.github.kotlin-graphics:kotlin-unsigned:2dd9c3c02957cc21fc9da154ad50646359e572ad" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.sksamuel.koors:koors:0.90.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.2-M1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.0-beta-31" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-opengl:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.reflections:reflections:0.9.10" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.guava:guava:18.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-core:2.7.11" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.bytebuddy:byte-buddy:1.6.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.bytebuddy:byte-buddy-agent:1.6.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:2.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.javassist:javassist:3.18.2-GA" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.findbugs:annotations:2.0.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-glfw:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-jemalloc:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-openal:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-opengl:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl-stb:3.1.2-SNAPSHOT:natives-windows" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.lwjgl:lwjgl:3.1.2-SNAPSHOT:natives-windows" level="project" />
+  </component>
+</module>
