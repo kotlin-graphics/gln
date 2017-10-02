@@ -222,6 +222,12 @@ object Texture2d {
     inline fun storage(levels: Int, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, levels, internalFormat, size.x, size.y)
     inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Vec3i) = GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, levels, internalFormat.i, size.x, size.y)
 
+    inline fun compressedSubImage(level: Int, size: Vec3i, format: gl.InternalFormat, data: ByteBuffer) =
+            compressedSubImage(level, 0, 0, size.x, size.y, format.i, data)
+
+    inline fun compressedSubImage(level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: Int, data: ByteBuffer) =
+            GL13.nglCompressedTexSubImage2D(GL11.GL_TEXTURE_2D, level, xOffset, yOffset, width, height, format, data.capacity(), memAddress0(data) + data.position())
+
     var baseLevel = 0
         set(value) {
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, value)
@@ -353,6 +359,7 @@ object Textures {
 
     inline fun image1d(level: Int, internalFormat: Int, width: Int, format: Int, type: Int, pixels: ByteBuffer) =
             GL11.nglTexImage1D(target, level, internalFormat, width, 0, format, type, memAddress0(pixels) + pixels.position())
+
     inline fun image2d(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) =
             GL11.nglTexImage2D(target, level, internalFormat, width, height, 0, format, type, memAddress0(pixels) + pixels.position())
 
