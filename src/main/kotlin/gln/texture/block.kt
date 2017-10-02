@@ -3,6 +3,7 @@ package gln.texture
 import gli_.gl
 import glm_.BYTES
 import glm_.vec2.Vec2i
+import glm_.vec3.Vec3i
 import gln.buf
 import gln.bufAd
 import gln.get
@@ -219,7 +220,7 @@ object Texture2d {
 
     inline fun storage(internalFormat: Int, size: Vec2i) = storage(1, internalFormat, size)
     inline fun storage(levels: Int, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, levels, internalFormat, size.x, size.y)
-    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Vec2i) = GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, levels, internalFormat.i, size.x, size.y)
+    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Vec3i) = GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, levels, internalFormat.i, size.x, size.y)
 
     var baseLevel = 0
         set(value) {
