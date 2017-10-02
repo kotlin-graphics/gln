@@ -1,5 +1,7 @@
 package gln.texture
 
+import gli_.gl
+import glm_.BYTES
 import glm_.vec2.Vec2i
 import gln.buf
 import gln.bufAd
@@ -217,6 +219,7 @@ object Texture2d {
 
     inline fun storage(internalFormat: Int, size: Vec2i) = storage(1, internalFormat, size)
     inline fun storage(levels: Int, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, levels, internalFormat, size.x, size.y)
+    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Vec2i) = GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, levels, internalFormat.i, size.x, size.y)
 
     var baseLevel = 0
         set(value) {
@@ -230,9 +233,14 @@ object Texture2d {
         }
     var levels = 0..1_000
         set(value) {
-            GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL12.GL_TEXTURE_BASE_LEVEL, value.first)
-            GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL12.GL_TEXTURE_MAX_LEVEL, value.endInclusive)
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, value.first)
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, value.endInclusive)
             field = value
+        }
+    var swizzles = gl.Swizzles()
+        set(value) {
+            buf.putInt(0, value.r.i).putInt(Int.BYTES, value.g.i).putInt(Int.BYTES * 2, value.b.i).putInt(Int.BYTES * 3, value.a.i)
+            GL11.nglTexParameteriv(GL11.GL_TEXTURE_2D, GL33.GL_TEXTURE_SWIZZLE_RGBA, bufAd)
         }
 
     inline fun levels(base: Int = 0, max: Int = 1_000) {
