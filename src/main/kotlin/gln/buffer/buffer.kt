@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
 import org.lwjgl.system.MemoryUtil.NULL
-import org.lwjgl.system.MemoryUtil.memAddress
 import java.nio.*
 import kotlin.properties.Delegates
 

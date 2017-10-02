@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
 import org.lwjgl.system.MemoryUtil.NULL
-import org.lwjgl.system.MemoryUtil.memAddress
+import org.lwjgl.system.MemoryUtil.memAddress0
 import java.nio.*
 
 
@@ -51,14 +51,14 @@ inline fun initBuffer(target: Int, block: Buffer.() -> Unit): Int {
 }
 
 inline fun initBuffers(buffers: IntBuffer, block: Buffers.() -> Unit) {
-    GL15.glGenBuffers(buffers)
+    GL15.nglGenBuffers(buffers.capacity(), memAddress0(buffers) + buffers.position() shl 2)
     Buffers.buffers = buffers
     Buffers.block()
 }
 
 inline fun initUniformBuffers(buffers: IntBuffer, block: Buffers.() -> Unit) {
     Buffers.target = GL31.GL_UNIFORM_BUFFER
-    GL15.glGenBuffers(buffers)
+    GL15.nglGenBuffers(buffers.capacity(), memAddress0(buffers) + buffers.position() shl 2)
     Buffers.buffers = buffers
     Buffers.block()
     GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, 0)
@@ -92,12 +92,12 @@ object Buffer {
             field = value
         }
 
-    inline fun data(data: ByteBuffer, usage: Int = 0) = GL15.nglBufferData(target, data.remaining().L, memAddress(data, data.position()), usage)
-    inline fun data(data: ShortBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 1).L, memAddress(data, data.position()), usage)
-    inline fun data(data: IntBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 2).L, memAddress(data, data.position()), usage)
-    inline fun data(data: LongBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 3).L, memAddress(data, data.position()), usage)
-    inline fun data(data: FloatBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 2).L, memAddress(data, data.position()), usage)
-    inline fun data(data: DoubleBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 3).L, memAddress(data, data.position()), usage)
+    inline fun data(data: ByteBuffer, usage: Int = 0) = GL15.nglBufferData(target, data.remaining().L, memAddress0(data) + data.position(), usage)
+    inline fun data(data: ShortBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 1).L, memAddress0(data) + data.position() shl 1, usage)
+    inline fun data(data: IntBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 2).L, memAddress0(data) + data.position() shl 2, usage)
+    inline fun data(data: LongBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 3).L, memAddress0(data) + data.position() shl 3, usage)
+    inline fun data(data: FloatBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 2).L, memAddress0(data) + data.position() shl 2, usage)
+    inline fun data(data: DoubleBuffer, usage: Int = 0) = GL15.nglBufferData(target, (data.remaining() shl 3).L, memAddress0(data) + data.position() shl 3, usage)
 
     inline fun data(size: Int, data: Vec4, usage: Int = 0) {
         buf.putFloat(0, data.x).putFloat(Float.BYTES, data.y).putFloat(Float.BYTES * 2, data.z).putFloat(Float.BYTES * 3, data.w)
@@ -106,23 +106,23 @@ object Buffer {
 
     inline fun data(size: Int, usage: Int = 0) = GL15.nglBufferData(target, size.L, NULL, usage)
 
-    inline fun subData(offset: Int, data: ByteBuffer) = GL15.nglBufferSubData(target, offset.L, data.remaining().L, memAddress(data, data.position()))
-    inline fun subData(offset: Int, data: ShortBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 1).L, memAddress(data, data.position()))
-    inline fun subData(offset: Int, data: IntBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 2).L, memAddress(data, data.position()))
-    inline fun subData(offset: Int, data: LongBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 3).L, memAddress(data, data.position()))
-    inline fun subData(offset: Int, data: FloatBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 2).L, memAddress(data, data.position()))
-    inline fun subData(offset: Int, data: DoubleBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 3).L, memAddress(data, data.position()))
+    inline fun subData(offset: Int, data: ByteBuffer) = GL15.nglBufferSubData(target, offset.L, data.remaining().L, memAddress0(data) + data.position())
+    inline fun subData(offset: Int, data: ShortBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 1).L, memAddress0(data) + data.position() shl 1)
+    inline fun subData(offset: Int, data: IntBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 2).L, memAddress0(data) + data.position() shl 2)
+    inline fun subData(offset: Int, data: LongBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 3).L, memAddress0(data) + data.position() shl 3)
+    inline fun subData(offset: Int, data: FloatBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 2).L, memAddress0(data) + data.position() shl 2)
+    inline fun subData(offset: Int, data: DoubleBuffer) = GL15.nglBufferSubData(target, offset.L, (data.remaining() shl 3).L, memAddress0(data) + data.position() shl 3)
 
-    inline fun subData(data: ByteBuffer) = GL15.nglBufferSubData(target, 0L, data.remaining().L, memAddress(data, data.position()))
-    inline fun subData(data: ShortBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 1).L, memAddress(data, data.position()))
-    inline fun subData(data: IntBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 2).L, memAddress(data, data.position()))
-    inline fun subData(data: LongBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 3).L, memAddress(data, data.position()))
-    inline fun subData(data: FloatBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 2).L, memAddress(data, data.position()))
-    inline fun subData(data: DoubleBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 3).L, memAddress(data, data.position()))
+    inline fun subData(data: ByteBuffer) = GL15.nglBufferSubData(target, 0L, data.remaining().L, memAddress0(data) + data.position())
+    inline fun subData(data: ShortBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 1).L, memAddress0(data) + data.position() shl 1)
+    inline fun subData(data: IntBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 2).L, memAddress0(data) + data.position() shl 2)
+    inline fun subData(data: LongBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 3).L, memAddress0(data) + data.position() shl 3)
+    inline fun subData(data: FloatBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 2).L, memAddress0(data) + data.position() shl 2)
+    inline fun subData(data: DoubleBuffer) = GL15.nglBufferSubData(target, 0L, (data.remaining() shl 3).L, memAddress0(data) + data.position() shl 3)
 
 
     // ----- Mat4 -----
-    inline fun data(mat: Mat4, usage: Int = 0){
+    inline fun data(mat: Mat4, usage: Int = 0) {
         mat to buf
         GL15.nglBufferData(target, Mat4.size.L, bufAd, usage)
     }
@@ -131,6 +131,7 @@ object Buffer {
         mat to buf
         GL15.nglBufferSubData(target, offset.L, Mat4.size.L, bufAd)
     }
+
     inline fun subData(mat: Mat4) {
         mat to buf
         GL15.nglBufferSubData(target, 0L, Mat4.size.L, bufAd)
