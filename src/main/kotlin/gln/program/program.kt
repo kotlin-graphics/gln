@@ -2,7 +2,10 @@ package gln.program
 
 import gln.get
 import org.lwjgl.opengl.*
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
+import java.util.stream.Collectors
 import kotlin.properties.Delegates
 
 
@@ -169,8 +172,9 @@ open class Program {
 
         val shader = GL20.glCreateShader(path.type)
 
-        val url = ClassLoader.getSystemResource(path)
-        val lines = File(url.toURI()).readLines()
+        val lines = ClassLoader.getSystemResourceAsStream(path).use {
+            BufferedReader(InputStreamReader(it)).lines().collect(Collectors.toList())
+        }
 
         var source = ""
         lines.forEach {
