@@ -1,10 +1,7 @@
 package gln.buffer
 
-import glm_.BYTES
 import glm_.L
 import glm_.mat4x4.Mat4
-import glm_.set
-import glm_.vec4.Vec4
 import gln.buf
 import gln.bufAd
 import gln.get
@@ -12,7 +9,9 @@ import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
 import org.lwjgl.system.MemoryUtil.NULL
-import java.nio.*
+import org.lwjgl.system.MemoryUtil.memAddress
+import java.nio.ByteBuffer
+import java.nio.IntBuffer
 import kotlin.properties.Delegates
 
 /**
@@ -34,14 +33,18 @@ inline fun glBufferData(target: Int, mat: Mat4, usage: Int) {
     mat to buf
     GL15.nglBufferData(target, Mat4.size.L, bufAd, usage)
 }
+
 inline fun glBufferSubData(target: Int, offset: Int, mat: Mat4) {
     mat to buf
     GL15.nglBufferSubData(target, offset.L, Mat4.size.L, bufAd)
 }
+
 inline fun glBufferSubData(target: Int, mat: Mat4) {
     mat to buf
     GL15.nglBufferSubData(target, 0L, Mat4.size.L, bufAd)
 }
+
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ByteBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
 
 
 inline fun glBindBuffer(target: Int) = GL15.glBindBuffer(target, 0)
