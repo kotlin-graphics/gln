@@ -10,8 +10,7 @@ import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memAddress
-import java.nio.ByteBuffer
-import java.nio.IntBuffer
+import java.nio.*
 import kotlin.properties.Delegates
 
 /**
@@ -45,6 +44,12 @@ inline fun glBufferSubData(target: Int, mat: Mat4) {
 }
 
 inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ByteBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ShortBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: IntBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: LongBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: CharBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: FloatBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: DoubleBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
 
 
 inline fun glBindBuffer(target: Int) = GL15.glBindBuffer(target, 0)
