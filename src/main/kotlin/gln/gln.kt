@@ -24,7 +24,7 @@ inline fun <reified T : Enum<T>> intArrayBig() = IntArray(enumValues<T>().size)
 
 
 fun glViewport(size: Vec2i) = GL11.glViewport(0, 0, size.x, size.y)
-
+fun glViewport(width: Int, height: Int) = GL11.glViewport(0, 0, width, height)
 fun glViewport(viewport: Vec4i) = GL11.glViewport(viewport.x, viewport.y, viewport.z, viewport.w)
 
 fun glScissor(size: Vec2i) = GL11.glScissor(0, 0, size.x, size.y)
