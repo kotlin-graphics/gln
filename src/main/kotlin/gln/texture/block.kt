@@ -1,6 +1,7 @@
 package gln.texture
 
 import gli_.gl
+import gli_.gli
 import glm_.BYTES
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
@@ -201,6 +202,12 @@ object Texture2d {
             field = name
         }
 
+    inline fun image(gliTexture: gli_.Texture) {
+        val format = gli.gl.translate(gliTexture.format, gliTexture.swizzles)
+        for (i in 0 until gliTexture.levels())
+            image(i, format.internal, gliTexture.extent(i), format.external, format.type, gliTexture.data(0, 0, i))
+    }
+
     inline fun image(internalFormat: Int, width: Int, height: Int, format: Int, type: Int) = image(0, internalFormat, width, height, format, type)
     inline fun image(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int) =
             GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type, NULL)
@@ -217,6 +224,12 @@ object Texture2d {
     inline fun image(internalFormat: Int, size: Vec2i, format: Int, type: Int, pixels: ByteBuffer) = image(0, internalFormat, size, format, type, pixels)
     inline fun image(level: Int, internalFormat: Int, size: Vec2i, format: Int, type: Int, pixels: ByteBuffer) =
             GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, size.x, size.y, 0, format, type, memAddress0(pixels) + pixels.position())
+
+    inline fun image(internalFormat: gli_.gl.InternalFormat, size: Vec3i, format: gli_.gl.ExternalFormat, type: gli_.gl.TypeFormat, pixels: ByteBuffer) =
+            image(0, internalFormat, size, format, type, pixels)
+    inline fun image(level: Int, internalFormat: gli_.gl.InternalFormat, size: Vec3i, format: gli_.gl.ExternalFormat, type: gli_.gl.TypeFormat, pixels: ByteBuffer) =
+            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, memAddress0(pixels) + pixels.position())
+
 
     inline fun storage(internalFormat: Int, size: Vec2i) = storage(1, internalFormat, size)
     inline fun storage(levels: Int, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, levels, internalFormat, size.x, size.y)
