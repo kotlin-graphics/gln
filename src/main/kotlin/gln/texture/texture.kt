@@ -11,6 +11,7 @@ import gln.get
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL42
+import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
@@ -33,6 +34,11 @@ inline fun glTexParameteriv(target: gli_.gl.Target, pName: Int, param: gli_.gl.S
     buf.putInt(0, param[0].i).putInt(Int.BYTES, param[1].i).putInt(Int.BYTES * 2, param[2].i).putInt(Int.BYTES * 3, param[3].i)
     GL11.nglTexParameteriv(target.i, pName, bufAd)
 }
+
+inline fun glTexImage2D(level: Int, internalformat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer)
+        = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat, width, height, 0, format, type, MemoryUtil.memAddress(pixels, pixels.position()))
+inline fun glTexImage2D(internalformat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer)
+        = glTexImage2D(0, internalformat, width, height, format, type, pixels)
 
 inline fun glTexStorage2D(target: Int, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(target, 1, internalFormat, size.x, size.y)
 //inline fun glTexStorage2D(target: gli_.gl.Target, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(target.i, 1, internalFormat, size.x, size.y) TODO ?
