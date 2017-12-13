@@ -1,13 +1,17 @@
 package gln.buffer
 
+import gli_.buffer.destroy
+import glm_.BYTES
 import glm_.L
 import glm_.mat4x4.Mat4
+import glm_.size
 import gln.buf
 import gln.bufAd
 import gln.get
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
+import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memAddress
 import java.nio.*
@@ -42,6 +46,15 @@ inline fun glBufferSubData(target: Int, mat: Mat4) {
     mat to buf
     GL15.nglBufferSubData(target, 0L, Mat4.size.L, bufAd)
 }
+
+
+inline fun glBufferData(target: Int, data: FloatArray, usage: Int) {
+    val buffer = MemoryUtil.memAlloc(data.size * Float.BYTES)
+    for(i in data.indices) buffer.putFloat(i * Float.BYTES, data[i])
+    GL15.nglBufferData(target, buffer.size.L, memAddress(buffer, 0), usage)
+    buffer.destroy()
+}
+
 
 inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ByteBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
 inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ShortBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
