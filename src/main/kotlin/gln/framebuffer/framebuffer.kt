@@ -19,6 +19,7 @@ inline fun glFramebufferRenderbuffer(target: Int, attachment: Int, renderbuffert
 
 
 inline fun glBindFramebuffer(target: Int, framebuffer: Enum<*>) = GL30.glBindFramebuffer(target, framebufferName[framebuffer])
+inline fun glBindFramebuffer(target: Int, framebuffer: IntBuffer) = GL30.glBindFramebuffer(target, framebuffer[0])
 inline fun glBindFramebuffer(framebuffer: Enum<*>) = GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebufferName[framebuffer])
 inline fun glBindFramebuffer(framebuffer: IntBuffer) = GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer[0])
 inline fun glBindFramebuffer(framebuffer: Int) = GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer)
