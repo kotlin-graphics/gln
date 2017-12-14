@@ -405,3 +405,6 @@ fun glUniform(location: Int, mat4: Mat4) {
 //fun glUniform(location: Int, mat4x2: Mat4x2) = GL40.glUniformMatrix4x2dv(location, false, mat4x2 to m42Buf)
 //fun glUniform(location: Int, mat4x3: Mat4x3) = GL40.glUniformMatrix4x3dv(location, false, mat4x3 to m43Buf)
 //fun glUniform(location: Int, mat4: Mat4) = GL40.glUniformMatrix4dv(location, false, mat4 to m4Buf)
+
+// special for textures
+fun glUniform1i(location: Int, v0: Enum<*>) = GL20.glUniform1i(location, v0.ordinal)

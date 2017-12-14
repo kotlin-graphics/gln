@@ -68,6 +68,10 @@ object ProgramUse {
         get() = uniform
         set(value) = GL20.glUniform1i(uniform, value)
 
+    var String.unitE: Enum<*>
+        get() = throw Error()
+        set(value) = GL20.glUniform1i(uniform, value.ordinal)
+
 
     fun link() = GL20.glLinkProgram(name)
 
