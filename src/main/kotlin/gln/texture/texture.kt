@@ -19,6 +19,7 @@ import kotlin.properties.Delegates
 
 var textureName: IntBuffer by Delegates.notNull()
 
+operator fun Int.plus(enum: Enum<*>) = plus(enum.ordinal)
 
 inline fun glBindTexture(target: Int, texture: Enum<*>) = GL11.glBindTexture(target, textureName[texture])
 inline fun glBindTexture(target: Int, texture: IntBuffer) = GL11.glBindTexture(target, texture[0])
