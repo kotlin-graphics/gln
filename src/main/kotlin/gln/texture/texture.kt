@@ -40,6 +40,10 @@ inline fun glTexImage2D(level: Int, internalformat: Int, width: Int, height: Int
         = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat, width, height, 0, format, type, MemoryUtil.memAddress(pixels, pixels.position()))
 inline fun glTexImage2D(internalformat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer)
         = glTexImage2D(0, internalformat, width, height, format, type, pixels)
+inline fun glTexImage2D(level: Int, internalformat: gl.InternalFormat, width: Int, height: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer)
+        = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat.i, width, height, 0, format.i, type.i, MemoryUtil.memAddress(pixels, pixels.position()))
+inline fun glTexImage2D(internalformat: gl.InternalFormat, width: Int, height: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer)
+        = glTexImage2D(0, internalformat, width, height, format, type, pixels)
 
 inline fun glTexStorage2D(target: Int, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(target, 1, internalFormat, size.x, size.y)
 //inline fun glTexStorage2D(target: gli_.gl.Target, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(target.i, 1, internalFormat, size.x, size.y) TODO ?
