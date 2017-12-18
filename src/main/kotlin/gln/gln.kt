@@ -18,6 +18,7 @@ val bufAd = MemoryUtil.memAddress(buf)
 val buf2Ad = MemoryUtil.memAddress(buf2)
 
 operator fun IntBuffer.get(e: Enum<*>) = get(e.ordinal)
+operator fun IntBuffer.set(e: Enum<*>, value: Int): IntBuffer = put(e.ordinal, value)
 operator fun IntArray.get(e: Enum<*>) = get(e.ordinal)
 operator fun IntArray.set(e: Enum<*>, int: Int) = set(e.ordinal, int)
 inline fun <reified T : Enum<T>> intArrayBig() = IntArray(enumValues<T>().size)
