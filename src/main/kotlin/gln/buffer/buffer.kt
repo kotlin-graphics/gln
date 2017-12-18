@@ -71,10 +71,12 @@ inline fun glBindBuffer(target: Int, buffer: Enum<*>) = GL15.glBindBuffer(target
 
 inline fun glBindArrayBuffer(buffer: Enum<*>) = GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, bufferName[buffer])
 inline fun glBindArrayBuffer(buffer: IntArray) = GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, buffer[0])
+inline fun glBindArrayBuffer(buffer: IntBuffer) = GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, buffer[0])
 inline fun glBindArrayBuffer(buffer: Int) = GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, buffer)
 
 inline fun glBindElementBuffer(buffer: Enum<*>) = GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, bufferName[buffer])
 inline fun glBindElementBuffer(buffer: IntArray) = GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer[0])
+inline fun glBindElementBuffer(buffer: IntBuffer) = GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer[0])
 inline fun glBindElementBuffer(buffer: Int) = GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer)
 
 
