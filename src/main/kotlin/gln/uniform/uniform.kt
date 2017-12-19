@@ -31,10 +31,10 @@ import glm_.vec4.Vec4t
 import gln.buf
 import gln.bufAd
 import org.lwjgl.opengl.GL20
-import org.lwjgl.opengl.GL21
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL40
 import unsigned.Uint
+import java.awt.Color
 
 
 // ----------------------------------------- vec -----------------------------------------------------------------------
@@ -49,6 +49,7 @@ fun glUniform(location: Int, boolean: Boolean) = GL20.glUniform1i(location, bool
 fun glUniform(location: Int, vec1: Vec1) = GL20.glUniform1f(location, vec1.x)
 //fun glUniform(location: Int, vec1d: Vec1d) = GL40.glUniform1d(location, vec1d.x) TODO
 fun glUniform(location: Int, vec1i: Vec1i) = GL20.glUniform1i(location, vec1i.x)
+
 fun glUniform(location: Int, vec1bool: Vec1bool) = GL20.glUniform1i(location, vec1bool.x.i)
 
 fun glUniform(location: Int, x: Float, y: Float) = GL20.glUniform2f(location, x, y)
@@ -361,35 +362,43 @@ fun glUniform(location: Int, mat2: Mat2) {
     mat2 to buf
     GL20.nglUniformMatrix2fv(location, 1, false, bufAd)
 }
+
 fun glUniform(location: Int, mat2x3: Mat2x3) {
     TODO()
 //    mat2x3 to
 //    GL21.glUniformMatrix2x3fv(location, false, mat2x3 to m23Buf)
 }
+
 fun glUniform(location: Int, mat2x4: Mat2x4) {
     TODO()
 //    GL21.glUniformMatrix2x4fv(location, false, mat2x4 to m24Buf)
 }
+
 fun glUniform(location: Int, mat3x2: Mat3x2) {
     TODO()
 //    GL21.glUniformMatrix3x2fv(location, false, mat3x2 to m32Buf)
 }
+
 fun glUniform(location: Int, mat3: Mat3) {
     mat3 to buf
-    GL20.nglUniformMatrix3fv(location, 1,false, bufAd)
+    GL20.nglUniformMatrix3fv(location, 1, false, bufAd)
 }
+
 fun glUniform(location: Int, mat3x4: Mat3x4) {
     TODO()
 //    GL21.glUniformMatrix3x4fv(location, false, mat3x4 to m34Buf)
 }
+
 fun glUniform(location: Int, mat4x2: Mat4x2) {
     TODO()
 //    GL21.glUniformMatrix4x2fv(location, false, mat4x2 to m42Buf)
 }
+
 fun glUniform(location: Int, mat4x3: Mat4x3) {
     TODO()
 //    GL21.glUniformMatrix4x3fv(location, false, mat4x3 to m43Buf)
 }
+
 fun glUniform(location: Int, mat4: Mat4) {
     mat4 to buf
     GL20.nglUniformMatrix4fv(location, 1, false, bufAd)
@@ -408,3 +417,6 @@ fun glUniform(location: Int, mat4: Mat4) {
 
 // special for textures
 fun glUniform1i(location: Int, v0: Enum<*>) = GL20.glUniform1i(location, v0.ordinal)
+
+// special for colors
+fun glUniform(location: Int, color: Color) = with(color) { GL20.glUniform4f(location, red / 255f, green / 255f, blue / 255f, alpha / 255f) }
