@@ -94,6 +94,7 @@ object Buffer {
 
     inline fun data(data: ShortArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
     inline fun data(data: IntArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
+    inline fun data(data: LongArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
     inline fun data(data: FloatArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
     inline fun data(data: DoubleArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
 
