@@ -92,6 +92,11 @@ object Buffer {
             field = value
         }
 
+    inline fun data(data: ShortArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
+    inline fun data(data: IntArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
+    inline fun data(data: FloatArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
+    inline fun data(data: DoubleArray, usage: Int = 0) = GL15.glBufferData(target, data, usage)
+
     inline fun data(data: ByteBuffer, usage: Int = 0) = GL15.nglBufferData(target, data.remaining().L, memAddress0(data) + data.position(), usage)
     inline fun data(data: ShortBuffer, usage: Int = 0) = GL15.nglBufferData(target, data.remaining().L shl 1, memAddress0(data) + data.position() shl 1, usage)
     inline fun data(data: IntBuffer, usage: Int = 0) = GL15.nglBufferData(target, data.remaining().L shl 2, memAddress0(data) + data.position() shl 2, usage)
