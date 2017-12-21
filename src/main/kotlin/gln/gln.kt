@@ -38,6 +38,7 @@ inline fun glBlitFramebuffer(size: Vec2i) = GL30.glBlitFramebuffer(
 
 
 inline fun glClearColor() = GL11.glClearColor(0f, 0f, 0f, 1f)
+inline fun glClearColor(float: Float) = GL11.glClearColor(float, float, float, float)
 inline fun glClearColor(color: Vec3) = GL11.glClearColor(color.x, color.y, color.z, 1f)
 inline fun glClearColor(color: Vec4) = GL11.glClearColor(color.x, color.y, color.z, color.w)
 inline fun glClearDepthf() = GL41.glClearDepthf(1f)
