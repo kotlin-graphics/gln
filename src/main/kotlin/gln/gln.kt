@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL41
 import org.lwjgl.system.MemoryUtil
+import java.awt.Color
 import java.nio.IntBuffer
 
 val buf = MemoryUtil.memAlloc(256)
@@ -39,8 +40,9 @@ inline fun glBlitFramebuffer(size: Vec2i) = GL30.glBlitFramebuffer(
 
 inline fun glClearColor() = GL11.glClearColor(0f, 0f, 0f, 1f)
 inline fun glClearColor(float: Float) = GL11.glClearColor(float, float, float, float)
-inline fun glClearColor(color: Vec3) = GL11.glClearColor(color.x, color.y, color.z, 1f)
-inline fun glClearColor(color: Vec4) = GL11.glClearColor(color.x, color.y, color.z, color.w)
+inline fun glClearColor(color: Color) = GL11.glClearColor(color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f)
+inline fun glClearColor(vec: Vec3) = GL11.glClearColor(vec.x, vec.y, vec.z, 1f)
+inline fun glClearColor(vec: Vec4) = GL11.glClearColor(vec.x, vec.y, vec.z, vec.w)
 inline fun glClearDepthf() = GL41.glClearDepthf(1f)
 
 
