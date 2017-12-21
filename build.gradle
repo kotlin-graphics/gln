@@ -11,18 +11,18 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 buildscript {
 
-    ext.kotlinVersion = '1.2.10'
+    ext.kotlinVersion = '1.2.20-eap-11'
 
     repositories {
         jcenter()   // shadow
         mavenCentral()
-        maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
     }
 }
 
@@ -31,7 +31,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    compile 'com.github.kotlin-graphics:gli:1c1212dbbb9de4b5bf6b38e8b6e502503d82f815'
+    compile 'com.github.kotlin-graphics:gli:3951e8548df3d7b8d3bb08a6b4a2443203b435df'
 
     testCompile 'io.kotlintest:kotlintest:2.0.7'
 
@@ -63,7 +63,7 @@ dependencies {
 
 repositories {
     mavenCentral()
-    maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
+    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url 'https://jitpack.io' }
 }

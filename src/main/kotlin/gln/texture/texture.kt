@@ -1,7 +1,6 @@
 package gln.texture
 
 import gli_.gl
-import gli_.gli
 import glm_.BYTES
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
@@ -12,6 +11,7 @@ import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL42
 import org.lwjgl.system.MemoryUtil
+import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
@@ -36,24 +36,47 @@ inline fun glTexParameteriv(target: gli_.gl.Target, pName: Int, param: gli_.gl.S
     GL11.nglTexParameteriv(target.i, pName, bufAd)
 }
 
-inline fun glTexImage2D(level: Int, internalformat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer)
-        = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat, width, height, 0, format, type, MemoryUtil.memAddress(pixels, pixels.position()))
-inline fun glTexImage2D(internalformat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer)
-        = glTexImage2D(0, internalformat, width, height, format, type, pixels)
-inline fun glTexImage2D(level: Int, internalformat: gl.InternalFormat, width: Int, height: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer)
-        = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat.i, width, height, 0, format.i, type.i, MemoryUtil.memAddress(pixels, pixels.position()))
-inline fun glTexImage2D(internalformat: gl.InternalFormat, width: Int, height: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer)
-        = glTexImage2D(0, internalformat, width, height, format, type, pixels)
+inline fun glTexImage2D(level: Int, internalformat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat, width, height, 0, format, type, MemoryUtil.memAddress(pixels, pixels.position()))
+inline fun glTexImage2D(internalformat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) = glTexImage2D(0, internalformat, width, height, format, type, pixels)
+
+inline fun glTexImage2D(level: Int, internalformat: gl.InternalFormat, width: Int, height: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat.i, width, height, 0, format.i, type.i, MemoryUtil.memAddress(pixels, pixels.position()))
+inline fun glTexImage2D(internalformat: gl.InternalFormat, width: Int, height: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer) = glTexImage2D(0, internalformat, width, height, format, type, pixels)
+
+    // bufferless
+inline fun glTexImage2D(level: Int, internalformat: Int, width: Int, height: Int, format: Int, type: Int) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat, width, height, 0, format, type, NULL)
+inline fun glTexImage2D(internalformat: Int, width: Int, height: Int, format: Int, type: Int) = glTexImage2D(0, internalformat, width, height, format, type)
+
+inline fun glTexImage2D(level: Int, internalformat: gl.InternalFormat, width: Int, height: Int, format: gl.ExternalFormat, type: gl.TypeFormat) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat.i, width, height, 0, format.i, type.i, NULL)
+inline fun glTexImage2D(internalformat: gl.InternalFormat, width: Int, height: Int, format: gl.ExternalFormat, type: gl.TypeFormat) = glTexImage2D(0, internalformat, width, height, format, type)
+
+
+// glm size
+inline fun glTexImage2D(level: Int, internalformat: Int, size: Vec2i, format: Int, type: Int, pixels: ByteBuffer) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat, size.x, size.y, 0, format, type, MemoryUtil.memAddress(pixels, pixels.position()))
+inline fun glTexImage2D(internalformat: Int, size: Vec2i, format: Int, type: Int, pixels: ByteBuffer) = glTexImage2D(0, internalformat, size, format, type, pixels)
+
+inline fun glTexImage2D(level: Int, internalformat: gl.InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat.i, size.x, size.y, 0, format.i, type.i, MemoryUtil.memAddress(pixels, pixels.position()))
+inline fun glTexImage2D(internalformat: gl.InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer) = glTexImage2D(0, internalformat, size, format, type, pixels)
+
+    // bufferless
+inline fun glTexImage2D(level: Int, internalformat: Int, size: Vec2i, format: Int, type: Int) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat, size.x, size.y, 0, format, type, NULL)
+inline fun glTexImage2D(internalformat: Int, size: Vec2i, format: Int, type: Int) = glTexImage2D(0, internalformat, size, format, type)
+
+inline fun glTexImage2D(level: Int, internalformat: gl.InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalformat.i, size.x, size.y, 0, format.i, type.i, NULL)
+inline fun glTexImage2D(internalformat: gl.InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat) = glTexImage2D(0, internalformat, size, format, type)
+
 
 inline fun glTexStorage2D(target: Int, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(target, 1, internalFormat, size.x, size.y)
 //inline fun glTexStorage2D(target: gli_.gl.Target, internalFormat: Int, size: Vec2i) = GL42.glTexStorage2D(target.i, 1, internalFormat, size.x, size.y) TODO ?
 inline fun glTexStorage2D(target: gli_.gl.Target, internalFormat: gli_.gl.InternalFormat, size: Vec3i) = glTexStorage2D(target, 1, internalFormat, size.x, size.y)
+
 inline fun glTexStorage2D(target: gli_.gl.Target, levels: Int, internalFormat: gli_.gl.InternalFormat, size: Vec3i) = glTexStorage2D(target, levels, internalFormat, size.x, size.y)
 inline fun glTexStorage2D(target: gli_.gl.Target, levels: Int, internalFormat: gli_.gl.InternalFormat, width: Int, height: Int) = GL42.glTexStorage2D(target.i, levels, internalFormat.i, width, height)
 
 inline fun glCompressedTexSubImage2D(target: gli_.gl.Target, level: Int, extent: Vec3i, format: gli_.gl.InternalFormat, data: ByteBuffer) =
         glCompressedTexSubImage2D(target, level, 0, 0, extent.x, extent.y, format, data)
+
 inline fun glCompressedTexSubImage2D(target: gli_.gl.Target, level: Int, xOffset: Int, yOffset: Int, extent: Vec3i, format: gli_.gl.InternalFormat, data: ByteBuffer) =
         glCompressedTexSubImage2D(target, level, xOffset, yOffset, extent.x, extent.y, format, data)
+
 inline fun glCompressedTexSubImage2D(target: gli_.gl.Target, level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: gli_.gl.InternalFormat, data: ByteBuffer) =
         GL13.glCompressedTexSubImage2D(target.i, level, xOffset, yOffset, width, height, format.i, data)
