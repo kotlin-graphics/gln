@@ -11,6 +11,8 @@ inline fun withMultiSample(block: () -> Unit) {
     GL11.glDisable(GL13.GL_MULTISAMPLE)
 }
 
+inline fun resolveMultiSample(readFbo: IntArray, readBuffer: Int, drawFbo: IntArray, drawBuffer: Int, size: Vec2i) = resolveMultiSample(readFbo[0], readBuffer, drawFbo[0], drawBuffer, size)
+inline fun resolveMultiSample(readFbo: IntArray, readBuffer: Int, drawFbo: Int, drawBuffer: Int, size: Vec2i) = resolveMultiSample(readFbo[0], readBuffer, drawFbo, drawBuffer, size)
 inline fun resolveMultiSample(readFbo: Int, readBuffer: Int, drawFbo: Int, drawBuffer: Int, size: Vec2i) {
     GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, readFbo)
     GL11.glReadBuffer(readBuffer)
