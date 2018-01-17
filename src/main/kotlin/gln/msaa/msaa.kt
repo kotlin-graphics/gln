@@ -1,7 +1,6 @@
 package gln.msaa
 
 import glm_.vec2.Vec2i
-import gln.framebuffer.glBindFramebuffer
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL30
@@ -12,7 +11,7 @@ inline fun withMultiSample(block: () -> Unit) {
     GL11.glDisable(GL13.GL_MULTISAMPLE)
 }
 
-fun resolveMultiSample(readFbo: Int, readBuffer: Int, drawFbo: Int, drawBuffer: Int, size: Vec2i) {
+inline fun resolveMultiSample(readFbo: Int, readBuffer: Int, drawFbo: Int, drawBuffer: Int, size: Vec2i) {
     GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, readFbo)
     GL11.glReadBuffer(readBuffer)
     GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, drawFbo)
