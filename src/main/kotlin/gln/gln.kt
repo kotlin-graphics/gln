@@ -67,12 +67,6 @@ inline fun glGetVec4i(pname: Int): Vec4i {
     return Vec4i(buf)
 }
 
-inline fun withMultiSample(block: () -> Unit) {
-    GL11.glEnable(GL_MULTISAMPLE)
-    block()
-    GL11.glDisable(GL_MULTISAMPLE)
-}
-
 fun checkError(location: String, throwError: Boolean = true): Boolean {
 
     val error = GL11.glGetError()
