@@ -7,6 +7,7 @@ import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
 import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL13.GL_MULTISAMPLE
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL41
 import org.lwjgl.system.MemoryUtil
@@ -64,6 +65,12 @@ inline fun glGetVec4(pname: Int): Vec4 {
 inline fun glGetVec4i(pname: Int): Vec4i {
     GL11.nglGetIntegerv(pname, bufAd)
     return Vec4i(buf)
+}
+
+inline fun withMultiSample(block: () -> Unit) {
+    GL11.glEnable(GL_MULTISAMPLE)
+    block()
+    GL11.glDisable(GL_MULTISAMPLE)
 }
 
 fun checkError(location: String, throwError: Boolean = true): Boolean {
