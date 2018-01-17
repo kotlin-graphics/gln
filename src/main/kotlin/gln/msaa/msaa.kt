@@ -4,6 +4,7 @@ import glm_.vec2.Vec2i
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL30
+import java.nio.IntBuffer
 
 inline fun withMultiSample(block: () -> Unit) {
     GL11.glEnable(GL13.GL_MULTISAMPLE)
@@ -11,8 +12,8 @@ inline fun withMultiSample(block: () -> Unit) {
     GL11.glDisable(GL13.GL_MULTISAMPLE)
 }
 
-inline fun resolveMultiSample(readFbo: IntArray, readBuffer: Int, drawFbo: IntArray, drawBuffer: Int, size: Vec2i) = resolveMultiSample(readFbo[0], readBuffer, drawFbo[0], drawBuffer, size)
-inline fun resolveMultiSample(readFbo: IntArray, readBuffer: Int, drawFbo: Int, drawBuffer: Int, size: Vec2i) = resolveMultiSample(readFbo[0], readBuffer, drawFbo, drawBuffer, size)
+inline fun resolveMultiSample(readFbo: IntBuffer, readBuffer: Int, drawFbo: IntBuffer, drawBuffer: Int, size: Vec2i) = resolveMultiSample(readFbo[0], readBuffer, drawFbo[0], drawBuffer, size)
+inline fun resolveMultiSample(readFbo: IntBuffer, readBuffer: Int, drawFbo: Int, drawBuffer: Int, size: Vec2i) = resolveMultiSample(readFbo[0], readBuffer, drawFbo, drawBuffer, size)
 inline fun resolveMultiSample(readFbo: Int, readBuffer: Int, drawFbo: Int, drawBuffer: Int, size: Vec2i) {
     GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, readFbo)
     GL11.glReadBuffer(readBuffer)
