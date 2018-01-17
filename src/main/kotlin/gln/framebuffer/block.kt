@@ -36,15 +36,15 @@ inline fun withFramebuffer(framebuffer: Int, block: Framebuffer.() -> Unit) {
     Framebuffer.block()
 }
 
-// TODO check if leave
-inline fun withFramebuffer(block: Framebuffer.() -> Unit) {
-    Framebuffer.name = 0
-    Framebuffer.block()
-}
+// TODO check if leave, backup current fbo?
+//inline fun withDefaultFramebuffer(block: Framebuffer.() -> Unit) {
+//    Framebuffer.name = 0
+//    Framebuffer.block()
+//}
 
 object Framebuffer {
 
-    var name = 0
+    var name = defaultFramebuffer
         set(value) {
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, value)
             field = value
@@ -100,5 +100,4 @@ object Framebuffers {
         Framebuffer.name = names[index] // bind
         Framebuffer.block()
     }
-
 }

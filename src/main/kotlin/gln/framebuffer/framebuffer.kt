@@ -15,6 +15,7 @@ import kotlin.properties.Delegates
 
 var framebufferName: IntBuffer by Delegates.notNull()
 
+val defaultFramebuffer = 0
 
 inline fun glFramebufferRenderbuffer(target: Int, attachment: Int, renderbuffertarget: Int, renderbuffer: Enum<*>) = GL30.glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbufferName[renderbuffer])
 inline fun glFramebufferRenderbuffer(target: Int, attachment: Int, renderbuffertarget: Int, renderbuffer: IntBuffer) = GL30.glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer[0])
@@ -25,7 +26,7 @@ inline fun glBindFramebuffer(target: Int, framebuffer: IntBuffer) = GL30.glBindF
 inline fun glBindFramebuffer(framebuffer: Enum<*>) = GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebufferName[framebuffer])
 inline fun glBindFramebuffer(framebuffer: IntBuffer) = GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer[0])
 inline fun glBindFramebuffer(framebuffer: Int) = GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer)
-inline fun glBindFramebuffer() = GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0)
+inline fun glBindFramebuffer() = GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, defaultFramebuffer)
 
 
 //inline fun glFramebufferTexture2D(target: Int, attachment: Int, textarget: Int, texture: Int) = GL30.glFramebufferTexture2D(target, attachment, textarget, texture, 0) TODO renable without target
