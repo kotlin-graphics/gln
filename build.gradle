@@ -16,8 +16,8 @@ buildscript {
     repositories {
         jcenter()   // shadow
         mavenCentral()
-        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { setUrl("https://dl.bintray.com/kotlin/kotlin-eap") }
+        maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots/") }
     }
 
     dependencies {
@@ -63,9 +63,9 @@ dependencies {
 
 repositories {
     mavenCentral()
-    maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url 'https://jitpack.io' }
+    maven { setUrl("https://dl.bintray.com/kotlin/kotlin-eap") }
+    maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots/") }
+    maven { setUrl('https://jitpack.io') }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
