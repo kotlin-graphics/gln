@@ -149,7 +149,7 @@ object Buffer {
     inline fun bindBase(index: Int) = GL30.glBindBufferBase(target, index, 0)
 
     inline fun mapRange(length: Int, access: Int) = mapRange(0, length, access)
-    inline fun mapRange(offset: Int, length: Int, access: Int): ByteBuffer = GL30.glMapBufferRange(target, offset.L, length.L, access)
+    inline fun mapRange(offset: Int, length: Int, access: Int) = GL30.glMapBufferRange(target, offset.L, length.L, access)
 
     inline fun flushRange(length: Int) = flushRange(0, length)
     inline fun flushRange(offset: Int, length: Int) = GL30.glFlushMappedBufferRange(target, offset.L, length.L)
@@ -233,7 +233,7 @@ object MappedBuffer {
         }
 
     fun mapRange(length: Int, access: Int) {
-        buffer = GL30.glMapBufferRange(target, 0L, length.L, access)
+        buffer = GL30.glMapBufferRange(target, 0L, length.L, access)!!
     }
 
     lateinit var buffer: ByteBuffer

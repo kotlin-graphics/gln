@@ -11,7 +11,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 buildscript {
 
-    ext.kotlinVersion = '1.2.21'
+    ext.kotlinVersion = '1.2.30-eap-16'
 
     repositories {
         jcenter()   // shadow
@@ -31,7 +31,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    compile 'com.github.kotlin-graphics:gli:0cfe6c23ec96604e80574ae795d34b99bd45fe19'
+    compile 'com.github.kotlin-graphics:gli:cb51db0be2c0e1b720859f27c1ed338ab38715f6'
 
     testCompile 'io.kotlintest:kotlintest:2.0.7'
 
@@ -46,7 +46,7 @@ dependencies {
             ext.lwjglNatives = "natives-macos"
             break
     }
-    ext.lwjglVersion = "3.1.5-SNAPSHOT"
+    ext.lwjglVersion = "3.1.6-SNAPSHOT"
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
