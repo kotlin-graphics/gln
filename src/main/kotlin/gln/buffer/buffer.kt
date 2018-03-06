@@ -9,6 +9,7 @@ import gln.buf
 import gln.bufAd
 import gln.get
 import org.lwjgl.opengl.GL15
+import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
 import org.lwjgl.system.MemoryUtil
@@ -93,3 +94,5 @@ inline fun glBindUniformBufferBase(index: Int, buffer: Enum<*>) = glBindBufferBa
 inline fun glBindBufferBase(target: Int, index: Int, buffer: Enum<*>) = GL30.glBindBufferBase(target, index, bufferName[buffer])
 inline fun glBindBufferBase(target: Int, index: Int, buffer: IntBuffer) = GL30.glBindBufferBase(target, index, buffer[0])
 inline fun glBindBufferBase(target: Int, index: Int) = GL30.glBindBufferBase(target, index, 0)
+
+inline fun glDrawBuffers(vararg buffers: Int) = GL20.glDrawBuffers(buffers)
