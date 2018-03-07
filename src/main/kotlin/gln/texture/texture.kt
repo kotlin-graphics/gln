@@ -4,6 +4,8 @@ import gli_.gl
 import glm_.BYTES
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
+import glm_.vec4.Vec4
+import glm_.vec4.Vec4i
 import gln.buf
 import gln.bufAd
 import gln.get
@@ -34,8 +36,16 @@ inline fun glBindTexture(target: gli_.gl.Target, texture: IntBuffer) = GL11.glBi
 
 inline fun glBindTexture(target: Int) = GL11.glBindTexture(target, 0)
 
-inline fun glTexParameter(name: Int, param: Int) = GL11.glTexParameteri(GL_TEXTURE_2D, name, param)
-inline fun glTexParameter(name: Int, param: Float) = GL11.glTexParameterf(GL_TEXTURE_2D, name, param)
+inline fun glBindTexture2d(texture: Int = 0) = GL11.glBindTexture(GL_TEXTURE_2D, texture)
+
+inline fun glTex2dParameter(name: Int, param: Int) = GL11.glTexParameteri(GL_TEXTURE_2D, name, param)
+inline fun glTex2dParameter(name: Int, param: Vec4i) = GL11.glTexParameteriv(GL_TEXTURE_2D, name, param.toIntArray())
+inline fun glTex2dParameter(name: Int, param: IntArray) = GL11.glTexParameteriv(GL_TEXTURE_2D, name, param)
+
+inline fun glTex2dParameter(name: Int, param: Float) = GL11.glTexParameterf(GL_TEXTURE_2D, name, param)
+inline fun glTex2dParameter(name: Int, param: Vec4) = GL11.glTexParameterfv(GL_TEXTURE_2D, name, param.toFloatArray())
+inline fun glTex2dParameter(name: Int, param: FloatArray) = GL11.glTexParameterfv(GL_TEXTURE_2D, name, param)
+
 inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: Int) = GL11.glTexParameteri(target.i, name, param)
 inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: Float) = GL11.glTexParameterf(target.i, name, param)
 inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: gli_.gl.Swizzles) {
