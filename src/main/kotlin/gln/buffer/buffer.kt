@@ -24,10 +24,10 @@ import kotlin.properties.Delegates
 
 var bufferName: IntBuffer by Delegates.notNull()
 
-//
-//inline fun glArrayBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL15.GL_ARRAY_BUFFER, size.L, NULL, usage)
-//inline fun glElementBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, size.L, NULL, usage)
-//inline fun glUniformBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL31.GL_UNIFORM_BUFFER, size.L, NULL, usage)
+
+inline fun glArrayBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL15.GL_ARRAY_BUFFER, size.L, NULL, usage)
+inline fun glElementBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, size.L, NULL, usage)
+inline fun glUniformBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL31.GL_UNIFORM_BUFFER, size.L, NULL, usage)
 inline fun glBufferData(target: Int, size: Int, usage: Int) = GL15.nglBufferData(target, size.L, NULL, usage)
 
 
