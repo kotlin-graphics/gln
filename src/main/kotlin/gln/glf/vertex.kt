@@ -52,6 +52,14 @@ object glf {
                 VertexAttribute(semantic.attr.COLOR, Vec4.length, GL_FLOAT, false, stride, Vec4.size.L))
     }
 
+    object pos4_col4_uv2 : VertexLayout {
+        val stride = Vec4.size * 2 + Vec2.size
+        override var attributes = arrayOf(
+                VertexAttribute(semantic.attr.POSITION, Vec4.length, GL_FLOAT, false, stride, 0),
+                VertexAttribute(semantic.attr.COLOR, Vec4.length, GL_FLOAT, false, stride, Vec4.size.L),
+                VertexAttribute(semantic.attr.TEX_COORD, Vec2.length, GL_FLOAT, false, stride, Vec4.size.L * 2))
+    }
+
 
     object pos2_tc2 : VertexLayout {
         val stride = Vec2.size * 2
@@ -167,6 +175,14 @@ object Vertex { // TODO
         override var attributes = arrayOf(
                 VertexAttribute(semantic.attr.POSITION, Vec4.length, GL_FLOAT, false, stride, 0),
                 VertexAttribute(semantic.attr.COLOR, Vec4.length, GL_FLOAT, false, stride, Vec4.size.L))
+    }
+
+    class pos4_col4_uv2 : VertexLayout {
+        val stride = Vec4.size * 2 + Vec2.size
+        override var attributes = arrayOf(
+                VertexAttribute(semantic.attr.POSITION, Vec4.length, GL_FLOAT, false, stride, 0),
+                VertexAttribute(semantic.attr.COLOR, Vec4.length, GL_FLOAT, false, stride, Vec4.size.L),
+                VertexAttribute(semantic.attr.TEX_COORD, Vec2.length, GL_FLOAT, false, stride, Vec4.size.L * 2))
     }
 
 
