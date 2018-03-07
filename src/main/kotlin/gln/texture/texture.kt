@@ -34,10 +34,13 @@ inline fun glBindTexture(target: gli_.gl.Target, texture: IntBuffer) = GL11.glBi
 
 inline fun glBindTexture(target: Int) = GL11.glBindTexture(target, 0)
 
-inline fun glTexParameteri(target: gli_.gl.Target, pName: Int, param: Int) = GL11.glTexParameteri(target.i, pName, param)
-inline fun glTexParameteriv(target: gli_.gl.Target, pName: Int, param: gli_.gl.Swizzles) {
+inline fun glTexParameter(name: Int, param: Int) = GL11.glTexParameteri(GL_TEXTURE_2D, name, param)
+inline fun glTexParameter(name: Int, param: Float) = GL11.glTexParameterf(GL_TEXTURE_2D, name, param)
+inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: Int) = GL11.glTexParameteri(target.i, name, param)
+inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: Float) = GL11.glTexParameterf(target.i, name, param)
+inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: gli_.gl.Swizzles) {
     buf.putInt(0, param[0].i).putInt(Int.BYTES, param[1].i).putInt(Int.BYTES * 2, param[2].i).putInt(Int.BYTES * 3, param[3].i)
-    GL11.nglTexParameteriv(target.i, pName, bufAd)
+    GL11.nglTexParameteriv(target.i, name, bufAd)
 }
 
 inline fun glTexImage2D(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) = GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type, MemoryUtil.memAddress(pixels, pixels.position()))

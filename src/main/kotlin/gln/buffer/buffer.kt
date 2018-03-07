@@ -28,6 +28,9 @@ var bufferName: IntBuffer by Delegates.notNull()
 inline fun glArrayBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL15.GL_ARRAY_BUFFER, size.L, NULL, usage)
 inline fun glArrayBufferData(floats: FloatArray, usage: Int) = GL15.glBufferData(GL15.GL_ARRAY_BUFFER, floats, usage)
 
+inline fun glArrayBufferSubData(offset: Int, floats: FloatArray) = GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, offset.L, floats)
+inline fun glArrayBufferSubData(floats: FloatArray) = GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0L, floats)
+
 inline fun glElementBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, size.L, NULL, usage)
 inline fun glElementBufferData(ints: IntArray, usage: Int) = GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, ints, usage)
 inline fun glElementBufferData(shorts: ShortArray, usage: Int) = GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, shorts, usage)
