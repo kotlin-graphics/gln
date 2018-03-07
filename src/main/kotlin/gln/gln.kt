@@ -43,6 +43,7 @@ inline fun glClearColor() = GL11.glClearColor(0f, 0f, 0f, 1f)
 inline fun glClearColor(float: Float) = GL11.glClearColor(float, float, float, float)
 inline fun glClearColor(color: Color) = GL11.glClearColor(color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f)
 inline fun glClearColor(vec: Vec3) = GL11.glClearColor(vec.x, vec.y, vec.z, 1f)
+inline fun glClearColor(vec: Vec3, alpha: Float) = GL11.glClearColor(vec.x, vec.y, vec.z, alpha)
 inline fun glClearColor(vec: Vec4) = GL11.glClearColor(vec.x, vec.y, vec.z, vec.w)
 inline fun glClearDepthf() = GL41.glClearDepthf(1f)
 
