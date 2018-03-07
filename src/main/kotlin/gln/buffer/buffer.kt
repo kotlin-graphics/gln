@@ -8,10 +8,11 @@ import glm_.size
 import gln.buf
 import gln.bufAd
 import gln.get
-import org.lwjgl.opengl.GL15
-import org.lwjgl.opengl.GL20
-import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL31
+import org.lwjgl.opengl.*
+import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER
+import org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER
+import org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER
+import org.lwjgl.system.JNI
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memAddress
@@ -25,17 +26,17 @@ import kotlin.properties.Delegates
 var bufferName: IntBuffer by Delegates.notNull()
 
 
-inline fun glArrayBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL15.GL_ARRAY_BUFFER, size.L, NULL, usage)
-inline fun glArrayBufferData(floats: FloatArray, usage: Int) = GL15.glBufferData(GL15.GL_ARRAY_BUFFER, floats, usage)
+inline fun glArrayBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL_ARRAY_BUFFER, size.L, NULL, usage)
+inline fun glArrayBufferData(floats: FloatArray, usage: Int) = GL15.glBufferData(GL_ARRAY_BUFFER, floats, usage)
 
-inline fun glArrayBufferSubData(offset: Int, floats: FloatArray) = GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, offset.L, floats)
-inline fun glArrayBufferSubData(floats: FloatArray) = GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0L, floats)
+inline fun glArrayBufferSubData(offset: Int, elements: Int, floats: FloatArray) = JNI.callPPPV(GL.getCapabilities().glBufferSubData, GL_ARRAY_BUFFER, offset.L, (elements shl 2).L, floats)
+inline fun glArrayBufferSubData(floats: FloatArray) = GL15.glBufferSubData(GL_ARRAY_BUFFER, 0L, floats)
 
-inline fun glElementBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, size.L, NULL, usage)
-inline fun glElementBufferData(ints: IntArray, usage: Int) = GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, ints, usage)
-inline fun glElementBufferData(shorts: ShortArray, usage: Int) = GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, shorts, usage)
+inline fun glElementBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL_ELEMENT_ARRAY_BUFFER, size.L, NULL, usage)
+inline fun glElementBufferData(ints: IntArray, usage: Int) = GL15.glBufferData(GL_ELEMENT_ARRAY_BUFFER, ints, usage)
+inline fun glElementBufferData(shorts: ShortArray, usage: Int) = GL15.glBufferData(GL_ELEMENT_ARRAY_BUFFER, shorts, usage)
 
-inline fun glUniformBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL31.GL_UNIFORM_BUFFER, size.L, NULL, usage)
+inline fun glUniformBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL_UNIFORM_BUFFER, size.L, NULL, usage)
 
 inline fun glBufferData(target: Int, size: Int, usage: Int) = GL15.nglBufferData(target, size.L, NULL, usage)
 
