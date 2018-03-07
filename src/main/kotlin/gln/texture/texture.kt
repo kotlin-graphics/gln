@@ -8,7 +8,9 @@ import gln.buf
 import gln.bufAd
 import gln.get
 import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11.GL_TEXTURE_2D
 import org.lwjgl.opengl.GL13
+import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL32.GL_TEXTURE_2D_MULTISAMPLE
 import org.lwjgl.opengl.GL32.glTexImage2DMultisample
 import org.lwjgl.opengl.GL42
@@ -89,3 +91,6 @@ inline fun glCompressedTexSubImage2D(target: gli_.gl.Target, level: Int, xOffset
 
 inline fun glCompressedTexSubImage2D(target: gli_.gl.Target, level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: gli_.gl.InternalFormat, data: ByteBuffer) =
         GL13.glCompressedTexSubImage2D(target.i, level, xOffset, yOffset, width, height, format.i, data)
+
+
+inline fun glGenerateMipmap() = GL30.glGenerateMipmap(GL_TEXTURE_2D)
