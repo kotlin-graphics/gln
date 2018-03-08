@@ -13,7 +13,7 @@ import kotlin.reflect.KMutableProperty0
 
 var vertexArrayName: IntBuffer by Delegates.notNull()
 
-inline fun glGenVertexArrays(array: KMutableProperty0<Int>) {
+inline fun glGenVertexArray(array: KMutableProperty0<Int>) {
     array.set(GL30.glGenVertexArrays())
 }
 inline fun glGenVertexArray() = GL30.glGenVertexArrays()
