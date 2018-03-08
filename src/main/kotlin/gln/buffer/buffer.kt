@@ -28,6 +28,7 @@ var bufferName: IntBuffer by Delegates.notNull()
 
 inline fun glGenBuffer(buffer: KMutableProperty0<Int>) = buffer.set(GL15.glGenBuffers())
 inline fun glGenBuffer() = GL15.glGenBuffers()
+inline fun glDeleteBuffer(buffer: Int) = GL15.glDeleteBuffers(buffer)
 
 
 

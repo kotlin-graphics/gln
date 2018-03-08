@@ -15,6 +15,7 @@ var vertexArrayName: IntBuffer by Delegates.notNull()
 
 inline fun glGenVertexArray(array: KMutableProperty0<Int>) = array.set(GL30.glGenVertexArrays())
 inline fun glGenVertexArray() = GL30.glGenVertexArrays()
+inline fun glDeleteVertexArray(array: Int) = GL30.glDeleteVertexArrays(array)
 
 inline fun glBindVertexArray(vertexArray: Enum<*>) = GL30.glBindVertexArray(vertexArrayName[vertexArray])
 inline fun glBindVertexArray(vertexArray: IntBuffer) = GL30.glBindVertexArray(vertexArray[0])

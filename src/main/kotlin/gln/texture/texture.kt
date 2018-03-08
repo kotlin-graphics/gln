@@ -30,6 +30,7 @@ operator fun Int.plus(enum: Enum<*>) = plus(enum.ordinal)
 
 inline fun glGenTexture(texture: KMutableProperty0<Int>) = texture.set(GL11.glGenTextures())
 inline fun glGenTexture() = GL11.glGenTextures()
+inline fun glDeleteTexture(texture: Int) = GL11.glDeleteTextures(texture)
 
 inline fun glBindTexture(target: Int, texture: Enum<*>) = GL11.glBindTexture(target, textureName[texture])
 inline fun glBindTexture(target: Int, texture: IntBuffer) = GL11.glBindTexture(target, texture[0])
