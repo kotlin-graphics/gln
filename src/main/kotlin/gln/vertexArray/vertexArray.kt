@@ -8,10 +8,15 @@ import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
+import kotlin.reflect.KMutableProperty0
 
 
 var vertexArrayName: IntBuffer by Delegates.notNull()
 
+inline fun glGenVertexArrays(array: KMutableProperty0<Int>) {
+    array.set(GL30.glGenVertexArrays())
+}
+inline fun glGenVertexArray() = GL30.glGenVertexArrays()
 
 inline fun glBindVertexArray(vertexArray: Enum<*>) = GL30.glBindVertexArray(vertexArrayName[vertexArray])
 inline fun glBindVertexArray(vertexArray: IntBuffer) = GL30.glBindVertexArray(vertexArray[0])

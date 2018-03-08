@@ -18,12 +18,19 @@ import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memAddress
 import java.nio.*
 import kotlin.properties.Delegates
+import kotlin.reflect.KMutableProperty0
 
 /**
  * Created by elect on 18/04/17.
  */
 
 var bufferName: IntBuffer by Delegates.notNull()
+
+inline fun glGenBuffer(buffer: KMutableProperty0<Int>) {
+    buffer.set(GL15.glGenBuffers())
+}
+inline fun glGenBuffer() = GL15.glGenBuffers()
+
 
 
 inline fun glArrayBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL_ARRAY_BUFFER, size.L, NULL, usage)
