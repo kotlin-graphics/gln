@@ -26,9 +26,7 @@ import kotlin.reflect.KMutableProperty0
 
 var bufferName: IntBuffer by Delegates.notNull()
 
-inline fun glGenBuffer(buffer: KMutableProperty0<Int>) {
-    buffer.set(GL15.glGenBuffers())
-}
+inline fun glGenBuffer(buffer: KMutableProperty0<Int>) = buffer.set(GL15.glGenBuffers())
 inline fun glGenBuffer() = GL15.glGenBuffers()
 
 

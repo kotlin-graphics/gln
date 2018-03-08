@@ -21,11 +21,15 @@ import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
+import kotlin.reflect.KMutableProperty0
 
 
 var textureName: IntBuffer by Delegates.notNull()
 
 operator fun Int.plus(enum: Enum<*>) = plus(enum.ordinal)
+
+inline fun glGenTexture(texture: KMutableProperty0<Int>) = texture.set(GL11.glGenTextures())
+inline fun glGenTexture() = GL11.glGenTextures()
 
 inline fun glBindTexture(target: Int, texture: Enum<*>) = GL11.glBindTexture(target, textureName[texture])
 inline fun glBindTexture(target: Int, texture: IntBuffer) = GL11.glBindTexture(target, texture[0])
