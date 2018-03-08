@@ -43,6 +43,11 @@ inline fun glElementBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL_EL
 inline fun glElementBufferData(ints: IntArray, usage: Int) = GL15.glBufferData(GL_ELEMENT_ARRAY_BUFFER, ints, usage)
 inline fun glElementBufferData(shorts: ShortArray, usage: Int) = GL15.glBufferData(GL_ELEMENT_ARRAY_BUFFER, shorts, usage)
 
+inline fun glElementBufferSubData(offset: Int, elements: Int, ints: IntArray) = JNI.callPPPV(GL.getCapabilities().glBufferSubData, GL_ARRAY_BUFFER, offset.L, (elements shl 2).L, ints)
+inline fun glElementBufferSubData(ints: IntArray) = GL15.glBufferSubData(GL_ARRAY_BUFFER, 0L, ints)
+inline fun glElementBufferSubData(offset: Int, elements: Int, shorts: ShortArray) = JNI.callPPPV(GL.getCapabilities().glBufferSubData, GL_ARRAY_BUFFER, offset.L, (elements shl 2).L, shorts)
+inline fun glElementBufferSubData(shorts: ShortArray) = GL15.glBufferSubData(GL_ARRAY_BUFFER, 0L, shorts)
+
 inline fun glUniformBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL_UNIFORM_BUFFER, size.L, NULL, usage)
 
 inline fun glBufferData(target: Int, size: Int, usage: Int) = GL15.nglBufferData(target, size.L, NULL, usage)
