@@ -31,7 +31,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    compile 'com.github.kotlin-graphics:gli:116c300f66f337b4e5cdb60ee8682b61c18afaea'
+    compile 'com.github.kotlin-graphics:gli:886fb1cf827cbae5a125179173cda37c13bcdcaf'
 
     testCompile 'io.kotlintest:kotlintest:2.0.7'
 
@@ -46,7 +46,7 @@ dependencies {
             ext.lwjglNatives = "natives-macos"
             break
     }
-    ext.lwjglVersion = "3.1.6-SNAPSHOT"
+    ext.lwjglVersion = "3.1.7-SNAPSHOT"
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
