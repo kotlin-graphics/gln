@@ -221,6 +221,43 @@ open class Program {
             return shader
         }
 
+        fun fromSources(vertSrc: Array<String>, fragSrc: Array<String>, geomSrc: Array<String>? = null): Program {
+
+            val program = Program()
+
+            val shaders = arrayListOf(createShaderFromSource(vertSrc, GL20.GL_VERTEX_SHADER), createShaderFromSource(fragSrc, GL20.GL_FRAGMENT_SHADER))
+            geomSrc?.let { shaders += createShaderFromSource(it, GL32.GL_GEOMETRY_SHADER) }
+
+            shaders.forEach { GL20.glAttachShader(program.name, it) }
+
+            program.link()
+
+            if (GL20.glGetProgrami(program.name, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
+                System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program.name)}")
+
+            shaders.forEach {
+                GL20.glDetachShader(program.name, it)
+                GL20.glDeleteShader(it)
+            }
+
+            return program
+        }
+
+        @Throws(Error::class)
+        fun createShaderFromSource(source: Array<String>, type: Int): Int {
+
+            val shader = GL20.glCreateShader(type)
+
+            GL20.glShaderSource(shader, *source)
+
+            GL20.glCompileShader(shader)
+
+            if (GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)
+                throw Error(GL20.glGetShaderInfoLog(shader))
+
+            return shader
+        }
+
         fun createShaderFromPath(path: String): Int {
 
             val lines = ClassLoader.getSystemResourceAsStream(path).use {
