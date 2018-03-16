@@ -24,18 +24,20 @@ inline fun glDeletePrograms(programs: IntArray) = programs.forEach { GL20.glDele
 inline fun glDeleteProgram(program: Program) = GL20.glDeleteProgram(program.name)
 inline fun glDeletePrograms(vararg programs: Program) = programs.forEach { GL20.glDeleteProgram(it.name) }
 
+typealias ShaderSource = String
 
 open class Program {
 
-    @JvmField val name: Int
+    @JvmField
+    val name = GL20.glCreateProgram()
     val uniforms = HashMap<String, Int>()
+
+    constructor()
 
     // for Learn OpenGL
 
     /** (root, vertex, fragment) or (vertex, fragment)  */
     constructor(context: Class<*>, vararg strings: String) {
-
-        name = GL20.glCreateProgram()
 
         val root =
                 if (strings[0].isShaderPath())
@@ -51,16 +53,12 @@ open class Program {
 
         val (shaders, uniforms) = strings.drop(if (root.isEmpty()) 0 else 1).partition { it.isShaderPath() }
 
-        val shaderNames = shaders.map { createShader(context, root + it) }.onEach { GL20.glAttachShader(name, it) }
+        val shaderNames = shaders.map { createShaderFromPath(context, root + it) }.onEach { GL20.glAttachShader(name, it) }
 
         GL20.glLinkProgram(name)
 
-        if (GL20.glGetProgrami(name, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
-
-            val strInfoLog = GL20.glGetProgramInfoLog(name)
-
-            System.err.println("Linker failure: $strInfoLog")
-        }
+        if (GL20.glGetProgrami(name, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
+            System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(name)}")
 
         shaderNames.forEach {
             GL20.glDetachShader(name, it)
@@ -78,8 +76,6 @@ open class Program {
 
     constructor(vararg strings: String) {
 
-        name = GL20.glCreateProgram()
-
 //        var root = ""
 //
 //        if (!strings[0].isShaderPath() && !strings[0].contains("#version")) { // TODO passing directly srcs
@@ -88,28 +84,20 @@ open class Program {
 //                root = "$root/"
 //        }
 
-        val root =
-                if (strings[0].isShaderPath())
-                    ""
-                else {
-                    var r = strings[0]
-                    if(!r.endsWith('/'))
-                        r = "$r/"
-                    r
-                }
+        val root = when {
+            strings[0].isShaderPath() -> ""
+            !strings[0].endsWith('/') -> strings[0] + '/'
+            else -> strings[0]
+        }
 
         val (shaders, uniforms) = strings.drop(if (root.isEmpty()) 0 else 1).partition { it.isShaderPath() }
 
-        val shaderNames = shaders.map { createShader(root + it) }.onEach { GL20.glAttachShader(name, it) }
+        val shaderNames = shaders.map { createShaderFromPath(root + it) }.onEach { GL20.glAttachShader(name, it) }
 
         GL20.glLinkProgram(name)
 
-        if (GL20.glGetProgrami(name, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
-
-            val strInfoLog = GL20.glGetProgramInfoLog(name)
-
-            System.err.println("Linker failure: $strInfoLog")
-        }
+        if (GL20.glGetProgrami(name, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
+            System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(name)}")
 
         shaderNames.forEach {
             GL20.glDetachShader(name, it)
@@ -127,10 +115,13 @@ open class Program {
 
     operator fun get(s: String): Int = uniforms[s]!!
 
-    internal fun String.isShaderPath() = endsWith(".vert") || endsWith(".tesc") || endsWith(".tese") || endsWith(".geom") || endsWith(".frag") || endsWith(".comp")
+    private fun String.isShaderPath() = when (substringAfterLast('.')) {
+        "vert", "tesc", "tese", "geom", "frag", "comp" -> true
+        else -> false
+    }
 
 
-    fun createShader(context: Class<*>, path: String): Int {
+    fun createShaderFromPath(context: Class<*>, path: String): Int {
 
         val shader = GL20.glCreateShader(path.type)
 
@@ -168,45 +159,6 @@ open class Program {
         return File(url.toURI()).readText() + "\n"
     }
 
-    fun createShader(path: String): Int {
-
-        val shader = GL20.glCreateShader(path.type)
-
-        val lines = ClassLoader.getSystemResourceAsStream(path).use {
-            BufferedReader(InputStreamReader(it)).lines().collect(Collectors.toList())
-        }
-
-        var source = ""
-        lines.forEach {
-            if (it.startsWith("#include "))
-                source += parseInclude(path.substringBeforeLast('/'), it.substring("#include ".length).trim())
-            else
-                source += it
-            source += '\n'
-        }
-
-        GL20.glShaderSource(shader, source)
-
-        GL20.glCompileShader(shader)
-
-        val status = GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS)
-        if (status == GL11.GL_FALSE) {
-
-            val strInfoLog = GL20.glGetShaderInfoLog(shader)
-
-            System.err.println("Compiler failure in ${path.substringAfterLast('/')} shader: $strInfoLog")
-        }
-
-        return shader
-    }
-
-    fun parseInclude(root: String, shader: String): String {
-        if (shader.startsWith('"') && shader.endsWith('"'))
-            shader.substring(1, shader.length - 1)
-        val url = ClassLoader.getSystemResource("$root/$shader")
-        return File(url.toURI()).readText() + "\n"
-    }
-
     fun createProgram(shaderList: List<Int>): Int {
 
         val program = GL20.glCreateProgram()
@@ -215,13 +167,8 @@ open class Program {
 
         GL20.glLinkProgram(program)
 
-        val status = GL20.glGetProgrami(program, GL20.GL_LINK_STATUS)
-        if (status == GL11.GL_FALSE) {
-
-            val strInfoLog = GL20.glGetProgramInfoLog(program)
-
-            System.err.println("Linker failure: $strInfoLog")
-        }
+        if(GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
+            System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program)}")
 
         shaderList.forEach {
             GL20.glDetachShader(program, it)
@@ -231,14 +178,87 @@ open class Program {
         return program
     }
 
-    private val String.type
-        get() = when (substringAfterLast('.')) {
-            "vert" -> GL20.GL_VERTEX_SHADER
-            "tesc" -> GL40.GL_TESS_CONTROL_SHADER
-            "tese" -> GL40.GL_TESS_EVALUATION_SHADER
-            "geom" -> GL32.GL_GEOMETRY_SHADER
-            "frag" -> GL20.GL_FRAGMENT_SHADER
-            "comp" -> GL43.GL_COMPUTE_SHADER
-            else -> throw Error("invalid shader extension")
+    operator fun plusAssign(shader: Int) = GL20.glAttachShader(name, shader)
+
+    fun link() = GL20.glLinkProgram(name)
+
+    companion object {
+
+        fun fromSources(vertSrc: String, fragSrc: String, geomSrc: String? = null): Program {
+
+            val program = Program()
+
+            val shaders = arrayListOf(createShaderFromSource(vertSrc, GL20.GL_VERTEX_SHADER), createShaderFromSource(fragSrc, GL20.GL_FRAGMENT_SHADER))
+            geomSrc?.let { shaders += createShaderFromSource(it, GL32.GL_GEOMETRY_SHADER) }
+
+            shaders.forEach { GL20.glAttachShader(program.name, it) }
+
+            program.link()
+
+            if (GL20.glGetProgrami(program.name, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
+                System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program.name)}")
+
+            shaders.forEach {
+                GL20.glDetachShader(program.name, it)
+                GL20.glDeleteShader(it)
+            }
+
+            return program
         }
+
+        @Throws(Error::class)
+        fun createShaderFromSource(source: String, type: Int): Int {
+
+            val shader = GL20.glCreateShader(type)
+
+            GL20.glShaderSource(shader, source)
+
+            GL20.glCompileShader(shader)
+
+            if (GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)
+                throw Error(GL20.glGetShaderInfoLog(shader))
+
+            return shader
+        }
+
+        fun createShaderFromPath(path: String): Int {
+
+            val lines = ClassLoader.getSystemResourceAsStream(path).use {
+                BufferedReader(InputStreamReader(it)).lines().collect(Collectors.toList())
+            }
+
+            var source = ""
+            lines.forEach {
+                source +=
+                        if (it.startsWith("#include "))
+                            parseInclude(path.substringBeforeLast('/'), it.substring("#include ".length).trim())
+                        else it
+                source += '\n'
+            }
+
+            try {
+                return createShaderFromSource(source, path.type)
+            } catch (err: Exception) {
+                throw Error("Compiler failure in ${path.substringAfterLast('/')} shader: ${err.message}")
+            }
+        }
+
+        fun parseInclude(root: String, shader: String): String {
+            if (shader.startsWith('"') && shader.endsWith('"'))
+                shader.substring(1, shader.length - 1)
+            val url = ClassLoader.getSystemResource("$root/$shader")
+            return File(url.toURI()).readText() + "\n"
+        }
+
+        private val String.type
+            get() = when (substringAfterLast('.')) {
+                "vert" -> GL20.GL_VERTEX_SHADER
+                "tesc" -> GL40.GL_TESS_CONTROL_SHADER
+                "tese" -> GL40.GL_TESS_EVALUATION_SHADER
+                "geom" -> GL32.GL_GEOMETRY_SHADER
+                "frag" -> GL20.GL_FRAGMENT_SHADER
+                "comp" -> GL43.GL_COMPUTE_SHADER
+                else -> throw Error("invalid shader extension")
+            }
+    }
 }
