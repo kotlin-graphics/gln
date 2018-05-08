@@ -32,9 +32,9 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    compile 'com.github.kotlin-graphics:gli:f0631586724fd51de24e202937dcb93bb8fd2f80'
+    compile 'com.github.kotlin-graphics:gli:a4f1f5b958f8a88bc9941a7d837459c87bf6ed96'
 
-    testCompile 'io.kotlintest:kotlintest-runner-junit5:3.0.6'
+    //testCompile 'io.kotlintest:kotlintest-runner-junit5:3.0.6'
 
     switch (OperatingSystem.current()) {
         case OperatingSystem.WINDOWS:

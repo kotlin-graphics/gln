@@ -1,6 +1,6 @@
 package gln.buffer
 
-import gli_.buffer.destroy
+import glm_.buffer.free
 import glm_.BYTES
 import glm_.L
 import glm_.mat4x4.Mat4
@@ -74,7 +74,7 @@ inline fun glBufferData(target: Int, data: FloatArray, usage: Int) {
     val buffer = MemoryUtil.memAlloc(data.size * Float.BYTES)
     for(i in data.indices) buffer.putFloat(i * Float.BYTES, data[i])
     GL15.nglBufferData(target, buffer.size.L, memAddress(buffer, 0), usage)
-    buffer.destroy()
+    buffer.free()
 }
 
 
