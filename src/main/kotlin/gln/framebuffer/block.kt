@@ -1,5 +1,8 @@
 package gln.framebuffer
 
+import glm_.buffer.adr
+import glm_.buffer.cap
+import glm_.buffer.pos
 import gln.buf
 import gln.bufAd
 import gln.get
@@ -8,7 +11,6 @@ import gln.texture.textureName
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL32
-import org.lwjgl.system.MemoryUtil.memAddress0
 import java.nio.IntBuffer
 
 
@@ -24,7 +26,7 @@ inline fun initFramebuffer(block: Framebuffer.() -> Unit): Int {
 
 inline fun initFramebuffers(block: Framebuffers.() -> Unit) = initFramebuffers(framebufferName, block)
 inline fun initFramebuffers(framebuffer: IntBuffer, block: Framebuffers.() -> Unit) {
-    GL30.nglGenFramebuffers(framebuffer.capacity(), memAddress0(framebuffer) + framebuffer.position() shl 2)
+    GL30.nglGenFramebuffers(framebuffer.cap, framebuffer.adr + framebuffer.pos shl 2)
     Framebuffers.names = framebuffer
     Framebuffers.block()
 }

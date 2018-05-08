@@ -3,6 +3,7 @@ package gln.buffer
 import glm_.buffer.free
 import glm_.BYTES
 import glm_.L
+import glm_.buffer.adr
 import glm_.mat4x4.Mat4
 import glm_.size
 import gln.buf
@@ -15,7 +16,6 @@ import org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER
 import org.lwjgl.system.JNI
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
-import org.lwjgl.system.MemoryUtil.memAddress
 import java.nio.*
 import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty0
@@ -73,18 +73,18 @@ inline fun glBufferSubData(target: Int, mat: Mat4) {
 inline fun glBufferData(target: Int, data: FloatArray, usage: Int) {
     val buffer = MemoryUtil.memAlloc(data.size * Float.BYTES)
     for(i in data.indices) buffer.putFloat(i * Float.BYTES, data[i])
-    GL15.nglBufferData(target, buffer.size.L, memAddress(buffer, 0), usage)
+    GL15.nglBufferData(target, buffer.size.L, buffer.adr, usage)
     buffer.free()
 }
 
 
-inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ByteBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
-inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ShortBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
-inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: IntBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
-inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: LongBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
-inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: CharBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
-inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: FloatBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
-inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: DoubleBuffer) = GL15.nglBufferSubData(target, 0L, size.L, memAddress(buffer))
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ByteBuffer) = GL15.nglBufferSubData(target, 0L, size.L, buffer.adr)
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: ShortBuffer) = GL15.nglBufferSubData(target, 0L, size.L, buffer.adr)
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: IntBuffer) = GL15.nglBufferSubData(target, 0L, size.L, buffer.adr)
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: LongBuffer) = GL15.nglBufferSubData(target, 0L, size.L, buffer.adr)
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: CharBuffer) = GL15.nglBufferSubData(target, 0L, size.L, buffer.adr)
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: FloatBuffer) = GL15.nglBufferSubData(target, 0L, size.L, buffer.adr)
+inline fun glBufferSubData(target: Int, offset: Int, size: Int, buffer: DoubleBuffer) = GL15.nglBufferSubData(target, 0L, size.L, buffer.adr)
 
 
 inline fun glBindBuffer(target: Int) = GL15.glBindBuffer(target, 0)

@@ -1,6 +1,7 @@
 package gln.draw
 
 import glm_.BYTES
+import glm_.buffer.cap
 import glm_.size
 import org.lwjgl.opengl.*
 import java.nio.ByteBuffer
@@ -27,8 +28,8 @@ inline fun glDrawArraysInstancedBaseInstance(mode: Int, count: Int, primCount: I
 inline fun glMultiDrawArraysIndirect(indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / (4 * Int.BYTES), 0)
 inline fun glMultiDrawArraysIndirect(mode: Int, indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(mode, indirect, indirect.size / (4 * Int.BYTES), 0)
 inline fun glMultiDrawArraysIndirect(mode: Int, indirect: ByteBuffer, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode, indirect, primCount, 0)
-inline fun glMultiDrawArraysIndirect(indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.capacity() / 4, 0)
-inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.capacity() / 4, 0)
+inline fun glMultiDrawArraysIndirect(indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.cap / 4, 0)
+inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.cap / 4, 0)
 inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntBuffer, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode, indirect, primCount, 0)
 inline fun glMultiDrawArraysIndirect(indirect: IntArray) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / 4, 0)
 inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntArray) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / 4, 0)

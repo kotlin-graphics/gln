@@ -1,17 +1,18 @@
 package gln.renderbuffer
 
+import glm_.buffer.adr
+import glm_.buffer.cap
 import glm_.vec2.Vec2i
 import gln.buf
 import gln.bufAd
 import gln.get
 import org.lwjgl.opengl.GL30
-import org.lwjgl.system.MemoryUtil.memAddress0
 import java.nio.IntBuffer
 
 
 inline fun initRenderbuffers(block: RenderBuffers.() -> Unit) = initRenderbuffers(renderbufferName, block)
 inline fun initRenderbuffers(renderbuffers: IntBuffer, block: RenderBuffers.() -> Unit) {
-    GL30.nglGenRenderbuffers(renderbuffers.capacity(), memAddress0(renderbuffers) + renderbuffers.capacity() shl 2)
+    GL30.nglGenRenderbuffers(renderbuffers.cap, renderbuffers.adr + renderbuffers.cap shl 2)
     RenderBuffers.names = renderbuffers
     RenderBuffers.block()
 }

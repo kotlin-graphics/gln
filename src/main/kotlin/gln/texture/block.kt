@@ -3,6 +3,9 @@ package gln.texture
 import gli_.gl
 import gli_.gli
 import glm_.BYTES
+import glm_.buffer.adr
+import glm_.buffer.cap
+import glm_.buffer.pos
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import gln.buf
@@ -10,7 +13,6 @@ import gln.bufAd
 import gln.get
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
-import org.lwjgl.system.MemoryUtil.memAddress0
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
@@ -120,14 +122,14 @@ inline fun initTexture(target: Int, block: Texture.() -> Unit): Int {
 
 inline fun initTextures2d(block: Textures2d.() -> Unit) = initTextures2d(textureName, block)
 inline fun initTextures2d(textures: IntBuffer, block: Textures2d.() -> Unit) {
-    GL11.nglGenTextures(textures.capacity(), memAddress0(textures) + textures.capacity() shl 2)
+    GL11.nglGenTextures(textures.cap, textures.adr + textures.cap shl 2)
     Textures2d.names = textures
     Textures2d.block()
 }
 
 inline fun initTextures(target: Int, block: Textures.() -> Unit) = initTextures(target, textureName, block)
 inline fun initTextures(target: Int, textures: IntBuffer, block: Textures.() -> Unit) {
-    GL11.nglGenTextures(textures.capacity(), memAddress0(textures) + textures.capacity() shl 2)
+    GL11.nglGenTextures(textures.cap, textures.adr + textures.cap shl 2)
     Textures.target = target
     Textures.names = textures
     Textures.block()
@@ -144,7 +146,7 @@ object Texture {
 
     inline fun image1d(internalFormat: Int, width: Int, format: Int, type: Int, pixels: ByteBuffer) = image1d(0, internalFormat, width, format, type, pixels)
     inline fun image1d(level: Int, internalFormat: Int, width: Int, format: Int, type: Int, pixels: ByteBuffer) =
-            GL11.nglTexImage1D(GL11.GL_TEXTURE_1D, level, internalFormat, width, 0, format, type, memAddress0(pixels) + pixels.position())
+            GL11.nglTexImage1D(GL11.GL_TEXTURE_1D, level, internalFormat, width, 0, format, type, pixels.adr + pixels.pos)
 
     var baseLevel = 0
         set(value) {
@@ -174,7 +176,7 @@ object Texture1d {
 
     fun image(internalFormat: Int, width: Int, format: Int, type: Int, pixels: ByteBuffer) = image(0, internalFormat, width, format, type, pixels)
     fun image(level: Int, internalFormat: Int, width: Int, format: Int, type: Int, pixels: ByteBuffer) =
-            GL11.nglTexImage1D(GL11.GL_TEXTURE_1D, level, internalFormat, width, 0, format, type, memAddress0(pixels) + pixels.position())
+            GL11.nglTexImage1D(GL11.GL_TEXTURE_1D, level, internalFormat, width, 0, format, type, pixels.adr + pixels.pos)
 
     var baseLevel = 0
         set(value) {
@@ -214,7 +216,7 @@ object Texture2d {
 
     inline fun image(internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) = image(0, internalFormat, width, height, format, type, pixels)
     inline fun image(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) =
-            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type, memAddress0(pixels) + pixels.position())
+            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type, pixels.adr + pixels.pos)
 
     // TODO size for others
 
@@ -223,12 +225,12 @@ object Texture2d {
 
     inline fun image(internalFormat: Int, size: Vec2i, format: Int, type: Int, pixels: ByteBuffer) = image(0, internalFormat, size, format, type, pixels)
     inline fun image(level: Int, internalFormat: Int, size: Vec2i, format: Int, type: Int, pixels: ByteBuffer) =
-            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, size.x, size.y, 0, format, type, memAddress0(pixels) + pixels.position())
+            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, size.x, size.y, 0, format, type, pixels.adr + pixels.pos)
 
     inline fun image(internalFormat: gli_.gl.InternalFormat, size: Vec3i, format: gli_.gl.ExternalFormat, type: gli_.gl.TypeFormat, pixels: ByteBuffer) =
             image(0, internalFormat, size, format, type, pixels)
     inline fun image(level: Int, internalFormat: gli_.gl.InternalFormat, size: Vec3i, format: gli_.gl.ExternalFormat, type: gli_.gl.TypeFormat, pixels: ByteBuffer) =
-            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, memAddress0(pixels) + pixels.position())
+            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels.adr + pixels.pos)
 
 
     inline fun storage(internalFormat: Int, size: Vec2i) = storage(1, internalFormat, size)
@@ -239,7 +241,7 @@ object Texture2d {
             compressedSubImage(level, 0, 0, size.x, size.y, format.i, data)
 
     inline fun compressedSubImage(level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: Int, data: ByteBuffer) =
-            GL13.nglCompressedTexSubImage2D(GL11.GL_TEXTURE_2D, level, xOffset, yOffset, width, height, format, data.capacity(), memAddress0(data) + data.position())
+            GL13.nglCompressedTexSubImage2D(GL11.GL_TEXTURE_2D, level, xOffset, yOffset, width, height, format, data.cap, data.adr + data.pos)
 
     var baseLevel = 0
         set(value) {
@@ -371,10 +373,10 @@ object Textures {
     lateinit var names: IntBuffer
 
     inline fun image1d(level: Int, internalFormat: Int, width: Int, format: Int, type: Int, pixels: ByteBuffer) =
-            GL11.nglTexImage1D(target, level, internalFormat, width, 0, format, type, memAddress0(pixels) + pixels.position())
+            GL11.nglTexImage1D(target, level, internalFormat, width, 0, format, type, pixels.adr + pixels.pos)
 
     inline fun image2d(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) =
-            GL11.nglTexImage2D(target, level, internalFormat, width, height, 0, format, type, memAddress0(pixels) + pixels.position())
+            GL11.nglTexImage2D(target, level, internalFormat, width, height, 0, format, type, pixels.adr + pixels.pos)
 
     inline fun at1d(index: Enum<*>, block: Texture1d.() -> Unit) = at1d(index.ordinal, block)
     inline fun at1d(index: Int, block: Texture1d.() -> Unit) {
@@ -394,7 +396,7 @@ object Textures2d {
     lateinit var names: IntBuffer
 
     inline fun image2d(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) =
-            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type, memAddress0(pixels) + pixels.position())
+            GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type, pixels.adr + pixels.pos)
 
     inline fun at(index: Enum<*>, block: Texture2d.() -> Unit) = at(index.ordinal, block)
     inline fun at(index: Int, block: Texture2d.() -> Unit) {

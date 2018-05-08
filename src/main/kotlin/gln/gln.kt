@@ -1,23 +1,22 @@
 package gln
 
 import glm_.BYTES
+import glm_.buffer.adr
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL13.GL_MULTISAMPLE
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL41
 import org.lwjgl.system.MemoryUtil
 import java.awt.Color
+import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
-val buf = MemoryUtil.memAlloc(256)
-val buf2 = MemoryUtil.memAlloc(Int.BYTES)
-val bufAd = MemoryUtil.memAddress(buf)
-val buf2Ad = MemoryUtil.memAddress(buf2)
+val buf: ByteBuffer = MemoryUtil.memAlloc(256)
+val bufAd = buf.adr
 
 operator fun IntBuffer.get(e: Enum<*>) = get(e.ordinal)
 operator fun IntBuffer.set(e: Enum<*>, value: Int): IntBuffer = put(e.ordinal, value)

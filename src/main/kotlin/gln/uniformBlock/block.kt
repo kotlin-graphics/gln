@@ -2,10 +2,9 @@ package gln.uniformBlock
 
 import glm_.BYTES
 import glm_.bool
+import glm_.buffer.cap
 import glm_.glm
 import gln.buf
-import gln.buf2
-import gln.buf2Ad
 import gln.bufAd
 import org.lwjgl.opengl.GL31
 import org.lwjgl.opengl.GL40
@@ -19,8 +18,8 @@ object UniformBlock {
 
     inline val name: String
         get() {
-            GL31.nglGetActiveUniformBlockName(programName, blockIndex, buf.capacity(), buf2Ad, bufAd)
-            val bytes = ByteArray(buf2.getInt(0), { buf[it] })
+            GL31.nglGetActiveUniformBlockName(programName, blockIndex, buf.cap, bufAd, bufAd + Int.BYTES)
+            val bytes = ByteArray(buf.getInt(0), { buf[Int.BYTES + it] })
             return String(bytes)
         }
     inline val binding: Int
