@@ -29,7 +29,7 @@ typealias ShaderSource = String
 open class Program {
 
     @JvmField
-    val name = GL20.glCreateProgram()
+    var name = GL20.glCreateProgram()
     val uniforms = HashMap<String, Int>()
 
     constructor()
