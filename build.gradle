@@ -30,12 +30,13 @@ buildscript {
 
 dependencies {
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    compile 'com.github.kotlin-graphics:gli:d7e0dd9feeeef6a324e1262b09b246f663801c67'
+    implementation 'com.github.kotlin-graphics:gli:e486e385dfea7707b682a43f9ce8810b1be73506'
 
     //testCompile 'io.kotlintest:kotlintest-runner-junit5:3.0.6'
 
+    ext.lwjglVersion = "3.1.7-SNAPSHOT"
     switch (OperatingSystem.current()) {
         case OperatingSystem.WINDOWS:
             ext.lwjglNatives = "natives-windows"
@@ -47,19 +48,10 @@ dependencies {
             ext.lwjglNatives = "natives-macos"
             break
     }
-    ext.lwjglVersion = "3.1.7-SNAPSHOT"
-    compile "org.lwjgl:lwjgl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
-    compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
-    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
-    runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
+    ["", "-glfw", "-jemalloc", "-openal", "-opengl", "-stb"].each {
+        implementation "org.lwjgl:lwjgl$it:$lwjglVersion"
+        implementation "org.lwjgl:lwjgl$it:$lwjglVersion:$lwjglNatives"
+    }
 }
 
 repositories {
