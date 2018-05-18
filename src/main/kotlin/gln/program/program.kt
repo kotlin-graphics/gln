@@ -167,7 +167,7 @@ open class Program {
 
         GL20.glLinkProgram(program)
 
-        if(GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
+        if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
             System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program)}")
 
         shaderList.forEach {
@@ -183,6 +183,8 @@ open class Program {
     fun link() = GL20.glLinkProgram(name)
 
     val linkStatus get() = GL20.glGetProgrami(name, GL20.GL_LINK_STATUS)
+
+    val infoLog get() = GL20.glGetProgramInfoLog(name)
 
     companion object {
 
