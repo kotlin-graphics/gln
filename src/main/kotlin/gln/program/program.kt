@@ -182,6 +182,8 @@ open class Program {
 
     fun link() = GL20.glLinkProgram(name)
 
+    val linkStatus get() = GL20.glGetProgrami(name, GL20.GL_LINK_STATUS)
+
     companion object {
 
         fun fromSources(vertSrc: String, fragSrc: String, geomSrc: String? = null): Program {
