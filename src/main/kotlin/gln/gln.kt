@@ -7,9 +7,7 @@ import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL41
+import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil
 import java.awt.Color
 import java.nio.ByteBuffer
