@@ -124,6 +124,6 @@ inline fun glCompressedTexSubImage2D(target: gli_.gl.Target, level: Int, xOffset
         GL13.glCompressedTexSubImage2D(target.i, level, xOffset, yOffset, width, height, format.i, data)
 
 
-inline fun glGenerate1dMipmap() = GL30.glGenerateMipmap(GL_TEXTURE_1D)
-inline fun glGenerate2dMipmap() = GL30.glGenerateMipmap(GL_TEXTURE_2D)
-inline fun glGenerate3dMipmap() = GL30.glGenerateMipmap(GL_TEXTURE_3D)
+inline fun glGenerateMipmap1D() = GL30.glGenerateMipmap(GL_TEXTURE_1D)
+inline fun glGenerateMipmap2D() = GL30.glGenerateMipmap(GL_TEXTURE_2D)
+inline fun glGenerateMipmap3D() = GL30.glGenerateMipmap(GL_TEXTURE_3D)
