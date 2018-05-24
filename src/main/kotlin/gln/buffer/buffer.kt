@@ -34,6 +34,7 @@ inline fun glDeleteBuffer(buffer: Int) = GL15.glDeleteBuffers(buffer)
 
 inline fun glArrayBufferData(size: Int, usage: Int) = GL15.nglBufferData(GL_ARRAY_BUFFER, size.L, NULL, usage)
 inline fun glArrayBufferData(floats: FloatArray, usage: Int) = GL15.glBufferData(GL_ARRAY_BUFFER, floats, usage)
+inline fun glArrayBufferData(floats: FloatBuffer, usage: Int) = GL15.glBufferData(GL_ARRAY_BUFFER, floats, usage)
 
 inline fun glArrayBufferSubData(offset: Int, elements: Int, floats: FloatArray) = JNI.callPPPV(GL.getCapabilities().glBufferSubData, GL_ARRAY_BUFFER, offset.L, (elements shl 2).L, floats)
 inline fun glArrayBufferSubData(floats: FloatArray) = GL15.glBufferSubData(GL_ARRAY_BUFFER, 0L, floats)
