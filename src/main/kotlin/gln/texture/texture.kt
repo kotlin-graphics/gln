@@ -44,6 +44,7 @@ inline fun glBindTexture(target: gli_.gl.Target, texture: IntBuffer) = GL11.glBi
 inline fun glBindTexture(target: Int) = GL11.glBindTexture(target, 0)
 
 inline fun glBindTexture2d(texture: Int = 0) = GL11.glBindTexture(GL_TEXTURE_2D, texture)
+inline fun glBindTexture2d(texture: IntBuffer) = GL11.glBindTexture(GL_TEXTURE_2D, texture[0])
 
 inline fun glTex2dParameter(name: Int, param: Int) = GL11.glTexParameteri(GL_TEXTURE_2D, name, param)
 inline fun glTex2dParameter(name: Int, param: Vec4i) = GL11.glTexParameteriv(GL_TEXTURE_2D, name, param.toIntArray())
