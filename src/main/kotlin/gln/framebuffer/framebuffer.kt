@@ -5,6 +5,7 @@ import gln.get
 import gln.renderbuffer.renderbufferName
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER
+import org.lwjgl.opengl.GL30.GL_RENDERBUFFER
 import org.lwjgl.opengl.GL32
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
@@ -17,8 +18,9 @@ var framebufferName: IntBuffer by Delegates.notNull()
 
 val defaultFramebuffer = 0
 
-inline fun glFramebufferRenderbuffer(target: Int, attachment: Int, renderbuffertarget: Int, renderbuffer: Enum<*>) = GL30.glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbufferName[renderbuffer])
-inline fun glFramebufferRenderbuffer(target: Int, attachment: Int, renderbuffertarget: Int, renderbuffer: IntBuffer) = GL30.glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer[0])
+inline fun glFramebufferRenderbuffer(attachment: Int, renderbuffer: Enum<*>) = GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, renderbufferName[renderbuffer])
+inline fun glFramebufferRenderbuffer(attachment: Int, renderbuffer: IntArray) = GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, renderbuffer[0])
+inline fun glFramebufferRenderbuffer(attachment: Int, renderbuffer: IntBuffer) = GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, renderbuffer[0])
 
 
 inline fun glBindFramebuffer(target: Int, framebuffer: Enum<*>) = GL30.glBindFramebuffer(target, framebufferName[framebuffer])
