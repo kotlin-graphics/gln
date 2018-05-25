@@ -12,9 +12,10 @@ var renderbufferName: IntBuffer by Delegates.notNull()
 
 inline fun glRenderbufferStorageMultisample(target: Int, samples: Int, internalFormat: Int, size: Vec2i) = GL30.glRenderbufferStorageMultisample(target, samples, internalFormat, size.x, size.y)
 
-inline fun glBindRenderbuffer(target: Int) = GL30.glBindRenderbuffer(target, 0)
-inline fun glBindRenderbuffer(target: Int, renderbuffer: IntBuffer) = GL30.glBindRenderbuffer(target, renderbuffer[0])
-inline fun glBindRenderbuffer(target: Int, renderbuffer: Enum<*>) = GL30.glBindRenderbuffer(target, renderbufferName[renderbuffer])
+inline fun glBindRenderbuffer() = GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, 0)
+inline fun glBindRenderbuffer(renderbuffer: IntArray) = GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, renderbuffer[0])
+inline fun glBindRenderbuffer(renderbuffer: IntBuffer) = GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, renderbuffer[0])
+inline fun glBindRenderbuffer(renderbuffer: Enum<*>) = GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, renderbufferName[renderbuffer])
 
 
 inline fun glRenderbufferStorage(internalFormat: Int, width: Int, height: Int) = GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, internalFormat, width, height)
