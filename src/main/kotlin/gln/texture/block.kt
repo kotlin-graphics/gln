@@ -6,6 +6,7 @@ import glm_.BYTES
 import glm_.buffer.adr
 import glm_.buffer.cap
 import glm_.buffer.pos
+import glm_.buffer.rem
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import gln.buf
@@ -122,14 +123,14 @@ inline fun initTexture(target: Int, block: Texture.() -> Unit): Int {
 
 inline fun initTextures2d(block: Textures2d.() -> Unit) = initTextures2d(textureName, block)
 inline fun initTextures2d(textures: IntBuffer, block: Textures2d.() -> Unit) {
-    GL11.nglGenTextures(textures.cap, textures.adr + textures.cap shl 2)
+    GL11.nglGenTextures(textures.rem, textures.adr + textures.pos * Int.BYTES)
     Textures2d.names = textures
     Textures2d.block()
 }
 
 inline fun initTextures(target: Int, block: Textures.() -> Unit) = initTextures(target, textureName, block)
 inline fun initTextures(target: Int, textures: IntBuffer, block: Textures.() -> Unit) {
-    GL11.nglGenTextures(textures.cap, textures.adr + textures.cap shl 2)
+    GL11.nglGenTextures(textures.rem, textures.adr + textures.pos * Int.BYTES)
     Textures.target = target
     Textures.names = textures
     Textures.block()
@@ -241,7 +242,7 @@ object Texture2d {
             compressedSubImage(level, 0, 0, size.x, size.y, format.i, data)
 
     inline fun compressedSubImage(level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: Int, data: ByteBuffer) =
-            GL13.nglCompressedTexSubImage2D(GL11.GL_TEXTURE_2D, level, xOffset, yOffset, width, height, format, data.cap, data.adr + data.pos)
+            GL13.nglCompressedTexSubImage2D(GL11.GL_TEXTURE_2D, level, xOffset, yOffset, width, height, format, data.rem, data.adr + data.pos)
 
     var baseLevel = 0
         set(value) {

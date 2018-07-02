@@ -3,6 +3,7 @@ package gln.uniformBlock
 import glm_.BYTES
 import glm_.bool
 import glm_.buffer.cap
+import glm_.buffer.rem
 import glm_.glm
 import gln.buf
 import gln.bufAd
@@ -18,8 +19,8 @@ object UniformBlock {
 
     inline val name: String
         get() {
-            GL31.nglGetActiveUniformBlockName(programName, blockIndex, buf.cap, bufAd, bufAd + Int.BYTES)
-            val bytes = ByteArray(buf.getInt(0), { buf[Int.BYTES + it] })
+            GL31.nglGetActiveUniformBlockName(programName, blockIndex, buf.rem, bufAd, bufAd + Int.BYTES)
+            val bytes = ByteArray(buf.getInt(0)) { buf[Int.BYTES + it] }
             return String(bytes)
         }
     inline val binding: Int
@@ -45,7 +46,7 @@ object UniformBlock {
     inline val activeUniformsIndices: IntArray
         get() {
             GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, bufAd)
-            return IntArray(glm.min(activeUniforms, 32), { buf.getInt(it * Int.BYTES) })
+            return IntArray(glm.min(activeUniforms, 32)) { buf.getInt(it * Int.BYTES) }
         }
     inline val byVertexShader: Boolean
         get() {

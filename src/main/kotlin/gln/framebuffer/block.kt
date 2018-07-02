@@ -1,8 +1,10 @@
 package gln.framebuffer
 
+import glm_.BYTES
 import glm_.buffer.adr
 import glm_.buffer.cap
 import glm_.buffer.pos
+import glm_.buffer.rem
 import gln.buf
 import gln.bufAd
 import gln.get
@@ -26,7 +28,7 @@ inline fun initFramebuffer(block: Framebuffer.() -> Unit): Int {
 
 inline fun initFramebuffers(block: Framebuffers.() -> Unit) = initFramebuffers(framebufferName, block)
 inline fun initFramebuffers(framebuffer: IntBuffer, block: Framebuffers.() -> Unit) {
-    GL30.nglGenFramebuffers(framebuffer.cap, framebuffer.adr + framebuffer.pos shl 2)
+    GL30.nglGenFramebuffers(framebuffer.rem, framebuffer.adr + framebuffer.pos * Int.BYTES)
     Framebuffers.names = framebuffer
     Framebuffers.block()
 }

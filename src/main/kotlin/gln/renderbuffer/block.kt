@@ -1,7 +1,10 @@
 package gln.renderbuffer
 
+import glm_.BYTES
 import glm_.buffer.adr
 import glm_.buffer.cap
+import glm_.buffer.pos
+import glm_.buffer.rem
 import glm_.vec2.Vec2i
 import gln.buf
 import gln.bufAd
@@ -12,7 +15,7 @@ import java.nio.IntBuffer
 
 inline fun initRenderbuffers(block: RenderBuffers.() -> Unit) = initRenderbuffers(renderbufferName, block)
 inline fun initRenderbuffers(renderbuffers: IntBuffer, block: RenderBuffers.() -> Unit) {
-    GL30.nglGenRenderbuffers(renderbuffers.cap, renderbuffers.adr + renderbuffers.cap shl 2)
+    GL30.nglGenRenderbuffers(renderbuffers.rem, renderbuffers.adr + renderbuffers.pos * Int.BYTES)
     RenderBuffers.names = renderbuffers
     RenderBuffers.block()
 }
