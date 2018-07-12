@@ -32,7 +32,7 @@ inline fun initFramebuffers(framebuffer: IntBuffer, block: Framebuffers.() -> Un
     Framebuffers.block()
 }
 
-inline fun <R> withFramebuffer(framebuffer: IntBuffer, block: Framebuffer.() -> R) = withFramebuffer(framebufferName[0], block)
+inline fun <R> withFramebuffer(framebuffer: IntBuffer, block: Framebuffer.() -> R) = withFramebuffer(framebuffer[0], block)
 inline fun <R> withFramebuffer(framebuffer: Enum<*>, block: Framebuffer.() -> R) = withFramebuffer(framebufferName[framebuffer], block)
 inline fun <R> withFramebuffer(framebuffer: IntArray, block: Framebuffer.() -> R) = withFramebuffer(framebuffer[0], block)
 inline fun <R> withFramebuffer(block: Framebuffer.() -> R) = withFramebuffer(0, block)
