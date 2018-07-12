@@ -1,16 +1,16 @@
 package gln.debug
 
 
-import org.lwjgl.opengl.GLDebugMessageCallback
-import org.lwjgl.opengl.GLDebugMessageCallbackI
-import org.lwjgl.opengl.KHRDebug
+import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
+import org.lwjgl.opengl.GL43.glDebugMessageControl as prova
 
 
 enum class GlDebugSource(val i: Int) {
     API(KHRDebug.GL_DEBUG_SOURCE_API),
     APPLICATION(KHRDebug.GL_DEBUG_SOURCE_APPLICATION),
+    DONT_CARE(GL11.GL_DONT_CARE),
     OTHER(KHRDebug.GL_DEBUG_SOURCE_OTHER),
     SHADER_COMPILER(KHRDebug.GL_DEBUG_SOURCE_SHADER_COMPILER),
     THIRD_PARTY(KHRDebug.GL_DEBUG_SOURCE_THIRD_PARTY),
@@ -23,6 +23,7 @@ enum class GlDebugSource(val i: Int) {
 
 enum class GlDebugType(val i: Int) {
     DEPRECATED_BEHAVIOR(KHRDebug.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR),
+    DONT_CARE(GL11.GL_DONT_CARE),
     ERROR(KHRDebug.GL_DEBUG_TYPE_ERROR),
     MARKER(KHRDebug.GL_DEBUG_TYPE_MARKER),
     OTHER(KHRDebug.GL_DEBUG_TYPE_OTHER),
@@ -38,6 +39,7 @@ enum class GlDebugType(val i: Int) {
 }
 
 enum class GlDebugSeverity(val i: Int) {
+    DONT_CARE(GL11.GL_DONT_CARE),
     HIGH(KHRDebug.GL_DEBUG_SEVERITY_HIGH),
     LOW(KHRDebug.GL_DEBUG_SEVERITY_LOW),
     MEDIUM(KHRDebug.GL_DEBUG_SEVERITY_MEDIUM),
@@ -56,4 +58,19 @@ fun glDebugMessageCallback(callback: (source: GlDebugSource, type: GlDebugType, 
         callback(GlDebugSource.of(source), GlDebugType.of(type), id, GlDebugSeverity.of(severity), MemoryUtil.memUTF8(message))
     }
     KHRDebug.glDebugMessageCallback(glDebugCallback, NULL)
+}
+
+fun glDebugMessageControl(source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int, enabled: Boolean) {
+    _glDebugMessageControl(source.i, type.i, severity.i, id, enabled)
+}
+
+val _glDebugMessageControl: (Int, Int, Int, Int, Boolean) -> Unit = GL.getCapabilities().run {
+    when {
+        OpenGL43 -> GL43::glDebugMessageControl
+        GL_KHR_debug -> KHRDebug::glDebugMessageControl
+        GL_ARB_debug_output -> ARBDebugOutput::glDebugMessageControlARB
+        else -> throw Error()
+    //            if (caps.GL_AMD_debug_output)
+    //                AMDDebugOutput.glDebugMessageEnableAMD(GL11.GL_DONT_CARE, GL11.GL_DONT_CARE,  GL43.GL_DEBUG_SEVERITY_NOTIFICATION, 0, false)
+    }
 }
