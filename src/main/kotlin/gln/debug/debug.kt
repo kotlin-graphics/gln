@@ -52,15 +52,15 @@ enum class GlDebugSeverity(val i: Int) {
 
 var glDebugCallback: GLDebugMessageCallback? = null
 
-fun glDebugMessageCallback(callback: (source: GlDebugSource, type: GlDebugType, id: Int, severity: GlDebugSeverity, message: String) -> Unit) {
+fun glDebugMessageCallback(callback: (source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int, message: String) -> Unit) {
     glDebugCallback?.free()
     glDebugCallback = GLDebugMessageCallback.create { source, type, id, severity, _, message, _ ->
-        callback(GlDebugSource.of(source), GlDebugType.of(type), id, GlDebugSeverity.of(severity), MemoryUtil.memUTF8(message))
+        callback(GlDebugSource of source, GlDebugType of type, GlDebugSeverity of severity, id, MemoryUtil.memUTF8(message))
     }
     KHRDebug.glDebugMessageCallback(glDebugCallback, NULL)
 }
 
-fun glDebugMessageControl(source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int, enabled: Boolean) {
+fun glDebugMessageControl(source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int = 0, enabled: Boolean) {
     _glDebugMessageControl(source.i, type.i, severity.i, id, enabled)
 }
 
