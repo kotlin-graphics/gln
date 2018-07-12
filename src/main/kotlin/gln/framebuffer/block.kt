@@ -2,7 +2,6 @@ package gln.framebuffer
 
 import glm_.BYTES
 import glm_.buffer.adr
-import glm_.buffer.cap
 import glm_.buffer.pos
 import glm_.buffer.rem
 import gln.buf
@@ -33,13 +32,13 @@ inline fun initFramebuffers(framebuffer: IntBuffer, block: Framebuffers.() -> Un
     Framebuffers.block()
 }
 
-inline fun withFramebuffer(framebuffer: IntBuffer, block: Framebuffer.() -> Unit) = withFramebuffer(framebufferName[0], block)
-inline fun withFramebuffer(framebuffer: Enum<*>, block: Framebuffer.() -> Unit) = withFramebuffer(framebufferName[framebuffer], block)
-inline fun withFramebuffer(framebuffer: IntArray, block: Framebuffer.() -> Unit) = withFramebuffer(framebuffer[0], block)
-inline fun withFramebuffer(block: Framebuffer.() -> Unit) = withFramebuffer(0, block)
-inline fun withFramebuffer(framebuffer: Int, block: Framebuffer.() -> Unit) {
+inline fun <R> withFramebuffer(framebuffer: IntBuffer, block: Framebuffer.() -> R) = withFramebuffer(framebufferName[0], block)
+inline fun <R> withFramebuffer(framebuffer: Enum<*>, block: Framebuffer.() -> R) = withFramebuffer(framebufferName[framebuffer], block)
+inline fun <R> withFramebuffer(framebuffer: IntArray, block: Framebuffer.() -> R) = withFramebuffer(framebuffer[0], block)
+inline fun <R> withFramebuffer(block: Framebuffer.() -> R) = withFramebuffer(0, block)
+inline fun <R> withFramebuffer(framebuffer: Int, block: Framebuffer.() -> R): R {
     Framebuffer.name = framebuffer
-    Framebuffer.block()
+    return Framebuffer.block()
 }
 
 // TODO check if leave, backup current fbo?
