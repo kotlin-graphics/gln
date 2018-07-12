@@ -54,21 +54,22 @@ var glDebugCallback: GLDebugMessageCallback? = null
 
 fun glDebugMessageCallback(callback: (source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int, message: String) -> Unit) {
     glDebugCallback?.free()
-    glDebugCallback = GLDebugMessageCallback.create { source, type, id, severity, _, message, _ ->
+    glDebugCallback = GLDebugMessageCallback.create { source, type, severity, id, _, message, _ ->
         callback(GlDebugSource of source, GlDebugType of type, GlDebugSeverity of severity, id, MemoryUtil.memUTF8(message))
     }
     KHRDebug.glDebugMessageCallback(glDebugCallback, NULL)
 }
 
-fun glDebugMessageControl(source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int = 0, enabled: Boolean) {
-    _glDebugMessageControl(source.i, type.i, severity.i, id, enabled)
+// TODO glDebugMessageControl with id
+fun glDebugMessageControl(source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, enabled: Boolean) {
+    _glDebugMessageControl(source.i, type.i, severity.i, 0, NULL, enabled)
 }
 
-val _glDebugMessageControl: (Int, Int, Int, Int, Boolean) -> Unit = GL.getCapabilities().run {
+val _glDebugMessageControl: (source: Int, type: Int, severity: Int, count: Int, adr: Long, Boolean) -> Unit = GL.getCapabilities().run {
     when {
-        OpenGL43 -> GL43::glDebugMessageControl
-        GL_KHR_debug -> KHRDebug::glDebugMessageControl
-        GL_ARB_debug_output -> ARBDebugOutput::glDebugMessageControlARB
+        OpenGL43 -> GL43::nglDebugMessageControl
+        GL_KHR_debug -> KHRDebug::nglDebugMessageControl
+        GL_ARB_debug_output -> ARBDebugOutput::nglDebugMessageControlARB
         else -> throw Error()
     //            if (caps.GL_AMD_debug_output)
     //                AMDDebugOutput.glDebugMessageEnableAMD(GL11.GL_DONT_CARE, GL11.GL_DONT_CARE,  GL43.GL_DEBUG_SEVERITY_NOTIFICATION, 0, false)
