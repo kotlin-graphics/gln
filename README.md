@@ -7,3 +7,8 @@
 [![Slack Status](http://slack.kotlinlang.org/badge.svg)](http://slack.kotlinlang.org/)
 
 OpenGL Next, functional programming
+
+
+A wrapper around OpenGL aimed to improve the dev experience by making gl code compact, easier (also allocation-wise) and type-safe (by converting those gl int constants into enums).
+
+To show you a practical example, you can take a look at the different code snippets on the [gli README](https://github.com/kotlin-graphics/gli)
