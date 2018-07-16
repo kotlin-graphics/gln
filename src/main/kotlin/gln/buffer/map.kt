@@ -7,17 +7,17 @@ import org.lwjgl.opengl.GL45
 import java.nio.ByteBuffer
 
 
-fun glMapBufferRange(target: Int, length: Long, access: Int) = GL30.glMapBufferRange(target, 0, length.L, access)
-fun glMapBufferRange(target: Int, length: Int, access: Int) = GL30.glMapBufferRange(target, 0, length.L, access)
-fun glMapBufferRange(target: Int, offset: Int, length: Int, access: Int) = GL30.glMapBufferRange(target, offset.L, length.L, access)
+fun glMapBufferRange(target: BufferTarget, length: Long, access: Int) = GL30.glMapBufferRange(target.i, 0, length.L, access)
+fun glMapBufferRange(target: BufferTarget, length: Int, access: Int) = GL30.glMapBufferRange(target.i, 0, length.L, access)
+fun glMapBufferRange(target: BufferTarget, offset: Int, length: Int, access: Int) = GL30.glMapBufferRange(target.i, offset.L, length.L, access)
 
-fun ByteBuffer.glMapBufferRange(target: Int, length: Long, access: Int) = GL30.glMapBufferRange(target, 0, length.L, access, this)
-fun ByteBuffer.glMapBufferRange(target: Int, length: Int, access: Int) = GL30.glMapBufferRange(target, 0, length.L, access, this)
-fun ByteBuffer.glMapBufferRange(target: Int, offset: Int, length: Int, access: Int) = GL30.glMapBufferRange(target, offset.L, length.L, access, this)
+fun ByteBuffer.glMapBufferRange(target: BufferTarget, length: Long, access: Int) = GL30.glMapBufferRange(target.i, 0, length.L, access, this)
+fun ByteBuffer.glMapBufferRange(target: BufferTarget, length: Int, access: Int) = GL30.glMapBufferRange(target.i, 0, length.L, access, this)
+fun ByteBuffer.glMapBufferRange(target: BufferTarget, offset: Int, length: Int, access: Int) = GL30.glMapBufferRange(target.i, offset.L, length.L, access, this)
 
-fun ByteBuffer.map(target: Int, access: Int) = GL15.glMapBuffer(target, access, this)
-fun ByteBuffer.map(target: Int, access: Int, length: Int) = GL15.glMapBuffer(target, access, length.L, this)
-fun ByteBuffer.map(target: Int, access: Int, length: Long) = GL15.glMapBuffer(target, access, length, this)
+fun ByteBuffer.map(target: BufferTarget, access: Int) = GL15.glMapBuffer(target.i, access, this)
+fun ByteBuffer.map(target: BufferTarget, access: Int, length: Int) = GL15.glMapBuffer(target.i, access, length.L, this)
+fun ByteBuffer.map(target: BufferTarget, access: Int, length: Long) = GL15.glMapBuffer(target.i, access, length, this)
 
 fun ByteBuffer.mapNamed(buffer: Int, access: Int) = GL45.glMapNamedBuffer(buffer, access, this)
 fun ByteBuffer.mapNamed(buffer: Int, access: Int, length: Int) = GL45.glMapNamedBuffer(buffer, access, length.L, this)
