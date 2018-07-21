@@ -30,9 +30,11 @@ buildscript {
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    ext.kotlin = "org.jetbrains.kotlin:kotlin"
+    implementation "$kotlin-stdlib:$kotlinVersion"
+    implementation "$kotlin-reflect:$kotlinVersion"
 
-    implementation 'com.github.kotlin-graphics:gli:6fcc778'
+    implementation 'com.github.kotlin-graphics:gli:4f1beb6'
 
     //testCompile 'io.kotlintest:kotlintest-runner-junit5:3.0.6'
 
