@@ -1,5 +1,6 @@
 package gln
 
+import ab.appBuffer
 import glm_.BYTES
 import glm_.buffer.adr
 import glm_.vec2.Vec2
@@ -13,7 +14,9 @@ import java.awt.Color
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
+@Deprecated("use appBuffer instead")
 val buf: ByteBuffer = MemoryUtil.memAlloc(256)
+@Deprecated("use appBuffer instead")
 val bufAd = buf.adr
 
 operator fun IntBuffer.get(e: Enum<*>) = get(e.ordinal)
@@ -46,23 +49,31 @@ inline fun glClearDepthf() = GL41.glClearDepthf(1f)
 
 
 inline fun glGetVec2(pname: Int): Vec2 {
-    GL11.nglGetFloatv(pname, bufAd)
-    return Vec2(buf)
-}
-
-inline fun glGetVec2i(pname: Int): Vec2i {
-    GL11.nglGetIntegerv(pname, bufAd)
-    return Vec2i(buf)
+    val x = appBuffer.float
+    val y = appBuffer.float
+    return Vec2(MemoryUtil.memGetFloat(x), MemoryUtil.memGetFloat(y))
 }
 
 inline fun glGetVec4(pname: Int): Vec4 {
-    GL11.nglGetFloatv(pname, bufAd)
-    return Vec4(buf)
+    val x = appBuffer.float
+    val y = appBuffer.float
+    val z = appBuffer.float
+    val w = appBuffer.float
+    return Vec4(MemoryUtil.memGetFloat(x), MemoryUtil.memGetFloat(y), MemoryUtil.memGetFloat(z), MemoryUtil.memGetFloat(w))
+}
+
+inline fun glGetVec2i(pname: Int): Vec2i {
+    val x = appBuffer.int
+    val y = appBuffer.int
+    return Vec2i(MemoryUtil.memGetInt(x), MemoryUtil.memGetInt(y))
 }
 
 inline fun glGetVec4i(pname: Int): Vec4i {
-    GL11.nglGetIntegerv(pname, bufAd)
-    return Vec4i(buf)
+    val x = appBuffer.int
+    val y = appBuffer.int
+    val z = appBuffer.int
+    val w = appBuffer.int
+    return Vec4i(MemoryUtil.memGetInt(x), MemoryUtil.memGetInt(y), MemoryUtil.memGetInt(z), MemoryUtil.memGetInt(w))
 }
 
 fun checkError(location: String, throwError: Boolean = true): Boolean {

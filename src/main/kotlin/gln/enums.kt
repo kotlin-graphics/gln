@@ -1,5 +1,9 @@
 package gln
 
+import glm_.BYTES
+import glm_.vec2.Vec2b
+import glm_.vec3.Vec3b
+import glm_.vec4.Vec4b
 import org.lwjgl.opengl.*
 
 /*  This is the OpenGL and OpenGL ES enumerant registry.
@@ -149,17 +153,18 @@ val CONSTANT_ALPHA_EXT_ = BlendingFactorSrc(EXTBlendColor.GL_CONSTANT_ALPHA_EXT)
 val ONE_MINUS_CONSTANT_ALPHA_EXT_ = BlendingFactorSrc(EXTBlendColor.GL_ONE_MINUS_CONSTANT_ALPHA_EXT)
 
 //###############################################################################
-//
-//BlendEquationModeEXT enum:
-//use GetPName LOGIC_OP
-//use EXT_blend_minmax FUNC_ADD_EXT
-//use EXT_blend_minmax MIN_EXT
-//use EXT_blend_minmax MAX_EXT
-//use EXT_blend_subtract FUNC_SUBTRACT_EXT
-//use EXT_blend_subtract FUNC_REVERSE_SUBTRACT_EXT
+
+inline class BlendEquationMode(val i: Int)
+
+val LOGIC_OP = BlendEquationMode(GL11.GL_LOGIC_OP)
+val FUNC_ADD = BlendEquationMode(GL14.GL_FUNC_ADD)
+val MIN = BlendEquationMode(GL14.GL_MIN)
+val MAX = BlendEquationMode(GL14.GL_MAX)
+val FUNC_SUBTRACT = BlendEquationMode(GL14.GL_FUNC_SUBTRACT)
+val FUNC_REVERSE_SUBTRACT = BlendEquationMode(GL14.GL_FUNC_REVERSE_SUBTRACT)
 //use SGIX_blend_alpha_minmax ALPHA_MIN_SGIX
 //use SGIX_blend_alpha_minmax ALPHA_MAX_SGIX
-//
+
 //###############################################################################
 //
 //ColorMaterialFace enum:
@@ -234,35 +239,37 @@ val FRONT_AND_BACK = CullFaceMode(GL11.GL_FRONT_AND_BACK)
 
 //###############################################################################
 
-inline class DepthFunction(val i: Int)
+/** Depth and Stencil func */
+inline class CompareFunction(val i: Int)
 
-val NEVER = DepthFunction(GL11.GL_NEVER)
-val LESS = DepthFunction(GL11.GL_LESS)
-val EQUAL = DepthFunction(GL11.GL_EQUAL)
-val LEQUAL = DepthFunction(GL11.GL_LEQUAL)
-val GREATER = DepthFunction(GL11.GL_GREATER)
-val NOTEQUAL = DepthFunction(GL11.GL_NOTEQUAL)
-val GEQUAL = DepthFunction(GL11.GL_GEQUAL)
-val ALWAYS = DepthFunction(GL11.GL_ALWAYS)
+val NEVER = CompareFunction(GL11.GL_NEVER)
+val LESS = CompareFunction(GL11.GL_LESS)
+val EQUAL = CompareFunction(GL11.GL_EQUAL)
+val LEQUAL = CompareFunction(GL11.GL_LEQUAL)
+val GREATER = CompareFunction(GL11.GL_GREATER)
+val NOTEQUAL = CompareFunction(GL11.GL_NOTEQUAL)
+val GEQUAL = CompareFunction(GL11.GL_GEQUAL)
+val ALWAYS = CompareFunction(GL11.GL_ALWAYS)
 
 //###############################################################################
 
-inline class DrawBufferMode(val i: Int)
+/** Draw and Read */
+inline class BufferMode(val i: Int)
 
-val NONE = DrawBufferMode(GL11.GL_NONE)
-val FRONT_LEFT = DrawBufferMode(GL11.GL_FRONT_LEFT)
-val FRONT_RIGHT = DrawBufferMode(GL11.GL_FRONT_RIGHT)
-val BACK_LEFT = DrawBufferMode(GL11.GL_BACK_LEFT)
-val BACK_RIGHT = DrawBufferMode(GL11.GL_BACK_RIGHT)
-val FRONT_ = DrawBufferMode(GL11.GL_FRONT)
-val BACK_ = DrawBufferMode(GL11.GL_BACK)
-val LEFT = DrawBufferMode(GL11.GL_LEFT)
-val RIGHT = DrawBufferMode(GL11.GL_RIGHT)
-val FRONT_AND_BACK_ = DrawBufferMode(GL11.GL_FRONT_AND_BACK)
-val AUX0 = DrawBufferMode(GL11.GL_AUX0)
-val AUX1 = DrawBufferMode(GL11.GL_AUX1)
-val AUX2 = DrawBufferMode(GL11.GL_AUX2)
-val AUX3 = DrawBufferMode(GL11.GL_AUX3)
+val NONE = BufferMode(GL11.GL_NONE)
+val FRONT_LEFT = BufferMode(GL11.GL_FRONT_LEFT)
+val FRONT_RIGHT = BufferMode(GL11.GL_FRONT_RIGHT)
+val BACK_LEFT = BufferMode(GL11.GL_BACK_LEFT)
+val BACK_RIGHT = BufferMode(GL11.GL_BACK_RIGHT)
+val FRONT_ = BufferMode(GL11.GL_FRONT)
+val BACK_ = BufferMode(GL11.GL_BACK)
+val LEFT = BufferMode(GL11.GL_LEFT)
+val RIGHT = BufferMode(GL11.GL_RIGHT)
+val FRONT_AND_BACK_ = BufferMode(GL11.GL_FRONT_AND_BACK)
+val AUX0 = BufferMode(GL11.GL_AUX0)
+val AUX1 = BufferMode(GL11.GL_AUX1)
+val AUX2 = BufferMode(GL11.GL_AUX2)
+val AUX3 = BufferMode(GL11.GL_AUX3)
 
 //###############################################################################
 
@@ -376,26 +383,26 @@ val CLIP_PLANE2 = EnableCap(GL11.GL_CLIP_PLANE2)
 //use SGI_texture_color_table TEXTURE_COLOR_TABLE_SGI
 
 //###############################################################################
-//
-//ErrorCode enum:
-//NO_ERROR					= 0
-//INVALID_ENUM					= 0x0500
-//INVALID_VALUE					= 0x0501
-//INVALID_OPERATION				= 0x0502
-//STACK_OVERFLOW					= 0x0503
-//STACK_UNDERFLOW					= 0x0504
-//OUT_OF_MEMORY					= 0x0505
-//use EXT_histogram TABLE_TOO_LARGE_EXT
-//use EXT_texture TEXTURE_TOO_LARGE_EXT
-//
+
+inline class ErrorCode(val i: Int)
+
+val NO_ERROR = ErrorCode(GL11.GL_NO_ERROR)
+val INVALID_ENUM = ErrorCode(GL11.GL_INVALID_ENUM)
+val INVALID_VALUE = ErrorCode(GL11.GL_INVALID_VALUE)
+val INVALID_OPERATION = ErrorCode(GL11.GL_INVALID_OPERATION)
+val STACK_OVERFLOW = ErrorCode(GL11.GL_STACK_OVERFLOW)
+val STACK_UNDERFLOW = ErrorCode(GL11.GL_STACK_UNDERFLOW)
+val OUT_OF_MEMORY = ErrorCode(GL11.GL_OUT_OF_MEMORY)
+val TABLE_TOO_LARGE_EXT = ErrorCode(ARBImaging.GL_TABLE_TOO_LARGE)
+val TEXTURE_TOO_LARGE = ErrorCode(0x8065)
+
 //# Additional error codes
-//
+
 //# VERSION_3_0 enum:
 //# ARB_framebuffer_object enum: (note: no ARB suffixes)
 //# EXT_framebuffer_object enum:
-//#	INVALID_FRAMEBUFFER_OPERATION			= 0x0506	# 3.0 / ARB_fbo
-//#	INVALID_FRAMEBUFFER_OPERATION_EXT		= 0x0506
-//
+val INVALID_FRAMEBUFFER_OPERATION = ErrorCode(GL30.GL_INVALID_FRAMEBUFFER_OPERATION)
+
 //###############################################################################
 //
 //FeedbackType enum:
@@ -457,11 +464,12 @@ val CLIP_PLANE2 = EnableCap(GL11.GL_CLIP_PLANE2)
 //use SGIX_fragment_lighting FRAGMENT_LIGHT_MODEL_NORMAL_INTERPOLATION_SGIX
 //
 //###############################################################################
-//
-//FrontFaceDirection enum:
-//CW						= 0x0900
-//CCW						= 0x0901
-//
+
+inline class FrontFaceDirection(val i: Int)
+
+val CW = FrontFaceDirection(GL11.GL_CW)
+val CCW = FrontFaceDirection(GL11.GL_CCW)
+
 //###############################################################################
 //
 //GetColorTableParameterPNameSGI enum:
@@ -1078,27 +1086,31 @@ val CLIP_PLANE2 = EnableCap(GL11.GL_CLIP_PLANE2)
 //use SGIX_texture_scale_bias POST_TEXTURE_FILTER_SCALE_SGIX
 //
 //###############################################################################
-//
-//HintMode enum:
-//DONT_CARE					= 0x1100
-//FASTEST						= 0x1101
-//NICEST						= 0x1102
-//
+
+inline class HintMode(val i: Int)
+
+val DONT_CARE = HintMode(GL11.GL_DONT_CARE)
+val FASTEST = HintMode(GL11.GL_FASTEST)
+val NICEST = HintMode(GL11.GL_NICEST)
+
 //###############################################################################
-//
-//HintTarget enum:
-//use GetPName PERSPECTIVE_CORRECTION_HINT
-//use GetPName POINT_SMOOTH_HINT
-//use GetPName LINE_SMOOTH_HINT
-//use GetPName POLYGON_SMOOTH_HINT
-//use GetPName FOG_HINT
-//use EXT_cmyka PACK_CMYK_HINT_EXT
-//use EXT_cmyka UNPACK_CMYK_HINT_EXT
+
+inline class HintTarget(val i: Int)
+
+val PERSPECTIVE_CORRECTION_HINT = HintTarget(GL11.GL_PERSPECTIVE_CORRECTION_HINT)
+val POINT_SMOOTH_HINT = HintTarget(GL11.GL_POINT_SMOOTH_HINT)
+val LINE_SMOOTH_HINT = HintTarget(GL11.GL_LINE_SMOOTH_HINT)
+val POLYGON_SMOOTH_HINT = HintTarget(GL11.GL_POLYGON_SMOOTH_HINT)
+val FOG_HINT = HintTarget(GL11.GL_FOG_HINT)
+val PACK_CMYK_HINT_EXT = HintTarget(0x800e)
+val UNPACK_CMYK_HINT_EXT = HintTarget(0x800f)
 //use SGIS_generate_mipmap GENERATE_MIPMAP_HINT_SGIS
 //use SGIX_convolution_accuracy CONVOLUTION_HINT_SGIX
 //use SGIX_texture_multi_buffer TEXTURE_MULTI_BUFFER_HINT_SGIX
 //use SGIX_vertex_preclip VERTEX_PRECLIP_HINT_SGIX
-//
+val TEXTURE_COMPRESSION_HINT = HintTarget(GL13.GL_TEXTURE_COMPRESSION_HINT)
+val FRAGMENT_SHADER_DERIVATIVE_HINT = HintTarget(GL20.GL_FRAGMENT_SHADER_DERIVATIVE_HINT)
+
 //###############################################################################
 //
 //HistogramTargetEXT enum:
@@ -1161,7 +1173,20 @@ val CLIP_PLANE2 = EnableCap(GL11.GL_CLIP_PLANE2)
 //
 //###############################################################################
 
-inline class DataType(val i: Int)
+inline class DataType(val i: Int) {
+    val size: Int
+        get() = when (this) {
+            BYTE, UNSIGNED_BYTE -> Byte.BYTES
+            SHORT, UNSIGNED_SHORT -> Short.BYTES
+            INT, UNSIGNED_INT -> Int.BYTES
+            FLOAT -> Float.BYTES
+            `2_BYTES` -> Vec2b.size
+            `3_BYTES` -> Vec3b.size
+            `4_BYTES` -> Vec4b.size
+            DOUBLE -> Double.BYTES
+            else -> throw Error()
+        }
+}
 
 val BYTE = DataType(GL11.GL_BYTE)
 val UNSIGNED_BYTE = DataType(GL11.GL_UNSIGNED_BYTE)
@@ -1206,25 +1231,26 @@ val FIXED_OES = DataType(0x140C)
 //use SGIX_list_priority LIST_PRIORITY_SGIX
 //
 //###############################################################################
-//
-//LogicOp enum:
-//CLEAR						= 0x1500
-//AND						= 0x1501
-//AND_REVERSE					= 0x1502
-//COPY						= 0x1503
-//AND_INVERTED					= 0x1504
-//NOOP						= 0x1505
-//XOR						= 0x1506
-//OR						= 0x1507
-//NOR						= 0x1508
-//EQUIV						= 0x1509
-//INVERT						= 0x150A
-//OR_REVERSE					= 0x150B
-//COPY_INVERTED					= 0x150C
-//OR_INVERTED					= 0x150D
-//NAND						= 0x150E
-//SET						= 0x150F
-//
+
+inline class LogicOp(val i: Int)
+
+val CLEAR = LogicOp(GL11.GL_CLEAR)
+val AND = LogicOp(GL11.GL_AND)
+val AND_REVERSE = LogicOp(GL11.GL_AND_REVERSE)
+val COPY = LogicOp(GL11.GL_COPY)
+val AND_INVERTED = LogicOp(GL11.GL_AND_INVERTED)
+val NOOP = LogicOp(GL11.GL_NOOP)
+val XOR = LogicOp(GL11.GL_XOR)
+val OR = LogicOp(GL11.GL_OR)
+val NOR = LogicOp(GL11.GL_NOR)
+val EQUIV = LogicOp(GL11.GL_EQUIV)
+val INVERT = LogicOp(GL11.GL_INVERT)
+val OR_REVERSE = LogicOp(GL11.GL_OR_REVERSE)
+val COPY_INVERTED = LogicOp(GL11.GL_COPY_INVERTED)
+val OR_INVERTED = LogicOp(GL11.GL_OR_INVERTED)
+val NAND = LogicOp(GL11.GL_NAND)
+val SET = LogicOp(GL11.GL_SET)
+
 //###############################################################################
 //
 //MapTarget enum:
@@ -1482,8 +1508,8 @@ val FIXED_OES = DataType(0x140C)
 //FILL						= 0x1B02
 //
 //###############################################################################
-//
-//ReadBufferMode enum:
+
+//inline class ReadBufferMode(val i: Int)
 //use DrawBufferMode FRONT_LEFT
 //use DrawBufferMode FRONT_RIGHT
 //use DrawBufferMode BACK_LEFT
@@ -1496,7 +1522,7 @@ val FIXED_OES = DataType(0x140C)
 //use DrawBufferMode AUX1
 //use DrawBufferMode AUX2
 //use DrawBufferMode AUX3
-//
+
 //###############################################################################
 //
 //RenderingMode enum:
@@ -1539,15 +1565,18 @@ val FIXED_OES = DataType(0x140C)
 //use AlphaFunction ALWAYS
 //
 //###############################################################################
-//
-//StencilOp enum:
-//use BlendingFactorDest ZERO
-//KEEP						= 0x1E00
-//REPLACE						= 0x1E01
-//INCR						= 0x1E02
-//DECR						= 0x1E03
-//use LogicOp INVERT
-//
+
+inline class StencilOp(val i: Int)
+
+val ZERO__ = StencilOp(GL11.GL_ZERO)
+val KEEP = StencilOp(GL11.GL_KEEP)
+val REPLACE = StencilOp(GL11.GL_REPLACE)
+val INCR = StencilOp(GL11.GL_INCR)
+val INCR_WRAP = StencilOp(GL14.GL_INCR_WRAP)
+val DECR = StencilOp(GL11.GL_DECR)
+val DECR_WRAP = StencilOp(GL14.GL_DECR_WRAP)
+val INVERT_ = StencilOp(GL11.GL_INVERT)
+
 //###############################################################################
 //
 //StringName enum:
@@ -6173,3 +6202,8 @@ val PROXY_TEXTURE_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
 //# E&S:	  108000-108999
 //
 //###############################################################################
+
+inline class ProvokeMode(val i: Int)
+
+val FIRST_VERTEX_CONVENTION = ProvokeMode(GL32.GL_FIRST_VERTEX_CONVENTION)
+val LAST_VERTEX_CONVENTION = ProvokeMode(GL32.GL_LAST_VERTEX_CONVENTION)

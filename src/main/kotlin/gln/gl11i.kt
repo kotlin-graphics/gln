@@ -6,14 +6,23 @@
 
 package gln
 
+import ab.appBuffer
+import glm_.buffer.adr
+import glm_.buffer.rem
 import glm_.vec2.Vec2d
 import glm_.vec4.Vec4
-import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11C
 import java.awt.Color
 import java.nio.ByteBuffer
+import java.nio.IntBuffer
+import java.nio.ShortBuffer
 
 
 object gl11 : gl11i
+
+fun main(args: Array<String>) {
+    gl11.flush()
+}
 
 /**
  * The OpenGL functionality of a forward compatible context, up to version 1.1.
@@ -45,7 +54,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glEnable">Reference Page</a>
      */
-    fun enable(target: EnableCap) = GL11.glEnable(target.i)
+    fun enable(target: EnableCap) = GL11C.glEnable(target.i)
 
     // --- [ glDisable ] ---
 
@@ -56,7 +65,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDisable">Reference Page</a>
      */
-    fun disable(target: EnableCap) = GL11.glDisable(target.i)
+    fun disable(target: EnableCap) = GL11C.glDisable(target.i)
 
     // --- [ glBindTexture ] ---
 
@@ -72,7 +81,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindTexture">Reference Page</a>
      */
-    fun bindTexture(target: TextureTarget, texture: GLtexture) = GL11.glBindTexture(target.i, texture.i)
+    fun bindTexture(target: TextureTarget, texture: GLtexture) = GL11C.glBindTexture(target.i, texture.i)
 
     // --- [ glBlendFunc ] ---
 
@@ -84,7 +93,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFunc">Reference Page</a>
      */
-    fun blendFunc(sFactor: BlendingFactorSrc, dFactor: BlendingFactorDest) = GL11.glBlendFunc(sFactor.i, dFactor.i)
+    fun blendFunc(sFactor: BlendingFactorSrc, dFactor: BlendingFactorDest) = GL11C.glBlendFunc(sFactor.i, dFactor.i)
 
     // --- [ glClear ] ---
 
@@ -96,7 +105,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClear">Reference Page</a>
      */
-    fun clear(mask: ClearBufferMask) = GL11.glClear(mask.i)
+    fun clear(mask: ClearBufferMask) = GL11C.glClear(mask.i)
 
     // --- [ glClearColor ] ---
 
@@ -110,7 +119,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearColor">Reference Page</a>
      */
-    fun clearColor(red: Float, green: Float, blue: Float, alpha: Float) = GL11.glClearColor(red, green, blue, alpha)
+    fun clearColor(red: Float, green: Float, blue: Float, alpha: Float) = GL11C.glClearColor(red, green, blue, alpha)
 
     /**
      * Sets the clear value for fixed-point and floating-point color buffers in RGBA mode. The specified components are stored as floating-point values.
@@ -122,7 +131,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearColor">Reference Page</a>
      */
-    fun clearColor(float: Float) = GL11.glClearColor(float, float, float, float)
+    fun clearColor(float: Float) = GL11C.glClearColor(float, float, float, float)
 
     /**
      * Sets the clear value for fixed-point and floating-point color buffers in RGBA mode. The specified components are stored as floating-point values.
@@ -134,7 +143,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearColor">Reference Page</a>
      */
-    fun clearColor(color: Color) = GL11.glClearColor(color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f)
+    fun clearColor(color: Color) = GL11C.glClearColor(color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f)
 
     /**
      * Sets the clear value for fixed-point and floating-point color buffers in RGBA mode. The specified components are stored as floating-point values.
@@ -146,7 +155,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearColor">Reference Page</a>
      */
-    fun clearColor(color: Vec4) = GL11.glClearColor(color.r, color.g, color.b, color.a)
+    fun clearColor(color: Vec4) = GL11C.glClearColor(color.r, color.g, color.b, color.a)
 
     // --- [ glClearDepth ] ---
 
@@ -158,7 +167,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearDepth">Reference Page</a>
      */
-    fun clearDepth(depth: Double) = GL11.glClearDepth(depth)
+    fun clearDepth(depth: Double) = GL11C.glClearDepth(depth)
 
     // --- [ glClearStencil ] ---
 
@@ -169,7 +178,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearStencil">Reference Page</a>
      */
-    fun clearStencil(s: Int) = GL11.glClearStencil(s)
+    fun clearStencil(s: Int) = GL11C.glClearStencil(s)
 
     // --- [ glColorMask ] ---
 
@@ -183,7 +192,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glColorMask">Reference Page</a>
      */
-    fun colorMask(red: Boolean, green: Boolean, blue: Boolean, alpha: Boolean) = GL11.glColorMask(red, green, blue, alpha)
+    fun colorMask(red: Boolean, green: Boolean, blue: Boolean, alpha: Boolean) = GL11C.glColorMask(red, green, blue, alpha)
 
     // --- [ glCullFace ] ---
 
@@ -196,7 +205,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCullFace">Reference Page</a>
      */
-    fun cullFace(mode: CullFaceMode) = GL11.glCullFace(mode.i)
+    fun cullFace(mode: CullFaceMode) = GL11C.glCullFace(mode.i)
 
     // --- [ glDepthFunc ] ---
 
@@ -207,7 +216,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDepthFunc">Reference Page</a>
      */
-    fun depthFunc(func: DepthFunction) = GL11.glDepthFunc(func.i)
+    fun depthFunc(func: CompareFunction) = GL11C.glDepthFunc(func.i)
 
     // --- [ glDepthMask ] ---
 
@@ -218,7 +227,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDepthMask">Reference Page</a>
      */
-    fun depthMask(flag: Boolean) = GL11.glDepthMask(flag)
+    fun depthMask(flag: Boolean) = GL11C.glDepthMask(flag)
 
     // --- [ glDepthRange ] ---
 
@@ -230,7 +239,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDepthRange">Reference Page</a>
      */
-    fun depthRange(zNear: Double, zFar: Double) = GL11.glDepthRange(zNear, zFar)
+    fun depthRange(zNear: Double, zFar: Double) = GL11C.glDepthRange(zNear, zFar)
 
     /**
      * Sets the depth range for all viewports to the same values.
@@ -240,7 +249,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDepthRange">Reference Page</a>
      */
-    fun depthRange(z: Vec2d) = GL11.glDepthRange(z.x, z.y)
+    fun depthRange(z: Vec2d) = GL11C.glDepthRange(z.x, z.y)
 
     // --- [ glDrawArrays ] ---
 
@@ -257,7 +266,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
      */
-    fun drawArrays(mode: BeginMode, first: Int, count: Int) = GL11.glDrawArrays(mode.i, first, count)
+    fun drawArrays(mode: BeginMode, first: Int, count: Int) = GL11C.glDrawArrays(mode.i, first, count)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices. Elements {@code first} through
@@ -271,7 +280,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
      */
-    fun drawArrays(mode: BeginMode, count: Int) = GL11.glDrawArrays(mode.i, 0, count)
+    fun drawArrays(mode: BeginMode, count: Int) = GL11C.glDrawArrays(mode.i, 0, count)
 
     // --- [ glDrawBuffer ] ---
 
@@ -285,7 +294,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawBuffer">Reference Page</a>
      */
-    fun drawBuffer(buf: DrawBufferMode) = GL11.glDrawBuffer(buf.i)
+    fun drawBuffer(buf: BufferMode) = GL11C.glDrawBuffer(buf.i)
 
     // --- [ glDrawElements ] ---
 
@@ -301,7 +310,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(mode: BeginMode, count: Int, type: DataType = UNSIGNED_INT, indices: Long = 0) = GL11.glDrawElements(mode.i, count, type.i, indices)
+    fun drawElements(mode: BeginMode, count: Int, type: DataType = UNSIGNED_INT, indices: Long = 0) = GL11C.nglDrawElements(mode.i, count, type.i, indices)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -315,7 +324,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(count: Int, type: DataType = UNSIGNED_INT, indices: Long = 0) = GL11.glDrawElements(TRIANGLES.i, count, type.i, indices)
+    fun drawElements(count: Int, type: DataType = UNSIGNED_INT, indices: Long = 0) = GL11C.nglDrawElements(TRIANGLES.i, count, type.i, indices)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -328,8 +337,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(mode: BeginMode, type: DataType, indices: ByteBuffer) = nglDrawElements(mode, indices.remaining() >> GLChecks.typeToByteShift(type), type, memAddress(indices));
-    }
+    fun drawElements(mode: BeginMode, type: DataType, indices: ByteBuffer) = GL11C.nglDrawElements(mode.i, indices.rem * type.size, type.i, indices.adr)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -341,9 +349,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    public static void glDrawElements(@NativeType("GLenum") int mode, @NativeType("void const *") ByteBuffer indices) {
-        nglDrawElements(mode, indices.remaining(), GL11.GL_UNSIGNED_BYTE, memAddress(indices));
-    }
+    fun drawElements(mode: BeginMode, indices: ByteBuffer) = GL11C.nglDrawElements(mode.i, indices.rem, GL11C.GL_UNSIGNED_BYTE, indices.adr)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -355,9 +361,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    public static void glDrawElements(@NativeType("GLenum") int mode, @NativeType("void const *") ShortBuffer indices) {
-        nglDrawElements(mode, indices.remaining(), GL11.GL_UNSIGNED_SHORT, memAddress(indices));
-    }
+    fun drawElements(mode: BeginMode, indices: ShortBuffer) = GL11C.nglDrawElements(mode.i, indices.rem, GL11C.GL_UNSIGNED_SHORT, indices.adr)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -369,369 +373,104 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    public static void glDrawElements(@NativeType("GLenum") int mode, @NativeType("void const *") IntBuffer indices) {
-        nglDrawElements(mode, indices.remaining(), GL11.GL_UNSIGNED_INT, memAddress(indices));
-    }
-//
-//    // --- [ glFinish ] ---
-//
-//    /**
-//     * Forces all previously issued GL commands to complete. {@code Finish} does not return until all effects from such commands on GL client and server
-//     * state and the framebuffer are fully realized.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glFinish">Reference Page</a>
-//     */
-//    public static native void glFinish();
-//
-//    // --- [ glFlush ] ---
-//
-//    /**
-//     * Causes all previously issued GL commands to complete in finite time (although such commands may still be executing when {@code Flush} returns).
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glFlush">Reference Page</a>
-//     */
-//    public static native void glFlush();
-//
-//    // --- [ glFrontFace ] ---
-//
-//    /**
-//     * The first step of polygon rasterization is to determine if the polygon is back-facing or front-facing. This determination is made based on the sign of
-//     * the (clipped or unclipped) polygon's area computed in window coordinates. The interpretation of the sign of this value is controlled with this function.
-//     * In the initial state, the front face direction is set to {@link #GL_CCW CCW}.
-//     *
-//     * @param dir the front face direction. One of:<br><table><tr><td>{@link #GL_CCW CCW}</td><td>{@link #GL_CW CW}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glFrontFace">Reference Page</a>
-//     */
-//    public static native void glFrontFace(@NativeType("GLenum") int dir);
-//
-//    // --- [ glGenTextures ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glGenTextures GenTextures}
-//     *
-//     * @param n the number of textures to create
-//     */
-//    public static native void nglGenTextures(int n, long textures);
-//
-//    /**
-//     * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
-//     * state and a dimensionality only when they are first bound, just as if they were unused.
-//     *
-//     * @param textures a scalar or buffer in which to place the returned texture names
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
-//     */
-//    public static void glGenTextures(@NativeType("GLuint *") IntBuffer textures) {
-//        nglGenTextures(textures.remaining(), memAddress(textures));
-//    }
-//
-//    /**
-//     * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
-//     * state and a dimensionality only when they are first bound, just as if they were unused.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGenTextures() {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer textures = stack.callocInt(1);
-//            nglGenTextures(1, memAddress(textures));
-//            return textures.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glDeleteTextures ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glDeleteTextures DeleteTextures}
-//     *
-//     * @param n the number of texture names in the {@code textures} parameter
-//     */
-//    public static native void nglDeleteTextures(int n, long textures);
-//
-//    /**
-//     * Deletes texture objects. After a texture object is deleted, it has no contents or dimensionality, and its name is again unused. If a texture that is
-//     * currently bound to any of the target bindings of {@link #glBindTexture BindTexture} is deleted, it is as though {@link #glBindTexture BindTexture} had been executed with the
-//     * same target and texture zero. Additionally, special care must be taken when deleting a texture if any of the images of the texture are attached to a
-//     * framebuffer object.
-//     *
-//     * <p>Unused names in textures that have been marked as used for the purposes of {@link #glGenTextures GenTextures} are marked as unused again. Unused names in textures are
-//     * silently ignored, as is the name zero.</p>
-//     *
-//     * @param textures contains {@code n} names of texture objects to be deleted
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
-//     */
-//    public static void glDeleteTextures(@NativeType("GLuint const *") IntBuffer textures) {
-//        nglDeleteTextures(textures.remaining(), memAddress(textures));
-//    }
-//
-//    /**
-//     * Deletes texture objects. After a texture object is deleted, it has no contents or dimensionality, and its name is again unused. If a texture that is
-//     * currently bound to any of the target bindings of {@link #glBindTexture BindTexture} is deleted, it is as though {@link #glBindTexture BindTexture} had been executed with the
-//     * same target and texture zero. Additionally, special care must be taken when deleting a texture if any of the images of the texture are attached to a
-//     * framebuffer object.
-//     *
-//     * <p>Unused names in textures that have been marked as used for the purposes of {@link #glGenTextures GenTextures} are marked as unused again. Unused names in textures are
-//     * silently ignored, as is the name zero.</p>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
-//     */
-//    public static void glDeleteTextures(@NativeType("GLuint const *") int texture) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer textures = stack.ints(texture);
-//            nglDeleteTextures(1, memAddress(textures));
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetBooleanv ] ---
-//
-//    /** Unsafe version of: {@link #glGetBooleanv GetBooleanv} */
-//    public static native void nglGetBooleanv(int pname, long params);
-//
-//    /**
-//     * Returns the current boolean value of the specified state variable.
-//     *
-//     * <p><b>LWJGL note</b>: The state that corresponds to the state variable may be a single value or an array of values. In the case of an array of values,
-//     * LWJGL will <b>not</b> validate if {@code params} has enough space to store that array. Doing so would introduce significant overhead, as the
-//     * OpenGL state variables are too many. It is the user's responsibility to avoid JVM crashes by ensuring enough space for the returned values.</p>
-//     *
-//     * @param pname  the state variable
-//     * @param params a scalar or buffer in which to place the returned data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBooleanv">Reference Page</a>
-//     */
-//    public static void glGetBooleanv(@NativeType("GLenum") int pname, @NativeType("GLboolean *") ByteBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetBooleanv(pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Returns the current boolean value of the specified state variable.
-//     *
-//     * <p><b>LWJGL note</b>: The state that corresponds to the state variable may be a single value or an array of values. In the case of an array of values,
-//     * LWJGL will <b>not</b> validate if {@code params} has enough space to store that array. Doing so would introduce significant overhead, as the
-//     * OpenGL state variables are too many. It is the user's responsibility to avoid JVM crashes by ensuring enough space for the returned values.</p>
-//     *
-//     * @param pname the state variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBooleanv">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static boolean glGetBoolean(@NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            ByteBuffer params = stack.calloc(1);
-//            nglGetBooleanv(pname, memAddress(params));
-//            return params.get(0) != 0;
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetFloatv ] ---
-//
-//    /** Unsafe version of: {@link #glGetFloatv GetFloatv} */
-//    public static native void nglGetFloatv(int pname, long params);
-//
-//    /**
-//     * Returns the current float value of the specified state variable.
-//     *
-//     * <p><b>LWJGL note</b>: The state that corresponds to the state variable may be a single value or an array of values. In the case of an array of values,
-//     * LWJGL will <b>not</b> validate if {@code params} has enough space to store that array. Doing so would introduce significant overhead, as the
-//     * OpenGL state variables are too many. It is the user's responsibility to avoid JVM crashes by ensuring enough space for the returned values.</p>
-//     *
-//     * @param pname  the state variable
-//     * @param params a scalar or buffer in which to place the returned data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFloatv">Reference Page</a>
-//     */
-//    public static void glGetFloatv(@NativeType("GLenum") int pname, @NativeType("GLfloat *") FloatBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetFloatv(pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Returns the current float value of the specified state variable.
-//     *
-//     * <p><b>LWJGL note</b>: The state that corresponds to the state variable may be a single value or an array of values. In the case of an array of values,
-//     * LWJGL will <b>not</b> validate if {@code params} has enough space to store that array. Doing so would introduce significant overhead, as the
-//     * OpenGL state variables are too many. It is the user's responsibility to avoid JVM crashes by ensuring enough space for the returned values.</p>
-//     *
-//     * @param pname the state variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFloatv">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static float glGetFloat(@NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            FloatBuffer params = stack.callocFloat(1);
-//            nglGetFloatv(pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetIntegerv ] ---
-//
-//    /** Unsafe version of: {@link #glGetIntegerv GetIntegerv} */
-//    public static native void nglGetIntegerv(int pname, long params);
-//
-//    /**
-//     * Returns the current integer value of the specified state variable.
-//     *
-//     * <p><b>LWJGL note</b>: The state that corresponds to the state variable may be a single value or an array of values. In the case of an array of values,
-//     * LWJGL will <b>not</b> validate if {@code params} has enough space to store that array. Doing so would introduce significant overhead, as the
-//     * OpenGL state variables are too many. It is the user's responsibility to avoid JVM crashes by ensuring enough space for the returned values.</p>
-//     *
-//     * @param pname  the state variable
-//     * @param params a scalar or buffer in which to place the returned data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetIntegerv">Reference Page</a>
-//     */
-//    public static void glGetIntegerv(@NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetIntegerv(pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Returns the current integer value of the specified state variable.
-//     *
-//     * <p><b>LWJGL note</b>: The state that corresponds to the state variable may be a single value or an array of values. In the case of an array of values,
-//     * LWJGL will <b>not</b> validate if {@code params} has enough space to store that array. Doing so would introduce significant overhead, as the
-//     * OpenGL state variables are too many. It is the user's responsibility to avoid JVM crashes by ensuring enough space for the returned values.</p>
-//     *
-//     * @param pname the state variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetIntegerv">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetInteger(@NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.callocInt(1);
-//            nglGetIntegerv(pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetDoublev ] ---
-//
-//    /** Unsafe version of: {@link #glGetDoublev GetDoublev} */
-//    public static native void nglGetDoublev(int pname, long params);
-//
-//    /**
-//     * Returns the current double value of the specified state variable.
-//     *
-//     * <p><b>LWJGL note</b>: The state that corresponds to the state variable may be a single value or an array of values. In the case of an array of values,
-//     * LWJGL will <b>not</b> validate if {@code params} has enough space to store that array. Doing so would introduce significant overhead, as the
-//     * OpenGL state variables are too many. It is the user's responsibility to avoid JVM crashes by ensuring enough space for the returned values.</p>
-//     *
-//     * @param pname  the state variable
-//     * @param params a scalar or buffer in which to place the returned data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetDoublev">Reference Page</a>
-//     */
-//    public static void glGetDoublev(@NativeType("GLenum") int pname, @NativeType("GLdouble *") DoubleBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetDoublev(pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Returns the current double value of the specified state variable.
-//     *
-//     * <p><b>LWJGL note</b>: The state that corresponds to the state variable may be a single value or an array of values. In the case of an array of values,
-//     * LWJGL will <b>not</b> validate if {@code params} has enough space to store that array. Doing so would introduce significant overhead, as the
-//     * OpenGL state variables are too many. It is the user's responsibility to avoid JVM crashes by ensuring enough space for the returned values.</p>
-//     *
-//     * @param pname the state variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetDoublev">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static double glGetDouble(@NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            DoubleBuffer params = stack.callocDouble(1);
-//            nglGetDoublev(pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetError ] ---
-//
-//    /**
-//     * Returns error information. Each detectable error is assigned a numeric code. When an error is detected, a flag is set and the code is recorded. Further
-//     * errors, if they occur, do not affect this recorded code. When {@code GetError} is called, the code is returned and the flag is cleared, so that a
-//     * further error will again record its code. If a call to {@code GetError} returns {@link #GL_NO_ERROR NO_ERROR}, then there has been no detectable error since
-//     * the last call to {@code GetError} (or since the GL was initialized).
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetError">Reference Page</a>
-//     */
-//    @NativeType("GLenum")
-//    public static native int glGetError();
-//
-//    // --- [ glGetPointerv ] ---
-//
-//    /** Unsafe version of: {@link #glGetPointerv GetPointerv} */
-//    public static native void nglGetPointerv(int pname, long params);
-//
-//    /**
-//     * Returns a pointer in the current GL context.
-//     *
-//     * @param pname  the pointer to return. One of:<br><table><tr><td>{@link GL43#GL_DEBUG_CALLBACK_FUNCTION DEBUG_CALLBACK_FUNCTION}</td><td>{@link GL43#GL_DEBUG_CALLBACK_USER_PARAM DEBUG_CALLBACK_USER_PARAM}</td></tr></table>
-//     * @param params a buffer in which to place the returned pointer
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetPointerv">Reference Page</a>
-//     */
-//    public static void glGetPointerv(@NativeType("GLenum") int pname, @NativeType("void **") PointerBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetPointerv(pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Returns a pointer in the current GL context.
-//     *
-//     * @param pname the pointer to return. One of:<br><table><tr><td>{@link GL43#GL_DEBUG_CALLBACK_FUNCTION DEBUG_CALLBACK_FUNCTION}</td><td>{@link GL43#GL_DEBUG_CALLBACK_USER_PARAM DEBUG_CALLBACK_USER_PARAM}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetPointerv">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static long glGetPointer(@NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            PointerBuffer params = stack.callocPointer(1);
-//            nglGetPointerv(pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetString ] ---
+    fun drawElements(mode: BeginMode, indices: IntBuffer) = GL11C.nglDrawElements(mode.i, indices.rem, GL11C.GL_UNSIGNED_INT, indices.adr)
+
+    // --- [ glFinish ] ---
+
+    /**
+     * Forces all previously issued GL commands to complete. {@code Finish} does not return until all effects from such commands on GL client and server
+     * state and the framebuffer are fully realized.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFinish">Reference Page</a>
+     */
+    fun finish() = GL11C.glFinish()
+
+    // --- [ glFlush ] ---
+
+    /**
+     * Causes all previously issued GL commands to complete in finite time (although such commands may still be executing when {@code Flush} returns).
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFlush">Reference Page</a>
+     */
+    fun flush() = GL11C.glFlush()
+
+    // --- [ glFrontFace ] ---
+
+    /**
+     * The first step of polygon rasterization is to determine if the polygon is back-facing or front-facing. This determination is made based on the sign of
+     * the (clipped or unclipped) polygon's area computed in window coordinates. The interpretation of the sign of this value is controlled with this function.
+     * In the initial state, the front face direction is set to {@link #GL_CCW CCW}.
+     *
+     * @param dir the front face direction. One of:<br><table><tr><td>{@link #GL_CCW CCW}</td><td>{@link #GL_CW CW}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFrontFace">Reference Page</a>
+     */
+    fun frontFace(dir: FrontFaceDirection) = GL11C.glFrontFace(dir.i)
+
+    // --- [ glGenTextures ] ---
+
+    /**
+     * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
+     * state and a dimensionality only when they are first bound, just as if they were unused.
+     *
+     * @param textures a scalar or buffer in which to place the returned texture names
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
+     */
+    fun genTextures(textures: GLtextures) = GL11C.nglGenTextures(textures.rem, textures.adr)
+
+    /**
+     * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
+     * state and a dimensionality only when they are first bound, just as if they were unused.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
+     */
+    fun genTexture() = appBuffer.withIntPtr { GL11C.nglGenTextures(1, it) }
+
+    // --- [ glDeleteTextures ] ---
+
+    /**
+     * Deletes texture objects. After a texture object is deleted, it has no contents or dimensionality, and its name is again unused. If a texture that is
+     * currently bound to any of the target bindings of {@link #glBindTexture BindTexture} is deleted, it is as though {@link #glBindTexture BindTexture} had been executed with the
+     * same target and texture zero. Additionally, special care must be taken when deleting a texture if any of the images of the texture are attached to a
+     * framebuffer object.
+     *
+     * <p>Unused names in textures that have been marked as used for the purposes of {@link #glGenTextures GenTextures} are marked as unused again. Unused names in textures are
+     * silently ignored, as is the name zero.</p>
+     *
+     * @param textures contains {@code n} names of texture objects to be deleted
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
+     */
+    fun deleteTextures(textures: GLtextures) = GL11C.nglDeleteTextures(textures.rem, textures.adr)
+
+    /**
+     * Deletes texture objects. After a texture object is deleted, it has no contents or dimensionality, and its name is again unused. If a texture that is
+     * currently bound to any of the target bindings of {@link #glBindTexture BindTexture} is deleted, it is as though {@link #glBindTexture BindTexture} had been executed with the
+     * same target and texture zero. Additionally, special care must be taken when deleting a texture if any of the images of the texture are attached to a
+     * framebuffer object.
+     *
+     * <p>Unused names in textures that have been marked as used for the purposes of {@link #glGenTextures GenTextures} are marked as unused again. Unused names in textures are
+     * silently ignored, as is the name zero.</p>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
+     */
+    fun deleteTexture(texture: GLtexture) = appBuffer.withIntPtr(texture.i) { GL11C.nglDeleteTextures(1, it) }
+
+    // --- [ glGetError ] ---
+
+    /**
+     * Returns error information. Each detectable error is assigned a numeric code. When an error is detected, a flag is set and the code is recorded. Further
+     * errors, if they occur, do not affect this recorded code. When {@code GetError} is called, the code is returned and the flag is cleared, so that a
+     * further error will again record its code. If a call to {@code GetError} returns {@link #GL_NO_ERROR NO_ERROR}, then there has been no detectable error since
+     * the last call to {@code GetError} (or since the GL was initialized).
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetError">Reference Page</a>
+     */
+    val error: ErrorCode
+        get() = ErrorCode(GL11C.glGetError())
+
+    // --- [ glGetString ] ---
 //
 //    /** Unsafe version of: {@link #glGetString GetString} */
 //    public static native long nglGetString(int name);

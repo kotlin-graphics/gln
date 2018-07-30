@@ -4,24 +4,14 @@ import glm_.buffer.cap
 import glm_.buffer.free
 import glm_.buffer.intBufferBig
 import glm_.vec2.Vec2
+import glm_.vec3.Vec3i
 import gln.*
 import org.lwjgl.opengl.ATITextureCompression3DC.GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI
 import org.lwjgl.opengl.EXTTextureCompressionLATC.*
 import org.lwjgl.opengl.EXTTextureCompressionS3TC.*
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT
 import org.lwjgl.opengl.EXTTextureSRGB.*
-import org.lwjgl.opengl.GL11.*
-import org.lwjgl.opengl.GL12.*
-import org.lwjgl.opengl.GL13.*
-import org.lwjgl.opengl.GL14.*
-import org.lwjgl.opengl.GL20.*
-import org.lwjgl.opengl.GL30.*
-import org.lwjgl.opengl.GL31.*
-import org.lwjgl.opengl.GL32.*
 import org.lwjgl.opengl.GL33.GL_MAX_DUAL_SOURCE_DRAW_BUFFERS
-import org.lwjgl.opengl.GL40.*
-import org.lwjgl.opengl.GL41.*
-import org.lwjgl.opengl.GL42.*
 import org.lwjgl.opengl.GL43.*
 import org.lwjgl.opengl.GL44.GL_PRIMITIVE_RESTART_FOR_PATCHES_SUPPORTED
 import org.lwjgl.opengl.GL45.GL_MAX_COMBINED_CLIP_AND_CULL_DISTANCES
@@ -58,6 +48,9 @@ class Caps(profile: Profile) {
         val MINOR_VERSION = glGetInteger(GL_MINOR_VERSION)
         @JvmField
         val MAJOR_VERSION = glGetInteger(GL_MAJOR_VERSION)
+        /** JVM custom */
+        val version = MAJOR_VERSION * 10 + MINOR_VERSION
+
         //         val CONTEXT_FLAGS =
 //                if (check(4, 3) || glisExtensionAvailable("GL_KHR_debug"))
 //                    glGetInteger(GL_CONTEXT_FLAGS)
@@ -695,6 +688,9 @@ class Caps(profile: Profile) {
         var MAX_FRAMEBUFFER_HEIGHT = 0
         @JvmField
         var MAX_FRAMEBUFFER_LAYERS = 0
+        /** JVM custom */
+        @JvmField
+        var MAX_FRAMEBUFFER_SIZE = Vec3i()
         @JvmField
         var MAX_FRAMEBUFFER_SAMPLES = 0
         @JvmField
@@ -894,6 +890,10 @@ class Caps(profile: Profile) {
                 MAX_FRAMEBUFFER_HEIGHT = glGetInteger(GL_MAX_FRAMEBUFFER_HEIGHT)
                 MAX_FRAMEBUFFER_WIDTH = glGetInteger(GL_MAX_FRAMEBUFFER_WIDTH)
                 MAX_FRAMEBUFFER_LAYERS = glGetInteger(GL_MAX_FRAMEBUFFER_LAYERS)
+                MAX_FRAMEBUFFER_SIZE.put(
+                        MAX_FRAMEBUFFER_WIDTH,
+                        MAX_FRAMEBUFFER_HEIGHT,
+                        MAX_FRAMEBUFFER_LAYERS)
                 MAX_FRAMEBUFFER_SAMPLES = glGetInteger(GL_MAX_FRAMEBUFFER_SAMPLES)
             }
 
@@ -1094,8 +1094,8 @@ class Caps(profile: Profile) {
             }
 
             if (check(4, 1) || extensions.ARB_ES2_compatibility) {
-                IMPLEMENTATION_COLOR_READ_FORMAT = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_FORMAT)
-                IMPLEMENTATION_COLOR_READ_TYPE = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_TYPE)
+                IMPLEMENTATION_COLOR_READ_FORMAT = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_FORMAT) // TODO GliInternalFormat
+                IMPLEMENTATION_COLOR_READ_TYPE = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_TYPE) // TODO "
             }
 
             if (check(2, 1)) {
