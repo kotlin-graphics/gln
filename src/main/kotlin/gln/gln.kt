@@ -95,4 +95,4 @@ fun checkError(location: String, throwError: Boolean = true): Boolean {
     return true
 }
 
-val VERSION = "0.4.3"
+val VERSION = "0.4.4"
