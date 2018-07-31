@@ -13,7 +13,9 @@ import java.awt.Color
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
+@Deprecated("use appBuffer instead")
 val buf: ByteBuffer = MemoryUtil.memAlloc(256)
+@Deprecated("use appBuffer instead")
 val bufAd = buf.adr
 
 operator fun IntBuffer.get(e: Enum<*>) = get(e.ordinal)
