@@ -1029,28 +1029,28 @@ val CCW = FrontFaceDirection(GL11.GL_CCW)
 //use SGI_texture_color_table TEXTURE_COLOR_TABLE_SGI
 //
 //###############################################################################
-//
-//GetTextureParameter enum:
-//use TextureParameterName TEXTURE_MAG_FILTER
-//use TextureParameterName TEXTURE_MIN_FILTER
-//use TextureParameterName TEXTURE_WRAP_S
-//use TextureParameterName TEXTURE_WRAP_T
-//TEXTURE_WIDTH					= 0x1000
-//TEXTURE_HEIGHT					= 0x1001
-//TEXTURE_INTERNAL_FORMAT				= 0x1003
-//TEXTURE_COMPONENTS				= 0x1003
-//TEXTURE_BORDER_COLOR				= 0x1004
-//TEXTURE_BORDER					= 0x1005
-//TEXTURE_RED_SIZE				= 0x805C
-//TEXTURE_GREEN_SIZE				= 0x805D
-//TEXTURE_BLUE_SIZE				= 0x805E
-//TEXTURE_ALPHA_SIZE				= 0x805F
-//TEXTURE_LUMINANCE_SIZE				= 0x8060
-//TEXTURE_INTENSITY_SIZE				= 0x8061
-//TEXTURE_PRIORITY				= 0x8066
-//TEXTURE_RESIDENT				= 0x8067
-//use EXT_texture3D TEXTURE_DEPTH_EXT
-//use EXT_texture3D TEXTURE_WRAP_R_EXT
+
+inline class GetTextureParameter(val i: Int)
+val TEXTURE_MAG_FILTER = GetTextureParameter(GL_)
+val TEXTURE_MIN_FILTER= GetTextureParameter(GL_)
+val TEXTURE_WRAP_S= GetTextureParameter(GL_)
+val TEXTURE_WRAP_T= GetTextureParameter(GL_)
+val TEXTURE_WIDTH					= GetTextureParameter(GL_)
+val TEXTURE_HEIGHT					= GetTextureParameter(GL_)
+val TEXTURE_INTERNAL_FORMAT				= GetTextureParameter(GL_)
+val TEXTURE_COMPONENTS				= GetTextureParameter(GL_)
+val TEXTURE_BORDER_COLOR				= GetTextureParameter(GL_)
+val TEXTURE_BORDER					= GetTextureParameter(GL_)
+val TEXTURE_RED_SIZE				= 0x805C
+val TEXTURE_GREEN_SIZE				= 0x805D
+val TEXTURE_BLUE_SIZE				= 0x805E
+val TEXTURE_ALPHA_SIZE				= 0x805F
+val TEXTURE_LUMINANCE_SIZE				= 0x8060
+val TEXTURE_INTENSITY_SIZE				= 0x8061
+val TEXTURE_PRIORITY				= 0x8066
+val TEXTURE_RESIDENT				= 0x8067
+val TEXTURE_DEPTH_EXT
+val TEXTURE_WRAP_R_EXT
 //use SGIS_detail_texture DETAIL_TEXTURE_LEVEL_SGIS
 //use SGIS_detail_texture DETAIL_TEXTURE_MODE_SGIS
 //use SGIS_detail_texture DETAIL_TEXTURE_FUNC_POINTS_SGIS

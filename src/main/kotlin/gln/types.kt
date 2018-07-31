@@ -22,3 +22,5 @@ inline class GLtextures(val i: IntBuffer) {
     inline val adr: Long
         get() = i.adr
 }
+
+inline class Pointer(val L: Long)

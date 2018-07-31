@@ -14,9 +14,15 @@ import org.lwjgl.system.MemoryUtil
 object glGet {
 
     inline fun int(pName: Int) = GL11C.glGetInteger(pName)
-    inline fun int(pName: Int, index: Int) = GL30.glGetIntegeri(pName, index)
-    inline fun long(pName: Int) = GL32.glGetInteger64(pName)
-    inline fun long(pName: Int, index: Int) = GL32.glGetInteger64i(pName, index)
+    inline fun int(pName: Int, index: Int) = GL30C.glGetIntegeri(pName, index)
+    inline fun long(pName: Int) = GL32C.glGetInteger64(pName)
+    inline fun long(pName: Int, index: Int) = GL32C.glGetInteger64i(pName, index)
+    inline fun pointer(pName: Int): Pointer {
+        val pointer = appBuffer.pointerBuffer
+        GL11C.nglGetPointerv(pName, MemoryUtil.memAddress(pointer))
+        return Pointer(pointer[0])
+    }
+
     inline fun float(pName: Int) = GL11C.glGetFloat(pName)
     inline fun bool(pName: Int) = GL11C.glGetInteger(pName).bool
     inline fun vec4bool(pName: Int): Vec4bool {
@@ -28,7 +34,7 @@ object glGet {
     inline fun vec2(pName: Int): Vec2 {
         val floats = appBuffer.floatArray(Vec2.length)
         GL11C.nglGetFloatv(pName, floats)
-        return Vec2(MemoryUtil.memGetFloat(floats),  MemoryUtil.memGetFloat(floats + Float.BYTES))
+        return Vec2(MemoryUtil.memGetFloat(floats), MemoryUtil.memGetFloat(floats + Float.BYTES))
     }
 
     inline fun vec4(pName: Int): Vec4 {
@@ -402,9 +408,42 @@ object glGet {
 
     val viewport: Vec4i
         get() = vec4i(GL11.GL_VIEWPORT)
+
+    // glGetPointerv
+
+    val colorArrayPointer: Pointer
+        get() = pointer(GL11.GL_COLOR_ARRAY_POINTER)
+
+    val edgeFlagArrayPointer: Pointer
+        get() = pointer(GL11.GL_EDGE_FLAG_ARRAY_POINTER)
+
+    val feedbackBufferPointer: Pointer
+        get() = pointer(GL11.GL_FEEDBACK_BUFFER_POINTER)
+
+    val indexArrayPointer: Pointer
+        get() = pointer(GL11.GL_INDEX_ARRAY_POINTER)
+
+    val normalArrayPointer: Pointer
+        get() = pointer(GL11.GL_NORMAL_ARRAY_POINTER)
+
+    val textureCoordArrayPointer: Pointer
+        get() = pointer(GL11.GL_TEXTURE_COORD_ARRAY_POINTER)
+
+    val selectionBufferPointer: Pointer
+        get() = pointer(GL11.GL_SELECTION_BUFFER_POINTER)
+
+    val vertexArrayPointer: Pointer
+        get() = pointer(GL11.GL_VERTEX_ARRAY_POINTER)
+
+    val debugCallbackFunction: Pointer
+        get() = pointer(GL43.GL_DEBUG_CALLBACK_FUNCTION)
+
+    val debugCallbackUserParam: Pointer
+        get() = pointer(GL43.GL_DEBUG_CALLBACK_USER_PARAM)
 }
 
 // TODO remove
 typealias GliInternalFormat = Int
+typealias GliExternalFormat = Int
 
 typealias GliTypeFormat = Int
