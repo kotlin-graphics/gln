@@ -1031,26 +1031,28 @@ val CCW = FrontFaceDirection(GL11.GL_CCW)
 //###############################################################################
 
 inline class GetTextureParameter(val i: Int)
-val TEXTURE_MAG_FILTER = GetTextureParameter(GL_)
-val TEXTURE_MIN_FILTER= GetTextureParameter(GL_)
-val TEXTURE_WRAP_S= GetTextureParameter(GL_)
-val TEXTURE_WRAP_T= GetTextureParameter(GL_)
-val TEXTURE_WIDTH					= GetTextureParameter(GL_)
-val TEXTURE_HEIGHT					= GetTextureParameter(GL_)
-val TEXTURE_INTERNAL_FORMAT				= GetTextureParameter(GL_)
-val TEXTURE_COMPONENTS				= GetTextureParameter(GL_)
-val TEXTURE_BORDER_COLOR				= GetTextureParameter(GL_)
-val TEXTURE_BORDER					= GetTextureParameter(GL_)
-val TEXTURE_RED_SIZE				= 0x805C
-val TEXTURE_GREEN_SIZE				= 0x805D
-val TEXTURE_BLUE_SIZE				= 0x805E
-val TEXTURE_ALPHA_SIZE				= 0x805F
-val TEXTURE_LUMINANCE_SIZE				= 0x8060
-val TEXTURE_INTENSITY_SIZE				= 0x8061
-val TEXTURE_PRIORITY				= 0x8066
-val TEXTURE_RESIDENT				= 0x8067
-val TEXTURE_DEPTH_EXT
-val TEXTURE_WRAP_R_EXT
+
+val TEXTURE_MAG_FILTER = GetTextureParameter(GL11.GL_TEXTURE_MAG_FILTER)
+val TEXTURE_MIN_FILTER = GetTextureParameter(GL11.GL_TEXTURE_MIN_FILTER)
+val TEXTURE_WRAP_S = GetTextureParameter(GL11.GL_TEXTURE_WRAP_S)
+val TEXTURE_WRAP_T = GetTextureParameter(GL11.GL_TEXTURE_WRAP_T)
+val TEXTURE_WIDTH = GetTextureParameter(GL11.GL_TEXTURE_WIDTH)
+val TEXTURE_HEIGHT = GetTextureParameter(GL11.GL_TEXTURE_HEIGHT)
+val TEXTURE_INTERNAL_FORMAT = GetTextureParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT)
+val TEXTURE_COMPONENTS = GetTextureParameter(GL11.GL_TEXTURE_COMPONENTS)
+val TEXTURE_BORDER_COLOR = GetTextureParameter(GL11.GL_TEXTURE_BORDER_COLOR)
+val TEXTURE_BORDER = GetTextureParameter(GL11.GL_TEXTURE_BORDER)
+val TEXTURE_RED_SIZE = GetTextureParameter(GL11.GL_TEXTURE_RED_SIZE)
+val TEXTURE_GREEN_SIZE = GetTextureParameter(GL11.GL_TEXTURE_GREEN_SIZE)
+val TEXTURE_BLUE_SIZE = GetTextureParameter(GL11.GL_TEXTURE_BLUE_SIZE)
+val TEXTURE_ALPHA_SIZE = GetTextureParameter(GL11.GL_TEXTURE_ALPHA_SIZE)
+val TEXTURE_LUMINANCE_SIZE = GetTextureParameter(GL11.GL_TEXTURE_LUMINANCE_SIZE)
+val TEXTURE_INTENSITY_SIZE = GetTextureParameter(GL11.GL_TEXTURE_INTENSITY_SIZE)
+val TEXTURE_PRIORITY = GetTextureParameter(GL11.GL_TEXTURE_PRIORITY)
+val TEXTURE_RESIDENT = GetTextureParameter(GL11.GL_TEXTURE_RESIDENT)
+
+// val TEXTURE_DEPTH_EXT
+// val TEXTURE_WRAP_R_EXT
 //use SGIS_detail_texture DETAIL_TEXTURE_LEVEL_SGIS
 //use SGIS_detail_texture DETAIL_TEXTURE_MODE_SGIS
 //use SGIS_detail_texture DETAIL_TEXTURE_FUNC_POINTS_SGIS

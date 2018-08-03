@@ -13,6 +13,9 @@ import glm_.vec2.Vec2d
 import glm_.vec4.Vec4
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11C
+import org.lwjgl.system.*
+import org.lwjgl.system.Checks.*
+import org.lwjgl.system.MemoryUtil.memAddress
 import java.awt.Color
 import java.nio.*
 
@@ -454,7 +457,8 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    fun deleteTexture(texture: GLtexture) = appBuffer.withIntPtr(texture.i) { GL11C.nglDeleteTextures(1, it) }
+    // TODO this requires appBuffer in kotlin 1.3-M1 because of the lambda
+    //fun deleteTexture(texture: GLtexture) = appBuffer.withIntPtr(texture.i) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetError ] ---
 
@@ -575,11 +579,11 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
-    fun getTexLevelParameteriv(target: TextureTarget, level: Int, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params) {
+    fun getTexLevelParameteriv(target: TextureTarget, level: Int, @NativeType("GLenum") pname: Int, @NativeType("GLint *") params: IntBuffer) {
         if (CHECKS) {
             check(params, 1);
         }
-        nglGetTexLevelParameteriv(target, level, pname, memAddress(params));
+        GL11.nglGetTexLevelParameteriv(target.i, level, pname, memAddress(params));
     }
 
     /**
