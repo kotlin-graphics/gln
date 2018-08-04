@@ -11,7 +11,6 @@ import glm_.buffer.adr
 import glm_.buffer.rem
 import glm_.vec2.Vec2d
 import glm_.vec4.Vec4
-import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.system.*
 import org.lwjgl.system.Checks.*
@@ -580,9 +579,9 @@ interface gl11i {
      */
     fun getTexLevelParameteriv(target: TextureTarget, level: Int, @NativeType("GLenum") pname: Int, @NativeType("GLint *") params: IntBuffer) {
         if (CHECKS) {
-            check(params, 1);
+            check(params, 1)
         }
-        GL11.nglGetTexLevelParameteriv(target.i, level, pname, memAddress(params));
+        GL11C.nglGetTexLevelParameteriv(target.i, level, pname, memAddress(params))
     }
 
     /**
