@@ -457,8 +457,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    // TODO this requires appBuffer in kotlin 1.3-M1 because of the lambda
-    //fun deleteTexture(texture: GLtexture) = appBuffer.withIntPtr(texture.i) { GL11C.nglDeleteTextures(1, it) }
+    fun deleteTexture(texture: GLtexture) = appBuffer.withIntPtr(texture.i) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetError ] ---
 
