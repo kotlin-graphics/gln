@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package gln.draw
 
 import glm_.BYTES
@@ -29,10 +31,10 @@ inline fun glMultiDrawArraysIndirect(indirect: ByteBuffer) = GL43.glMultiDrawArr
 inline fun glMultiDrawArraysIndirect(mode: Int, indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(mode, indirect, indirect.size / (4 * Int.BYTES), 0)
 inline fun glMultiDrawArraysIndirect(mode: Int, indirect: ByteBuffer, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode, indirect, primCount, 0)
 inline fun glMultiDrawArraysIndirect(indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.cap / 4, 0)
-inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.cap / 4, 0)
+inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.cap / 4, 0) // TODO should TRIANGLES not be mode instead? what does that mean for primcount calculation?
 inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntBuffer, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode, indirect, primCount, 0)
 inline fun glMultiDrawArraysIndirect(indirect: IntArray) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / 4, 0)
-inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntArray) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / 4, 0)
+inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntArray) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / 4, 0) // TODO should TRIANGLES not be mode instead? what does that mean for primcount calculation?
 inline fun glMultiDrawArraysIndirect(mode: Int, indirect: IntArray, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode, indirect, primCount, 0)
 
 inline fun glMultiDrawArraysIndirectBindlessNV(indirect: ByteBuffer, drawCount: Int, vertexBufferCount: Int) = glMultiDrawArraysIndirectBindlessNV(GL11.GL_TRIANGLES, indirect, drawCount, vertexBufferCount)

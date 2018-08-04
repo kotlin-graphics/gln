@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package gln.renderbuffer
 
 import glm_.vec2.Vec2i

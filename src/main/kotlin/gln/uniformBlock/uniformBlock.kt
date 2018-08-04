@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package gln.uniformBlock
 
 import org.lwjgl.opengl.GL31
