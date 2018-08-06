@@ -78,24 +78,23 @@ val COLOR_DEPTH_BUFFER_BIT = ClearBufferMask(GL11.GL_COLOR_BUFFER_BIT or GL11.GL
 //
 //###############################################################################
 
-inline class BeginMode(val i: Int)
-
-val POINTS = BeginMode(GL11.GL_POINTS)
-val LINES = BeginMode(GL11.GL_LINES)
-val LINE_LOOP = BeginMode(GL11.GL_LINE_LOOP)
-val LINE_STRIP = BeginMode(GL11.GL_LINE_STRIP)
-val TRIANGLES = BeginMode(GL11.GL_TRIANGLES)
-val TRIANGLE_STRIP = BeginMode(GL11.GL_TRIANGLE_STRIP)
-val TRIANGLE_FAN = BeginMode(GL11.GL_TRIANGLE_FAN)
-val QUADS = BeginMode(GL11.GL_QUADS)
-val QUAD_STRIP = BeginMode(GL11.GL_QUAD_STRIP)
-val POLYGON = BeginMode(GL11.GL_POLYGON)
-val LINES_ADJACENCY = BeginMode(GL32.GL_LINES_ADJACENCY)
-val LINE_STRIP_ADJACENCY = BeginMode(GL32.GL_LINE_STRIP_ADJACENCY)
-val TRIANGLES_ADJACENCY = BeginMode(GL32.GL_TRIANGLES_ADJACENCY)
-val TRIANGLE_STRIP_ADJACENCY = BeginMode(GL32.GL_TRIANGLE_STRIP_ADJACENCY)
-val PATCHES = BeginMode(GL40.GL_PATCHES)
-
+enum class DrawMode(val i: Int) {
+    POINTS(GL11.GL_POINTS),
+    LINES(GL11.GL_LINES),
+    LINE_LOOP(GL11.GL_LINE_LOOP),
+    LINE_STRIP(GL11.GL_LINE_STRIP),
+    TRIANGLES(GL11.GL_TRIANGLES),
+    TRIANGLE_STRIP(GL11.GL_TRIANGLE_STRIP),
+    TRIANGLE_FAN(GL11.GL_TRIANGLE_FAN),
+    QUADS(GL11.GL_QUADS),
+    QUAD_STRIP(GL11.GL_QUAD_STRIP),
+    POLYGON(GL11.GL_POLYGON),
+    LINES_ADJACENCY(GL32.GL_LINES_ADJACENCY),
+    LINE_STRIP_ADJACENCY(GL32.GL_LINE_STRIP_ADJACENCY),
+    TRIANGLES_ADJACENCY(GL32.GL_TRIANGLES_ADJACENCY),
+    TRIANGLE_STRIP_ADJACENCY(GL32.GL_TRIANGLE_STRIP_ADJACENCY),
+    PATCHES(GL40.GL_PATCHES)
+}
 //###############################################################################
 //
 //AccumOp enum:
@@ -119,38 +118,27 @@ val PATCHES = BeginMode(GL40.GL_PATCHES)
 //
 //###############################################################################
 
-inline class BlendingFactorDest(val i: Int)
+inline class BlendingFactor(val i: Int)
 
-val ZERO = BlendingFactorDest(GL11.GL_ZERO)
-val ONE = BlendingFactorDest(GL11.GL_ONE)
-val SRC_COLOR = BlendingFactorDest(GL11.GL_SRC_COLOR)
-val ONE_MINUS_SRC_COLOR = BlendingFactorDest(GL11.GL_ONE_MINUS_SRC_COLOR)
-val SRC_ALPHA = BlendingFactorDest(GL11.GL_SRC_ALPHA)
-val ONE_MINUS_SRC_ALPHA = BlendingFactorDest(GL11.GL_ONE_MINUS_SRC_ALPHA)
-val DST_ALPHA = BlendingFactorDest(GL11.GL_DST_ALPHA)
-val ONE_MINUS_DST_ALPHA = BlendingFactorDest(GL11.GL_ONE_MINUS_DST_ALPHA)
-val CONSTANT_COLOR_EXT = BlendingFactorDest(EXTBlendColor.GL_CONSTANT_COLOR_EXT)
-val ONE_MINUS_CONSTANT_COLOR_EXT = BlendingFactorDest(EXTBlendColor.GL_ONE_MINUS_CONSTANT_COLOR_EXT)
-val CONSTANT_ALPHA_EXT = BlendingFactorDest(EXTBlendColor.GL_CONSTANT_ALPHA_EXT)
-val ONE_MINUS_CONSTANT_ALPHA_EXT = BlendingFactorDest(EXTBlendColor.GL_ONE_MINUS_CONSTANT_ALPHA_EXT)
-
-//###############################################################################
-
-inline class BlendingFactorSrc(val i: Int)
-
-val ZERO_ = BlendingFactorSrc(GL11.GL_ZERO)
-val ONE_ = BlendingFactorSrc(GL11.GL_ONE)
-val DST_COLOR = BlendingFactorSrc(GL11.GL_DST_COLOR)
-val ONE_MINUS_DST_COLOR = BlendingFactorSrc(GL11.GL_ONE_MINUS_DST_COLOR)
-val SRC_ALPHA_SATURATE = BlendingFactorSrc(GL11.GL_SRC_ALPHA_SATURATE)
-val SRC_ALPHA_ = BlendingFactorSrc(GL11.GL_SRC_ALPHA)
-val ONE_MINUS_SRC_ALPHA_ = BlendingFactorSrc(GL11.GL_ONE_MINUS_SRC_ALPHA)
-val DST_ALPHA_ = BlendingFactorSrc(GL11.GL_DST_ALPHA)
-val ONE_MINUS_DST_ALPHA_ = BlendingFactorSrc(GL11.GL_ONE_MINUS_DST_ALPHA)
-val CONSTANT_COLOR_EXT_ = BlendingFactorSrc(EXTBlendColor.GL_CONSTANT_COLOR_EXT)
-val ONE_MINUS_CONSTANT_COLOR_EXT_ = BlendingFactorSrc(EXTBlendColor.GL_ONE_MINUS_CONSTANT_COLOR_EXT)
-val CONSTANT_ALPHA_EXT_ = BlendingFactorSrc(EXTBlendColor.GL_CONSTANT_ALPHA_EXT)
-val ONE_MINUS_CONSTANT_ALPHA_EXT_ = BlendingFactorSrc(EXTBlendColor.GL_ONE_MINUS_CONSTANT_ALPHA_EXT)
+val ZERO = BlendingFactor(GL11.GL_ZERO)
+val ONE = BlendingFactor(GL11.GL_ONE)
+val SRC_COLOR = BlendingFactor(GL11.GL_SRC_COLOR)
+val ONE_MINUS_SRC_COLOR = BlendingFactor(GL11.GL_ONE_MINUS_SRC_COLOR)
+val DST_COLOR = BlendingFactor(GL11.GL_DST_COLOR)
+val ONE_MINUS_DST_COLOR = BlendingFactor(GL11.GL_ONE_MINUS_DST_COLOR)
+val SRC_ALPHA = BlendingFactor(GL11.GL_SRC_ALPHA)
+val ONE_MINUS_SRC_ALPHA = BlendingFactor(GL11.GL_ONE_MINUS_SRC_ALPHA)
+val DST_ALPHA = BlendingFactor(GL11.GL_DST_ALPHA)
+val ONE_MINUS_DST_ALPHA = BlendingFactor(GL11.GL_ONE_MINUS_DST_ALPHA)
+val CONSTANT_COLOR = BlendingFactor(GL14.GL_CONSTANT_COLOR)
+val ONE_MINUS_CONSTANT_COLOR = BlendingFactor(GL14.GL_ONE_MINUS_CONSTANT_COLOR)
+val CONSTANT_ALPHA = BlendingFactor(GL14.GL_CONSTANT_ALPHA)
+val ONE_MINUS_CONSTANT_ALPHA = BlendingFactor(GL14.GL_ONE_MINUS_CONSTANT_ALPHA)
+val SRC_ALPHA_SATURATE = BlendingFactor(GL14.GL_SRC_ALPHA_SATURATE)
+val SRC1_COLOR = BlendingFactor(GL33.GL_SRC1_COLOR)
+val ONE_MINUS_SRC1_COLOR = BlendingFactor(GL33.GL_ONE_MINUS_SRC1_COLOR)
+val SRC1_ALPHA = BlendingFactor(GL15.GL_SRC1_ALPHA)
+val ONE_MINUS_SRC1_ALPHA = BlendingFactor(GL33.GL_ONE_MINUS_SRC1_ALPHA)
 
 //###############################################################################
 
@@ -231,15 +219,26 @@ val FUNC_REVERSE_SUBTRACT = BlendEquationMode(GL14.GL_FUNC_REVERSE_SUBTRACT)
 //
 //###############################################################################
 
-inline class CullFaceMode(val i: Int)
+inline class FaceMode(val i: Int)
 
-val FRONT = CullFaceMode(GL11.GL_FRONT)
-val BACK = CullFaceMode(GL11.GL_BACK)
-val FRONT_AND_BACK = CullFaceMode(GL11.GL_FRONT_AND_BACK)
+val FRONT = FaceMode(GL11.GL_FRONT)
+val BACK = FaceMode(GL11.GL_BACK)
+val FRONT_AND_BACK = FaceMode(GL11.GL_FRONT_AND_BACK)
 
 //###############################################################################
 
-/** Depth and Stencil func */
+inline class CullFaceMode(val i: Int)
+
+val OFF_ = CullFaceMode(GL11.GL_FALSE)
+val FRONT__ = CullFaceMode(GL11.GL_FRONT)
+val BACK__ = CullFaceMode(GL11.GL_BACK)
+val FRONT_AND_BACK__ = CullFaceMode(GL11.GL_FRONT_AND_BACK)
+
+internal var _cullFaceEnabled = false
+
+//###############################################################################
+
+/** Depth, Stencil and textureCompareMode func */
 inline class CompareFunction(val i: Int)
 
 val NEVER = CompareFunction(GL11.GL_NEVER)
@@ -1030,27 +1029,58 @@ val CCW = FrontFaceDirection(GL11.GL_CCW)
 //
 //###############################################################################
 
-inline class GetTextureParameter(val i: Int)
-val TEXTURE_MAG_FILTER = GetTextureParameter(GL_)
-val TEXTURE_MIN_FILTER= GetTextureParameter(GL_)
-val TEXTURE_WRAP_S= GetTextureParameter(GL_)
-val TEXTURE_WRAP_T= GetTextureParameter(GL_)
-val TEXTURE_WIDTH					= GetTextureParameter(GL_)
-val TEXTURE_HEIGHT					= GetTextureParameter(GL_)
-val TEXTURE_INTERNAL_FORMAT				= GetTextureParameter(GL_)
-val TEXTURE_COMPONENTS				= GetTextureParameter(GL_)
-val TEXTURE_BORDER_COLOR				= GetTextureParameter(GL_)
-val TEXTURE_BORDER					= GetTextureParameter(GL_)
-val TEXTURE_RED_SIZE				= 0x805C
-val TEXTURE_GREEN_SIZE				= 0x805D
-val TEXTURE_BLUE_SIZE				= 0x805E
-val TEXTURE_ALPHA_SIZE				= 0x805F
-val TEXTURE_LUMINANCE_SIZE				= 0x8060
-val TEXTURE_INTENSITY_SIZE				= 0x8061
-val TEXTURE_PRIORITY				= 0x8066
-val TEXTURE_RESIDENT				= 0x8067
-val TEXTURE_DEPTH_EXT
-val TEXTURE_WRAP_R_EXT
+inline class GetTexLevelParameter(val i: Int)
+
+val WIDTH = GetTexLevelParameter(GL11.GL_TEXTURE_WIDTH)
+val HEIGHT = GetTexLevelParameter(GL11.GL_TEXTURE_HEIGHT)
+val DEPTH = GetTexLevelParameter(GL12.GL_TEXTURE_DEPTH)
+val INTERNAL_FORMAT = GetTexLevelParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT)
+val COMPONENTS = GetTexLevelParameter(GL11.GL_TEXTURE_COMPONENTS)
+val RED_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_RED_TYPE)
+val GREEN_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_GREEN_TYPE)
+val BLUE_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_BLUE_TYPE)
+val ALPHA_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_ALPHA_TYPE)
+val DEPTH_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_DEPTH_TYPE)
+val RED_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_RED_SIZE)
+val GREEN_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_GREEN_SIZE)
+val BLUE_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_BLUE_SIZE)
+val ALPHA_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_ALPHA_SIZE)
+val DEPTH_SIZE = GetTexLevelParameter(GL30.GL_TEXTURE_DEPTH_SIZE)
+val COMPRESSED = GetTexLevelParameter(GL30.GL_TEXTURE_COMPRESSED)
+val COMPRESSED_IMAGE_SIZE = GetTexLevelParameter(GL13.GL_TEXTURE_COMPRESSED_IMAGE_SIZE)
+val BUFFER_OFFSET = GetTexLevelParameter(GL43.GL_TEXTURE_BUFFER_OFFSET)
+val BUFFER_SIZE = GetTexLevelParameter(GL43.GL_TEXTURE_BUFFER_SIZE)
+
+
+inline class TexParameter(val i: Int)
+
+val DEPTH_STENCIL_MODE = TexParameter(GL43.GL_DEPTH_STENCIL_TEXTURE_MODE)
+val IMAGE_FORMAT_COMPATIBILITY_TYPE = TexParameter(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_TYPE)
+val BASE_LEVEL = TexParameter(GL12.GL_TEXTURE_BASE_LEVEL)
+val BORDER_COLOR = TexParameter(GL11.GL_TEXTURE_BORDER_COLOR)
+val COMPARE_MODE = TexParameter(GL14.GL_TEXTURE_COMPARE_MODE)
+val COMPARE_FUNC = TexParameter(GL14.GL_TEXTURE_COMPARE_FUNC)
+val IMMUTABLE_FORMAT = TexParameter(GL42.GL_TEXTURE_IMMUTABLE_FORMAT)
+val IMMUTABLE_LEVELS = TexParameter(GL43.GL_TEXTURE_IMMUTABLE_LEVELS)
+val LOD_BIAS = TexParameter(GL14.GL_TEXTURE_LOD_BIAS)
+val MAG_FILTER = TexParameter(GL11.GL_TEXTURE_MAG_FILTER)
+val MAX_LEVEL = TexParameter(GL12.GL_TEXTURE_MAX_LEVEL)
+val MAX_LOD = TexParameter(GL12.GL_TEXTURE_MAX_LOD)
+val MIN_FILTER = TexParameter(GL11.GL_TEXTURE_MIN_FILTER)
+val MIN_LOD = TexParameter(GL12.GL_TEXTURE_MIN_LOD)
+val SWIZZLE_R_ = TexParameter(GL33.GL_TEXTURE_SWIZZLE_R)
+val SWIZZLE_G_ = TexParameter(GL33.GL_TEXTURE_SWIZZLE_G)
+val SWIZZLE_B_ = TexParameter(GL33.GL_TEXTURE_SWIZZLE_B)
+val SWIZZLE_A_ = TexParameter(GL33.GL_TEXTURE_SWIZZLE_A)
+val SWIZZLE_RGBA_ = TexParameter(GL33.GL_TEXTURE_SWIZZLE_RGBA)
+val TARGET = TexParameter(GL45.GL_TEXTURE_TARGET)
+val VIEW_MIN_LAYER = TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER)
+val VIEW_MIN_LEVEL = TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LEVEL)
+val VIEW_NUM_LAYERS = TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LAYERS)
+val VIEW_NUM_LEVELS = TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LEVELS)
+val WRAP_S = TexParameter(GL11.GL_TEXTURE_WRAP_S)
+val WRAP_T = TexParameter(GL11.GL_TEXTURE_WRAP_T)
+val WRAP_R = TexParameter(GL12.GL_TEXTURE_WRAP_R)
 //use SGIS_detail_texture DETAIL_TEXTURE_LEVEL_SGIS
 //use SGIS_detail_texture DETAIL_TEXTURE_MODE_SGIS
 //use SGIS_detail_texture DETAIL_TEXTURE_FUNC_POINTS_SGIS
@@ -1234,6 +1264,7 @@ val FIXED_OES = DataType(0x140C)
 
 inline class LogicOp(val i: Int)
 
+val OFF = LogicOp(GL11.GL_FALSE)
 val CLEAR = LogicOp(GL11.GL_CLEAR)
 val AND = LogicOp(GL11.GL_AND)
 val AND_REVERSE = LogicOp(GL11.GL_AND_REVERSE)
@@ -1250,6 +1281,8 @@ val COPY_INVERTED = LogicOp(GL11.GL_COPY_INVERTED)
 val OR_INVERTED = LogicOp(GL11.GL_OR_INVERTED)
 val NAND = LogicOp(GL11.GL_NAND)
 val SET = LogicOp(GL11.GL_SET)
+
+internal var _logicOpEnabled = false
 
 //###############################################################################
 //
@@ -1375,24 +1408,25 @@ val SET = LogicOp(GL11.GL_SET)
 //use GetPixelMap PIXEL_MAP_A_TO_A
 //
 //###############################################################################
-//
-//PixelStoreParameter enum:
-//use GetPName UNPACK_SWAP_BYTES
-//use GetPName UNPACK_LSB_FIRST
-//use GetPName UNPACK_ROW_LENGTH
-//use GetPName UNPACK_SKIP_ROWS
-//use GetPName UNPACK_SKIP_PIXELS
-//use GetPName UNPACK_ALIGNMENT
-//use GetPName PACK_SWAP_BYTES
-//use GetPName PACK_LSB_FIRST
-//use GetPName PACK_ROW_LENGTH
-//use GetPName PACK_SKIP_ROWS
-//use GetPName PACK_SKIP_PIXELS
-//use GetPName PACK_ALIGNMENT
-//use EXT_texture3D PACK_SKIP_IMAGES_EXT
-//use EXT_texture3D PACK_IMAGE_HEIGHT_EXT
-//use EXT_texture3D UNPACK_SKIP_IMAGES_EXT
-//use EXT_texture3D UNPACK_IMAGE_HEIGHT_EXT
+
+inline class PixelStoreParameter(val i: Int)
+
+val UNPACK_SWAP_BYTES = PixelStoreParameter(GL11.GL_UNPACK_SWAP_BYTES)
+val UNPACK_LSB_FIRST = PixelStoreParameter(GL11.GL_UNPACK_LSB_FIRST)
+val UNPACK_ROW_LENGTH = PixelStoreParameter(GL11.GL_UNPACK_ROW_LENGTH)
+val UNPACK_SKIP_ROWS = PixelStoreParameter(GL11.GL_UNPACK_SKIP_ROWS)
+val UNPACK_SKIP_PIXELS = PixelStoreParameter(GL11.GL_UNPACK_SKIP_PIXELS)
+val UNPACK_ALIGNMENT = PixelStoreParameter(GL11.GL_UNPACK_ALIGNMENT)
+val UNPACK_SKIP_IMAGES = PixelStoreParameter(GL12.GL_UNPACK_SKIP_IMAGES)
+val UNPACK_IMAGE_HEIGHT = PixelStoreParameter(GL12.GL_UNPACK_IMAGE_HEIGHT)
+val PACK_SWAP_BYTES = PixelStoreParameter(GL11.GL_PACK_SWAP_BYTES)
+val PACK_LSB_FIRST = PixelStoreParameter(GL11.GL_PACK_LSB_FIRST)
+val PACK_ROW_LENGTH = PixelStoreParameter(GL11.GL_PACK_ROW_LENGTH)
+val PACK_SKIP_ROWS = PixelStoreParameter(GL11.GL_PACK_SKIP_ROWS)
+val PACK_SKIP_PIXELS = PixelStoreParameter(GL11.GL_PACK_SKIP_PIXELS)
+val PACK_ALIGNMENT = PixelStoreParameter(GL11.GL_PACK_ALIGNMENT)
+val PACK_SKIP_IMAGES = PixelStoreParameter(GL12.GL_PACK_SKIP_IMAGES)
+val PACK_IMAGE_HEIGHT = PixelStoreParameter(GL12.GL_PACK_IMAGE_HEIGHT)
 //use SGIS_texture4D PACK_SKIP_VOLUMES_SGIS
 //use SGIS_texture4D PACK_IMAGE_DEPTH_SGIS
 //use SGIS_texture4D UNPACK_SKIP_VOLUMES_SGIS
@@ -1501,12 +1535,13 @@ val SET = LogicOp(GL11.GL_SET)
 //use SGIS_point_parameters DISTANCE_ATTENUATION_SGIS
 //
 //###############################################################################
-//
-//PolygonMode enum:
-//POINT						= 0x1B00
-//LINE						= 0x1B01
-//FILL						= 0x1B02
-//
+
+inline class PolygonMode(val i: Int)
+
+val POINT = PolygonMode(GL11.GL_POINT)
+val LINE = PolygonMode(GL11.GL_LINE)
+val FILL = PolygonMode(GL11.GL_FILL)
+
 //###############################################################################
 
 //inline class ReadBufferMode(val i: Int)
@@ -1650,10 +1685,11 @@ val INVERT_ = StencilOp(GL11.GL_INVERT)
 //use SGIS_point_line_texgen OBJECT_LINE_SGIS
 //
 //###############################################################################
-//
-//TextureMagFilter enum:
-//NEAREST						= 0x2600
-//LINEAR						= 0x2601
+
+inline class TextureMagFilter(val i: Int)
+
+val NEAREST_ = TextureMagFilter(GL11.GL_NEAREST)
+val LINEAR_ = TextureMagFilter(GL11.GL_LINEAR)
 //use SGIS_detail_texture LINEAR_DETAIL_SGIS
 //use SGIS_detail_texture LINEAR_DETAIL_ALPHA_SGIS
 //use SGIS_detail_texture LINEAR_DETAIL_COLOR_SGIS
@@ -1666,14 +1702,15 @@ val INVERT_ = StencilOp(GL11.GL_INVERT)
 //use SGIX_impact_pixel_texture PIXEL_TEX_GEN_Q_FLOOR_SGIX
 //
 //###############################################################################
-//
-//TextureMinFilter enum:
-//use TextureMagFilter NEAREST
-//use TextureMagFilter LINEAR
-//NEAREST_MIPMAP_NEAREST				= 0x2700
-//LINEAR_MIPMAP_NEAREST				= 0x2701
-//NEAREST_MIPMAP_LINEAR				= 0x2702
-//LINEAR_MIPMAP_LINEAR				= 0x2703
+
+inline class TextureMinFilter(val i: Int)
+
+val NEAREST = TextureMinFilter(GL11.GL_NEAREST)
+val LINEAR = TextureMinFilter(GL11.GL_LINEAR)
+val NEAREST_MIPMAP_NEAREST = TextureMinFilter(GL11.GL_NEAREST_MIPMAP_NEAREST)
+val LINEAR_MIPMAP_NEAREST = TextureMinFilter(GL11.GL_LINEAR_MIPMAP_NEAREST)
+val NEAREST_MIPMAP_LINEAR = TextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR)
+val LINEAR_MIPMAP_LINEAR = TextureMinFilter(GL11.GL_LINEAR_MIPMAP_LINEAR)
 //use SGIS_texture_filter4 FILTER4_SGIS
 //use SGIX_clipmap LINEAR_CLIPMAP_LINEAR_SGIX
 //use SGIX_clipmap NEAREST_CLIPMAP_NEAREST_SGIX
@@ -1718,15 +1755,33 @@ val INVERT_ = StencilOp(GL11.GL_INVERT)
 //use SGIX_texture_scale_bias POST_TEXTURE_FILTER_SCALE_SGIX
 //
 //###############################################################################
-//
-inline class TextureTarget(val i: Int)
 
-val TEXTURE_1D = TextureTarget(GL11.GL_TEXTURE_1D)
-val TEXTURE_2D = TextureTarget(GL11.GL_TEXTURE_2D)
-val PROXY_TEXTURE_1D = TextureTarget(GL11.GL_PROXY_TEXTURE_1D)
-val PROXY_TEXTURE_2D = TextureTarget(GL11.GL_PROXY_TEXTURE_2D)
-val TEXTURE_3D = TextureTarget(GL12.GL_TEXTURE_3D)
-val PROXY_TEXTURE_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
+enum class TextureTarget(val i: Int) {
+    `1D`(GL11.GL_TEXTURE_1D),
+    `2D`(GL11.GL_TEXTURE_2D),
+    `3D`(GL12.GL_TEXTURE_3D),
+    `1D_ARRAY`(GL30.GL_TEXTURE_1D_ARRAY),
+    `2D_ARRAY`(GL30.GL_TEXTURE_2D_ARRAY),
+    RECTANGLE(GL31.GL_TEXTURE_RECTANGLE),
+    `2D_MULTISAMPLE`(GL32C.GL_TEXTURE_2D_MULTISAMPLE),
+    `2D_MULTISAMPLE_ARRAY`(GL32.GL_TEXTURE_2D_MULTISAMPLE_ARRAY),
+    CUBE_MAP(GL13.GL_TEXTURE_CUBE_MAP),
+    CUBE_MAP_POSITIVE_X(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X),
+    CUBE_MAP_MEGATIVE_X(GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_X),
+    CUBE_MAP_POSITIVE_Y(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Y),
+    CUBE_MAP_MEGATIVE_Y(GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y),
+    CUBE_MAP_POSITIVE_Z(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Z),
+    CUBE_MAP_MEGATIVE_Z(GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z),
+    PROXY_1D(GL11.GL_PROXY_TEXTURE_1D),
+    PROXY_2D(GL11.GL_PROXY_TEXTURE_2D),
+    PROXY_3D(GL12.GL_PROXY_TEXTURE_3D),
+    PROXY_1D_ARRAY(GL30.GL_PROXY_TEXTURE_1D_ARRAY),
+    PROXY_2D_ARRAY(GL30.GL_PROXY_TEXTURE_2D_ARRAY),
+    PROXY_RECTANGLE(GL31.GL_PROXY_TEXTURE_RECTANGLE),
+    PROXY_2D_MULTISAMPLE(GL32.GL_PROXY_TEXTURE_2D_MULTISAMPLE),
+    PROXY_2D_MULTISAMPLE_ARRAY(GL32.GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY),
+    PROXY_CUBE_MAP(GL32.GL_PROXY_TEXTURE_CUBE_MAP),
+    BUFFER(GL32.GL_TEXTURE_BUFFER)
 //use SGIS_detail_texture DETAIL_TEXTURE_2D_SGIS
 //use SGIS_texture4D TEXTURE_4D_SGIS
 //use SGIS_texture4D PROXY_TEXTURE_4D_SGIS
@@ -1734,12 +1789,14 @@ val PROXY_TEXTURE_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
 //use SGIS_texture_lod TEXTURE_MAX_LOD_SGIS
 //use SGIS_texture_lod TEXTURE_BASE_LEVEL_SGIS
 //use SGIS_texture_lod TEXTURE_MAX_LEVEL_SGIS
-//
+}
 //###############################################################################
-//
-//TextureWrapMode enum:
-//CLAMP						= 0x2900
-//REPEAT						= 0x2901
+
+inline class TextureWrapMode(val i: Int)
+
+val CLAMP = TextureWrapMode(GL11.GL_CLAMP)
+val REPEAT = TextureWrapMode(GL11.GL_REPEAT)
+
 //use SGIS_texture_border_clamp CLAMP_TO_BORDER_SGIS
 //use SGIS_texture_edge_clamp CLAMP_TO_EDGE_SGIS
 //
@@ -4897,6 +4954,23 @@ val PROXY_TEXTURE_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
 //#	WEIGHT_ARRAY_BUFFER_BINDING_ARB			= 0x889E
 //#	VERTEX_ATTRIB_ARRAY_BUFFER_BINDING		= 0x889F
 //#	VERTEX_ATTRIB_ARRAY_BUFFER_BINDING_ARB		= 0x889F
+
+inline class BufferTarget(val i: Int)
+
+val ARRAY_BUFFER = BufferTarget(GL15.GL_ARRAY_BUFFER)
+val ATOMIC_COUNTER_BUFFER = BufferTarget(GL42.GL_ATOMIC_COUNTER_BUFFER)
+val COPY_READ_BUFFER = BufferTarget(GL31.GL_COPY_READ_BUFFER)
+val COPY_WRITE_BUFFER = BufferTarget(GL31.GL_COPY_WRITE_BUFFER)
+val DISPATCH_INDIRECT_BUFFER = BufferTarget(GL43.GL_DISPATCH_INDIRECT_BUFFER)
+val DRAW_INDIRECT_BUFFER = BufferTarget(GL40.GL_DRAW_INDIRECT_BUFFER)
+val ELEMENT_ARRAY_BUFFER = BufferTarget(GL15.GL_ELEMENT_ARRAY_BUFFER)
+val PIXEL_PACK_BUFFER = BufferTarget(GL21.GL_PIXEL_PACK_BUFFER)
+val PIXEL_UNPACK_BUFFER = BufferTarget(GL21.GL_PIXEL_UNPACK_BUFFER)
+val SHADER_STORAGE_BUFFER = BufferTarget(GL43.GL_SHADER_STORAGE_BUFFER)
+val TEXTURE_BUFFER = BufferTarget(GL31.GL_TEXTURE_BUFFER)
+val TRANSFORM_FEEDBACK_BUFFER = BufferTarget(GL30.GL_TRANSFORM_FEEDBACK_BUFFER)
+val UNIFORM_BUFFER = BufferTarget(GL31.GL_UNIFORM_BUFFER)
+
 //
 //# ARB_vertex_program enum: (additional; see above)
 //# ARB_fragment_program enum: (additional; see above)
@@ -4927,11 +5001,16 @@ val PROXY_TEXTURE_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
 //
 //# VERSION_1_5 enum: (Promoted for OpenGL 1.5)
 //# ARB_vertex_buffer_object enum: (additional; see above)
-//#	READ_ONLY					= 0x88B8
+inline class BufferAccess(val i: Int)
+
+val READ_ONLY = BufferAccess(GL15.GL_READ_ONLY)
+
 //#	READ_ONLY_ARB					= 0x88B8
-//#	WRITE_ONLY					= 0x88B9
+val WRITE_ONLY = BufferAccess(GL15.GL_WRITE_ONLY)
+
 //#	WRITE_ONLY_ARB					= 0x88B9
-//#	READ_WRITE					= 0x88BA
+val READ_WRITE = BufferAccess(GL15.GL_READ_WRITE)
+
 //#	READ_WRITE_ARB					= 0x88BA
 //#	BUFFER_ACCESS					= 0x88BB
 //#	BUFFER_ACCESS_ARB				= 0x88BB
@@ -4982,25 +5061,18 @@ val PROXY_TEXTURE_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
 //
 //# VERSION_1_5 enum: (Promoted for OpenGL 1.5)
 //# ARB_vertex_buffer_object enum: (additional; see above)
-//#	STREAM_DRAW					= 0x88E0
-//#	STREAM_DRAW_ARB					= 0x88E0
-//#	STREAM_READ					= 0x88E1
-//#	STREAM_READ_ARB					= 0x88E1
-//#	STREAM_COPY					= 0x88E2
-//#	STREAM_COPY_ARB					= 0x88E2
-//#	STATIC_DRAW					= 0x88E4
-//#	STATIC_DRAW_ARB					= 0x88E4
-//#	STATIC_READ					= 0x88E5
-//#	STATIC_READ_ARB					= 0x88E5
-//#	STATIC_COPY					= 0x88E6
-//#	STATIC_COPY_ARB					= 0x88E6
-//#	DYNAMIC_DRAW					= 0x88E8
-//#	DYNAMIC_DRAW_ARB				= 0x88E8
-//#	DYNAMIC_READ					= 0x88E9
-//#	DYNAMIC_READ_ARB				= 0x88E9
-//#	DYNAMIC_COPY					= 0x88EA
-//#	DYNAMIC_COPY_ARB				= 0x88EA
-//
+inline class Usage(val i: Int)
+
+val STREAM_DRAW = Usage(GL15.GL_STREAM_DRAW)
+val STREAM_READ = Usage(GL15.GL_STREAM_READ)
+val STREAM_COPY = Usage(GL15.GL_STREAM_COPY)
+val STATIC_DRAW = Usage(GL15.GL_STREAM_DRAW)
+val STATIC_READ = Usage(GL15.GL_STATIC_READ)
+val STATIC_COPY = Usage(GL15.GL_STATIC_COPY)
+val DYNAMIC_DRAW = Usage(GL15.GL_DYNAMIC_DRAW)
+val DYNAMIC_READ = Usage(GL15.GL_DYNAMIC_READ)
+val DYNAMIC_COPY = Usage(GL15.GL_DYNAMIC_COPY)
+
 //# VERSION_2_1 enum:
 //# ARB_pixel_buffer_object enum:
 //# EXT_pixel_buffer_object enum:
@@ -5639,8 +5711,10 @@ val PROXY_TEXTURE_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
 //
 //# VERSION_2_0 enum:
 //#	POINT_SPRITE_COORD_ORIGIN			= 0x8CA0
-//#	LOWER_LEFT					= 0x8CA1
-//#	UPPER_LEFT					= 0x8CA2
+inline class PointSpriteCoordOrigin(val i: Int)
+
+val LOWER_LEFT = PointSpriteCoordOrigin(GL20.GL_LOWER_LEFT)
+val UPPER_LEFT = PointSpriteCoordOrigin(GL20.GL_UPPER_LEFT)
 //#	STENCIL_BACK_REF				= 0x8CA3
 //#	STENCIL_BACK_VALUE_MASK				= 0x8CA4
 //#	STENCIL_BACK_WRITEMASK				= 0x8CA5
@@ -6085,13 +6159,14 @@ val PROXY_TEXTURE_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
 //#	PROGRAM_MATRIX_STACK_DEPTH_EXT			= 0x8E2F
 //
 //# NV_future_use: 0x8E30-0x8E41
-//
-//# EXT_texture_swizzle enum:
-//#	TEXTURE_SWIZZLE_R_EXT				= 0x8E42
-//#	TEXTURE_SWIZZLE_G_EXT				= 0x8E43
-//#	TEXTURE_SWIZZLE_B_EXT				= 0x8E44
-//#	TEXTURE_SWIZZLE_A_EXT				= 0x8E45
-//#	TEXTURE_SWIZZLE_RGBA_EXT			= 0x8E46
+
+inline class TextureSwizzle(val i: Int)
+
+val SWIZZLE_R = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_R)
+val SWIZZLE_G = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_G)
+val SWIZZLE_B = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_B)
+val SWIZZLE_A = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_A)
+val SWIZZLE_RGBA = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_RGBA)
 //
 //# NV_future_use: 0x8E47-0x8E4F
 //
@@ -6207,3 +6282,25 @@ inline class ProvokeMode(val i: Int)
 
 val FIRST_VERTEX_CONVENTION = ProvokeMode(GL32.GL_FIRST_VERTEX_CONVENTION)
 val LAST_VERTEX_CONVENTION = ProvokeMode(GL32.GL_LAST_VERTEX_CONVENTION)
+
+//###############################################################################
+
+inline class DepthStencilTextureMode(val i: Int)
+
+val DEPTH_COMPONENT = ProvokeMode(GL32.GL_DEPTH_COMPONENT)
+val STENCIL_COMPONENT = ProvokeMode(GL43.GL_STENCIL_COMPONENTS)
+
+//###############################################################################
+
+inline class TextureCompareMode(val i: Int)
+
+val COMPARE_R_TO_TEXTURE = TextureCompareMode(GL14.GL_COMPARE_R_TO_TEXTURE)
+val NONE_ = TextureCompareMode(GL11.GL_NONE)
+
+//###############################################################################
+
+inline class ImageFormatCompatibilityType(val i: Int)
+
+val IMAGE_FORMAT_COMPATIBILITY_BY_SIZE = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_SIZE)
+val IMAGE_FORMAT_COMPATIBILITY_BY_CLASS = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_CLASS)
+val NONE__ = ImageFormatCompatibilityType(GL11.GL_NONE)

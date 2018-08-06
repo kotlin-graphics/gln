@@ -7,6 +7,7 @@ import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
+import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil
@@ -76,6 +77,27 @@ inline fun glGetVec4i(pname: Int): Vec4i {
     return Vec4i(MemoryUtil.memGetInt(x), MemoryUtil.memGetInt(y), MemoryUtil.memGetInt(z), MemoryUtil.memGetInt(w))
 }
 
+// utils
+
+fun vec4i(pName: Int): Vec4i {
+    val ints = appBuffer.intArray(4)
+    GL11C.nglGetIntegerv(pName, ints)
+    return Vec4i(MemoryUtil.memGetInt(ints), MemoryUtil.memGetInt(ints + Int.BYTES),
+            MemoryUtil.memGetInt(ints + Int.BYTES * 2), MemoryUtil.memGetInt(ints + Int.BYTES * 3))
+}
+
+fun vec4(pName: Int): Vec4 {
+    val floats = appBuffer.floatBuffer(Vec4.length)
+    GL11C.nglGetFloatv(pName, floats.adr)
+    return Vec4(floats)
+}
+
+fun vec4bool(pName: Int): Vec4bool {
+    val bools = appBuffer.intBuffer(4)
+    GL11C.glGetIntegerv(pName, bools)
+    return Vec4bool(bools)
+}
+
 fun checkError(location: String, throwError: Boolean = true): Boolean {
 
     val error = GL11.glGetError()
@@ -96,3 +118,9 @@ fun checkError(location: String, throwError: Boolean = true): Boolean {
 }
 
 val VERSION = "0.4.4"
+
+fun main(args: Array<String>) {
+
+}
+
+object gl11 : gl11i
