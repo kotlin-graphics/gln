@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package gln.buffer
 
 import glm_.BYTES

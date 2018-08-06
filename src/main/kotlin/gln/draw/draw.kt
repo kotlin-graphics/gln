@@ -1,7 +1,10 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package gln.draw
 
 import glm_.BYTES
 import glm_.buffer.cap
+import glm_.buffer.rem
 import glm_.size
 import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL11.*
@@ -43,14 +46,14 @@ inline fun glDrawArraysIndirect(indirect: ByteBuffer) = GL40.glDrawArraysIndirec
 inline fun glDrawArraysInstancedBaseInstance(count: Int, primCount: Int, baseInstance: Int) = glDrawArraysInstancedBaseInstance(GL11.GL_TRIANGLES, count, primCount, baseInstance)
 inline fun glDrawArraysInstancedBaseInstance(mode: Int, count: Int, primCount: Int, baseInstance: Int) = GL42.glDrawArraysInstancedBaseInstance(mode, 0, count, primCount, baseInstance)
 // TODO check primcount, also stride: Int = 0
-inline fun glMultiDrawArraysIndirect(indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / (4 * Int.BYTES), 0)
-inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, indirect.size / (4 * Int.BYTES), 0)
+inline fun glMultiDrawArraysIndirect(indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / DrawArraysIndirectCommand_SIZE, 0)
+inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, indirect.size / DrawArraysIndirectCommand_SIZE, 0)
 inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: ByteBuffer, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, primCount, 0)
-inline fun glMultiDrawArraysIndirect(indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.cap / 4, 0)
-inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.cap / 4, 0)
+inline fun glMultiDrawArraysIndirect(indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.rem / DrawArraysIndirectCommand_LENGTH, 0)
+inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, indirect.rem / DrawArraysIndirectCommand_LENGTH, 0)
 inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntBuffer, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, primCount, 0)
-inline fun glMultiDrawArraysIndirect(indirect: IntArray) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / 4, 0)
-inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntArray) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / 4, 0)
+inline fun glMultiDrawArraysIndirect(indirect: IntArray) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / DrawArraysIndirectCommand_LENGTH, 0)
+inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntArray) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, indirect.size / DrawArraysIndirectCommand_LENGTH, 0)
 inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntArray, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, primCount, 0)
 
 inline fun glMultiDrawArraysIndirectBindlessNV(indirect: ByteBuffer, drawCount: Int, vertexBufferCount: Int) = glMultiDrawArraysIndirectBindlessNV(DrawMode.triangles, indirect, drawCount, vertexBufferCount)
@@ -66,3 +69,15 @@ inline fun glDrawElements(mode: DrawMode, count: Int, type: Int) = GL11.glDrawEl
 inline fun glDrawElementsBaseVertex(count: Int, type: Int, indices_buffer_offset: Long, basevertex: Int) = GL32.glDrawElementsBaseVertex(GL11.GL_TRIANGLES, count, type, indices_buffer_offset, basevertex)
 // TODO finish
 inline fun glDrawElementsInstancedBaseVertex(count: Int, type: Int, primcount: Int, basevertex: Int) = GL32.glDrawElementsInstancedBaseVertex(GL11.GL_TRIANGLES, count, type, 0, primcount, basevertex)
+
+
+/**
+ *     typedef  struct {
+ *          uint  count;
+ *          uint  instanceCount;
+ *          uint  first;
+ *          uint  baseInstance;
+ *     } DrawArraysIndirectCommand;
+ */
+val DrawArraysIndirectCommand_LENGTH = 4 // TODO property of inline classe
+val DrawArraysIndirectCommand_SIZE = DrawArraysIndirectCommand_LENGTH * Int.BYTES // TODO property of inline classe
