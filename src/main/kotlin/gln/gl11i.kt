@@ -6,22 +6,24 @@
 
 package gln
 
-import ab.appBuffer
 import gli_.gl.ExternalFormat
 import gli_.gl.InternalFormat
 import gli_.gl.TypeFormat
-import glm_.BYTES
+import glm_.bool
 import glm_.buffer.adr
 import glm_.buffer.intBufferBig
 import glm_.buffer.rem
+import glm_.buffer.remSize
 import glm_.i
 import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
+import gln.`object`.GLtexture
+import kool_.kool
 import org.lwjgl.opengl.GL11C
-import org.lwjgl.system.MemoryUtil
+import org.lwjgl.opengl.GL12
 import org.lwjgl.system.MemoryUtil.NULL
 import java.awt.Color
 import java.nio.Buffer
@@ -46,9 +48,6 @@ import java.nio.ShortBuffer
  * </ul>
  */
 interface gl11i {
-
-    /** vertex_array */
-//    public static final int GL_VERTEX_ARRAY = 0x8074;
 
     // --- [ glBindTexture ] ---
 
@@ -77,6 +76,22 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFunc">Reference Page</a>
      */
     fun blendFunc(sFactor: BlendingFactor, dFactor: BlendingFactor) = GL11C.glBlendFunc(sFactor.i, dFactor.i)
+
+    /**
+     * Specifies the weighting factors used by the blend equation, for both RGB and alpha functions and for all draw buffers.
+     *
+     * @param sFactor the source weighting factor. One of:<br><table><tr><td>{@link #GL_ZERO ZERO}</td><td>{@link #GL_ONE ONE}</td><td>{@link #GL_SRC_COLOR SRC_COLOR}</td><td>{@link #GL_ONE_MINUS_SRC_COLOR ONE_MINUS_SRC_COLOR}</td><td>{@link #GL_DST_COLOR DST_COLOR}</td></tr><tr><td>{@link #GL_ONE_MINUS_DST_COLOR ONE_MINUS_DST_COLOR}</td><td>{@link #GL_SRC_ALPHA SRC_ALPHA}</td><td>{@link #GL_ONE_MINUS_SRC_ALPHA ONE_MINUS_SRC_ALPHA}</td><td>{@link #GL_DST_ALPHA DST_ALPHA}</td><td>{@link #GL_ONE_MINUS_DST_ALPHA ONE_MINUS_DST_ALPHA}</td></tr><tr><td>{@link GL14#GL_CONSTANT_COLOR CONSTANT_COLOR}</td><td>{@link GL14#GL_ONE_MINUS_CONSTANT_COLOR ONE_MINUS_CONSTANT_COLOR}</td><td>{@link GL14#GL_CONSTANT_ALPHA CONSTANT_ALPHA}</td><td>{@link GL14#GL_ONE_MINUS_CONSTANT_ALPHA ONE_MINUS_CONSTANT_ALPHA}</td><td>{@link #GL_SRC_ALPHA_SATURATE SRC_ALPHA_SATURATE}</td></tr><tr><td>{@link GL33#GL_SRC1_COLOR SRC1_COLOR}</td><td>{@link GL33#GL_ONE_MINUS_SRC1_COLOR ONE_MINUS_SRC1_COLOR}</td><td>{@link GL15#GL_SRC1_ALPHA SRC1_ALPHA}</td><td>{@link GL33#GL_ONE_MINUS_SRC1_ALPHA ONE_MINUS_SRC1_ALPHA}</td></tr></table>
+     * @param dFactor the destination weighting factor
+     * @param block the lambda to be executed under blending
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFunc">Reference Page</a>
+     */
+    fun blendFunc(sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> Unit) {
+        GL11C.glEnable(GL11C.GL_BLEND)
+        GL11C.glBlendFunc(sFactor.i, dFactor.i)
+        block()
+        GL11C.glDisable(GL11C.GL_BLEND)
+    }
 
     // --- [ glClear ] ---
 
@@ -142,6 +157,20 @@ interface gl11i {
         get() = vec4(GL11C.GL_COLOR_CLEAR_VALUE)
         set(value) = GL11C.glClearColor(value.r, value.g, value.b, value.a)
 
+    // --- [ glClearDepth ] ---
+
+    /**
+     * Sets the depth value used when clearing the depth buffer. When clearing a fixedpoint depth buffer, {@code depth} is clamped to the range [0,1] and
+     * converted to fixed-point. No conversion is applied when clearing a floating-point depth buffer.
+     *
+     * @param depth the value to which to clear the depth buffer
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearDepth">Reference Page</a>
+     */
+    var clearDepth: Double
+        get() = GL11C.glGetDouble(GL11C.GL_DEPTH_CLEAR_VALUE)
+        set(value) = GL11C.glClearDepth(value)
+
     // --- [ glClearStencil ] ---
 
     /**
@@ -151,7 +180,9 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearStencil">Reference Page</a>
      */
-    infix fun clearStencil(s: Int) = GL11C.glClearStencil(s)
+    var clearStencil: Int
+        get() = GL11C.glGetInteger(GL11C.GL_STENCIL_CLEAR_VALUE)
+        set(value) = GL11C.glClearStencil(value)
 
     // --- [ glColorMask ] ---
 
@@ -297,6 +328,37 @@ interface gl11i {
      */
     fun drawArrays(mode: DrawMode, count: Int) = GL11C.glDrawArrays(mode.i, 0, count)
 
+    // --- [ glDrawArrays ] --- Default Mode
+
+    /**
+     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices. Elements {@code first} through
+     * <code>first + count &ndash; 1</code> of each enabled non-instanced array are transferred to the GL.
+     *
+     * <p>If an array corresponding to an attribute required by a vertex shader is not enabled, then the corresponding element is taken from the current attribute
+     * state. If an array is enabled, the corresponding current vertex attribute value is unaffected by the execution of this function.</p>
+     *
+     * @param mode  the kind of primitives being constructed
+     * @param first the first vertex to transfer to the GL
+     * @param count the number of vertices after {@code first} to transfer to the GL
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
+     */
+    fun drawArrays(first: Int, count: Int) = GL11C.glDrawArrays(DrawMode.TRIANGLES.i, first, count)
+
+    /**
+     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices. Elements {@code first} through
+     * <code>first + count &ndash; 1</code> of each enabled non-instanced array are transferred to the GL.
+     *
+     * <p>If an array corresponding to an attribute required by a vertex shader is not enabled, then the corresponding element is taken from the current attribute
+     * state. If an array is enabled, the corresponding current vertex attribute value is unaffected by the execution of this function.</p>
+     *
+     * @param mode  the kind of primitives being constructed
+     * @param count the number of vertices after {@code first} to transfer to the GL
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
+     */
+    fun drawArrays(count: Int) = GL11C.glDrawArrays(DrawMode.TRIANGLES.i, 0, count)
+
     // --- [ glDrawBuffer ] ---
 
     /**
@@ -391,7 +453,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(count: Int, type: DataType = UNSIGNED_INT, indices: Long = 0) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices)
+    fun drawElements(count: Int, type: DataType = UNSIGNED_INT, indices: Ptr = Ptr(0L)) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices.L)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -414,30 +476,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    infix fun drawElements(indices: ByteBuffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.rem, GL11C.GL_UNSIGNED_BYTE, indices.adr)
-
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
-     * The i<sup>th</sup> element transferred by {@code DrawElements} will be taken from element {@code indices[i]} (if no element array buffer is bound), or
-     * from the element whose index is stored in the currently bound element array buffer at offset {@code indices + i}.
-     *
-     * @param indices the index values
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
-     */
-    infix fun drawElements(indices: ShortBuffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.rem, GL11C.GL_UNSIGNED_SHORT, indices.adr)
-
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
-     * The i<sup>th</sup> element transferred by {@code DrawElements} will be taken from element {@code indices[i]} (if no element array buffer is bound), or
-     * from the element whose index is stored in the currently bound element array buffer at offset {@code indices + i}.
-     *
-     * @param mode    the kind of primitives being constructed. One of:<br><table><tr><td>{@link #GL_POINTS POINTS}</td><td>{@link #GL_LINE_STRIP LINE_STRIP}</td><td>{@link #GL_LINE_LOOP LINE_LOOP}</td><td>{@link #GL_LINES LINES}</td><td>{@link #GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link #GL_TRIANGLE_FAN TRIANGLE_FAN}</td></tr><tr><td>{@link #GL_TRIANGLES TRIANGLES}</td><td>{@link GL32#GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link GL32#GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td></tr></table>
-     * @param indices the index values
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
-     */
-    infix fun drawElements(indices: IntBuffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.rem, GL11C.GL_UNSIGNED_INT, indices.adr)
+    infix fun drawElements(indices: Buffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.remSize, indices.glType, indices.adr)
 
     // --- [ glFinish ] ---
 
@@ -501,7 +540,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    fun genTexture() = appBuffer.withIntPtr { GL11C.nglGenTextures(1, it) }
+    fun genTexture() = kool.withIntPtr { GL11C.nglGenTextures(1, it) }
 
     // --- [ glDeleteTextures ] ---
 
@@ -531,7 +570,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTexture(texture: GLtexture) = appBuffer.withIntPtr(texture.i) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTexture(texture: GLtexture) = kool.withIntPtr(texture.i) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetError ] ---
 
@@ -586,11 +625,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
-    fun getTexLevelParameterI(target: TextureTarget, level: Int, pName: GetTexLevelParameter): Int {
-        val int = appBuffer.int
-        GL11C.nglGetTexLevelParameteriv(target.i, level, pName.i, int)
-        return MemoryUtil.memGetInt(int)
-    }
+    fun getTexLevelParameterI(target: TextureTarget, level: Int, pName: GetTexLevelParameter) = kool.withIntPtr { GL11C.nglGetTexLevelParameteriv(target.i, level, pName.i, it) }
 
     // --- [ glGetTexLevelParameterfv ] ---
 
@@ -604,11 +639,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
-    fun getTexLevelParameterF(target: TextureTarget, level: Int, pName: GetTexLevelParameter): Float {
-        val float = appBuffer.float
-        GL11C.nglGetTexLevelParameterfv(target.i, level, pName.i, float)
-        return MemoryUtil.memGetFloat(float)
-    }
+    fun getTexLevelParameterF(target: TextureTarget, level: Int, pName: GetTexLevelParameter) = kool.withFloatPtr { GL11C.nglGetTexLevelParameterfv(target.i, level, pName.i, it) }
 
     // --- [ glGetTexParameteriv ] ---
 
@@ -623,11 +654,7 @@ interface gl11i {
      *
      * Note: invalid for GL_TEXTURE_BORDER_COLOR or GL_TEXTURE_SWIZZLE_RGBA, use native
      */
-    fun getTexParameterI(target: TextureTarget, pName: TexParameter): Int {
-        val int = appBuffer.int
-        GL11C.nglGetTexParameteriv(target.i, pName.i, int)
-        return MemoryUtil.memGetInt(int)
-    }
+    fun getTexParameterI(target: TextureTarget, pName: TexParameter) = kool.withIntPtr { GL11C.nglGetTexParameteriv(target.i, pName.i, it) }
 
     // --- [ glGetTexParameterfv ] ---
 
@@ -640,11 +667,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexParameter">Reference Page</a>
      */
-    fun getTexParameterF(target: TextureTarget, pName: TexParameter): Float {
-        val float = appBuffer.float
-        GL11C.nglGetTexParameterfv(target.i, pName.i, float)
-        return MemoryUtil.memGetFloat(float)
-    }
+    fun getTexParameterF(target: TextureTarget, pName: TexParameter) = kool.withFloatPtr { GL11C.nglGetTexParameterfv(target.i, pName.i, it) }
 
     // --- [ glHint ] ---
 
@@ -671,6 +694,17 @@ interface gl11i {
     var lineWidth: Float
         get() = GL11C.glGetFloat(GL11C.GL_LINE_WIDTH)
         set(value) = GL11C.glLineWidth(value)
+
+    // --- [ glIsTexture ] ---
+
+    /**
+     * Returns true if {@code texture} is the name of a texture object.
+     *
+     * @param texture the texture name to query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glIsTexture">Reference Page</a>
+     */
+    fun isTexture(texture: Int) = GL11C.glIsTexture(texture)
 
     // --- [ glLogicOp ] ---
 
@@ -710,6 +744,72 @@ interface gl11i {
         block()
         GL11C.glDisable(GL11C.GL_COLOR_LOGIC_OP)
     }
+
+    // --- [ glPixelStorei ] ---
+
+    var packAlignment: Int
+        get() = GL11C.glGetInteger(GL11C.GL_PACK_ALIGNMENT)
+        set(value) = GL11C.glPixelStorei(PACK_ALIGNMENT.i, value)
+
+    var packImageHeight: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_IMAGE_HEIGHT)
+        set(value) = GL11C.glPixelStorei(PACK_IMAGE_HEIGHT.i, value)
+
+    var packLsbFirst: Boolean
+        get() = GL11C.glGetInteger(GL12.GL_PACK_LSB_FIRST).bool
+        set(value) = GL11C.glPixelStorei(PACK_LSB_FIRST.i, value.i)
+
+    var packRowLength: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_ROW_LENGTH)
+        set(value) = GL11C.glPixelStorei(PACK_ROW_LENGTH.i, value)
+
+    var packSkipImages: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_IMAGES)
+        set(value) = GL11C.glPixelStorei(PACK_SKIP_IMAGES.i, value)
+
+    var packSkipPixels: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_PIXELS)
+        set(value) = GL11C.glPixelStorei(PACK_SKIP_PIXELS.i, value)
+
+    var packSkipRows: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_ROWS)
+        set(value) = GL11C.glPixelStorei(PACK_SKIP_ROWS.i, value)
+
+    var packSwapBytes: Boolean
+        get() = GL11C.glGetInteger(GL12.GL_PACK_SWAP_BYTES).bool
+        set(value) = GL11C.glPixelStorei(PACK_SWAP_BYTES.i, value.i)
+
+    var unpackAlignment: Int
+        get() = GL11C.glGetInteger(GL11C.GL_UNPACK_ALIGNMENT)
+        set(value) = GL11C.glPixelStorei(UNPACK_ALIGNMENT.i, value)
+
+    var unpackImageHeight: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_IMAGE_HEIGHT)
+        set(value) = GL11C.glPixelStorei(UNPACK_IMAGE_HEIGHT.i, value)
+
+    var unpackLsbFirst: Boolean
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_LSB_FIRST).bool
+        set(value) = GL11C.glPixelStorei(UNPACK_LSB_FIRST.i, value.i)
+
+    var unpackRowLength: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_ROW_LENGTH)
+        set(value) = GL11C.glPixelStorei(UNPACK_ROW_LENGTH.i, value)
+
+    var unpackSkipImages: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_IMAGES)
+        set(value) = GL11C.glPixelStorei(UNPACK_SKIP_IMAGES.i, value)
+
+    var unpackSkipPixels: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_PIXELS)
+        set(value) = GL11C.glPixelStorei(UNPACK_SKIP_PIXELS.i, value)
+
+    var unpackSkipRows: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_ROWS)
+        set(value) = GL11C.glPixelStorei(UNPACK_SKIP_ROWS.i, value)
+
+    var unpackSwapBytes: Boolean
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SWAP_BYTES).bool
+        set(value) = GL11C.glPixelStorei(UNPACK_SWAP_BYTES.i, value.i)
 
     // --- [ glPointSize ] ---
 

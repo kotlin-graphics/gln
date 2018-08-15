@@ -13,12 +13,6 @@ interface glEnable {
             else -> GL11C.glDisable(GL11C.GL_BLEND)
         }
 
-    fun useBlend(sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> Unit) {
-        GL11C.glEnable(GL11C.GL_BLEND)
-        GL11C.glBlendFunc(sFactor.i, dFactor.i)
-        block()
-        GL11C.glDisable(GL11C.GL_BLEND)
-    }
 
     fun useBlend(buff: BufferMode, sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> Unit) {
         GL11C.glEnable(GL11C.GL_BLEND)
@@ -88,20 +82,20 @@ interface glEnable {
             else -> GL11C.glDisable(GL11.GL_DEPTH_TEST)
         }
 
-    fun useDepthTest(block: () -> Unit) {
+    fun depthTest(block: () -> Unit) {
         GL11C.glEnable(GL11.GL_DEPTH_TEST)
         block()
         GL11C.glDisable(GL11.GL_DEPTH_TEST)
     }
 
-    fun useDepthTest(func: CompareFunction, block: () -> Unit) {
+    fun depthFunc(func: CompareFunction, block: () -> Unit) {
         GL11C.glEnable(GL11.GL_DEPTH_TEST)
         GL11C.glDepthFunc(func.i)
         block()
         GL11C.glDisable(GL11.GL_DEPTH_TEST)
     }
 
-    fun useDepthTest(func: CompareFunction, near: Float, far: Float, block: () -> Unit) {
+    fun depthFunc(func: CompareFunction, near: Float, far: Float, block: () -> Unit) {
         GL11C.glEnable(GL11.GL_DEPTH_TEST)
         GL11C.glDepthFunc(func.i)
         GL41.glDepthRangef(near, far)
@@ -117,7 +111,7 @@ interface glEnable {
             else -> GL11C.glDisable(GL11.GL_DITHER)
         }
 
-    fun useDither(block: () -> Unit) {
+    fun dither(block: () -> Unit) {
         GL11C.glEnable(GL11.GL_DITHER)
         block()
         GL11C.glDisable(GL11.GL_DITHER)
@@ -131,7 +125,7 @@ interface glEnable {
             else -> GL11C.glDisable(GL30.GL_FRAMEBUFFER_SRGB)
         }
 
-    fun useFramebufferSrgb(block: () -> Unit) {
+    fun framebufferSrgb(block: () -> Unit) {
         GL11C.glEnable(GL30.GL_FRAMEBUFFER_SRGB)
         block()
         GL11C.glDisable(GL30.GL_FRAMEBUFFER_SRGB)
@@ -145,13 +139,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL11.GL_LINE_SMOOTH)
         }
 
-    fun useLineSmooth(block: () -> Unit) {
+    fun lineSmooth(block: () -> Unit) {
         GL11C.glEnable(GL11.GL_LINE_SMOOTH)
         block()
         GL11C.glDisable(GL30.GL_FRAMEBUFFER_SRGB)
     }
 
-    fun useLineSmooth(width: Float, block: () -> Unit) {
+    fun lineSmooth(width: Float, block: () -> Unit) {
         GL11C.glEnable(GL11.GL_LINE_SMOOTH)
         GL11.glLineWidth(width)
         block()
@@ -166,13 +160,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL13.GL_MULTISAMPLE)
         }
 
-    fun useMultisample(block: () -> Unit) {
+    fun multisample(block: () -> Unit) {
         GL11C.glEnable(GL13.GL_MULTISAMPLE)
         block()
         GL11C.glDisable(GL13.GL_MULTISAMPLE)
     }
 
-    fun useMultisample(sampleCoverage: Float, invert: Boolean, block: () -> Unit) {
+    fun multisample(sampleCoverage: Float, invert: Boolean, block: () -> Unit) {
         GL11C.glEnable(GL13.GL_MULTISAMPLE)
         GL13.glSampleCoverage(sampleCoverage, invert)
         block()
@@ -187,13 +181,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL13.GL_POLYGON_SMOOTH)
         }
 
-    fun usePolygonSmooth(block: () -> Unit) {
+    fun polygonSmooth(block: () -> Unit) {
         GL11C.glEnable(GL13.GL_POLYGON_SMOOTH)
         block()
         GL11C.glDisable(GL13.GL_POLYGON_SMOOTH)
     }
 
-    fun usePolygonSmooth(mode: PolygonMode, block: () -> Unit) {
+    fun polygonSmooth(mode: PolygonMode, block: () -> Unit) {
         GL11C.glEnable(GL13.GL_POLYGON_SMOOTH)
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, mode.i)
         block()
@@ -208,13 +202,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL13.GL_POLYGON_OFFSET_FILL)
         }
 
-    fun usePolygonOffsetFill(block: () -> Unit) {
+    fun polygonOffsetFill(block: () -> Unit) {
         GL11C.glEnable(GL13.GL_POLYGON_OFFSET_FILL)
         block()
         GL11C.glDisable(GL13.GL_POLYGON_OFFSET_FILL)
     }
 
-    fun usePolygonOffsetFill(factor: Float, units: Float, block: () -> Unit) {
+    fun polygonOffsetFill(factor: Float, units: Float, block: () -> Unit) {
         GL11C.glEnable(GL13.GL_POLYGON_OFFSET_FILL)
         GL11.glPolygonOffset(factor, units)
         block()
@@ -229,13 +223,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL13.GL_POLYGON_OFFSET_LINE)
         }
 
-    fun usePolygonOffsetLine(block: () -> Unit) {
+    fun polygonOffsetLine(block: () -> Unit) {
         GL11C.glEnable(GL13.GL_POLYGON_OFFSET_LINE)
         block()
         GL11C.glDisable(GL13.GL_POLYGON_OFFSET_LINE)
     }
 
-    fun usePolygonOffsetLine(factor: Float, units: Float, block: () -> Unit) {
+    fun polygonOffsetLine(factor: Float, units: Float, block: () -> Unit) {
         GL11C.glEnable(GL13.GL_POLYGON_OFFSET_LINE)
         GL11.glPolygonOffset(factor, units)
         block()
@@ -250,13 +244,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL13.GL_POLYGON_OFFSET_POINT)
         }
 
-    fun usePolygonOffsetPoint(block: () -> Unit) {
+    fun polygonOffsetPoint(block: () -> Unit) {
         GL11C.glEnable(GL13.GL_POLYGON_OFFSET_POINT)
         block()
         GL11C.glDisable(GL13.GL_POLYGON_OFFSET_POINT)
     }
 
-    fun usePolygonOffsetPoint(factor: Float, units: Float, block: () -> Unit) {
+    fun polygonOffsetPoint(factor: Float, units: Float, block: () -> Unit) {
         GL11C.glEnable(GL13.GL_POLYGON_OFFSET_POINT)
         GL11.glPolygonOffset(factor, units)
         block()
@@ -271,7 +265,7 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_PROGRAM_POINT_SIZE)
         }
 
-    fun useProgramPointSize(block: () -> Unit) {
+    fun programPointSize(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_PROGRAM_POINT_SIZE)
         block()
         GL11C.glDisable(GL32.GL_PROGRAM_POINT_SIZE)
@@ -285,13 +279,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_PRIMITIVE_RESTART)
         }
 
-    fun usePrimitiveRestart(block: () -> Unit) {
+    fun primitiveRestart(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_PRIMITIVE_RESTART)
         block()
         GL11C.glDisable(GL32.GL_PRIMITIVE_RESTART)
     }
 
-    fun usePrimitiveRestart(index: Int, block: () -> Unit) {
+    fun primitiveRestart(index: Int, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_PRIMITIVE_RESTART)
         GL31.glPrimitiveRestartIndex(index)
         block()
@@ -306,13 +300,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_SAMPLE_ALPHA_TO_COVERAGE)
         }
 
-    fun useSampleAlphaToCoverage(block: () -> Unit) {
+    fun sampleAlphaToCoverage(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SAMPLE_ALPHA_TO_COVERAGE)
         block()
         GL11C.glDisable(GL32.GL_SAMPLE_ALPHA_TO_COVERAGE)
     }
 
-    fun useSampleAlphaToCoverage(value: Float, invert: Boolean, block: () -> Unit) {
+    fun sampleAlphaToCoverage(value: Float, invert: Boolean, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SAMPLE_ALPHA_TO_COVERAGE)
         GL13.glSampleCoverage(value, invert)
         block()
@@ -327,13 +321,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_SAMPLE_ALPHA_TO_ONE)
         }
 
-    fun useSampleAlphaToOne(block: () -> Unit) {
+    fun sampleAlphaToOne(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SAMPLE_ALPHA_TO_ONE)
         block()
         GL11C.glDisable(GL32.GL_SAMPLE_ALPHA_TO_ONE)
     }
 
-    fun useSampleAlphaToOne(value: Float, invert: Boolean, block: () -> Unit) {
+    fun sampleAlphaToOne(value: Float, invert: Boolean, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SAMPLE_ALPHA_TO_ONE)
         GL13.glSampleCoverage(value, invert)
         block()
@@ -348,13 +342,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_SAMPLE_COVERAGE)
         }
 
-    fun useSampleCoverage(block: () -> Unit) {
+    fun sampleCoverage(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SAMPLE_COVERAGE)
         block()
         GL11C.glDisable(GL32.GL_SAMPLE_COVERAGE)
     }
 
-    fun useSampleCoverage(value: Float, invert: Boolean, block: () -> Unit) {
+    fun sampleCoverage(value: Float, invert: Boolean, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SAMPLE_COVERAGE)
         GL13.glSampleCoverage(value, invert)
         block()
@@ -369,7 +363,7 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_SAMPLE_MASK)
         }
 
-    fun useSampleMask(block: () -> Unit) {
+    fun sampleMask(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SAMPLE_MASK)
         block()
         GL11C.glDisable(GL32.GL_SAMPLE_MASK)
@@ -383,20 +377,20 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_SCISSOR_TEST)
         }
 
-    fun useScissor(block: () -> Unit) {
+    fun scissor(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SCISSOR_TEST)
         block()
         GL11C.glDisable(GL32.GL_SCISSOR_TEST)
     }
 
-    fun useScissor(x: Int, y: Int, width: Int, height: Int, block: () -> Unit) {
+    fun scissor(x: Int, y: Int, width: Int, height: Int, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SCISSOR_TEST)
         GL11.glScissor(x, y, width, height)
         block()
         GL11C.glDisable(GL32.GL_SCISSOR_TEST)
     }
 
-    fun useScissor(scissor: Vec4i, block: () -> Unit) {
+    fun scissor(scissor: Vec4i, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SCISSOR_TEST)
         GL11.glScissor(scissor.x, scissor.y, scissor.z, scissor.w)
         block()
@@ -411,13 +405,13 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_STENCIL)
         }
 
-    fun useStencil(block: () -> Unit) {
+    fun stencil(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_STENCIL)
         block()
         GL11C.glDisable(GL32.GL_STENCIL)
     }
 
-    fun useStencil(func: CompareFunction, ref: Int, mask: Int, sFail: StencilOp, dpFail: StencilOp, dpPass: StencilOp, block: () -> Unit) {
+    fun stencil(func: CompareFunction, ref: Int, mask: Int, sFail: StencilOp, dpFail: StencilOp, dpPass: StencilOp, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_STENCIL)
         GL11.glStencilFunc(func.i, ref, mask)
         GL11.glStencilOp(sFail.i, dpFail.i, dpPass.i)
@@ -433,7 +427,7 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_TEXTURE_CUBE_MAP_SEAMLESS)
         }
 
-    fun useTextureCubeMapSeamless(block: () -> Unit) {
+    fun textureCubeMapSeamless(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_TEXTURE_CUBE_MAP_SEAMLESS)
         block()
         GL11C.glDisable(GL32.GL_TEXTURE_CUBE_MAP_SEAMLESS)
@@ -447,7 +441,7 @@ interface glEnable {
             else -> GL11C.glDisable(GL32.GL_DEPTH_WRITEMASK)
         }
 
-    fun useDepthMask(block: () -> Unit) {
+    fun depthMask(block: () -> Unit) {
         GL11C.glEnable(GL32.GL_DEPTH_WRITEMASK)
         block()
         GL11C.glDisable(GL32.GL_DEPTH_WRITEMASK)

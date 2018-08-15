@@ -5,15 +5,21 @@
  */
 package gln
 
-import ab.appBuffer
 import glm_.L
 import glm_.buffer.adr
 import glm_.buffer.intBufferBig
 import glm_.buffer.rem
+import glm_.buffer.remSize
+import gln.`object`.GLbuffer
+import gln.`object`.GLbuffers
+import gln.`object`.GLqueries
+import gln.`object`.GLquery
+import kool_.kool
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.system.APIUtil
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.*
+import unsigned.Uint
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
@@ -59,11 +65,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteBuffers">Reference Page</a>
      */
-    infix fun deleteBuffer(buffer: GLbuffer) {
-        val buff = appBuffer.int
-        MemoryUtil.memPutInt(buff, buffer.i)
-        GL15C.nglDeleteBuffers(1, buff)
-    }
+    infix fun deleteBuffer(buffer: GLbuffer) = kool.withIntPtr(buffer.i){GL15C.nglDeleteBuffers(1, it) }
 
     // --- [ glGenBuffers ] ---
 
@@ -83,18 +85,14 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    infix fun genBuffers(count: Int): GLbuffers = GLbuffers(intBufferBig(count).apply { GL15C.nglGenBuffers(rem, adr) })
+    infix fun genBuffers(count: Int): GLbuffers = GLbuffers.big(count).apply { GL15C.nglGenBuffers(rem, adr) }
 
     /**
      * Generates buffer object names.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    fun genBuffer(): Int {
-        val buff = appBuffer.int
-        GL15C.nglGenBuffers(1, buff)
-        return MemoryUtil.memGetInt(buff)
-    }
+    fun genBuffer() = kool.withIntPtr { GL15C.nglGenBuffers(1, it) }
 
     // --- [ glIsBuffer ] ---
 
@@ -167,7 +165,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
      */
-    fun bufferData(target: BufferTarget, data: Buffer, usage: Usage) = GL15C.nglBufferData(target.i, data.remSize, data.adr, usage.i)
+    fun bufferData(target: BufferTarget, data: Buffer, usage: Usage) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
 
     // --- [ glBufferSubData ] ---
 
@@ -180,7 +178,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
      */
-    fun bufferSubData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remSize, data.adr)
+    fun bufferSubData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
 
     // --- [ glGetBufferSubData ] ---
 
@@ -275,31 +273,10 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUnmapBuffer">Reference Page</a>
      */
-    @NativeType("GLboolean")
-    public static native boolean glUnmapBuffer(@NativeType("GLenum") int target);
+    fun unmapBuffer(target: BufferTarget): Boolean = GL15C.glUnmapBuffer(target.i)
 
     // --- [ glGetBufferParameteriv ] ---
 
-    /** Unsafe version of: {@link #glGetBufferParameteriv GetBufferParameteriv} */
-    public static native void nglGetBufferParameteriv(int target, int pname, long params);
-
-    /**
-     * Returns the value of a buffer object parameter.
-     *
-     * @param target the target buffer object. One of:<br><table><tr><td>{@link #GL_ARRAY_BUFFER ARRAY_BUFFER}</td><td>{@link #GL_ELEMENT_ARRAY_BUFFER ELEMENT_ARRAY_BUFFER}</td><td>{@link GL21#GL_PIXEL_PACK_BUFFER PIXEL_PACK_BUFFER}</td><td>{@link GL21#GL_PIXEL_UNPACK_BUFFER PIXEL_UNPACK_BUFFER}</td></tr><tr><td>{@link GL30#GL_TRANSFORM_FEEDBACK_BUFFER TRANSFORM_FEEDBACK_BUFFER}</td><td>{@link GL31#GL_UNIFORM_BUFFER UNIFORM_BUFFER}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL31#GL_COPY_READ_BUFFER COPY_READ_BUFFER}</td></tr><tr><td>{@link GL31#GL_COPY_WRITE_BUFFER COPY_WRITE_BUFFER}</td><td>{@link GL40#GL_DRAW_INDIRECT_BUFFER DRAW_INDIRECT_BUFFER}</td><td>{@link GL42#GL_ATOMIC_COUNTER_BUFFER ATOMIC_COUNTER_BUFFER}</td><td>{@link GL43#GL_DISPATCH_INDIRECT_BUFFER DISPATCH_INDIRECT_BUFFER}</td></tr><tr><td>{@link GL43#GL_SHADER_STORAGE_BUFFER SHADER_STORAGE_BUFFER}</td><td>{@link ARBIndirectParameters#GL_PARAMETER_BUFFER_ARB PARAMETER_BUFFER_ARB}</td></tr></table>
-     * @param pname  the symbolic name of a buffer object parameter. One of:<br><table><tr><td>{@link GL15#GL_BUFFER_SIZE BUFFER_SIZE}</td><td>{@link #GL_BUFFER_USAGE BUFFER_USAGE}</td><td>{@link #GL_BUFFER_ACCESS BUFFER_ACCESS}</td><td>{@link #GL_BUFFER_MAPPED BUFFER_MAPPED}</td></tr><tr><td>{@link GL30#GL_BUFFER_ACCESS_FLAGS BUFFER_ACCESS_FLAGS}</td><td>{@link GL30#GL_BUFFER_MAP_LENGTH BUFFER_MAP_LENGTH}</td><td>{@link GL30#GL_BUFFER_MAP_OFFSET BUFFER_MAP_OFFSET}</td><td>{@link GL44#GL_BUFFER_IMMUTABLE_STORAGE BUFFER_IMMUTABLE_STORAGE}</td></tr><tr><td>{@link GL44#GL_BUFFER_STORAGE_FLAGS BUFFER_STORAGE_FLAGS}</td></tr></table>
-     * @param params the requested parameter
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
-     */
-    public static void glGetBufferParameteriv(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params)
-    {
-        if (CHECKS) {
-            check(params, 1);
-        }
-        nglGetBufferParameteriv(target, pname, memAddress(params));
-    }
-
     /**
      * Returns the value of a buffer object parameter.
      *
@@ -308,41 +285,10 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
      */
-    @NativeType("void")
-    public static int glGetBufferParameteri(@NativeType("GLenum") int target, @NativeType("GLenum") int pname)
-    {
-        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-        try {
-            IntBuffer params = stack . callocInt (1);
-            nglGetBufferParameteriv(target, pname, memAddress(params));
-            return params.get(0);
-        } finally {
-            stack.setPointer(stackPointer);
-        }
-    }
+    fun getBufferParameterI(target: BufferTarget, pName: BufferParameter) = kool.withIntPtr { GL15C.nglGetBufferParameteriv(target.i, pName.i, it) }
 
     // --- [ glGetBufferPointerv ] ---
 
-    /** Unsafe version of: {@link #glGetBufferPointerv GetBufferPointerv} */
-    public static native void nglGetBufferPointerv(int target, int pname, long params);
-
-    /**
-     * Returns the pointer to a mapped buffer object's data store.
-     *
-     * @param target the target buffer object. One of:<br><table><tr><td>{@link #GL_ARRAY_BUFFER ARRAY_BUFFER}</td><td>{@link #GL_ELEMENT_ARRAY_BUFFER ELEMENT_ARRAY_BUFFER}</td><td>{@link GL21#GL_PIXEL_PACK_BUFFER PIXEL_PACK_BUFFER}</td><td>{@link GL21#GL_PIXEL_UNPACK_BUFFER PIXEL_UNPACK_BUFFER}</td></tr><tr><td>{@link GL30#GL_TRANSFORM_FEEDBACK_BUFFER TRANSFORM_FEEDBACK_BUFFER}</td><td>{@link GL31#GL_UNIFORM_BUFFER UNIFORM_BUFFER}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL31#GL_COPY_READ_BUFFER COPY_READ_BUFFER}</td></tr><tr><td>{@link GL31#GL_COPY_WRITE_BUFFER COPY_WRITE_BUFFER}</td><td>{@link GL40#GL_DRAW_INDIRECT_BUFFER DRAW_INDIRECT_BUFFER}</td><td>{@link GL42#GL_ATOMIC_COUNTER_BUFFER ATOMIC_COUNTER_BUFFER}</td><td>{@link GL43#GL_DISPATCH_INDIRECT_BUFFER DISPATCH_INDIRECT_BUFFER}</td></tr><tr><td>{@link GL43#GL_SHADER_STORAGE_BUFFER SHADER_STORAGE_BUFFER}</td><td>{@link ARBIndirectParameters#GL_PARAMETER_BUFFER_ARB PARAMETER_BUFFER_ARB}</td></tr></table>
-     * @param pname  the pointer to be returned. Must be:<br><table><tr><td>{@link #GL_BUFFER_MAP_POINTER BUFFER_MAP_POINTER}</td></tr></table>
-     * @param params the pointer value specified by {@code pname}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferPointerv">Reference Page</a>
-     */
-    public static void glGetBufferPointerv(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("void **") PointerBuffer params)
-    {
-        if (CHECKS) {
-            check(params, 1);
-        }
-        nglGetBufferPointerv(target, pname, memAddress(params));
-    }
-
     /**
      * Returns the pointer to a mapped buffer object's data store.
      *
@@ -351,27 +297,11 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferPointerv">Reference Page</a>
      */
-    @NativeType("void")
-    public static long glGetBufferPointer(@NativeType("GLenum") int target, @NativeType("GLenum") int pname)
-    {
-        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-        try {
-            PointerBuffer params = stack . callocPointer (1);
-            nglGetBufferPointerv(target, pname, memAddress(params));
-            return params.get(0);
-        } finally {
-            stack.setPointer(stackPointer);
-        }
+    infix fun getBufferPointer(target: BufferTarget) = Ptr(kool.withPointer { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it)
+        return Ptr(pointer[0])
     }
 
     // --- [ glGenQueries ] ---
-
-    /**
-     * Unsafe version of: {@link #glGenQueries GenQueries}
-     *
-     * @param n the number of query object names to be generated
-     */
-    public static native void nglGenQueries(int n, long ids);
 
     /**
      * Generates query object names.
@@ -380,37 +310,29 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
-    public static void glGenQueries(@NativeType("GLuint *") IntBuffer ids)
-    {
-        nglGenQueries(ids.remaining(), memAddress(ids));
-    }
+    infix fun genQueries(ids: GLqueries) = GL15C.nglGenQueries(ids.rem, ids.adr)
+
+    /**
+     * Generates query object names.
+     *
+     * @param count an int representing the wished queries names to be allocated
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
+     */
+    infix fun genQueries(count: Int): GLqueries = GLqueries(intBufferBig(count).apply { GL15C.nglGenQueries(rem, adr) })
 
     /**
      * Generates query object names.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
-    @NativeType("void")
-    public static int glGenQueries()
-    {
-        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-        try {
-            IntBuffer ids = stack . callocInt (1);
-            nglGenQueries(1, memAddress(ids));
-            return ids.get(0);
-        } finally {
-            stack.setPointer(stackPointer);
-        }
+    fun genQuery(): GLquery {
+        val pQuery = appBuffer.int
+        GL15C.nglGenQueries(1, pQuery)
+        return GLquery(memGetInt(pQuery))
     }
 
     // --- [ glDeleteQueries ] ---
-
-    /**
-     * Unsafe version of: {@link #glDeleteQueries DeleteQueries}
-     *
-     * @param n the number of query objects to be deleted
-     */
-    public static native void nglDeleteQueries(int n, long ids);
 
     /**
      * Deletes named query objects.
@@ -419,25 +341,17 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteQueries">Reference Page</a>
      */
-    public static void glDeleteQueries(@NativeType("GLuint const *") IntBuffer ids)
-    {
-        nglDeleteQueries(ids.remaining(), memAddress(ids));
-    }
+    fun deleteQueries(ids: GLqueries) = GL15C.nglDeleteQueries(ids.rem, ids.adr)
 
     /**
      * Deletes named query objects.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteQueries">Reference Page</a>
      */
-    public static void glDeleteQueries(@NativeType("GLuint const *") int id)
-    {
-        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-        try {
-            IntBuffer ids = stack . ints (id);
-            nglDeleteQueries(1, memAddress(ids));
-        } finally {
-            stack.setPointer(stackPointer);
-        }
+    fun deleteQuery(id: GLquery) {
+        val pQuery = appBuffer.int
+        memPutInt(pQuery, id.i)
+        GL15C.nglDeleteQueries(1, pQuery)
     }
 
     // --- [ glIsQuery ] ---
@@ -449,8 +363,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsQuery">Reference Page</a>
      */
-    @NativeType("GLboolean")
-    public static native boolean glIsQuery(@NativeType("GLuint") int id);
+    fun isQuery(id: GLquery) = GL15C.glIsQuery(id.i)
 
     // --- [ glBeginQuery ] ---
 
@@ -462,7 +375,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBeginQuery">Reference Page</a>
      */
-    public static native void glBeginQuery(@NativeType("GLenum") int target, @NativeType("GLuint") int id);
+    fun beginQuery(target: QueryTarget, id: GLquery) = GL15C.glBeginQuery(target.i, id.i)
 
     // --- [ glEndQuery ] ---
 
@@ -473,30 +386,10 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glEndQuery">Reference Page</a>
      */
-    public static native void glEndQuery(@NativeType("GLenum") int target);
+    fun endQuery(target: QueryTarget) = GL15C.glEndQuery(target.i)
 
     // --- [ glGetQueryiv ] ---
 
-    /** Unsafe version of: {@link #glGetQueryiv GetQueryiv} */
-    public static native void nglGetQueryiv(int target, int pname, long params);
-
-    /**
-     * Returns parameters of a query object target.
-     *
-     * @param target the query object target. One of:<br><table><tr><td>{@link #GL_SAMPLES_PASSED SAMPLES_PASSED}</td><td>{@link GL30#GL_PRIMITIVES_GENERATED PRIMITIVES_GENERATED}</td><td>{@link GL30#GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN}</td><td>{@link GL33#GL_TIME_ELAPSED TIME_ELAPSED}</td></tr><tr><td>{@link GL33#GL_TIMESTAMP TIMESTAMP}</td><td>{@link GL33#GL_ANY_SAMPLES_PASSED ANY_SAMPLES_PASSED}</td><td>{@link GL43#GL_ANY_SAMPLES_PASSED_CONSERVATIVE ANY_SAMPLES_PASSED_CONSERVATIVE}</td></tr></table>
-     * @param pname  the symbolic name of a query object target parameter. One of:<br><table><tr><td>{@link #GL_QUERY_COUNTER_BITS QUERY_COUNTER_BITS}</td><td>{@link #GL_CURRENT_QUERY CURRENT_QUERY}</td></tr></table>
-     * @param params the requested data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetQuery">Reference Page</a>
-     */
-    public static void glGetQueryiv(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params)
-    {
-        if (CHECKS) {
-            check(params, 1);
-        }
-        nglGetQueryiv(target, pname, memAddress(params));
-    }
-
     /**
      * Returns parameters of a query object target.
      *
@@ -505,84 +398,30 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQuery">Reference Page</a>
      */
-    @NativeType("void")
-    public static int glGetQueryi(@NativeType("GLenum") int target, @NativeType("GLenum") int pname)
-    {
-        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-        try {
-            IntBuffer params = stack . callocInt (1);
-            nglGetQueryiv(target, pname, memAddress(params));
-            return params.get(0);
-        } finally {
-            stack.setPointer(stackPointer);
-        }
+    fun getQueryI(target: QueryTarget, pName: GetQuery): Int {
+        val int = appBuffer.int
+        GL15C.nglGetQueryiv(target.i, pName.i, int)
+        return memGetInt(int)
     }
 
     // --- [ glGetQueryObjectiv ] ---
 
-    /** Unsafe version of: {@link #glGetQueryObjectiv GetQueryObjectiv} */
-    public static native void nglGetQueryObjectiv(int id, int pname, long params);
-
-    /**
-     * Returns the integer value of a query object parameter.
-     *
-     * @param id     the name of a query object
-     * @param pname  the symbolic name of a query object parameter. One of:<br><table><tr><td>{@link #GL_QUERY_RESULT QUERY_RESULT}</td><td>{@link #GL_QUERY_RESULT_AVAILABLE QUERY_RESULT_AVAILABLE}</td></tr></table>
-     * @param params the requested data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
-     */
-    public static void glGetQueryObjectiv(@NativeType("GLuint") int id, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params)
-    {
-        if (CHECKS) {
-            check(params, 1);
-        }
-        nglGetQueryObjectiv(id, pname, memAddress(params));
-    }
-
     /**
      * Returns the integer value of a query object parameter.
      *
      * @param id    the name of a query object
-     * @param pname the symbolic name of a query object parameter. One of:<br><table><tr><td>{@link #GL_QUERY_RESULT QUERY_RESULT}</td><td>{@link #GL_QUERY_RESULT_AVAILABLE QUERY_RESULT_AVAILABLE}</td></tr></table>
+     * @param pName the symbolic name of a query object parameter. One of:<br><table><tr><td>{@link #GL_QUERY_RESULT QUERY_RESULT}</td><td>{@link #GL_QUERY_RESULT_AVAILABLE QUERY_RESULT_AVAILABLE}</td></tr></table>
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
      */
-    @NativeType("void")
-    public static int glGetQueryObjecti(@NativeType("GLuint") int id, @NativeType("GLenum") int pname)
-    {
-        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-        try {
-            IntBuffer params = stack . callocInt (1);
-            nglGetQueryObjectiv(id, pname, memAddress(params));
-            return params.get(0);
-        } finally {
-            stack.setPointer(stackPointer);
-        }
+    fun getQueryObjectI(id: GLquery, pName: GetQueryObject): Int {
+        val int = appBuffer.int
+        GL15C.nglGetQueryObjectiv(id.i, pName.i, int)
+        return memGetInt(int)
     }
 
     // --- [ glGetQueryObjectuiv ] ---
 
-    /** Unsafe version of: {@link #glGetQueryObjectuiv GetQueryObjectuiv} */
-    public static native void nglGetQueryObjectuiv(int id, int pname, long params);
-
-    /**
-     * Unsigned version of {@link #glGetQueryObjectiv GetQueryObjectiv}.
-     *
-     * @param id     the name of a query object
-     * @param pname  the symbolic name of a query object parameter. One of:<br><table><tr><td>{@link #GL_QUERY_RESULT QUERY_RESULT}</td><td>{@link #GL_QUERY_RESULT_AVAILABLE QUERY_RESULT_AVAILABLE}</td></tr></table>
-     * @param params the requested data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
-     */
-    public static void glGetQueryObjectuiv(@NativeType("GLuint") int id, @NativeType("GLenum") int pname, @NativeType("GLuint *") IntBuffer params)
-    {
-        if (CHECKS) {
-            check(params, 1);
-        }
-        nglGetQueryObjectuiv(id, pname, memAddress(params));
-    }
-
     /**
      * Unsigned version of {@link #glGetQueryObjectiv GetQueryObjectiv}.
      *
@@ -591,343 +430,9 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
      */
-    @NativeType("void")
-    public static int glGetQueryObjectui(@NativeType("GLuint") int id, @NativeType("GLenum") int pname)
-    {
-        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-        try {
-            IntBuffer params = stack . callocInt (1);
-            nglGetQueryObjectuiv(id, pname, memAddress(params));
-            return params.get(0);
-        } finally {
-            stack.setPointer(stackPointer);
-        }
+    fun getQueryObjectUI(id: GLquery, pName: GetQueryObject): Uint {
+        val int = appBuffer.int
+        GL15C.nglGetQueryObjectiv(id.i, pName.i, int)
+        return Uint(memGetInt(int))
     }
-
-    /**
-     * Array version of: {@link #glDeleteBuffers DeleteBuffers}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteBuffers">Reference Page</a>
-     */
-    public static void glDeleteBuffers(@NativeType("GLuint const *") int[] buffers)
-    {
-        long __functionAddress = GL . getICD ().glDeleteBuffers;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPV(__functionAddress, buffers.length, buffers);
-    }
-
-    /**
-     * Array version of: {@link #glGenBuffers GenBuffers}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
-     */
-    public static void glGenBuffers(@NativeType("GLuint *") int[] buffers)
-    {
-        long __functionAddress = GL . getICD ().glGenBuffers;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPV(__functionAddress, buffers.length, buffers);
-    }
-
-    /**
-     * Array version of: {@link #glBufferData BufferData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
-     */
-    public static void glBufferData(@NativeType("GLenum") int target, @NativeType("void const *") short[] data , @NativeType("GLenum") int usage)
-    {
-        long __functionAddress = GL . getICD ().glBufferData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPV(__functionAddress, target, Integer.toUnsignedLong(data.length) < < 1, data, usage);
-    }
-
-    /**
-     * Array version of: {@link #glBufferData BufferData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
-     */
-    public static void glBufferData(@NativeType("GLenum") int target, @NativeType("void const *") int[] data , @NativeType("GLenum") int usage)
-    {
-        long __functionAddress = GL . getICD ().glBufferData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPV(__functionAddress, target, Integer.toUnsignedLong(data.length) < < 2, data, usage);
-    }
-
-    /**
-     * Array version of: {@link #glBufferData BufferData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
-     */
-    public static void glBufferData(@NativeType("GLenum") int target, @NativeType("void const *") long[] data , @NativeType("GLenum") int usage)
-    {
-        long __functionAddress = GL . getICD ().glBufferData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPV(__functionAddress, target, Integer.toUnsignedLong(data.length) < < 3, data, usage);
-    }
-
-    /**
-     * Array version of: {@link #glBufferData BufferData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
-     */
-    public static void glBufferData(@NativeType("GLenum") int target, @NativeType("void const *") float[] data , @NativeType("GLenum") int usage)
-    {
-        long __functionAddress = GL . getICD ().glBufferData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPV(__functionAddress, target, Integer.toUnsignedLong(data.length) < < 2, data, usage);
-    }
-
-    /**
-     * Array version of: {@link #glBufferData BufferData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
-     */
-    public static void glBufferData(@NativeType("GLenum") int target, @NativeType("void const *") double[] data , @NativeType("GLenum") int usage)
-    {
-        long __functionAddress = GL . getICD ().glBufferData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPV(__functionAddress, target, Integer.toUnsignedLong(data.length) < < 3, data, usage);
-    }
-
-    /**
-     * Array version of: {@link #glBufferSubData BufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
-     */
-    public static void glBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void const *") short[] data )
-    {
-        long __functionAddress = GL . getICD ().glBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 1, data);
-    }
-
-    /**
-     * Array version of: {@link #glBufferSubData BufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
-     */
-    public static void glBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void const *") int[] data )
-    {
-        long __functionAddress = GL . getICD ().glBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 2, data);
-    }
-
-    /**
-     * Array version of: {@link #glBufferSubData BufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
-     */
-    public static void glBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void const *") long[] data )
-    {
-        long __functionAddress = GL . getICD ().glBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 3, data);
-    }
-
-    /**
-     * Array version of: {@link #glBufferSubData BufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
-     */
-    public static void glBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void const *") float[] data )
-    {
-        long __functionAddress = GL . getICD ().glBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 2, data);
-    }
-
-    /**
-     * Array version of: {@link #glBufferSubData BufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
-     */
-    public static void glBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void const *") double[] data )
-    {
-        long __functionAddress = GL . getICD ().glBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 3, data);
-    }
-
-    /**
-     * Array version of: {@link #glGetBufferSubData GetBufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferSubData">Reference Page</a>
-     */
-    public static void glGetBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void *") short[] data )
-    {
-        long __functionAddress = GL . getICD ().glGetBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 1, data);
-    }
-
-    /**
-     * Array version of: {@link #glGetBufferSubData GetBufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferSubData">Reference Page</a>
-     */
-    public static void glGetBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void *") int[] data )
-    {
-        long __functionAddress = GL . getICD ().glGetBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 2, data);
-    }
-
-    /**
-     * Array version of: {@link #glGetBufferSubData GetBufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferSubData">Reference Page</a>
-     */
-    public static void glGetBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void *") long[] data )
-    {
-        long __functionAddress = GL . getICD ().glGetBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 3, data);
-    }
-
-    /**
-     * Array version of: {@link #glGetBufferSubData GetBufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferSubData">Reference Page</a>
-     */
-    public static void glGetBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void *") float[] data )
-    {
-        long __functionAddress = GL . getICD ().glGetBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 2, data);
-    }
-
-    /**
-     * Array version of: {@link #glGetBufferSubData GetBufferSubData}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferSubData">Reference Page</a>
-     */
-    public static void glGetBufferSubData(@NativeType("GLenum") int target, @NativeType("GLintptr") long offset, @NativeType("void *") double[] data )
-    {
-        long __functionAddress = GL . getICD ().glGetBufferSubData;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPPPV(__functionAddress, target, offset, Integer.toUnsignedLong(data.length) < < 3, data);
-    }
-
-    /**
-     * Array version of: {@link #glGetBufferParameteriv GetBufferParameteriv}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
-     */
-    public static void glGetBufferParameteriv(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("GLint *") int[] params)
-    {
-        long __functionAddress = GL . getICD ().glGetBufferParameteriv;
-        if (CHECKS) {
-            check(__functionAddress);
-            check(params, 1);
-        }
-        callPV(__functionAddress, target, pname, params);
-    }
-
-    /**
-     * Array version of: {@link #glGenQueries GenQueries}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
-     */
-    public static void glGenQueries(@NativeType("GLuint *") int[] ids)
-    {
-        long __functionAddress = GL . getICD ().glGenQueries;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPV(__functionAddress, ids.length, ids);
-    }
-
-    /**
-     * Array version of: {@link #glDeleteQueries DeleteQueries}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteQueries">Reference Page</a>
-     */
-    public static void glDeleteQueries(@NativeType("GLuint const *") int[] ids)
-    {
-        long __functionAddress = GL . getICD ().glDeleteQueries;
-        if (CHECKS) {
-            check(__functionAddress);
-        }
-        callPV(__functionAddress, ids.length, ids);
-    }
-
-    /**
-     * Array version of: {@link #glGetQueryiv GetQueryiv}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetQuery">Reference Page</a>
-     */
-    public static void glGetQueryiv(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("GLint *") int[] params)
-    {
-        long __functionAddress = GL . getICD ().glGetQueryiv;
-        if (CHECKS) {
-            check(__functionAddress);
-            check(params, 1);
-        }
-        callPV(__functionAddress, target, pname, params);
-    }
-
-    /**
-     * Array version of: {@link #glGetQueryObjectiv GetQueryObjectiv}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
-     */
-    public static void glGetQueryObjectiv(@NativeType("GLuint") int id, @NativeType("GLenum") int pname, @NativeType("GLint *") int[] params)
-    {
-        long __functionAddress = GL . getICD ().glGetQueryObjectiv;
-        if (CHECKS) {
-            check(__functionAddress);
-            check(params, 1);
-        }
-        callPV(__functionAddress, id, pname, params);
-    }
-
-    /**
-     * Array version of: {@link #glGetQueryObjectuiv GetQueryObjectuiv}
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
-     */
-    public static void glGetQueryObjectuiv(@NativeType("GLuint") int id, @NativeType("GLenum") int pname, @NativeType("GLuint *") int[] params)
-    {
-        long __functionAddress = GL . getICD ().glGetQueryObjectuiv;
-        if (CHECKS) {
-            check(__functionAddress);
-            check(params, 1);
-        }
-        callPV(__functionAddress, id, pname, params);
-    }
-
 }

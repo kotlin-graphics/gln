@@ -193,9 +193,9 @@ interface glGet {
 
     val stencilBackWritemask: Int
         get() = int(GL20.GL_STENCIL_BACK_WRITEMASK)
-
-    val stencilClearValue: Int
-        get() = int(GL11.GL_STENCIL_CLEAR_VALUE)
+//
+//    val stencilClearValue: Int
+//        get() = int(GL11.GL_STENCIL_CLEAR_VALUE)
 
     val stencilFail: StencilOp
         get() = StencilOp(int(GL11.GL_STENCIL_FAIL))

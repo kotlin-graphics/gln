@@ -11,11 +11,16 @@ import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
-import org.lwjgl.opengl.*
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11C
+import org.lwjgl.opengl.GL30
+import org.lwjgl.opengl.GL41
 import org.lwjgl.system.MemoryUtil
 import java.awt.Color
+import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
+import java.nio.ShortBuffer
 
 @Deprecated("use appBuffer instead")
 val buf: ByteBuffer = MemoryUtil.memAlloc(256)
@@ -126,3 +131,21 @@ fun main(args: Array<String>) {
 }
 
 object gl11 : gl11i
+
+object gl15 : gl11i, gl12i, gl13i, gl14i, gl15i
+
+object gl20 :
+        gl11i,
+        gl12i,
+        gl13i,
+        gl14i,
+        gl15i,
+        gl20i
+
+val Buffer.glType: Int
+    get() = when(this) {
+        is ByteBuffer -> GL11C.GL_UNSIGNED_BYTE
+        is ShortBuffer -> GL11C.GL_UNSIGNED_SHORT
+        is IntBuffer -> GL11C.GL_UNSIGNED_INT
+        else -> throw Error("unsupported")
+    }
