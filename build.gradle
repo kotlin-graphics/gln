@@ -35,7 +35,7 @@ dependencies {
     implementation "$kotlin-reflect:$kotlinVersion"
 
     implementation 'com.github.kotlin-graphics:gli:7f4fbde'
-    implementation 'com.github.kotlin-graphics:kool:ee64027'
+    implementation 'com.github.kotlin-graphics:kool:c224fdf'
 
     //testCompile 'io.kotlintest:kotlintest-runner-junit5:3.0.6'
 

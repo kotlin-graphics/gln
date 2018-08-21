@@ -21,7 +21,7 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import gln.`object`.GLtexture
-import kool_.kool
+import kool.stak
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL12
 import org.lwjgl.system.MemoryUtil.NULL
@@ -86,11 +86,12 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFunc">Reference Page</a>
      */
-    fun blendFunc(sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> Unit) {
+    fun <R> blendFunc(sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> R): R {
         GL11C.glEnable(GL11C.GL_BLEND)
         GL11C.glBlendFunc(sFactor.i, dFactor.i)
-        block()
-        GL11C.glDisable(GL11C.GL_BLEND)
+        return block().also {
+            GL11C.glDisable(GL11C.GL_BLEND)
+        }
     }
 
     // --- [ glClear ] ---
@@ -540,7 +541,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    fun genTexture() = kool.withIntPtr { GL11C.nglGenTextures(1, it) }
+    fun genTexture() = stak.intAddress { GL11C.nglGenTextures(1, it) }
 
     // --- [ glDeleteTextures ] ---
 
@@ -570,7 +571,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTexture(texture: GLtexture) = kool.withIntPtr(texture.i) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTexture(texture: GLtexture) = stak.intAddress(texture.i) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetError ] ---
 
@@ -625,7 +626,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
-    fun getTexLevelParameterI(target: TextureTarget, level: Int, pName: GetTexLevelParameter) = kool.withIntPtr { GL11C.nglGetTexLevelParameteriv(target.i, level, pName.i, it) }
+    fun getTexLevelParameterI(target: TextureTarget, level: Int, pName: GetTexLevelParameter) = stak.intAddress { GL11C.nglGetTexLevelParameteriv(target.i, level, pName.i, it) }
 
     // --- [ glGetTexLevelParameterfv ] ---
 
@@ -639,7 +640,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
-    fun getTexLevelParameterF(target: TextureTarget, level: Int, pName: GetTexLevelParameter) = kool.withFloatPtr { GL11C.nglGetTexLevelParameterfv(target.i, level, pName.i, it) }
+    fun getTexLevelParameterF(target: TextureTarget, level: Int, pName: GetTexLevelParameter) = stak.floatAddress { GL11C.nglGetTexLevelParameterfv(target.i, level, pName.i, it) }
 
     // --- [ glGetTexParameteriv ] ---
 
@@ -654,7 +655,7 @@ interface gl11i {
      *
      * Note: invalid for GL_TEXTURE_BORDER_COLOR or GL_TEXTURE_SWIZZLE_RGBA, use native
      */
-    fun getTexParameterI(target: TextureTarget, pName: TexParameter) = kool.withIntPtr { GL11C.nglGetTexParameteriv(target.i, pName.i, it) }
+    fun getTexParameterI(target: TextureTarget, pName: TexParameter) = stak.intAddress { GL11C.nglGetTexParameteriv(target.i, pName.i, it) }
 
     // --- [ glGetTexParameterfv ] ---
 
@@ -667,7 +668,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexParameter">Reference Page</a>
      */
-    fun getTexParameterF(target: TextureTarget, pName: TexParameter) = kool.withFloatPtr { GL11C.nglGetTexParameterfv(target.i, pName.i, it) }
+    fun getTexParameterF(target: TextureTarget, pName: TexParameter) = stak.floatAddress { GL11C.nglGetTexParameterfv(target.i, pName.i, it) }
 
     // --- [ glHint ] ---
 
