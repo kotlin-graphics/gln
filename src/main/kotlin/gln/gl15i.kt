@@ -14,10 +14,9 @@ import gln.`object`.GLbuffer
 import gln.`object`.GLbuffers
 import gln.`object`.GLqueries
 import gln.`object`.GLquery
-import kool_.kool
+import kool.stak
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.system.APIUtil
-import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.*
 import unsigned.Uint
 import java.nio.Buffer
@@ -65,7 +64,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteBuffers">Reference Page</a>
      */
-    infix fun deleteBuffer(buffer: GLbuffer) = kool.withIntPtr(buffer.i){GL15C.nglDeleteBuffers(1, it) }
+    infix fun deleteBuffer(buffer: GLbuffer) = stak.intAddress(buffer.i){GL15C.nglDeleteBuffers(1, it) }
 
     // --- [ glGenBuffers ] ---
 
@@ -92,7 +91,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    fun genBuffer() = kool.withIntPtr { GL15C.nglGenBuffers(1, it) }
+    fun genBuffer() = stak.intAddress { GL15C.nglGenBuffers(1, it) }
 
     // --- [ glIsBuffer ] ---
 
@@ -285,7 +284,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
      */
-    fun getBufferParameterI(target: BufferTarget, pName: BufferParameter) = kool.withIntPtr { GL15C.nglGetBufferParameteriv(target.i, pName.i, it) }
+    fun getBufferParameterI(target: BufferTarget, pName: BufferParameter) = stak.intAddress { GL15C.nglGetBufferParameteriv(target.i, pName.i, it) }
 
     // --- [ glGetBufferPointerv ] ---
 
@@ -297,7 +296,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferPointerv">Reference Page</a>
      */
-    infix fun getBufferPointer(target: BufferTarget) = Ptr(kool.withPointer { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) } )
+    infix fun getBufferPointer(target: BufferTarget) = Ptr(stak.pointerAddress { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) } )
 
     // --- [ glGenQueries ] ---
 
@@ -324,7 +323,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
-    fun genQuery(): GLquery = GLquery(kool.withIntPtr { GL15C.nglGenQueries(1, it) })
+    fun genQuery(): GLquery = GLquery(stak.intAddress{ GL15C.nglGenQueries(1, it) })
 
     // --- [ glDeleteQueries ] ---
 
@@ -342,7 +341,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteQueries">Reference Page</a>
      */
-    fun deleteQuery(id: GLquery) = kool.withIntPtr(id.i) { GL15C.nglDeleteQueries(1, it) }
+    fun deleteQuery(id: GLquery) = stak.intAddress(id.i){GL15C.nglDeleteQueries(1, it) }
 
     // --- [ glIsQuery ] ---
 
