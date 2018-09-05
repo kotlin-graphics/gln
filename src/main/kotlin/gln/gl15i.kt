@@ -297,9 +297,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferPointerv">Reference Page</a>
      */
-    infix fun getBufferPointer(target: BufferTarget) = Ptr(kool.withPointer { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it)
-        return Ptr(pointer[0])
-    }
+    infix fun getBufferPointer(target: BufferTarget) = Ptr(kool.withPointer { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) } )
 
     // --- [ glGenQueries ] ---
 
@@ -326,11 +324,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
-    fun genQuery(): GLquery {
-        val pQuery = appBuffer.int
-        GL15C.nglGenQueries(1, pQuery)
-        return GLquery(memGetInt(pQuery))
-    }
+    fun genQuery(): GLquery = GLquery(kool.withIntPtr { GL15C.nglGenQueries(1, it) })
 
     // --- [ glDeleteQueries ] ---
 
@@ -348,11 +342,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteQueries">Reference Page</a>
      */
-    fun deleteQuery(id: GLquery) {
-        val pQuery = appBuffer.int
-        memPutInt(pQuery, id.i)
-        GL15C.nglDeleteQueries(1, pQuery)
-    }
+    fun deleteQuery(id: GLquery) = kool.withIntPtr(id.i) { GL15C.nglDeleteQueries(1, it) }
 
     // --- [ glIsQuery ] ---
 
@@ -398,11 +388,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQuery">Reference Page</a>
      */
-    fun getQueryI(target: QueryTarget, pName: GetQuery): Int {
-        val int = appBuffer.int
-        GL15C.nglGetQueryiv(target.i, pName.i, int)
-        return memGetInt(int)
-    }
+    fun getQueryI(target: QueryTarget, pName: GetQuery): Int = kool.withIntPtr { GL15C.nglGetQueryiv(target.i, pName.i, it) }
 
     // --- [ glGetQueryObjectiv ] ---
 
@@ -414,11 +400,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
      */
-    fun getQueryObjectI(id: GLquery, pName: GetQueryObject): Int {
-        val int = appBuffer.int
-        GL15C.nglGetQueryObjectiv(id.i, pName.i, int)
-        return memGetInt(int)
-    }
+    fun getQueryObjectI(id: GLquery, pName: GetQueryObject): Int = kool.withIntPtr { GL15C.nglGetQueryObjectiv(id.i, pName.i, it) }
 
     // --- [ glGetQueryObjectuiv ] ---
 
@@ -430,9 +412,5 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
      */
-    fun getQueryObjectUI(id: GLquery, pName: GetQueryObject): Uint {
-        val int = appBuffer.int
-        GL15C.nglGetQueryObjectiv(id.i, pName.i, int)
-        return Uint(memGetInt(int))
-    }
+    fun getQueryObjectUI(id: GLquery, pName: GetQueryObject): Uint = Uint(kool.withIntPtr { GL15C.nglGetQueryObjectiv(id.i, pName.i, it) })
 }

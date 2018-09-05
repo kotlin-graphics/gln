@@ -446,173 +446,173 @@ interface gl20i {
     fun uniform(location: Int, v0: Int, v1: Int, v2: Int, v3: Int) = GL20C.glUniform4i(location, v0, v1, v2, v3)
 
     // --- [ glUniform1fv ] ---
+/*
+    *//**
+     * Specifies the value of a single float uniform variable or a float uniform variable array for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     *//*
+    public static void glUniform1fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
+    {
+        nglUniform1fv(location, value.remaining(), memAddress(value));
+    }
 
-//    /**
-//     * Specifies the value of a single float uniform variable or a float uniform variable array for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static void glUniform1fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglUniform1fv(location, value.remaining(), memAddress(value));
-//    }
-//
-//    // --- [ glUniform2fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glUniform2fv Uniform2fv}
-//     *
-//     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-//     */
-//    public static native void nglUniform2fv(int location, int count, long value);
-//
-//    /**
-//     * Specifies the value of a single vec2 uniform variable or a vec2 uniform variable array for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static void glUniform2fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglUniform2fv(location, value.remaining() > > 1, memAddress(value));
-//    }
-//
-//    // --- [ glUniform3fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glUniform3fv Uniform3fv}
-//     *
-//     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-//     */
-//    public static native void nglUniform3fv(int location, int count, long value);
-//
-//    /**
-//     * Specifies the value of a single vec3 uniform variable or a vec3 uniform variable array for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static void glUniform3fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglUniform3fv(location, value.remaining() / 3, memAddress(value));
-//    }
-//
-//    // --- [ glUniform4fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glUniform4fv Uniform4fv}
-//     *
-//     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-//     */
-//    public static native void nglUniform4fv(int location, int count, long value);
-//
-//    /**
-//     * Specifies the value of a single vec4 uniform variable or a vec4 uniform variable array for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static void glUniform4fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglUniform4fv(location, value.remaining() > > 2, memAddress(value));
-//    }
-//
-//    // --- [ glUniform1iv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glUniform1iv Uniform1iv}
-//     *
-//     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-//     */
-//    public static native void nglUniform1iv(int location, int count, long value);
-//
-//    /**
-//     * Specifies the value of a single int uniform variable or a int uniform variable array for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static void glUniform1iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
-//    {
-//        nglUniform1iv(location, value.remaining(), memAddress(value));
-//    }
-//
-//    // --- [ glUniform2iv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glUniform2iv Uniform2iv}
-//     *
-//     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-//     */
-//    public static native void nglUniform2iv(int location, int count, long value);
-//
-//    /**
-//     * Specifies the value of a single ivec2 uniform variable or an ivec2 uniform variable array for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static void glUniform2iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
-//    {
-//        nglUniform2iv(location, value.remaining() > > 1, memAddress(value));
-//    }
-//
-//    // --- [ glUniform3iv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glUniform3iv Uniform3iv}
-//     *
-//     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-//     */
-//    public static native void nglUniform3iv(int location, int count, long value);
-//
-//    /**
-//     * Specifies the value of a single ivec3 uniform variable or an ivec3 uniform variable array for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static void glUniform3iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
-//    {
-//        nglUniform3iv(location, value.remaining() / 3, memAddress(value));
-//    }
-//
-//    // --- [ glUniform4iv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glUniform4iv Uniform4iv}
-//     *
-//     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-//     */
-//    public static native void nglUniform4iv(int location, int count, long value);
-//
-//    /**
-//     * Specifies the value of a single ivec4 uniform variable or an ivec4 uniform variable array for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static void glUniform4iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
-//    {
-//        nglUniform4iv(location, value.remaining() > > 2, memAddress(value));
-//    }
+    // --- [ glUniform2fv ] ---
+
+    *//**
+     * Unsafe version of: {@link #glUniform2fv Uniform2fv}
+     *
+     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
+     *//*
+    public static native void nglUniform2fv(int location, int count, long value);
+
+    *//**
+     * Specifies the value of a single vec2 uniform variable or a vec2 uniform variable array for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     *//*
+    public static void glUniform2fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
+    {
+        nglUniform2fv(location, value.remaining() > > 1, memAddress(value));
+    }
+
+    // --- [ glUniform3fv ] ---
+
+    *//**
+     * Unsafe version of: {@link #glUniform3fv Uniform3fv}
+     *
+     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
+     *//*
+    public static native void nglUniform3fv(int location, int count, long value);
+
+    *//**
+     * Specifies the value of a single vec3 uniform variable or a vec3 uniform variable array for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     *//*
+    public static void glUniform3fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
+    {
+        nglUniform3fv(location, value.remaining() / 3, memAddress(value));
+    }
+
+    // --- [ glUniform4fv ] ---
+
+    *//**
+     * Unsafe version of: {@link #glUniform4fv Uniform4fv}
+     *
+     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
+     *//*
+    public static native void nglUniform4fv(int location, int count, long value);
+
+    *//**
+     * Specifies the value of a single vec4 uniform variable or a vec4 uniform variable array for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     *//*
+    public static void glUniform4fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
+    {
+        nglUniform4fv(location, value.remaining() > > 2, memAddress(value));
+    }
+
+    // --- [ glUniform1iv ] ---
+
+    *//**
+     * Unsafe version of: {@link #glUniform1iv Uniform1iv}
+     *
+     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
+     *//*
+    public static native void nglUniform1iv(int location, int count, long value);
+
+    *//**
+     * Specifies the value of a single int uniform variable or a int uniform variable array for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     *//*
+    public static void glUniform1iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
+    {
+        nglUniform1iv(location, value.remaining(), memAddress(value));
+    }
+
+    // --- [ glUniform2iv ] ---
+
+    *//**
+     * Unsafe version of: {@link #glUniform2iv Uniform2iv}
+     *
+     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
+     *//*
+    public static native void nglUniform2iv(int location, int count, long value);
+
+    *//**
+     * Specifies the value of a single ivec2 uniform variable or an ivec2 uniform variable array for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     *//*
+    public static void glUniform2iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
+    {
+        nglUniform2iv(location, value.remaining() > > 1, memAddress(value));
+    }
+
+    // --- [ glUniform3iv ] ---
+
+    *//**
+     * Unsafe version of: {@link #glUniform3iv Uniform3iv}
+     *
+     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
+     *//*
+    public static native void nglUniform3iv(int location, int count, long value);
+
+    *//**
+     * Specifies the value of a single ivec3 uniform variable or an ivec3 uniform variable array for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     *//*
+    public static void glUniform3iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
+    {
+        nglUniform3iv(location, value.remaining() / 3, memAddress(value));
+    }
+
+    // --- [ glUniform4iv ] ---
+
+    *//**
+     * Unsafe version of: {@link #glUniform4iv Uniform4iv}
+     *
+     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
+     *//*
+    public static native void nglUniform4iv(int location, int count, long value);
+
+    *//**
+     * Specifies the value of a single ivec4 uniform variable or an ivec4 uniform variable array for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     *//*
+    public static void glUniform4iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
+    {
+        nglUniform4iv(location, value.remaining() > > 2, memAddress(value));
+    }*/
 
     // --- [ glUniformMatrix2fv ] ---
 
