@@ -3,10 +3,10 @@
 package gln.renderbuffer
 
 import glm_.BYTES
-import glm_.buffer.adr
-import glm_.buffer.cap
-import glm_.buffer.pos
-import glm_.buffer.rem
+import kool.adr
+import kool.cap
+import kool.pos
+import kool.rem
 import glm_.vec2.Vec2i
 import gln.buf
 import gln.bufAd

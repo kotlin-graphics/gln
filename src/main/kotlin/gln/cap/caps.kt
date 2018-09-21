@@ -1,8 +1,8 @@
 package gln.cap
 
-import glm_.buffer.cap
-import glm_.buffer.free
-import glm_.buffer.intBufferBig
+import kool.cap
+import kool.free
+import kool.intBufferBig
 import glm_.vec2.Vec2
 import gln.*
 import org.lwjgl.opengl.ATITextureCompression3DC.GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI

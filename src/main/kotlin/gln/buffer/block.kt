@@ -4,22 +4,21 @@ package gln.buffer
 
 import glm_.BYTES
 import glm_.L
-import glm_.buffer.adr
-import glm_.buffer.cap
-import glm_.buffer.pos
-import glm_.buffer.rem
 import glm_.mat4x4.Mat4
 import glm_.set
 import glm_.vec4.Vec4
 import gln.buf
 import gln.bufAd
+import gln.buffer.BufferTarget.BufferTarget2
 import gln.get
+import kool.adr
+import kool.pos
+import kool.rem
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
 import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.*
-import gln.buffer.BufferTarget.BufferTarget2
 
 
 inline fun initArrayBuffer(buffer: IntBuffer, block: Buffer.() -> Unit) {

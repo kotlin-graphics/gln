@@ -3,9 +3,9 @@
 package gln.framebuffer
 
 import glm_.BYTES
-import glm_.buffer.adr
-import glm_.buffer.pos
-import glm_.buffer.rem
+import kool.adr
+import kool.pos
+import kool.rem
 import gln.buf
 import gln.bufAd
 import gln.get

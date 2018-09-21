@@ -2,11 +2,10 @@ package gln.uniformBlock
 
 import glm_.BYTES
 import glm_.bool
-import glm_.buffer.cap
-import glm_.buffer.rem
 import glm_.glm
 import gln.buf
 import gln.bufAd
+import kool.rem
 import org.lwjgl.opengl.GL31
 import org.lwjgl.opengl.GL40
 import org.lwjgl.opengl.GL43

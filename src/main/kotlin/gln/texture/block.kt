@@ -5,10 +5,10 @@ package gln.texture
 import gli_.gl
 import gli_.gli
 import glm_.BYTES
-import glm_.buffer.adr
-import glm_.buffer.cap
-import glm_.buffer.pos
-import glm_.buffer.rem
+import kool.adr
+import kool.cap
+import kool.pos
+import kool.rem
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import gln.buf

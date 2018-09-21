@@ -4,8 +4,8 @@ package gln.buffer
 
 import glm_.BYTES
 import glm_.L
-import glm_.buffer.adr
-import glm_.buffer.free
+import kool.adr
+import kool.free
 import glm_.mat4x4.Mat4
 import glm_.size
 import gln.buf
