@@ -6,18 +6,22 @@
 
 package gln
 
-import glm_.bool
-import glm_.buffer.adr
-import glm_.i
-import glm_.vec3.Vec3i
-import gli_.gl.InternalFormat
 import gli_.gl.ExternalFormat
+import gli_.gl.InternalFormat
 import gli_.gl.TypeFormat
-import glm_.buffer.rem
 import glm_.vec2.Vec2i
-import org.lwjgl.opengl.*
+import glm_.vec3.Vec3i
+import kool.adr
+import kool.rem
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11C
+import org.lwjgl.opengl.GL12
+import org.lwjgl.opengl.GL12C
 import org.lwjgl.system.MemoryUtil.NULL
-import java.nio.*
+import java.nio.Buffer
+import java.nio.ByteBuffer
+import java.nio.IntBuffer
+import java.nio.ShortBuffer
 
 /**
  * The OpenGL functionality of a forward compatible context, up to version 1.2.

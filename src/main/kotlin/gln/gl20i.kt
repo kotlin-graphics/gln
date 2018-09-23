@@ -5,12 +5,11 @@
  */
 package gln
 
-import ab.appBuffer
 import glm_.L
 import glm_.bool
-import glm_.buffer.adr
-import glm_.buffer.intBufferBig
-import glm_.buffer.rem
+import kool.adr
+import kool.intBufferBig
+import kool.rem
 import glm_.mat2x2.Mat2
 import glm_.vec1.Vec1
 import glm_.vec1.Vec1d
@@ -28,8 +27,10 @@ import glm_.vec4.Vec4d
 import glm_.vec4.Vec4s
 import gln.`object`.GLprogram
 import gln.glf.VertexAttribute
+import kool.stak
 import org.lwjgl.PointerBuffer
 import org.lwjgl.opengl.GL20C
+import org.lwjgl.opengl.GL20C.nglUniformMatrix2fv
 import org.lwjgl.system.MemoryUtil.*
 import org.lwjgl.system.NativeType
 import java.nio.DoubleBuffer
@@ -625,9 +626,8 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, value: Mat2) {
-        val mat = appBuffer.bu
-        nglUniformMatrix2fv(location, value.remaining() > > 2, transpose, memAddress(value));
+    fun uniform(location: Int, value: Mat2) = stak {
+        nglUniformMatrix2fv(location, 1, false, value);
     }
 
     // --- [ glUniformMatrix3fv ] ---
