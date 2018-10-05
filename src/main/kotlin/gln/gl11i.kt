@@ -10,10 +10,10 @@ import gli_.gl.ExternalFormat
 import gli_.gl.InternalFormat
 import gli_.gl.TypeFormat
 import glm_.bool
-import glm_.buffer.adr
-import glm_.buffer.intBufferBig
-import glm_.buffer.rem
-import glm_.buffer.remSize
+import kool.adr
+import kool.intBufferBig
+import kool.rem
+import kool.remSize
 import glm_.i
 import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i

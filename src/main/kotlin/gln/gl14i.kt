@@ -5,8 +5,8 @@
  */
 package gln
 
-import glm_.buffer.adr
-import glm_.buffer.rem
+import kool.adr
+import kool.rem
 import glm_.vec4.Vec4
 import org.lwjgl.PointerBuffer
 import org.lwjgl.opengl.ARBImaging

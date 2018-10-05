@@ -6,8 +6,8 @@
 package gln
 
 import gli_.gl.InternalFormat
-import glm_.buffer.adr
-import glm_.buffer.rem
+import kool.adr
+import kool.rem
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import org.lwjgl.opengl.GL11C
