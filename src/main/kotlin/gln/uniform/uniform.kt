@@ -74,7 +74,7 @@ fun glUniform(location: Int, vec4i: Vec4i) = GL20.glUniform4i(location, vec4i.x,
 fun glUniform(location: Int, x: Boolean, y: Boolean, z: Boolean, w: Boolean) = GL20.glUniform4i(location, x.i, y.i, z.i, w.i)
 fun glUniform(location: Int, vec4bool: Vec4bool) = GL20.glUniform4i(location, vec4bool.x.i, vec4bool.y.i, vec4bool.z.i, vec4bool.w.i)
 
-fun glUniform(location: Int, floats: FloatArray) = when(floats.size){
+fun glUniform(location: Int, floats: FloatArray) = when (floats.size) {
     1 -> GL20.glUniform1f(location, floats[0])
     2 -> GL20.glUniform2f(location, floats[0], floats[1])
     3 -> GL20.glUniform3f(location, floats[0], floats[1], floats[2])
@@ -82,7 +82,7 @@ fun glUniform(location: Int, floats: FloatArray) = when(floats.size){
     else -> throw Error()
 }
 
-fun glUniform(location: Int, ints: IntArray) = when(ints.size){
+fun glUniform(location: Int, ints: IntArray) = when (ints.size) {
     1 -> GL20.glUniform1i(location, ints[0])
     2 -> GL20.glUniform2i(location, ints[0], ints[1])
     3 -> GL20.glUniform3i(location, ints[0], ints[1], ints[2])

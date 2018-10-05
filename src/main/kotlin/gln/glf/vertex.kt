@@ -5,9 +5,8 @@ import glm_.vec2.Vec2
 import glm_.vec2.Vec2us
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
-import glm_.vec4.Vec4ub
-import glm_.glm
 import glm_.vec4.Vec4b
+import glm_.vec4.Vec4ub
 import org.lwjgl.opengl.GL11.*
 
 
@@ -241,7 +240,7 @@ object Vertex { // TODO
                 VertexAttribute(semantic.attr.TEX_COORD, Vec2.length, GL_FLOAT, false, stride, Vec3.size.L * 2))
     }
 
-    class pos3_nor3_col4 (var p: Vec3, var n: Vec3, var c: Vec4)
+    class pos3_nor3_col4(var p: Vec3, var n: Vec3, var c: Vec4)
 
     abstract class Base
 }

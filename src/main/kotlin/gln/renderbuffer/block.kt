@@ -3,14 +3,13 @@
 package gln.renderbuffer
 
 import glm_.BYTES
-import kool.adr
-import kool.cap
-import kool.pos
-import kool.rem
 import glm_.vec2.Vec2i
 import gln.buf
 import gln.bufAd
 import gln.get
+import kool.adr
+import kool.pos
+import kool.rem
 import org.lwjgl.opengl.GL30
 import java.nio.IntBuffer
 

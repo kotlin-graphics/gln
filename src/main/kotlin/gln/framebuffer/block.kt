@@ -3,14 +3,14 @@
 package gln.framebuffer
 
 import glm_.BYTES
-import kool.adr
-import kool.pos
-import kool.rem
 import gln.buf
 import gln.bufAd
 import gln.get
 import gln.renderbuffer.renderbufferName
 import gln.texture.textureName
+import kool.adr
+import kool.pos
+import kool.rem
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL32

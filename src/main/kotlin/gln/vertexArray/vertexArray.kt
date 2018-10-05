@@ -25,8 +25,7 @@ inline fun glBindVertexArray(vertexArray: IntBuffer) = GL30.glBindVertexArray(ve
 inline fun glBindVertexArray() = GL30.glBindVertexArray(0)
 
 
-inline fun glVertexAttribPointer(index: Int, size: Int, type: Int, normalized: Boolean, stride: Int, pointer: Int)
-        = GL20.glVertexAttribPointer(index, size, type, normalized, stride, pointer.L)
+inline fun glVertexAttribPointer(index: Int, size: Int, type: Int, normalized: Boolean, stride: Int, pointer: Int) = GL20.glVertexAttribPointer(index, size, type, normalized, stride, pointer.L)
 
 inline fun glVertexAttribPointer(layout: VertexLayout) = layout.attributes.forEach(::glVertexAttribPointer)
 inline fun glEnableVertexAttribArray(layout: VertexLayout) = layout.attributes.forEach(::glEnableVertexAttribArray)
