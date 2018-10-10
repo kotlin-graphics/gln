@@ -54,7 +54,7 @@ var glDebugCallback: GLDebugMessageCallback? = null
 
 fun glDebugMessageCallback(callback: (source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int, message: String) -> Unit) {
     glDebugCallback?.free()
-    glDebugCallback = GLDebugMessageCallback.create { source, type, severity, id, _, message, _ ->
+    glDebugCallback = GLDebugMessageCallback.create { source, type, id, severity, _, message, _ ->
         callback(GlDebugSource of source, GlDebugType of type, GlDebugSeverity of severity, id, MemoryUtil.memUTF8(message))
     }
     KHRDebug.glDebugMessageCallback(glDebugCallback, NULL)
