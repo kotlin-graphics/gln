@@ -1,7 +1,9 @@
 package gln.debug
 
 
-import org.lwjgl.opengl.*
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GLDebugMessageCallback
+import org.lwjgl.opengl.KHRDebug
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.opengl.GL43.glDebugMessageControl as prova

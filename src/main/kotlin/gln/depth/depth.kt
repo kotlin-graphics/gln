@@ -1,7 +1,6 @@
 package gln.depth
 
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL32
 import org.lwjgl.opengl.GL41
 
@@ -35,12 +34,12 @@ object ObjectDepth {
             GL11.glDepthFunc(func.i)
             field = value
         }
-    var range = 0.0 .. 1.0
+    var range = 0.0..1.0
         set(value) {
             GL11.glDepthRange(value.start, value.endInclusive)
             field = value
         }
-    var rangef = 0f .. 1f
+    var rangef = 0f..1f
         set(value) {
             GL41.glDepthRangef(value.start, value.endInclusive)
             field = value

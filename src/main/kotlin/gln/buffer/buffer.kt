@@ -4,14 +4,14 @@ package gln.buffer
 
 import glm_.BYTES
 import glm_.L
-import kool.adr
-import kool.free
 import glm_.mat4x4.Mat4
 import glm_.size
 import gln.buf
 import gln.bufAd
 import gln.buffer.BufferTarget.BufferTarget2
 import gln.get
+import kool.adr
+import kool.free
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL20

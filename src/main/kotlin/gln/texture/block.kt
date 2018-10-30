@@ -5,15 +5,14 @@ package gln.texture
 import gli_.gl
 import gli_.gli
 import glm_.BYTES
-import kool.adr
-import kool.cap
-import kool.pos
-import kool.rem
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import gln.buf
 import gln.bufAd
 import gln.get
+import kool.adr
+import kool.pos
+import kool.rem
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.ByteBuffer
@@ -232,6 +231,7 @@ object Texture2d {
 
     inline fun image(internalFormat: gli_.gl.InternalFormat, size: Vec3i, format: gli_.gl.ExternalFormat, type: gli_.gl.TypeFormat, pixels: ByteBuffer) =
             image(0, internalFormat, size, format, type, pixels)
+
     inline fun image(level: Int, internalFormat: gli_.gl.InternalFormat, size: Vec3i, format: gli_.gl.ExternalFormat, type: gli_.gl.TypeFormat, pixels: ByteBuffer) =
             GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels.adr + pixels.pos)
 

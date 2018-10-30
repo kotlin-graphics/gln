@@ -3,9 +3,8 @@
 package gln.draw
 
 import glm_.BYTES
-import kool.cap
-import kool.rem
 import glm_.size
+import kool.rem
 import org.lwjgl.opengl.*
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
