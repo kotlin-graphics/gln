@@ -1,26 +1,8 @@
 package gln
 
-import ab.appBuffer
-import gli_.gl.InternalFormat
-import glm_.BYTES
-import glm_.L
-import glm_.bool
-import glm_.buffer.adr
-import glm_.buffer.intBufferBig
-import glm_.buffer.rem
-import glm_.buffer.remSize
-import glm_.vec2.Vec2i
-import glm_.vec3.Vec3i
-import glm_.vec4.Vec4
-import glm_.vec4.Vec4i
-import gln.TextureTarget.*
-import org.lwjgl.opengl.*
-import org.lwjgl.system.APIUtil
-import org.lwjgl.system.MemoryUtil
+import kool.adr
+import kool.rem
 import org.lwjgl.system.MemoryUtil.NULL
-import org.lwjgl.system.MemoryUtil.memByteBuffer
-import java.nio.Buffer
-import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
 

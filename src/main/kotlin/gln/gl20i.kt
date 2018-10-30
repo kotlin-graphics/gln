@@ -5,15 +5,19 @@
  */
 package gln
 
+import glm_.BYTES
 import glm_.L
 import glm_.bool
 import kool.adr
 import kool.intBufferBig
 import kool.rem
 import glm_.mat2x2.Mat2
+import glm_.mat3x3.Mat3
+import glm_.mat4x4.Mat4
 import glm_.vec1.Vec1
 import glm_.vec1.Vec1d
 import glm_.vec1.Vec1i
+import glm_.vec1.Vec1s
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i
@@ -24,15 +28,13 @@ import glm_.vec3.Vec3i
 import glm_.vec3.Vec3s
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4d
+import glm_.vec4.Vec4i
 import glm_.vec4.Vec4s
 import gln.`object`.GLprogram
 import gln.glf.VertexAttribute
 import kool.stak
-import org.lwjgl.PointerBuffer
-import org.lwjgl.opengl.GL20C
-import org.lwjgl.opengl.GL20C.nglUniformMatrix2fv
+import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.*
-import org.lwjgl.system.NativeType
 import java.nio.DoubleBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
@@ -171,9 +173,9 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderSource">Reference Page</a>
      */
-    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") strings: PointerBuffer, @NativeType("GLint const *") length: IntBuffer?) {
-        GL20C.nglShaderSource(shader.i, strings.rem, strings.adr, length?.adr ?: NULL)
-    }
+//    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") strings: PointerBuffer, @NativeType("GLint const *") length: IntBuffer?) {
+//        GL20C.nglShaderSource(shader.i, strings.rem, strings.adr, length?.adr ?: NULL)
+//    }
 
     /**
      * Sets the source code in {@code shader} to the source code in the array of strings specified by {@code strings}. Any source code previously stored in the
@@ -188,8 +190,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderSource">Reference Page</a>
      */
-    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") vararg strings: CharSequence) {
-        TODO()
+//    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") vararg strings: CharSequence) {
 //        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
 //        try {
 //            val stringsAddress = org.lwjgl.system.APIUtil.apiArrayi(stack, MemoryUtil::memUTF8, strings);
@@ -198,7 +199,7 @@ interface gl20i {
 //        } finally {
 //            stack.setPointer(stackPointer);
 //        }
-    }
+//    }
 
     /**
      * Sets the source code in {@code shader} to the source code in the array of strings specified by {@code strings}. Any source code previously stored in the
@@ -212,8 +213,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderSource">Reference Page</a>
      */
-    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") string: CharSequence) {
-        TODO()
+//    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") string: CharSequence) {
 //        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
 //        try {
 //            long stringsAddress = org . lwjgl . system . APIUtil . apiArrayi (stack, MemoryUtil::memUTF8, string);
@@ -222,7 +222,7 @@ interface gl20i {
 //        } finally {
 //            stack.setPointer(stackPointer);
 //        }
-    }
+//    }
 
     // --- [ glCompileShader ] ---
 
@@ -278,7 +278,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v0: Float) = GL20C.glUniform1f(location, v0)
+    fun uniform(location: UniformLocation, v0: Float) = GL20C.glUniform1f(location, v0)
 
     /**
      * Specifies the value of a float uniform variable for the current program object.
@@ -288,7 +288,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v: Vec1) = GL20C.glUniform1f(location, v.x)
+    fun uniform(location: UniformLocation, v: Vec1) = GL20C.glUniform1f(location, v.x)
 
     // --- [ glUniform2f ] ---
 
@@ -301,7 +301,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v0: Float, v1: Float) = GL20C.glUniform2f(location, v0, v1)
+    fun uniform(location: UniformLocation, v0: Float, v1: Float) = GL20C.glUniform2f(location, v0, v1)
 
     /**
      * Specifies the value of a vec2 uniform variable for the current program object.
@@ -311,7 +311,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v: Vec2) = GL20C.glUniform2f(location, v.x, v.y)
+    fun uniform(location: UniformLocation, v: Vec2) = GL20C.glUniform2f(location, v.x, v.y)
 
     // --- [ glUniform3f ] ---
 
@@ -325,7 +325,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v0: Float, v1: Float, v2: Float) = GL20C.glUniform3f(location, v0, v1, v2)
+    fun uniform(location: UniformLocation, v0: Float, v1: Float, v2: Float) = GL20C.glUniform3f(location, v0, v1, v2)
 
     /**
      * Specifies the value of a vec3 uniform variable for the current program object.
@@ -335,7 +335,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v: Vec3) = GL20C.glUniform3f(location, v.x, v.y, v.z)
+    fun uniform(location: UniformLocation, v: Vec3) = GL20C.glUniform3f(location, v.x, v.y, v.z)
 
     // --- [ glUniform4f ] ---
 
@@ -350,7 +350,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v0: Float, v1: Float, v2: Float, v3: Float) = GL20C.glUniform4f(location, v0, v1, v2, v3)
+    fun uniform(location: UniformLocation, v0: Float, v1: Float, v2: Float, v3: Float) = GL20C.glUniform4f(location, v0, v1, v2, v3)
 
     /**
      * Specifies the value of a vec4 uniform variable for the current program object.
@@ -360,7 +360,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v: Vec4) = GL20C.glUniform4f(location, v.x, v.y, v.z, v.w)
+    fun uniform(location: UniformLocation, v: Vec4) = GL20C.glUniform4f(location, v.x, v.y, v.z, v.w)
 
     // --- [ glUniform1i ] ---
 
@@ -372,7 +372,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform1i(location: Int, v0: Int) = GL20C.glUniform1i(location, v0)
+    fun uniform(location: UniformLocation, v0: Int) = GL20C.glUniform1i(location, v0)
 
     /**
      * Specifies the value of an int uniform variable for the current program object.
@@ -382,7 +382,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform1i(location: Int, v: Vec1i) = GL20C.glUniform1i(location, v.x)
+    fun uniform(location: UniformLocation, v: Vec1i) = GL20C.glUniform1i(location, v.x)
 
     // --- [ glUniform2i ] ---
 
@@ -395,7 +395,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v0: Int, v1: Int) = GL20C.glUniform2i(location, v0, v1)
+    fun uniform(location: UniformLocation, v0: Int, v1: Int) = GL20C.glUniform2i(location, v0, v1)
 
     /**
      * Specifies the value of an ivec2 uniform variable for the current program object.
@@ -405,7 +405,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v: Vec2i) = GL20C.glUniform2i(location, v.x, v.y)
+    fun uniform(location: UniformLocation, v: Vec2i) = GL20C.glUniform2i(location, v.x, v.y)
 
     // --- [ glUniform3i ] ---
 
@@ -419,7 +419,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v0: Int, v1: Int, v2: Int) = GL20C.glUniform3i(location, v0, v1, v2)
+    fun uniform(location: UniformLocation, v0: Int, v1: Int, v2: Int) = GL20C.glUniform3i(location, v0, v1, v2)
 
     /**
      * Specifies the value of an ivec3 uniform variable for the current program object.
@@ -429,7 +429,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v: Vec3i) = GL20C.glUniform3i(location, v.x, v.y, v.z)
+    fun uniform(location: UniformLocation, v: Vec3i) = GL20C.glUniform3i(location, v.x, v.y, v.z)
 
     // --- [ glUniform4i ] ---
 
@@ -444,176 +444,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, v0: Int, v1: Int, v2: Int, v3: Int) = GL20C.glUniform4i(location, v0, v1, v2, v3)
-
-    // --- [ glUniform1fv ] ---
-/*
-    *//**
-     * Specifies the value of a single float uniform variable or a float uniform variable array for the current program object.
-     *
-     * @param location the location of the uniform variable to be modified
-     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     *//*
-    public static void glUniform1fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
-    {
-        nglUniform1fv(location, value.remaining(), memAddress(value));
-    }
-
-    // --- [ glUniform2fv ] ---
-
-    *//**
-     * Unsafe version of: {@link #glUniform2fv Uniform2fv}
-     *
-     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-     *//*
-    public static native void nglUniform2fv(int location, int count, long value);
-
-    *//**
-     * Specifies the value of a single vec2 uniform variable or a vec2 uniform variable array for the current program object.
-     *
-     * @param location the location of the uniform variable to be modified
-     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     *//*
-    public static void glUniform2fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
-    {
-        nglUniform2fv(location, value.remaining() > > 1, memAddress(value));
-    }
-
-    // --- [ glUniform3fv ] ---
-
-    *//**
-     * Unsafe version of: {@link #glUniform3fv Uniform3fv}
-     *
-     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-     *//*
-    public static native void nglUniform3fv(int location, int count, long value);
-
-    *//**
-     * Specifies the value of a single vec3 uniform variable or a vec3 uniform variable array for the current program object.
-     *
-     * @param location the location of the uniform variable to be modified
-     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     *//*
-    public static void glUniform3fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
-    {
-        nglUniform3fv(location, value.remaining() / 3, memAddress(value));
-    }
-
-    // --- [ glUniform4fv ] ---
-
-    *//**
-     * Unsafe version of: {@link #glUniform4fv Uniform4fv}
-     *
-     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-     *//*
-    public static native void nglUniform4fv(int location, int count, long value);
-
-    *//**
-     * Specifies the value of a single vec4 uniform variable or a vec4 uniform variable array for the current program object.
-     *
-     * @param location the location of the uniform variable to be modified
-     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     *//*
-    public static void glUniform4fv(@NativeType("GLint") int location, @NativeType("GLfloat const *") FloatBuffer value)
-    {
-        nglUniform4fv(location, value.remaining() > > 2, memAddress(value));
-    }
-
-    // --- [ glUniform1iv ] ---
-
-    *//**
-     * Unsafe version of: {@link #glUniform1iv Uniform1iv}
-     *
-     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-     *//*
-    public static native void nglUniform1iv(int location, int count, long value);
-
-    *//**
-     * Specifies the value of a single int uniform variable or a int uniform variable array for the current program object.
-     *
-     * @param location the location of the uniform variable to be modified
-     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     *//*
-    public static void glUniform1iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
-    {
-        nglUniform1iv(location, value.remaining(), memAddress(value));
-    }
-
-    // --- [ glUniform2iv ] ---
-
-    *//**
-     * Unsafe version of: {@link #glUniform2iv Uniform2iv}
-     *
-     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-     *//*
-    public static native void nglUniform2iv(int location, int count, long value);
-
-    *//**
-     * Specifies the value of a single ivec2 uniform variable or an ivec2 uniform variable array for the current program object.
-     *
-     * @param location the location of the uniform variable to be modified
-     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     *//*
-    public static void glUniform2iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
-    {
-        nglUniform2iv(location, value.remaining() > > 1, memAddress(value));
-    }
-
-    // --- [ glUniform3iv ] ---
-
-    *//**
-     * Unsafe version of: {@link #glUniform3iv Uniform3iv}
-     *
-     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-     *//*
-    public static native void nglUniform3iv(int location, int count, long value);
-
-    *//**
-     * Specifies the value of a single ivec3 uniform variable or an ivec3 uniform variable array for the current program object.
-     *
-     * @param location the location of the uniform variable to be modified
-     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     *//*
-    public static void glUniform3iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
-    {
-        nglUniform3iv(location, value.remaining() / 3, memAddress(value));
-    }
-
-    // --- [ glUniform4iv ] ---
-
-    *//**
-     * Unsafe version of: {@link #glUniform4iv Uniform4iv}
-     *
-     * @param count the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.
-     *//*
-    public static native void nglUniform4iv(int location, int count, long value);
-
-    *//**
-     * Specifies the value of a single ivec4 uniform variable or an ivec4 uniform variable array for the current program object.
-     *
-     * @param location the location of the uniform variable to be modified
-     * @param value    a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     *//*
-    public static void glUniform4iv(@NativeType("GLint") int location, @NativeType("GLint const *") IntBuffer value)
-    {
-        nglUniform4iv(location, value.remaining() > > 2, memAddress(value));
-    }*/
+    fun uniform(location: UniformLocation, v0: Int, v1: Int, v2: Int, v3: Int) = GL20C.glUniform4i(location, v0, v1, v2, v3)
 
     // --- [ glUniformMatrix2fv ] ---
 
@@ -626,9 +457,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, value: Mat2) = stak {
-        nglUniformMatrix2fv(location, 1, false, value);
-    }
+    fun uniform(location: UniformLocation, value: Mat2) = GL20C.nglUniformMatrix2fv(location, 1, false, value.toFloatBufferStack().adr)
 
     // --- [ glUniformMatrix3fv ] ---
 
@@ -637,21 +466,7 @@ interface gl20i {
      *
      * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
      */
-    public static native void nglUniformMatrix3fv(int location, int count, boolean transpose, long value);
-
-    /**
-     * Specifies the value of a single mat3 uniform variable or a mat3 uniform variable array for the current program object.
-     *
-     * @param location  the location of the uniform variable to be modified
-     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
-     * @param value     a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     */
-    public static void glUniformMatrix3fv(@NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLfloat const *") FloatBuffer value)
-    {
-        nglUniformMatrix3fv(location, value.remaining() / 9, transpose, memAddress(value));
-    }
+    fun uniform(location: UniformLocation, value: Mat3) = GL20C.nglUniformMatrix3fv(location, 1, false, value.toFloatBufferStack().adr)
 
     // --- [ glUniformMatrix4fv ] ---
 
@@ -660,21 +475,7 @@ interface gl20i {
      *
      * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
      */
-    public static native void nglUniformMatrix4fv(int location, int count, boolean transpose, long value);
-
-    /**
-     * Specifies the value of a single mat4 uniform variable or a mat4 uniform variable array for the current program object.
-     *
-     * @param location  the location of the uniform variable to be modified
-     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
-     * @param value     a pointer to an array of {@code count} values that will be used to update the specified uniform variable
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-     */
-    public static void glUniformMatrix4fv(@NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLfloat const *") FloatBuffer value)
-    {
-        nglUniformMatrix4fv(location, value.remaining() > > 4, transpose, memAddress(value));
-    }
+    fun uniform(location: UniformLocation, value: Mat4) = GL20C.nglUniformMatrix4fv(location, 1, false, value.toFloatBufferStack().adr)
 
     // --- [ glGetShaderiv ] ---
 
@@ -682,15 +483,11 @@ interface gl20i {
      * Returns a parameter from a shader object.
      *
      * @param shader the shader object to be queried
-     * @param pName  the object parameter. One of:<br><table><tr><td>{@link #GL_SHADER_TYPE SHADER_TYPE}</td><td>{@link #GL_DELETE_STATUS DELETE_STATUS}</td><td>{@link #GL_COMPILE_STATUS COMPILE_STATUS}</td><td>{@link #GL_INFO_LOG_LENGTH INFO_LOG_LENGTH}</td><td>{@link #GL_SHADER_SOURCE_LENGTH SHADER_SOURCE_LENGTH}</td></tr></table>
+     * @param name  the object parameter. One of:<br><table><tr><td>{@link #GL_SHADER_TYPE SHADER_TYPE}</td><td>{@link #GL_DELETE_STATUS DELETE_STATUS}</td><td>{@link #GL_COMPILE_STATUS COMPILE_STATUS}</td><td>{@link #GL_INFO_LOG_LENGTH INFO_LOG_LENGTH}</td><td>{@link #GL_SHADER_SOURCE_LENGTH SHADER_SOURCE_LENGTH}</td></tr></table>
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShader">Reference Page</a>
      */
-    fun getShader(shader: GLshader, pName: GetShader): Int {
-        val int = appBuffer.int
-        GL20C.nglGetShaderiv(shader.i, pName.i, int)
-        return memGetInt(int)
-    }
+    fun getShader(shader: GLshader, name: GetShader): Int = stak.intAddress { GL20C.nglGetShaderiv(shader.i, name.i, it) }
 
     // --- [ glGetProgramiv ] ---
 
@@ -701,12 +498,10 @@ interface gl20i {
      * @param pName   the object parameter. One of:<br><table><tr><td>{@link #GL_DELETE_STATUS DELETE_STATUS}</td><td>{@link #GL_LINK_STATUS LINK_STATUS}</td><td>{@link #GL_VALIDATE_STATUS VALIDATE_STATUS}</td></tr><tr><td>{@link #GL_INFO_LOG_LENGTH INFO_LOG_LENGTH}</td><td>{@link #GL_ATTACHED_SHADERS ATTACHED_SHADERS}</td><td>{@link #GL_ACTIVE_ATTRIBUTES ACTIVE_ATTRIBUTES}</td></tr><tr><td>{@link #GL_ACTIVE_ATTRIBUTE_MAX_LENGTH ACTIVE_ATTRIBUTE_MAX_LENGTH}</td><td>{@link #GL_ACTIVE_UNIFORMS ACTIVE_UNIFORMS}</td><td>{@link #GL_ACTIVE_UNIFORM_MAX_LENGTH ACTIVE_UNIFORM_MAX_LENGTH}</td></tr><tr><td>{@link GL30#GL_TRANSFORM_FEEDBACK_BUFFER_MODE TRANSFORM_FEEDBACK_BUFFER_MODE}</td><td>{@link GL30#GL_TRANSFORM_FEEDBACK_VARYINGS TRANSFORM_FEEDBACK_VARYINGS}</td><td>{@link GL30#GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH}</td></tr><tr><td>{@link GL31#GL_ACTIVE_UNIFORM_BLOCKS ACTIVE_UNIFORM_BLOCKS}</td><td>{@link GL31#GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH}</td><td>{@link GL32#GL_GEOMETRY_VERTICES_OUT GEOMETRY_VERTICES_OUT}</td></tr><tr><td>{@link GL32#GL_GEOMETRY_INPUT_TYPE GEOMETRY_INPUT_TYPE}</td><td>{@link GL32#GL_GEOMETRY_OUTPUT_TYPE GEOMETRY_OUTPUT_TYPE}</td><td>{@link GL41#GL_PROGRAM_BINARY_LENGTH PROGRAM_BINARY_LENGTH}</td></tr><tr><td>{@link GL42#GL_ACTIVE_ATOMIC_COUNTER_BUFFERS ACTIVE_ATOMIC_COUNTER_BUFFERS}</td><td>{@link GL43#GL_COMPUTE_WORK_GROUP_SIZE COMPUTE_WORK_GROUP_SIZE}</td></tr></table>
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgram">Reference Page</a>
+     *
+     * Everything except  GL_COMPUTE_WORK_GROUP_SIZE
      */
-    fun getProgram(program: GLprogram, pName: GetProgram): Int {
-        val int = appBuffer.int
-        GL20C.nglGetProgramiv(program.i, pName.i, int)
-        return memGetInt(int)
-    }
+    fun getProgram(program: GLprogram, pName: GetProgram): Int = stak.intAddress { GL20C.nglGetProgramiv(program.i, pName.i, it) }
 
     // --- [ glGetShaderInfoLog ] ---
 
@@ -718,13 +513,13 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShaderInfoLog">Reference Page</a>
      */
-    infix fun getShaderInfoLog(shader: GLshader): String {
-        val maxLength = shader.infoLogLength
-        val infoLog = appBuffer.byteArray(maxLength)
-        val length = appBuffer.int
-        GL20C.nglGetShaderInfoLog(shader.i, maxLength, length, infoLog)
-        return MemoryTextDecoding.decodeUTF8(infoLog, memGetInt(length), 0)
-    }
+    infix fun getShaderInfoLog(shader: GLshader): String =
+            stak {
+                val maxLength = shader.infoLogLength
+                val infoLog = it.calloc(maxLength)
+                GL20C.nglGetShaderInfoLog(shader.i, maxLength, NULL, infoLog.adr)
+                MemoryTextDecoding.decodeUTF8(infoLog.adr, maxLength, 0)
+            }
 
     // --- [ glGetProgramInfoLog ] ---
 
@@ -736,13 +531,13 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramInfoLog">Reference Page</a>
      */
-    infix fun getProgramInfoLog(program: GLprogram): String {
-        val maxLength = program.infoLogLength
-        val infoLog = appBuffer.byteArray(maxLength)
-        val length = appBuffer.int
-        GL20C.nglGetProgramInfoLog(program.i, maxLength, length, infoLog)
-        return MemoryTextDecoding.decodeUTF8(infoLog, memGetInt(length), 0)
-    }
+    infix fun getProgramInfoLog(program: GLprogram): String =
+            stak {
+                val maxLength = program.infoLogLength
+                val infoLog = it.calloc(maxLength)
+                GL20C.nglGetProgramInfoLog(program.i, maxLength, NULL, infoLog.adr)
+                MemoryTextDecoding.decodeUTF8(infoLog.adr, maxLength, 0)
+            }
 
     // --- [ glGetAttachedShaders ] ---
 
@@ -755,12 +550,13 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetAttachedShaders">Reference Page</a>
      */
-    infix fun getAttachedShaders(program: GLprogram): GLshaders {
-        val maxCount = program.attachedShadersCount
-        val shaders = intBufferBig(maxCount)
-        GL20C.nglGetAttachedShaders(program.i, maxCount, NULL, shaders.adr)
-        return GLshaders(shaders)
-    }
+    infix fun getAttachedShaders(program: GLprogram): GLshaders =
+            stak {
+                val maxCount = program.attachedShadersCount
+                val shaders = intBufferBig(maxCount)
+                GL20C.nglGetAttachedShaders(program.i, maxCount, NULL, shaders.adr)
+                GLshaders(shaders)
+            }
 
     // --- [ glGetUniformLocation ] ---
 
@@ -772,10 +568,11 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformLocation">Reference Page</a>
      */
-    fun getUniformLocation(program: GLprogram, name: String): Int {
-        val nameEncoded = appBuffer.bufferOfAscii(name)
-        return GL20C.nglGetUniformLocation(program.i, nameEncoded.adr)
-    }
+    fun getUniformLocation(program: GLprogram, name: String): UniformLocation =
+            stak {
+                val nameEncoded = it.ASCII(name)
+                GL20C.nglGetUniformLocation(program.i, nameEncoded.adr)
+            }
 
     // --- [ glGetActiveUniform ] ---
 
@@ -789,15 +586,16 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniform">Reference Page</a>
      */
-    fun getActiveUniform(program: GLprogram, index: Int): Triple<String, Int, UniformType> {
-        val maxLength = program.activeUniformMaxLength
-        val name = appBuffer.byteArray(maxLength)
-        val length = appBuffer.int
-        val size = appBuffer.int
-        val type = appBuffer.int
-        GL20C.nglGetActiveUniform(program.i, index, maxLength, length, size, type, name)
-        return Triple(MemoryTextDecoding.decodeASCII(name, memGetInt(length), 0), 0, UniformType(memGetInt(type)))
-    }
+    fun getActiveUniform(program: GLprogram, index: Int): Triple<String, Int, UniformType> =
+            stak {
+                val maxLength = program.activeUniformMaxLength
+                val name = it.calloc(maxLength).adr
+                val length = it.malloc(3 * Int.BYTES).adr
+                val size = length + Int.BYTES
+                val type = size + Int.BYTES
+                GL20C.nglGetActiveUniform(program.i, index, maxLength, length, size, type, name)
+                Triple(MemoryTextDecoding.decodeASCII(name, memGetInt(length), 0), memGetInt(size), UniformType(memGetInt(type)))
+            }
 
     // --- [ glGetUniformfv ] ---
 
@@ -806,17 +604,15 @@ interface gl20i {
      *
      * @param program  the program object to be queried
      * @param location the location of the uniform variable to be queried
-     * @param params   the value of the specified uniform variable
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-//    public static void glGetUniformfv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLfloat *") FloatBuffer params)
-//    {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetUniformfv(program, location, memAddress(params));
-//    }
+    fun glGetUniformFloat(program: GLprogram, location: UniformLocation): Float =
+            stak {
+                val float = it.mallocFloat(1)
+                GL20C.nglGetUniformfv(program.i, location, float.adr)
+                float[0]
+            }
 
     /**
      * Returns the float value(s) of a uniform variable.
@@ -826,11 +622,42 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun getUniformF(program: GLprogram, location: Int): Float {
-        val float = appBuffer.float
-        GL20C.nglGetUniformfv(program.i, location, float)
-        return memGetFloat(float)
-    }
+    fun glGetUniformVec2(program: GLprogram, location: UniformLocation): Vec2 =
+            stak {
+                val float = it.mallocFloat(Vec2.length)
+                GL20C.nglGetUniformfv(program.i, location, float.adr)
+                Vec2(float)
+            }
+
+    /**
+     * Returns the float value(s) of a uniform variable.
+     *
+     * @param program  the program object to be queried
+     * @param location the location of the uniform variable to be queried
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
+     */
+    fun glGetUniformVec3(program: GLprogram, location: UniformLocation): Vec3 =
+            stak {
+                val float = it.mallocFloat(Vec3.length)
+                GL20C.nglGetUniformfv(program.i, location, float.adr)
+                Vec3(float)
+            }
+
+    /**
+     * Returns the float value(s) of a uniform variable.
+     *
+     * @param program  the program object to be queried
+     * @param location the location of the uniform variable to be queried
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
+     */
+    fun glGetUniformVec4(program: GLprogram, location: UniformLocation): Vec4 =
+            stak {
+                val float = it.mallocFloat(Vec4.length)
+                GL20C.nglGetUniformfv(program.i, location, float.adr)
+                Vec4(float)
+            }
 
     // --- [ glGetUniformiv ] ---
 
@@ -839,17 +666,15 @@ interface gl20i {
      *
      * @param program  the program object to be queried
      * @param location the location of the uniform variable to be queried
-     * @param params   the value of the specified uniform variable
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-//    public static void glGetUniformiv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLint *") IntBuffer params)
-//    {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetUniformiv(program, location, memAddress(params));
-//    }
+    fun getUniformInt(program: GLprogram, location: Int): Int =
+            stak {
+                val int = it.callocInt(1)
+                GL20C.nglGetUniformiv(program.i, location, int.adr)
+                int[0]
+            }
 
     /**
      * Returns the int value(s) of a uniform variable.
@@ -859,11 +684,42 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun getUniformI(program: GLprogram, location: Int): Int {
-        val int = appBuffer.int
-        GL20C.nglGetUniformiv(program.i, location, int)
-        return memGetInt(int)
-    }
+    fun getUniformVec2i(program: GLprogram, location: Int): Vec2i =
+            stak {
+                val int = it.callocInt(Vec2i.length)
+                GL20C.nglGetUniformiv(program.i, location, int.adr)
+                Vec2i(int)
+            }
+
+    /**
+     * Returns the int value(s) of a uniform variable.
+     *
+     * @param program  the program object to be queried
+     * @param location the location of the uniform variable to be queried
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
+     */
+    fun getUniformVec3i(program: GLprogram, location: Int): Vec2i =
+            stak {
+                val int = it.callocInt(Vec2i.length)
+                GL20C.nglGetUniformiv(program.i, location, int.adr)
+                Vec2i(int)
+            }
+
+    /**
+     * Returns the int value(s) of a uniform variable.
+     *
+     * @param program  the program object to be queried
+     * @param location the location of the uniform variable to be queried
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
+     */
+    fun getUniformVec4i(program: GLprogram, location: Int): Vec4i =
+            stak {
+                val int = it.callocInt(Vec4i.length)
+                GL20C.nglGetUniformiv(program.i, location, int.adr)
+                Vec4i(int)
+            }
 
     // --- [ glGetShaderSource ] ---
 
@@ -875,13 +731,13 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShaderSource">Reference Page</a>
      */
-    infix fun getShaderSource(shader: GLshader): String {
-        val maxLength = shader.sourceLength
-        val source = appBuffer.byteArray(maxLength)
-        val length = appBuffer.int
-        GL20C.nglGetShaderSource(shader.i, maxLength, length, source)
-        return MemoryTextDecoding.decodeUTF8(source, memGetInt(length), 0)
-    }
+    infix fun getShaderSource(shader: GLshader): String =
+            stak {
+                val maxLength = shader.sourceLength
+                val source = it.malloc(maxLength).adr
+                GL20C.nglGetShaderSource(shader.i, maxLength, NULL, source)
+                return MemoryTextDecoding.decodeUTF8(source, maxLength, 0)
+            }
 
     // --- [ glVertexAttrib1f ] ---
 
@@ -1743,10 +1599,11 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindAttribLocation">Reference Page</a>
      */
-    fun bindAttribLocation(program: GLprogram, index: Int, name: String) {
-        val nameEncoded = appBuffer.bufferOfAscii(name)
-        GL20C.nglBindAttribLocation(program.i, index, nameEncoded.adr)
-    }
+    fun bindAttribLocation(program: GLprogram, index: Int, name: String) =
+            stak {
+                val nameEncoded = it.ASCII(name)
+                GL20C.nglBindAttribLocation(program.i, index, nameEncoded.adr)
+            }
 
     // --- [ glGetActiveAttrib ] ---
 
@@ -1760,15 +1617,16 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveAttrib">Reference Page</a>
      */
-    fun getActiveAttrib(program: GLprogram, index: Int): Triple<String, Int, AttributeType> {
-        val maxLength = program.activeAttributeMaxLength
-        val length = appBuffer.int
-        val size = appBuffer.int
-        val type = appBuffer.int
-        val name = appBuffer.byteArray(maxLength)
-        GL20C.nglGetActiveAttrib(program.i, index, maxLength, length, size, type, name)
-        return Triple(MemoryTextDecoding.decodeASCII(name, memGetInt(length), 0), memGetInt(size), AttributeType(memGetInt(type)))
-    }
+    fun getActiveAttrib(program: GLprogram, index: Int): Triple<String, Int, AttributeType> =
+            stak {
+                val maxLength = program.activeAttributeMaxLength
+                val length = it.malloc(3 * Int.BYTES).adr
+                val size = length + Int.BYTES
+                val type = size + Int.BYTES
+                val name = it.calloc(maxLength).adr
+                GL20C.nglGetActiveAttrib(program.i, index, maxLength, length, size, type, name)
+                Triple(MemoryTextDecoding.decodeASCII(name, memGetInt(length), 0), memGetInt(size), AttributeType(memGetInt(type)))
+            }
 
     // --- [ glGetAttribLocation ] ---
 
@@ -1780,10 +1638,11 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetAttribLocation">Reference Page</a>
      */
-    fun getAttribLocation(program: GLprogram, name: String): Int {
-        val nameEncoded = appBuffer.bufferOfAscii(name)
-        return GL20C.nglGetAttribLocation(program.i, nameEncoded.adr)
-    }
+    fun getAttribLocation(program: GLprogram, name: String): Int =
+            stak {
+                val nameEncoded = it.ASCII(name)
+                GL20C.nglGetAttribLocation(program.i, nameEncoded.adr)
+            }
 
     // --- [ glGetVertexAttribiv ] ---
 
@@ -1795,11 +1654,8 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
-    fun getVertexAttribI(index: Int, pName: GetVertexAttrib): Int {
-        val int = appBuffer.int
-        GL20C.nglGetVertexAttribiv(index, pName.i, int)
-        return memGetInt(int)
-    }
+    fun getVertexAttribI(index: Int, pName: GetVertexAttrib): Int =
+            stak.intAddress { GL20C.nglGetVertexAttribiv(index, pName.i, it) }
 
     /**
      * Returns a full Vertex Attribute class
@@ -1809,21 +1665,17 @@ interface gl20i {
     fun getVertexAttrib(index: Int): VertexAttribute {
         return VertexAttribute(
                 index,
-                size = getVertexAttribI(index, SIZE_),
-                type = VertexAttribType(getVertexAttribI(index, TYPE)),
-                normalized = getVertexAttribI(index, NORMALIZED).bool,
-                interleavedStride = getVertexAttribI(index, STRIDE),
+                size = getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_SIZE)),
+                type = VertexAttribType(getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_TYPE))),
+                normalized = getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED)).bool,
+                interleavedStride = getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_STRIDE)),
                 pointer = getVertexAttribPointer(index).L).apply {
 
-            bufferBinding = getVertexAttribI(index, BUFFER_BINDING)
-            enabled = getVertexAttribI(index, ENABLED).bool
-            integer = getVertexAttribI(index, INTEGER).bool
-            divisor = getVertexAttribI(index, DIVISOR)
-            current = run {
-                val floats = appBuffer.floatBuffer(Vec4.length)
-                getCurrentVertexAttrib(index, floats)
-                Vec4(floats)
-            }
+            bufferBinding = getVertexAttribI(index, GetVertexAttrib(GL15.GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING))
+            enabled = getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED)).bool
+            integer = getVertexAttribI(index, GetVertexAttrib(GL30.GL_VERTEX_ATTRIB_ARRAY_INTEGER)).bool
+            divisor = getVertexAttribI(index, GetVertexAttrib(GL33.GL_VERTEX_ATTRIB_ARRAY_DIVISOR))
+            current = stak.vec4Buffer { getCurrentVertexAttrib(index, it) }
         }
     }
 
@@ -1837,7 +1689,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
-    fun getCurrentVertexAttrib(index: Int, params: FloatBuffer)   = GL20C.nglGetVertexAttribfv(index, GL20C.GL_CURRENT_VERTEX_ATTRIB, params.adr)
+    fun getCurrentVertexAttrib(index: Int, params: FloatBuffer) = GL20C.nglGetVertexAttribfv(index, GL20C.GL_CURRENT_VERTEX_ATTRIB, params.adr)
 
     // --- [ glGetVertexAttribdv ] ---
 
@@ -1850,7 +1702,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
-    fun getCurrentVertexAttrib(index: Int, params: DoubleBuffer)  = GL20C.nglGetVertexAttribdv(index, GL20C.GL_CURRENT_VERTEX_ATTRIB, params.adr)
+    fun getCurrentVertexAttrib(index: Int, params: DoubleBuffer) = GL20C.nglGetVertexAttribdv(index, GL20C.GL_CURRENT_VERTEX_ATTRIB, params.adr)
 
     /**
      * Returns the address of the specified generic vertex attribute pointer.
@@ -1859,11 +1711,12 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttribPointerv">Reference Page</a>
      */
-    infix fun getVertexAttribPointer(index: Int): Ptr {
-        val pointer = appBuffer.pointerBuffer
-        GL20C.nglGetVertexAttribPointerv(index, GL20C.GL_VERTEX_ATTRIB_ARRAY_POINTER, pointer.adr)
-        return Ptr(pointer[0])
-    }
+    infix fun getVertexAttribPointer(index: Int): Ptr =
+            stak {
+                val pointer = it.mallocPointer(1)
+                GL20C.nglGetVertexAttribPointerv(index, GL20C.GL_VERTEX_ATTRIB_ARRAY_POINTER, pointer.adr)
+                Ptr(pointer[0])
+            }
 
     // --- [ glDrawBuffers ] ---
 
@@ -1875,17 +1728,6 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawBuffers">Reference Page</a>
      */
     fun drawBuffers(bufs: IntBuffer) = GL20C.nglDrawBuffers(bufs.rem, bufs.adr)
-
-    /**
-     * Specifies a list of color buffers to be drawn into.
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawBuffers">Reference Page</a>
-     */
-    fun drawBuffers(buf: Int)    {
-        val buff = appBuffer.int
-        memPutInt(buff, buf)
-        GL20C.nglDrawBuffers(1, buff)
-    }
 
     // --- [ glBlendEquationSeparate ] ---
 

@@ -128,6 +128,7 @@ val VERSION = "0.4.4"
 
 fun main(args: Array<String>) {
 
+
 }
 
 object gl11 : gl11i
@@ -135,12 +136,13 @@ object gl11 : gl11i
 object gl15 : gl11i, gl12i, gl13i, gl14i, gl15i
 
 object gl20 :
+        glEnum(),
         gl11i,
         gl12i,
         gl13i,
         gl14i,
-        gl15i,
-        gl20i
+        gl15i//,
+//        gl20i
 
 val Buffer.glType: Int
     get() = when(this) {

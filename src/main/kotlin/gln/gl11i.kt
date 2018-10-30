@@ -10,10 +10,6 @@ import gli_.gl.ExternalFormat
 import gli_.gl.InternalFormat
 import gli_.gl.TypeFormat
 import glm_.bool
-import kool.adr
-import kool.intBufferBig
-import kool.rem
-import kool.remSize
 import glm_.i
 import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i
@@ -21,7 +17,8 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import gln.`object`.GLtexture
-import kool.stak
+import kool.*
+import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL12
 import org.lwjgl.system.MemoryUtil.NULL
@@ -227,18 +224,18 @@ interface gl11i {
     var cullFace: CullFaceMode
         get() = when {
             _cullFaceEnabled -> CullFaceMode(GL11C.glGetInteger(GL11C.GL_CULL_FACE_MODE))
-            else -> OFF_
+            else -> CullFaceMode(GL11.GL_FALSE)
         }
         set(value) = when {
             _cullFaceEnabled -> when (value) {
-                OFF_ -> {
+                CullFaceMode(GL11.GL_FALSE) -> {
                     GL11C.glDisable(GL11C.GL_CULL_FACE)
                     _cullFaceEnabled = false
                 }
                 else -> GL11C.glCullFace(value.i)
             }
             else -> when (value) {
-                OFF_ -> Unit
+                CullFaceMode(GL11.GL_FALSE) -> Unit
                 else -> {
                     GL11C.glEnable(GL11C.GL_CULL_FACE)
                     GL11C.glCullFace(value.i)
@@ -344,7 +341,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
      */
-    fun drawArrays(first: Int, count: Int) = GL11C.glDrawArrays(DrawMode.TRIANGLES.i, first, count)
+    fun drawArrays(first: Int, count: Int) = GL11C.glDrawArrays(GL11.GL_TRIANGLES, first, count)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices. Elements {@code first} through
@@ -358,7 +355,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
      */
-    fun drawArrays(count: Int) = GL11C.glDrawArrays(DrawMode.TRIANGLES.i, 0, count)
+    fun drawArrays(count: Int) = GL11C.glDrawArrays(GL11.GL_TRIANGLES, 0, count)
 
     // --- [ glDrawBuffer ] ---
 
@@ -390,7 +387,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(mode: DrawMode, count: Int, type: DataType = UNSIGNED_INT, indices: Long = 0) = GL11C.nglDrawElements(mode.i, count, type.i, indices)
+    fun drawElements(mode: DrawMode, count: Int, type: DataType = DataType(GL11.GL_UNSIGNED_INT), indices: Long = 0) = GL11C.nglDrawElements(mode.i, count, type.i, indices)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -454,7 +451,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(count: Int, type: DataType = UNSIGNED_INT, indices: Ptr = Ptr(0L)) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices.L)
+    fun drawElements(count: Int, type: DataType = DataType(GL11.GL_UNSIGNED_INT), indices: Ptr = Ptr(0L)) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices.L)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -719,18 +716,18 @@ interface gl11i {
     var logicOp: LogicOp
         get() = when {
             _logicOpEnabled -> LogicOp(GL11C.glGetInteger(GL11C.GL_LOGIC_OP_MODE))
-            else -> OFF
+            else -> LogicOp(GL11.GL_FALSE)
         }
         set(value) = when {
             _logicOpEnabled -> when (value) {
-                OFF -> {
+                LogicOp(GL11.GL_FALSE) -> {
                     GL11C.glDisable(GL11C.GL_COLOR_LOGIC_OP)
                     _logicOpEnabled = false
                 }
                 else -> GL11C.glLogicOp(value.i)
             }
             else -> when (value) {
-                OFF -> Unit
+                LogicOp(GL11.GL_FALSE) -> Unit
                 else -> {
                     GL11C.glEnable(GL11C.GL_COLOR_LOGIC_OP)
                     GL11C.glLogicOp(value.i)
@@ -750,67 +747,67 @@ interface gl11i {
 
     var packAlignment: Int
         get() = GL11C.glGetInteger(GL11C.GL_PACK_ALIGNMENT)
-        set(value) = GL11C.glPixelStorei(PACK_ALIGNMENT.i, value)
+        set(value) = GL11C.glPixelStorei(GL11C.GL_PACK_ALIGNMENT, value)
 
     var packImageHeight: Int
         get() = GL11C.glGetInteger(GL12.GL_PACK_IMAGE_HEIGHT)
-        set(value) = GL11C.glPixelStorei(PACK_IMAGE_HEIGHT.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_IMAGE_HEIGHT, value)
 
     var packLsbFirst: Boolean
         get() = GL11C.glGetInteger(GL12.GL_PACK_LSB_FIRST).bool
-        set(value) = GL11C.glPixelStorei(PACK_LSB_FIRST.i, value.i)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_LSB_FIRST, value.i)
 
     var packRowLength: Int
         get() = GL11C.glGetInteger(GL12.GL_PACK_ROW_LENGTH)
-        set(value) = GL11C.glPixelStorei(PACK_ROW_LENGTH.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_ROW_LENGTH, value)
 
     var packSkipImages: Int
         get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_IMAGES)
-        set(value) = GL11C.glPixelStorei(PACK_SKIP_IMAGES.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_IMAGES, value)
 
     var packSkipPixels: Int
         get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_PIXELS)
-        set(value) = GL11C.glPixelStorei(PACK_SKIP_PIXELS.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_PIXELS, value)
 
     var packSkipRows: Int
         get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_ROWS)
-        set(value) = GL11C.glPixelStorei(PACK_SKIP_ROWS.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_ROWS, value)
 
     var packSwapBytes: Boolean
         get() = GL11C.glGetInteger(GL12.GL_PACK_SWAP_BYTES).bool
-        set(value) = GL11C.glPixelStorei(PACK_SWAP_BYTES.i, value.i)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SWAP_BYTES, value.i)
 
     var unpackAlignment: Int
         get() = GL11C.glGetInteger(GL11C.GL_UNPACK_ALIGNMENT)
-        set(value) = GL11C.glPixelStorei(UNPACK_ALIGNMENT.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_ALIGNMENT, value)
 
     var unpackImageHeight: Int
         get() = GL11C.glGetInteger(GL12.GL_UNPACK_IMAGE_HEIGHT)
-        set(value) = GL11C.glPixelStorei(UNPACK_IMAGE_HEIGHT.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_IMAGE_HEIGHT, value)
 
     var unpackLsbFirst: Boolean
         get() = GL11C.glGetInteger(GL12.GL_UNPACK_LSB_FIRST).bool
-        set(value) = GL11C.glPixelStorei(UNPACK_LSB_FIRST.i, value.i)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_LSB_FIRST, value.i)
 
     var unpackRowLength: Int
         get() = GL11C.glGetInteger(GL12.GL_UNPACK_ROW_LENGTH)
-        set(value) = GL11C.glPixelStorei(UNPACK_ROW_LENGTH.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_ROW_LENGTH, value)
 
     var unpackSkipImages: Int
         get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_IMAGES)
-        set(value) = GL11C.glPixelStorei(UNPACK_SKIP_IMAGES.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_IMAGES, value)
 
     var unpackSkipPixels: Int
         get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_PIXELS)
-        set(value) = GL11C.glPixelStorei(UNPACK_SKIP_PIXELS.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_PIXELS, value)
 
     var unpackSkipRows: Int
         get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_ROWS)
-        set(value) = GL11C.glPixelStorei(UNPACK_SKIP_ROWS.i, value)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_ROWS, value)
 
     var unpackSwapBytes: Boolean
         get() = GL11C.glGetInteger(GL12.GL_UNPACK_SWAP_BYTES).bool
-        set(value) = GL11C.glPixelStorei(UNPACK_SWAP_BYTES.i, value.i)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SWAP_BYTES, value.i)
 
     // --- [ glPointSize ] ---
 

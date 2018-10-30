@@ -7,6 +7,8 @@ package gln
 
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
+import kool.adr
+import kool.stak
 import org.lwjgl.opengl.GL30C
 
 /**
@@ -50,7 +52,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, value: Vec4i) = GL30C.nglClearBufferiv(buffer.i, drawbuffer, value.toBuffer())
+    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, value: Vec4i) = stak { GL30C.nglClearBufferiv(buffer.i, drawbuffer, value.toIntBuffer(it).adr) }
 
     // --- [ glClearBufferuiv ] ---
 
@@ -63,7 +65,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, value: Vec4ui) = GL30C.nglClearBufferuiv(buffer.i, drawbuffer, value.toBuffer())
+    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, value: Vec4ui) = stak { GL30C.nglClearBufferuiv(buffer.i, drawbuffer, value.toIntBuffer(it).adr) }
 
     // --- [ glClearBufferfv ] ---
 
