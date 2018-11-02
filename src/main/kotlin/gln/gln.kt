@@ -6,15 +6,17 @@ import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
+import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import kool.adr
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL41
+import kool.stak
+import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil
 import java.awt.Color
+import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
+import java.nio.ShortBuffer
 
 @Deprecated("use appBuffer instead")
 val buf: ByteBuffer = MemoryUtil.memAlloc(256)
@@ -50,25 +52,16 @@ inline fun glClearColor(vec: Vec4) = GL11.glClearColor(vec.x, vec.y, vec.z, vec.
 inline fun glClearDepthf() = GL41.glClearDepthf(1f)
 
 
-inline fun glGetVec2(pname: Int): Vec2 {
-    GL11.nglGetFloatv(pname, bufAd)
-    return Vec2(buf)
-}
+inline fun glGetVec2(pname: Int): Vec2 = stak.vec2Address{ GL30C.nglGetFloatv(pname, it) }
 
-inline fun glGetVec2i(pname: Int): Vec2i {
-    GL11.nglGetIntegerv(pname, bufAd)
-    return Vec2i(buf)
-}
+inline fun glGetVec4(pname: Int): Vec4 = stak.vec4Address{GL30C.nglGetFloatv(pname, it) }
 
-inline fun glGetVec4(pname: Int): Vec4 {
-    GL11.nglGetFloatv(pname, bufAd)
-    return Vec4(buf)
-}
+inline fun glGetVec2i(pname: Int): Vec2i = stak.vec2iAddress{GL30C.nglGetIntegerv(pname, it) }
 
-inline fun glGetVec4i(pname: Int): Vec4i {
-    GL11.nglGetIntegerv(pname, bufAd)
-    return Vec4i(buf)
-}
+inline fun glGetVec4i(pname: Int): Vec4i = stak.vec4iAddress{GL30C.nglGetIntegerv(pname, it) }
+
+inline fun glGetVec4bool(pname: Int): Vec4bool = stak.vec4boolAddress{GL30C.nglGetIntegerv(pname, it) }
+
 
 fun checkError(location: String, throwError: Boolean = true): Boolean {
 
@@ -90,3 +83,29 @@ fun checkError(location: String, throwError: Boolean = true): Boolean {
 }
 
 val VERSION = "0.4.5"
+
+fun main(args: Array<String>) {
+
+
+}
+
+object gl11 : gl11i
+
+object gl15 : gl11i, gl12i, gl13i, gl14i, gl15i
+
+object gl20 :
+        glEnum(),
+        gl11i,
+        gl12i,
+        gl13i,
+        gl14i,
+        gl15i,
+        gl20i
+
+val Buffer.glType: Int
+    get() = when(this) {
+        is ByteBuffer -> GL11C.GL_UNSIGNED_BYTE
+        is ShortBuffer -> GL11C.GL_UNSIGNED_SHORT
+        is IntBuffer -> GL11C.GL_UNSIGNED_INT
+        else -> throw Error("unsupported")
+    }

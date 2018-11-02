@@ -1,6 +1,7 @@
 package gln.cap
 
 import glm_.vec2.Vec2
+import glm_.vec3.Vec3i
 import gln.*
 import kool.cap
 import kool.free
@@ -47,6 +48,9 @@ class Caps(profile: Profile) {
         val MINOR_VERSION = glGetInteger(GL_MINOR_VERSION)
         @JvmField
         val MAJOR_VERSION = glGetInteger(GL_MAJOR_VERSION)
+        /** JVM custom */
+        val version = MAJOR_VERSION * 10 + MINOR_VERSION
+
         //         val CONTEXT_FLAGS =
 //                if (check(4, 3) || glisExtensionAvailable("GL_KHR_debug"))
 //                    glGetInteger(GL_CONTEXT_FLAGS)
@@ -684,6 +688,9 @@ class Caps(profile: Profile) {
         var MAX_FRAMEBUFFER_HEIGHT = 0
         @JvmField
         var MAX_FRAMEBUFFER_LAYERS = 0
+        /** JVM custom */
+        @JvmField
+        var MAX_FRAMEBUFFER_SIZE = Vec3i()
         @JvmField
         var MAX_FRAMEBUFFER_SAMPLES = 0
         @JvmField
@@ -883,6 +890,10 @@ class Caps(profile: Profile) {
                 MAX_FRAMEBUFFER_HEIGHT = glGetInteger(GL_MAX_FRAMEBUFFER_HEIGHT)
                 MAX_FRAMEBUFFER_WIDTH = glGetInteger(GL_MAX_FRAMEBUFFER_WIDTH)
                 MAX_FRAMEBUFFER_LAYERS = glGetInteger(GL_MAX_FRAMEBUFFER_LAYERS)
+                MAX_FRAMEBUFFER_SIZE.put(
+                        MAX_FRAMEBUFFER_WIDTH,
+                        MAX_FRAMEBUFFER_HEIGHT,
+                        MAX_FRAMEBUFFER_LAYERS)
                 MAX_FRAMEBUFFER_SAMPLES = glGetInteger(GL_MAX_FRAMEBUFFER_SAMPLES)
             }
 
@@ -1083,8 +1094,8 @@ class Caps(profile: Profile) {
             }
 
             if (check(4, 1) || extensions.ARB_ES2_compatibility) {
-                IMPLEMENTATION_COLOR_READ_FORMAT = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_FORMAT)
-                IMPLEMENTATION_COLOR_READ_TYPE = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_TYPE)
+                IMPLEMENTATION_COLOR_READ_FORMAT = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_FORMAT) // TODO GliInternalFormat
+                IMPLEMENTATION_COLOR_READ_TYPE = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_TYPE) // TODO "
             }
 
             if (check(2, 1)) {
