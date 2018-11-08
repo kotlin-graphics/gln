@@ -19,6 +19,12 @@ inline class GLshader(val i: Int) {
 
     fun compile() = GL20C.glCompileShader(i)
 
+    // --- [ glShaderSource ] ---
+
+    infix fun source(source: CharSequence) = gl20.shaderSource(this, source)
+
+    fun source(vararg sources: CharSequence) = gl20.shaderSource(this, *sources)
+
     // --- [ glGetShaderiv ] ---
 
     val type: ShaderType

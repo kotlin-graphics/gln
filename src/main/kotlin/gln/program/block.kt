@@ -31,7 +31,7 @@ inline fun initPrograms(programs: IntArray, block: Programs.() -> Unit) {
     Programs.block()
 }
 
-inline fun usingProgram(program: Program, block: ProgramUse.() -> Unit) = usingProgram(program.name, block)
+inline fun usingProgram(program: GlslProgram, block: ProgramUse.() -> Unit) = usingProgram(program.name, block)
 inline fun usingProgram(program: Enum<*>, block: ProgramUse.() -> Unit) = usingProgram(programName[program], block)
 inline fun usingProgram(program: IntArray, block: ProgramUse.() -> Unit) = usingProgram(program[0], block)
 inline fun usingProgram(program: Int, block: ProgramUse.() -> Unit) {
@@ -40,7 +40,7 @@ inline fun usingProgram(program: Int, block: ProgramUse.() -> Unit) {
     glUseProgram()
 }
 
-inline fun withProgram(program: Program, block: ProgramBase.() -> Unit) = withProgram(program.name, block)
+inline fun withProgram(program: GlslProgram, block: ProgramBase.() -> Unit) = withProgram(program.name, block)
 inline fun withProgram(program: Enum<*>, block: ProgramBase.() -> Unit) = withProgram(programName[program], block)
 inline fun withProgram(program: IntArray, block: ProgramBase.() -> Unit) = withProgram(program[0], block)
 inline fun withProgram(program: Int, block: ProgramBase.() -> Unit) {

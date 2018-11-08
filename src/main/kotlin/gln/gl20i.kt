@@ -94,7 +94,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateShader">Reference Page</a>
      */
-    fun createShader(type: ShaderType) = GL20C.glCreateShader(type.i)
+    fun createShader(type: ShaderType): GLshader = GLshader(GL20C.glCreateShader(type.i))
 
     // --- [ glDeleteShader ] ---
 
@@ -166,37 +166,10 @@ interface gl20i {
      *
      * @param shader  the shader object whose source code is to be replaced
      * @param strings an array of pointers to strings containing the source code to be loaded into the shader
-     * @param length  an array of string lengths
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderSource">Reference Page</a>
      */
-//    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") strings: PointerBuffer, @NativeType("GLint const *") length: IntBuffer?) {
-//        GL20C.nglShaderSource(shader.i, strings.rem, strings.adr, length?.adr ?: NULL)
-//    }
-
-    /**
-     * Sets the source code in {@code shader} to the source code in the array of strings specified by {@code strings}. Any source code previously stored in the
-     * shader object is completely replaced. The number of strings in the array is specified by {@code count}. If {@code length} is {@code NULL}, each string is
-     * assumed to be null terminated. If {@code length} is a value other than {@code NULL}, it points to an array containing a string length for each of the
-     * corresponding elements of {@code strings}. Each element in the length array may contain the length of the corresponding string (the null character is not
-     * counted as part of the string length) or a value less than 0 to indicate that the string is null terminated. The source code strings are not scanned or
-     * parsed at this time; they are simply copied into the specified shader object.
-     *
-     * @param shader  the shader object whose source code is to be replaced
-     * @param strings an array of pointers to strings containing the source code to be loaded into the shader
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glShaderSource">Reference Page</a>
-     */
-//    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") vararg strings: CharSequence) {
-//        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-//        try {
-//            val stringsAddress = org.lwjgl.system.APIUtil.apiArrayi(stack, MemoryUtil::memUTF8, strings);
-//            nglShaderSource(shader, strings.length, stringsAddress, stringsAddress - (strings.length < < 2));
-//            org.lwjgl.system.APIUtil.apiArrayFree(stringsAddress, strings.length);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
+    fun shaderSource(shader: GLshader, vararg strings: CharSequence) = GL20C.glShaderSource(shader.i, *strings)
 
     /**
      * Sets the source code in {@code shader} to the source code in the array of strings specified by {@code strings}. Any source code previously stored in the
@@ -210,16 +183,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderSource">Reference Page</a>
      */
-//    fun shaderSource(shader: GLshader, @NativeType("GLchar const **") string: CharSequence) {
-//        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-//        try {
-//            long stringsAddress = org . lwjgl . system . APIUtil . apiArrayi (stack, MemoryUtil::memUTF8, string);
-//            nglShaderSource(shader, 1, stringsAddress, stringsAddress - 4);
-//            org.lwjgl.system.APIUtil.apiArrayFree(stringsAddress, 1);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
+    fun shaderSource(shader: GLshader, string: CharSequence) = GL20C.glShaderSource(shader.i, string)
 
     // --- [ glCompileShader ] ---
 
@@ -1708,7 +1672,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttribPointerv">Reference Page</a>
      */
-    infix fun getVertexAttribPointer(index: Int): Ptr = stak.pointerAddress {GL20C.nglGetVertexAttribPointerv(index, GL20C.GL_VERTEX_ATTRIB_ARRAY_POINTER, it) }
+    infix fun getVertexAttribPointer(index: Int): Ptr = stak.pointerAddress { GL20C.nglGetVertexAttribPointerv(index, GL20C.GL_VERTEX_ATTRIB_ARRAY_POINTER, it) }
 
     // --- [ glDrawBuffers ] ---
 
