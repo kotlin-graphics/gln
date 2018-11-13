@@ -108,3 +108,29 @@ object Framebuffers {
         Framebuffer.block()
     }
 }
+
+@JvmOverloads
+fun checkFramebuffer(location: String = "", throws: Boolean = true): Boolean {
+    val status = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER)
+    return when (status) {
+        GL30.GL_FRAMEBUFFER_COMPLETE -> true
+        else -> {
+            val message = "framebuffer incomplete, status: ${when (status) {
+                GL30.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT -> "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"
+                GL30.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT -> "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"
+                GL30.GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER -> "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER"
+                GL30.GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER -> "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER"
+                GL30.GL_FRAMEBUFFER_UNSUPPORTED -> "GL_FRAMEBUFFER_UNSUPPORTED"
+                GL30.GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE -> "GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE"
+                GL32.GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS -> "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS"
+                GL30.GL_FRAMEBUFFER_UNDEFINED -> "GL_FRAMEBUFFER_UNDEFINED"
+                else -> throw IllegalStateException()
+            }}"
+            if(throws)
+                throw Error(message)
+            else
+                System.err.println(message)
+            false
+        }
+    }
+}

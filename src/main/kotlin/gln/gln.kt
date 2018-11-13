@@ -63,23 +63,30 @@ inline fun glGetVec4i(pname: Int): Vec4i = stak.vec4iAddress{GL30C.nglGetInteger
 inline fun glGetVec4bool(pname: Int): Vec4bool = stak.vec4boolAddress{GL30C.nglGetIntegerv(pname, it) }
 
 
-fun checkError(location: String, throwError: Boolean = true): Boolean {
+@JvmOverloads
+fun checkError(location: String = "", throws: Boolean = true): Boolean {
 
     val error = GL11.glGetError()
-    if (error != GL11.GL_NO_ERROR) {
-        val errorString = when (error) {
-            GL11.GL_INVALID_ENUM -> "GL_INVALID_ENUM"
-            GL11.GL_INVALID_VALUE -> "GL_INVALID_VALUE"
-            GL11.GL_INVALID_OPERATION -> "GL_INVALID_OPERATION"
-            GL30.GL_INVALID_FRAMEBUFFER_OPERATION -> "GL_INVALID_FRAMEBUFFER_OPERATION"
-            GL11.GL_OUT_OF_MEMORY -> "GL_OUT_OF_MEMORY"
-            GL11.GL_STACK_UNDERFLOW -> "GL_STACK_UNDERFLOW"
-            GL11.GL_STACK_OVERFLOW -> "GL_STACK_OVERFLOW"
-            else -> throw IllegalStateException()
+    return when (error) {
+        GL11.GL_NO_ERROR -> true
+        else -> {
+            val message = when (error) {
+                GL11.GL_INVALID_ENUM -> "GL_INVALID_ENUM"
+                GL11.GL_INVALID_VALUE -> "GL_INVALID_VALUE"
+                GL11.GL_INVALID_OPERATION -> "GL_INVALID_OPERATION"
+                GL30.GL_INVALID_FRAMEBUFFER_OPERATION -> "GL_INVALID_FRAMEBUFFER_OPERATION"
+                GL11.GL_OUT_OF_MEMORY -> "GL_OUT_OF_MEMORY"
+                GL11.GL_STACK_UNDERFLOW -> "GL_STACK_UNDERFLOW"
+                GL11.GL_STACK_OVERFLOW -> "GL_STACK_OVERFLOW"
+                else -> throw IllegalStateException()
+            }
+            if (throws)
+                throw Error("OpenGL Error ($message) at $location")
+            else
+                System.err.println(message)
+            false
         }
-        return if (throwError) throw Error("OpenGL Error ($errorString) at $location") else false
     }
-    return true
 }
 
 val VERSION = "0.4.5"

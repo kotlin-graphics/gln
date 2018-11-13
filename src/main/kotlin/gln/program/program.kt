@@ -243,7 +243,7 @@ open class GlslProgram(
 
             val fullShader = when {
                 root.endsWith('/') || root.endsWith('\\') -> "$root$shader"
-                else -> root + '/' + shader
+                else -> "$root/$shader"
             }
 
             for (ext in shaderExtensions)
@@ -252,9 +252,8 @@ open class GlslProgram(
                     program += shaderName
                     shaderNames += shaderName
                 } catch (exc: Exception) {
-                    println("$fullShader$ext doesnt exist "+ exc.message)
+//                    println("$fullShader$ext doesnt exist "+ exc.message)
                 }
-            println(shaderNames)
             program.link()
 
             if (!program.linkStatus)
@@ -275,7 +274,7 @@ open class GlslProgram(
 
             fun fullShader(s: String) = when {
                 root.endsWith('/') || root.endsWith('\\') -> "$root$s"
-                else -> "$root${File.separator}$s"
+                else -> "$root/$s"
             }
 
             var fs = fullShader(vert)
@@ -307,7 +306,7 @@ open class GlslProgram(
 
             fun fullShader(s: String) = when {
                 root.endsWith('/') || root.endsWith('\\') -> "$root$s"
-                else -> "$root${File.separator}$s"
+                else -> "$root/$s"
             }
 
             var fs = fullShader(vert)
@@ -337,7 +336,7 @@ open class GlslProgram(
 
             fun fullShader(s: String) = when {
                 root.endsWith('/') || root.endsWith('\\') -> "$root$s"
-                else -> "$root${File.separator}$s"
+                else -> "$root/$s"
             }
 
             var fs = fullShader(vert)
@@ -375,7 +374,7 @@ open class GlslProgram(
 
             fun fullShader(s: String) = when {
                 root.endsWith('/') || root.endsWith('\\') -> "$root$s"
-                else -> "$root${File.separator}$s"
+                else -> "$root/$s"
             }
 
             var fs = fullShader(vert)
@@ -455,7 +454,6 @@ open class GlslProgram(
         fun createShaderFromPath(path: String, transform: ((String) -> String)? = null): GLshader {
 
             val lines = ClassLoader.getSystemResourceAsStream(path).use {
-                println(path)
                 InputStreamReader(it).readLines()
             }
 
@@ -475,7 +473,7 @@ open class GlslProgram(
             }
         }
 
-        fun parseInclude(root: String, shader: String): String {
+        private fun parseInclude(root: String, shader: String): String {
             if (shader.startsWith('"') && shader.endsWith('"'))
                 shader.substring(1, shader.length - 1)
             val url = ClassLoader.getSystemResource("$root/$shader")
@@ -498,6 +496,6 @@ open class GlslProgram(
             else -> false
         }
 
-        val shaderExtensions = arrayOf(".vert", ".tesc", ".tese", ".geom", ".frag", ".comp")
+        private val shaderExtensions = arrayOf(".vert", ".tesc", ".tese", ".geom", ".frag", ".comp")
     }
 }
