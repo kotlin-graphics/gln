@@ -37,15 +37,15 @@ open class GlslProgram(
 
     constructor(vertSrc: String, fragSrc: String) : this() {
 
-        val v = createShaderFromSource(vertSrc, GL20.GL_VERTEX_SHADER)
-        val f = createShaderFromSource(fragSrc, GL20.GL_FRAGMENT_SHADER)
+        val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
+        val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
 
         plusAssign(v)
         plusAssign(f)
 
         link()
 
-        if (!linkStatus) System.err.println("Linker failure: $infoLog")
+        if (!linkStatus) System.err.println("Linker failure: $infoLog")     // TODO change to exception
 
         minusAssign(v)
         minusAssign(f)
@@ -55,9 +55,9 @@ open class GlslProgram(
 
     constructor(vertSrc: String, geomSrc: String, fragSrc: String) : this() {
 
-        val v = createShaderFromSource(vertSrc, GL20.GL_VERTEX_SHADER)
-        val g = createShaderFromSource(geomSrc, GL32.GL_GEOMETRY_SHADER)
-        val f = createShaderFromSource(fragSrc, GL20.GL_FRAGMENT_SHADER)
+        val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
+        val g = GlShader.createFromSource(geomSrc, ShaderType(GL32.GL_GEOMETRY_SHADER))
+        val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
 
         plusAssign(v)
         plusAssign(g)
@@ -65,7 +65,7 @@ open class GlslProgram(
 
         link()
 
-        if (!linkStatus) System.err.println("Linker failure: $infoLog")
+        if (!linkStatus) System.err.println("Linker failure: $infoLog")     // TODO change to exception
 
         minusAssign(v)
         minusAssign(g)
@@ -119,43 +119,7 @@ open class GlslProgram(
     operator fun get(s: String): Int = uniforms.getOrPut(s) { GL20.glGetUniformLocation(name, s) }
 
 
-    fun createShaderFromPath(context: Class<*>, path: String): Int {
 
-        val shader = GL20.glCreateShader(path.type)
-
-        val url = context::class.java.getResource(path)
-        val lines = File(url.toURI()).readLines()
-
-        var source = ""
-        lines.forEach {
-            source += when {
-                it.startsWith("#include ") -> parseInclude(context, path.substringBeforeLast('/'), it.substring("#include ".length).trim())
-                else -> it
-            }
-            source += '\n'
-        }
-
-        GL20.glShaderSource(shader, source)
-
-        GL20.glCompileShader(shader)
-
-        val status = GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS)
-        if (status == GL11.GL_FALSE) {
-
-            val strInfoLog = GL20.glGetShaderInfoLog(shader)
-
-            System.err.println("Compiler failure in ${path.substringAfterLast('/')} shader: $strInfoLog")
-        }
-
-        return shader
-    }
-
-    fun parseInclude(context: Class<*>, root: String, shader: String): String {
-        if (shader.startsWith('"') && shader.endsWith('"'))
-            shader.substring(1, shader.length - 1)
-        val url = context::class.java.getResource("$root/$shader")
-        return File(url.toURI()).readText() + "\n"
-    }
 
     fun createProgram(shaderList: List<Int>): Int {
 
@@ -166,7 +130,7 @@ open class GlslProgram(
         GL20.glLinkProgram(program)
 
         if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
-            System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program)}")
+            System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program)}")     // TODO change to exception
 
         shaderList.forEach {
             GL20.glDetachShader(program, it)
@@ -244,7 +208,7 @@ open class GlslProgram(
 
             for (ext in shaderExtensions)
                 try {
-                    val shaderName = createShaderFromPath("$fullShader$ext")
+                    val shaderName = GlShader.createFromPath("$fullShader$ext")
                     program += shaderName
                     shaderNames += shaderName
                 } catch (exc: Exception) {
@@ -253,7 +217,7 @@ open class GlslProgram(
             program.link()
 
             if (!program.linkStatus)
-                System.err.println("Linker failure: ${program.infoLog}")
+                System.err.println("Linker failure: ${program.infoLog}")     // TODO change to exception
 
             for (s in shaderNames) {
                 program -= s
@@ -274,16 +238,16 @@ open class GlslProgram(
             }
 
             var fs = fullShader(vert)
-            val v = createShaderFromPath(if (fs.endsWith(".vert")) fs else "$fs.vert")
+            val v = GlShader.createFromPath(if (fs.endsWith(".vert")) fs else "$fs.vert")
             fs = fullShader(frag)
-            val f = createShaderFromPath(if (fs.endsWith(".frag")) fs else "$fs.frag")
+            val f = GlShader.createFromPath(if (fs.endsWith(".frag")) fs else "$fs.frag")
 
             program += v
             program += f
 
             program.link()
 
-            if (!program.linkStatus) System.err.println("Linker failure: ${program.infoLog}")
+            if (!program.linkStatus) System.err.println("Linker failure: ${program.infoLog}")     // TODO change to exception
 
             program -= v
             program -= f
@@ -306,16 +270,16 @@ open class GlslProgram(
             }
 
             var fs = fullShader(vert)
-            val v = createShaderFromPath(if (fs.endsWith(".vert")) fs else "$fs.vert", vertTransform)
+            val v = GlShader.createFromPath(if (fs.endsWith(".vert")) fs else "$fs.vert", vertTransform)
             fs = fullShader(frag)
-            val f = createShaderFromPath(if (fs.endsWith(".frag")) fs else "$fs.frag", fragTransform)
+            val f = GlShader.createFromPath(if (fs.endsWith(".frag")) fs else "$fs.frag", fragTransform)
 
             program += v
             program += f
 
             program.link()
 
-            if (!program.linkStatus) System.err.println("Linker failure: ${program.infoLog}")
+            if (!program.linkStatus) System.err.println("Linker failure: ${program.infoLog}")     // TODO change to exception
 
             program -= v
             program -= f
@@ -336,11 +300,11 @@ open class GlslProgram(
             }
 
             var fs = fullShader(vert)
-            val v = createShaderFromPath(if (fs.endsWith(".vert")) fs else "$fs.vert")
+            val v = GlShader.createFromPath(if (fs.endsWith(".vert")) fs else "$fs.vert")
             fs = fullShader(geom)
-            val g = createShaderFromPath(if (fs.endsWith(".geom")) fs else "$fs.geom")
+            val g = GlShader.createFromPath(if (fs.endsWith(".geom")) fs else "$fs.geom")
             fs = fullShader(frag)
-            val f = createShaderFromPath(if (fs.endsWith(".frag")) fs else "$fs.frag")
+            val f = GlShader.createFromPath(if (fs.endsWith(".frag")) fs else "$fs.frag")
 
             program += v
             program += g
@@ -348,7 +312,7 @@ open class GlslProgram(
 
             program.link()
 
-            if (!program.linkStatus) System.err.println("Linker failure: ${program.infoLog}")
+            if (!program.linkStatus) System.err.println("Linker failure: ${program.infoLog}")     // TODO change to exception
 
             program -= v
             program -= g
@@ -374,11 +338,11 @@ open class GlslProgram(
             }
 
             var fs = fullShader(vert)
-            val v = createShaderFromPath(if (fs.endsWith(".vert")) fs else "$fs.vert", vertTransform)
+            val v = GlShader.createFromPath(if (fs.endsWith(".vert")) fs else "$fs.vert", vertTransform)
             fs = fullShader(geom)
-            val g = createShaderFromPath(if (fs.endsWith(".geom")) fs else "$fs.geom", geomTransform)
+            val g = GlShader.createFromPath(if (fs.endsWith(".geom")) fs else "$fs.geom", geomTransform)
             fs = fullShader(frag)
-            val f = createShaderFromPath(if (fs.endsWith(".frag")) fs else "$fs.frag", fragTransform)
+            val f = GlShader.createFromPath(if (fs.endsWith(".frag")) fs else "$fs.frag", fragTransform)
 
             program += v
             program += g
@@ -386,7 +350,7 @@ open class GlslProgram(
 
             program.link()
 
-            if (!program.linkStatus) System.err.println("Linker failure: ${program.infoLog}")
+            if (!program.linkStatus) System.err.println("Linker failure: ${program.infoLog}")     // TODO change to exception
 
             program -= v
             program -= g
@@ -398,18 +362,6 @@ open class GlslProgram(
             return program
         }
 
-        @Throws(Error::class)
-        fun createShaderFromSource(source: String, type: Int): GlShader {
-
-            val shader = GlShader.create(ShaderType(type)).apply {
-                source(source)
-                compile()
-            }
-            if (!shader.compileStatus)
-                throw Error(shader.infoLog)
-
-            return shader
-        }
 
 //        fun fromSources(vertSrc: Array<String>, fragSrc: Array<String>, geomSrc: Array<String>? = null): GlslProgram {
 //
@@ -423,7 +375,7 @@ open class GlslProgram(
 //            program.link()
 //
 //            if (GL20.glGetProgrami(program.name, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
-//                System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program.name)}")
+//                System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program.name)}")     // TODO change to exception
 //
 //            shaders.forEach {
 //                GL20.glDetachShader(program.name, it)
@@ -433,64 +385,19 @@ open class GlslProgram(
 //            return program
 //        }
 
+
+        // TODO remove deprecated
         @Throws(Error::class)
-        fun createShaderFromSource(source: Array<String>, type: Int): GlShader {
+        @Deprecated("Moved to GlShader companion", ReplaceWith("GlShader.createFromSource(source, ShaderType(type))"))
+        fun createShaderFromSource(source: String, type: Int): GlShader = GlShader.createFromSource(source, ShaderType(type))
 
-            val shader = GlShader.create(ShaderType(type)).apply {
-                source(*source)
-                compile()
-            }
-            if (!shader.compileStatus)
-                throw Error(shader.infoLog)
-
-            return shader
-        }
+        @Throws(Error::class)
+        @Deprecated("Moved to GlShader companion", ReplaceWith("GlShader.createFromSource(source, ShaderType(type))"))
+        fun createShaderFromSource(source: Array<String>, type: Int): GlShader = GlShader.createFromSource(source, ShaderType(type))
 
         @Throws(Exception::class)
-        fun createShaderFromPath(path: String, transform: ((String) -> String)? = null): GlShader {
-
-            val lines = ClassLoader.getSystemResourceAsStream(path).use {
-                InputStreamReader(it).readLines()
-            }
-
-            var source = ""
-            lines.forEach {
-                source +=
-                        if (it.startsWith("#include "))
-                            parseInclude(path.substringBeforeLast('/'), it.substring("#include ".length).trim())
-                        else it
-                source += '\n'
-            }
-
-            try {
-                return createShaderFromSource(transform?.invoke(source) ?: source, path.type)
-            } catch (err: Exception) {
-                throw Error("Compiler failure in ${path.substringAfterLast('/')} shader: ${err.message}")
-            }
-        }
-
-        private fun parseInclude(root: String, shader: String): String {
-            if (shader.startsWith('"') && shader.endsWith('"'))
-                shader.substring(1, shader.length - 1)
-            val url = ClassLoader.getSystemResource("$root/$shader")
-            return File(url.toURI()).readText() + "\n"
-        }
-
-        private val String.type: Int
-            get() = when (substringAfterLast('.')) {
-                "vert" -> GL20.GL_VERTEX_SHADER
-                "tesc" -> GL40.GL_TESS_CONTROL_SHADER
-                "tese" -> GL40.GL_TESS_EVALUATION_SHADER
-                "geom" -> GL32.GL_GEOMETRY_SHADER
-                "frag" -> GL20.GL_FRAGMENT_SHADER
-                "comp" -> GL43.GL_COMPUTE_SHADER
-                else -> throw Error("invalid shader extension")
-            }
-
-        private fun String.isShaderPath() = when (substringAfterLast('.')) {
-            "vert", "tesc", "tese", "geom", "frag", "comp" -> true
-            else -> false
-        }
+        @Deprecated("Moved to GlShader companion", ReplaceWith("GlShader.createFromPath(path, transform)"))
+        fun createShaderFromPath(path: String, transform: ((String) -> String)? = null): GlShader = GlShader.createFromPath(path, transform)
 
         private val shaderExtensions = arrayOf(".vert", ".tesc", ".tese", ".geom", ".frag", ".comp")
     }

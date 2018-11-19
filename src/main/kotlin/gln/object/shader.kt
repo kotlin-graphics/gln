@@ -1,12 +1,14 @@
 package gln
 
 import glm_.bool
-import org.lwjgl.opengl.GL20C
+import org.lwjgl.opengl.*
+import java.io.*
 import java.nio.IntBuffer
 
 @Deprecated("This class was renamed to GlShader", ReplaceWith("GlShader", "gln.`object`"))
 typealias GLshader = GlShader // TODO remove
 
+// TODO stop throwing Error and change to some exception type
 
 inline class GlShader(val i: Int) {
 
@@ -61,6 +63,102 @@ inline class GlShader(val i: Int) {
     companion object {
         // --- [ glCreateShader ] ---
         fun create(type: ShaderType) = GlShader(GL20C.glCreateShader(type.i))
+
+        fun createFromSource(sourceText: String, type: ShaderType) = create(type).apply {
+
+            source(sourceText)
+            compile()
+
+            if(!compileStatus)
+                throw Error(infoLog)
+        }
+
+        fun createFromSource(sourceText: Array<String>, type: ShaderType) = create(type).apply {
+
+            source(*sourceText)
+            compile()
+
+            if(!compileStatus)
+                throw Error(infoLog)
+        }
+
+        fun createFromPath(path: String, transform: ((String) -> String)? = null): GlShader {
+
+            val lines = ClassLoader.getSystemResourceAsStream(path).use {
+                InputStreamReader(it).readLines()
+            }
+
+            var source = ""
+            lines.forEach {
+                source +=
+                        if (it.startsWith("#include "))
+                            parseInclude(path.substringBeforeLast('/'), it.substring("#include ".length).trim())
+                        else it
+                source += '\n'
+            }
+
+            try {
+                return GlShader.createFromSource(transform?.invoke(source) ?: source, ShaderType(path.type))
+            } catch (err: Exception) {
+                throw Error("Compiler failure in ${path.substringAfterLast('/')} shader: ${err.message}")
+            }
+        }
+
+        fun createShaderFromPath(context: Class<*>, path: String): Int {
+
+            val shader = GL20.glCreateShader(path.type)
+
+            val url = context::class.java.getResource(path)
+            val lines = File(url.toURI()).readLines()
+
+            var source = ""
+            lines.forEach {
+                source += when {
+                    it.startsWith("#include ") -> parseInclude(context, path.substringBeforeLast('/'), it.substring("#include ".length).trim())
+                    else -> it
+                }
+                source += '\n'
+            }
+
+            GL20.glShaderSource(shader, source)
+
+            GL20.glCompileShader(shader)
+
+            val status = GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS)
+            if (status == GL11.GL_FALSE) {
+
+                val strInfoLog = GL20.glGetShaderInfoLog(shader)
+
+                System.err.println("Compiler failure in ${path.substringAfterLast('/')} shader: $strInfoLog")
+            }
+
+            return shader
+        }
+
+        private fun parseInclude(context: Class<*>, root: String, shader: String): String {
+            if (shader.startsWith('"') && shader.endsWith('"'))
+                shader.substring(1, shader.length - 1)
+            val url = context::class.java.getResource("$root/$shader")
+            return File(url.toURI()).readText() + "\n"
+        }
+
+        private fun parseInclude(root: String, shader: String): String {
+            if (shader.startsWith('"') && shader.endsWith('"'))
+                shader.substring(1, shader.length - 1)
+            val url = ClassLoader.getSystemResource("$root/$shader")
+            return File(url.toURI()).readText() + "\n"
+        }
+
+        private val String.type: Int
+            get() = when (substringAfterLast('.')) {
+                "vert" -> GL20.GL_VERTEX_SHADER
+                "tesc" -> GL40.GL_TESS_CONTROL_SHADER
+                "tese" -> GL40.GL_TESS_EVALUATION_SHADER
+                "geom" -> GL32.GL_GEOMETRY_SHADER
+                "frag" -> GL20.GL_FRAGMENT_SHADER
+                "comp" -> GL43.GL_COMPUTE_SHADER
+                else -> throw Error("invalid shader extension")
+            }
     }
 }
 

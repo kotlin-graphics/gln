@@ -3,10 +3,9 @@ package gln.`object`
 import glm_.bool
 import gln.*
 import kool.adr
-import org.lwjgl.opengl.GL20C
-import org.lwjgl.opengl.GL41
-import org.lwjgl.opengl.GL42
+import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryStack.stackGet
+import java.lang.Exception
 
 @Deprecated("This class was renamed to GlProgram", ReplaceWith("GlProgram", "gln.`object`"))
 typealias GLprogram = GlProgram // TODO remove
@@ -151,5 +150,57 @@ inline class GlProgram(val i: Int) {
     companion object {
         // --- [ glCreateProgram ] ---
         fun create() = GlProgram(GL20C.glCreateProgram())
+
+	    fun createFromSource(vertSrc: String, fragSrc: String) : GlProgram {
+
+		    val program = GlProgram.create()
+
+		    val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
+		    val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
+
+		    program += v
+		    program += f
+
+		    program.link()
+
+
+		    program -= v
+		    program -= f
+		    v.delete()
+		    f.delete()
+
+		    if (!program.linkStatus) throw Exception("Linker failure: ${program.infoLog}")
+
+		    return program
+	    }
+
+	    fun createFromSource(vertSrc: String, geomSrc: String, fragSrc: String): GlProgram {
+
+		    val program = GlProgram.create()
+
+		    val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
+		    val g = GlShader.createFromSource(geomSrc, ShaderType(GL32.GL_GEOMETRY_SHADER))
+		    val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
+
+		    program += v
+		    program += g
+		    program += f
+
+		    program.link()
+
+
+		    program -= v
+		    program -= g
+		    program -= f
+		    v.delete()
+		    g.delete()
+		    f.delete()
+
+		    if (!program.linkStatus) throw Exception("Linker failure: ${program.infoLog}")
+
+		    return program
+	    }
+
+	    // TODO createFromPath
     }
 }
