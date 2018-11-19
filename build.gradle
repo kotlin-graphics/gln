@@ -27,7 +27,6 @@ buildscript {
     }
 }
 
-
 dependencies {
 
     ext.kotlin = "org.jetbrains.kotlin:kotlin"
@@ -71,6 +70,12 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
+}
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
+    }
 }
 
 artifacts {
