@@ -1,17 +1,17 @@
 package gln.`object`
 
 import glm_.bool
-import glm_.vec3.Vec3i
 import gln.*
 import kool.adr
-import kool.stak
 import org.lwjgl.opengl.GL20C
 import org.lwjgl.opengl.GL41
 import org.lwjgl.opengl.GL42
-import org.lwjgl.opengl.GL43
 import org.lwjgl.system.MemoryStack.stackGet
 
-inline class GLprogram(val i: Int) {
+@Deprecated("This class was renamed to GlProgram", ReplaceWith("GlProgram", "gln.`object`"))
+typealias GLprogram = GlProgram // TODO remove
+
+inline class GlProgram(val i: Int) {
 
     // --- [ glDeleteProgram ] ---
 
@@ -43,7 +43,7 @@ inline class GLprogram(val i: Int) {
     // --- [ glUseProgram ] ---
 
     fun use() = GL20C.glUseProgram(i)
-    fun <R> use(block: (GLprogram) -> R): R {
+    fun <R> use(block: (GlProgram) -> R): R {
         GL20C.glUseProgram(i)
         return block(this).also { GL20C.glUseProgram(0) }
     }
