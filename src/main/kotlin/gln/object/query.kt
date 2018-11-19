@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL20C
 import java.nio.IntBuffer
 
-inline class GLquery(val i: Int) {
+inline class GlQuery(val i: Int) {
 
     // --- [ glBeginQuery ] ---
 
@@ -19,7 +19,7 @@ inline class GLquery(val i: Int) {
     infix fun end(target: QueryTarget) = GL15C.glEndQuery(target.i)
 
 
-    fun <R> use(target: QueryTarget, block: (GLquery) -> R): R {
+    fun <R> use(target: QueryTarget, block: (GlQuery) -> R): R {
         GL15C.glBeginQuery(target.i, i)
         return block(this).also { GL15C.glEndQuery(target.i) }
     }
@@ -30,7 +30,7 @@ inline class GLquery(val i: Int) {
         get() = GL20C.glIsQuery(i)
 }
 
-inline class GLqueries(val i: IntBuffer) {
+inline class GlQueries(val i: IntBuffer) {
 
     inline val rem: Int
         get() = i.rem

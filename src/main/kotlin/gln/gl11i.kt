@@ -16,7 +16,7 @@ import glm_.vec2.Vec2i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
-import gln.`object`.GLtexture
+import gln.`object`.GlTexture
 import kool.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11C
@@ -60,7 +60,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindTexture">Reference Page</a>
      */
-    fun bindTexture(target: TextureTarget, texture: GLtexture) = GL11C.glBindTexture(target.i, texture.i)
+    fun bindTexture(target: TextureTarget, texture: GlTexture) = GL11C.glBindTexture(target.i, texture.i)
 
     // --- [ glBlendFunc ] ---
 
@@ -568,7 +568,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTexture(texture: GLtexture) = stak.intAddress(texture.i) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTexture(texture: GlTexture) = stak.intAddress(texture.i) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetError ] ---
 

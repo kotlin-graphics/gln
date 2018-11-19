@@ -2,7 +2,6 @@ package gln.`object`
 
 
 import gli_.gl.InternalFormat
-import glm_.BYTES
 import glm_.bool
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
@@ -12,50 +11,49 @@ import gln.*
 import kool.adr
 import kool.stak
 import org.lwjgl.opengl.*
-import org.lwjgl.system.MemoryUtil
 
 
-//inline class GLtexture1d(override val i: Int) : GLtexture {
+//inline class GlTexture1d(override val i: Int) : GlTexture {
 //    override val target: TextureTarget
 //        get() = `1D`
 //}
 //
-//inline class GLtexture1dArray(override val i: Int) : GLtexture {
+//inline class GlTexture1dArray(override val i: Int) : GlTexture {
 //    override val target: TextureTarget
 //        get() = `1D_ARRAY`
 //}
 //
-//inline class GLtexture2d(override val i: Int) : GLtexture {
+//inline class GlTexture2d(override val i: Int) : GlTexture {
 //    override val target: TextureTarget
 //        get() = `2D`
 //}
 //
-//inline class GLtexture2dArray(override val i: Int) : GLtexture {
+//inline class GlTexture2dArray(override val i: Int) : GlTexture {
 //    override val target: TextureTarget
 //        get() = `2D_ARRAY`
 //}
 //
-//inline class GLtexture3d(override val i: Int) : GLtexture {
+//inline class GlTexture3d(override val i: Int) : GlTexture {
 //    override val target: TextureTarget
 //        get() = `3D`
 //}
 //
-////inline class GLtextureCube(override val i: Int) : GLtexture {
+////inline class GlTextureCube(override val i: Int) : GlTexture {
 ////    override val target: TextureTarget
 ////        get() = CUBE_MAP
 ////}
 //
-////inline class GLtextureCubeArray(override val i: Int) : GLtexture {
+////inline class GlTextureCubeArray(override val i: Int) : GlTexture {
 ////    override val target: TextureTarget
 ////        get() = `1D`
 ////}
 //
-//inline class GLtextureRectangle(override val i: Int) : GLtexture {
+//inline class GlTextureRectangle(override val i: Int) : GlTexture {
 //    override val target: TextureTarget
 //        get() = RECTANGLE
 //}
 
-interface GLtexture {
+interface GlTexture {
 
     val i: Int
     val target: TextureTarget
@@ -228,7 +226,7 @@ interface GLtexture {
 
     fun bind() = GL11C.glBindTexture(target.i, i)
     fun unbind() = GL11C.glBindTexture(target.i, 0)
-    fun <R> bound(block: (GLtexture) -> R): R {
+    fun <R> bound(block: (GlTexture) -> R): R {
         GL11C.glBindTexture(target.i, i)
         return block(this).also { GL11C.glBindTexture(target.i, 0) }
     }

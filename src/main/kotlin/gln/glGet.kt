@@ -1,15 +1,12 @@
 package gln
 
-import glm_.BYTES
 import glm_.bool
 import glm_.vec2.Vec2
 import glm_.vec4.Vec4
-import gln.`object`.GLbuffer
 import gln.`object`.GLprogram
 import kool.Ptr
 import kool.stak
 import org.lwjgl.opengl.*
-import org.lwjgl.system.MemoryUtil
 
 interface glGet {
 
@@ -76,8 +73,8 @@ interface glGet {
     val readFramebufferBinding: GLframebuffer
         get() = GLframebuffer(int(GL30.GL_READ_FRAMEBUFFER_BINDING))
 
-//    val elementArrayBufferBinding: GLbuffer
-//        get() = GLbuffer(int(GL30.GL_ELEMENT_ARRAY_BUFFER_BINDING))
+//    val elementArrayBufferBinding: GlBuffer
+//        get() = GlBuffer(int(GL30.GL_ELEMENT_ARRAY_BUFFER_BINDING))
 
     val fragmentShaderDerivativeHint: HintMode
         get() = HintMode(int(GL30.GL_FRAGMENT_SHADER_DERIVATIVE_HINT))
@@ -88,11 +85,11 @@ interface glGet {
     val logicOpMode: LogicOp
         get() = LogicOp(int(GL11.GL_LOGIC_OP_MODE))
 
-//    val pixelPackBufferBinding: GLbuffer
-//        get() = GLbuffer(int(GL21.GL_PIXEL_PACK_BUFFER_BINDING))
+//    val pixelPackBufferBinding: GlBuffer
+//        get() = GlBuffer(int(GL21.GL_PIXEL_PACK_BUFFER_BINDING))
 //
-//    val pixelUnpackBufferBinding: GLbuffer
-//        get() = GLbuffer(int(GL21.GL_PIXEL_UNPACK_BUFFER_BINDING))
+//    val pixelUnpackBufferBinding: GlBuffer
+//        get() = GlBuffer(int(GL21.GL_PIXEL_UNPACK_BUFFER_BINDING))
 
     val pointFadeThresholdSize: Float
         get() = float(GL14.GL_POINT_FADE_THRESHOLD_SIZE)
@@ -145,10 +142,10 @@ interface glGet {
         get() = bool(GL41.GL_SHADER_COMPILER)
 
 
-//    val shaderStorageBufferBinding: GLbuffer
-//        get() = GLbuffer(int(GL43.GL_SHADER_STORAGE_BUFFER_BINDING))
+//    val shaderStorageBufferBinding: GlBuffer
+//        get() = GlBuffer(int(GL43.GL_SHADER_STORAGE_BUFFER_BINDING))
 
-//    fun shaderStorageBufferBinding(index: Int): GLbuffer = GLbuffer(int(GL43.GL_SHADER_STORAGE_BUFFER_BINDING, index))
+//    fun shaderStorageBufferBinding(index: Int): GlBuffer = GlBuffer(int(GL43.GL_SHADER_STORAGE_BUFFER_BINDING, index))
 
     fun shaderStorageBufferStart(index: Int): Long = long(GL43.GL_SHADER_STORAGE_BUFFER_START, index)
 
@@ -220,7 +217,7 @@ interface glGet {
 //    val textureBinding3d: GLtexture3d
 //        get() = GLtexture3d(int(GL12.GL_TEXTURE_BINDING_3D))
 //
-//    val textureBindingBuffer: GLtexture
+//    val textureBindingBuffer: GlTexture
 //        get() = GLtexture2d(int(GL31.GL_TEXTURE_BINDING_BUFFER))
 
 //    val textureBindingCubeMap: GLtextureCube TODO
@@ -235,10 +232,10 @@ interface glGet {
     val timestamp: Long
         get() = long(GL33.GL_TIMESTAMP)
 
-//    val transformFeedbackBufferBinding: GLbuffer
-//        get() = GLbuffer(int(GL30.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING))
+//    val transformFeedbackBufferBinding: GlBuffer
+//        get() = GlBuffer(int(GL30.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING))
 
-//    fun transformFeedbackBufferBinding(index: Int): GLbuffer = GLbuffer(int(GL30.GL_TRANSFORM_FEEDBACK_BUFFER_START, index))
+//    fun transformFeedbackBufferBinding(index: Int): GlBuffer = GlBuffer(int(GL30.GL_TRANSFORM_FEEDBACK_BUFFER_START, index))
 
     val transformFeedbackBufferStart: Long
         get() = long(GL30.GL_TRANSFORM_FEEDBACK_BUFFER_START)
@@ -246,8 +243,8 @@ interface glGet {
     val transformFeedbackBufferSize: Long
         get() = long(GL30.GL_TRANSFORM_FEEDBACK_BUFFER_SIZE)
 
-//    val uniformBufferBinding: GLbuffer
-//        get() = GLbuffer(int(GL31.GL_UNIFORM_BUFFER_BINDING))
+//    val uniformBufferBinding: GlBuffer
+//        get() = GlBuffer(int(GL31.GL_UNIFORM_BUFFER_BINDING))
 
     val uniformBufferSize: Long
         get() = long(GL31.GL_UNIFORM_BUFFER_SIZE)

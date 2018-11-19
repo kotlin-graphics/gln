@@ -14,7 +14,7 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
 
-object GLbuffer {
+object GlBuffer {
 
     var i = 0
     var target = BufferTarget(GL15.GL_ARRAY_BUFFER)
