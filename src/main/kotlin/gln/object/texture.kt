@@ -53,6 +53,9 @@ import org.lwjgl.opengl.*
 //        get() = RECTANGLE
 //}
 
+@Deprecated("This class was renamed to GlTexture", ReplaceWith("GlTexture", "gln.`object`"))
+typealias GLtexture = GlTexture // TODO remove
+
 interface GlTexture {
 
     val i: Int

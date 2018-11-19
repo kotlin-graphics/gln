@@ -3,7 +3,7 @@ package gln
 import glm_.bool
 import glm_.vec2.Vec2
 import glm_.vec4.Vec4
-import gln.`object`.GLprogram
+import gln.`object`.*
 import kool.Ptr
 import kool.stak
 import org.lwjgl.opengl.*
@@ -54,8 +54,8 @@ interface glGet {
     val debugGroupStackDepth: Int
         get() = int(GL43.GL_DEBUG_GROUP_STACK_DEPTH)
 
-    val currentProgram: GLprogram
-        get() = GLprogram(GL20.GL_CURRENT_PROGRAM)
+    val currentProgram: GlProgram
+        get() = GlProgram(GL20.GL_CURRENT_PROGRAM)
 
 
     val depthFunc: CompareFunction

@@ -13,6 +13,8 @@ import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
+@Deprecated("This class was renamed to GlBuffer", ReplaceWith("GlBuffer", "gln.`object`"))
+typealias GLbuffer = GlBuffer // TODO remove
 
 object GlBuffer {
 
