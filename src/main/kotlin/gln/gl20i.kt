@@ -27,7 +27,7 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4s
-import gln.`object`.GLprogram
+import gln.`object`.GlProgram
 import gln.glf.VertexAttribute
 import kool.*
 import org.lwjgl.opengl.*
@@ -60,7 +60,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgram">Reference Page</a>
      */
-    fun createProgram(): GLprogram = GLprogram(GL20C.glCreateProgram())
+    fun createProgram(): GlProgram = GlProgram(GL20C.glCreateProgram())
 
     // --- [ glDeleteProgram ] ---
 
@@ -71,7 +71,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteProgram">Reference Page</a>
      */
-    fun deleteProgram(program: GLprogram) = GL20C.glDeleteProgram(program.i)
+    fun deleteProgram(program: GlProgram) = GL20C.glDeleteProgram(program.i)
 
     // --- [ glIsProgram ] ---
 
@@ -83,7 +83,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsProgram">Reference Page</a>
      */
-    fun isProgram(program: GLprogram) = GL20C.glIsProgram(program.i)
+    fun isProgram(program: GlProgram) = GL20C.glIsProgram(program.i)
 
     // --- [ glCreateShader ] ---
 
@@ -94,7 +94,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateShader">Reference Page</a>
      */
-    fun createShader(type: ShaderType): GLshader = GLshader(GL20C.glCreateShader(type.i))
+    fun createShader(type: ShaderType): GlShader = GlShader(GL20C.glCreateShader(type.i))
 
     // --- [ glDeleteShader ] ---
 
@@ -105,7 +105,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteShader">Reference Page</a>
      */
-    fun deleteShader(shader: GLshader) = GL20C.glDeleteShader(shader.i)
+    fun deleteShader(shader: GlShader) = GL20C.glDeleteShader(shader.i)
 
     // --- [ glIsShader ] ---
 
@@ -117,7 +117,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsShader">Reference Page</a>
      */
-    fun isShader(shader: GLshader) = GL20C.glIsShader(shader.i)
+    fun isShader(shader: GlShader) = GL20C.glIsShader(shader.i)
 
     // --- [ glAttachShader ] ---
 
@@ -140,7 +140,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glAttachShader">Reference Page</a>
      */
-    fun attachShader(program: GLprogram, shader: GLshader) = GL20C.glAttachShader(program.i, shader.i)
+    fun attachShader(program: GlProgram, shader: GlShader) = GL20C.glAttachShader(program.i, shader.i)
 
     // --- [ glDetachShader ] ---
 
@@ -152,7 +152,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDetachShader">Reference Page</a>
      */
-    fun detachShader(program: GLprogram, shader: GLshader) = GL20C.glDetachShader(program.i, shader.i)
+    fun detachShader(program: GlProgram, shader: GlShader) = GL20C.glDetachShader(program.i, shader.i)
 
     // --- [ glShaderSource ] ---
 
@@ -169,7 +169,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderSource">Reference Page</a>
      */
-    fun shaderSource(shader: GLshader, vararg strings: CharSequence) = GL20C.glShaderSource(shader.i, *strings)
+    fun shaderSource(shader: GlShader, vararg strings: CharSequence) = GL20C.glShaderSource(shader.i, *strings)
 
     /**
      * Sets the source code in {@code shader} to the source code in the array of strings specified by {@code strings}. Any source code previously stored in the
@@ -183,7 +183,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderSource">Reference Page</a>
      */
-    fun shaderSource(shader: GLshader, string: CharSequence) = GL20C.glShaderSource(shader.i, string)
+    fun shaderSource(shader: GlShader, string: CharSequence) = GL20C.glShaderSource(shader.i, string)
 
     // --- [ glCompileShader ] ---
 
@@ -194,7 +194,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompileShader">Reference Page</a>
      */
-    fun compileShader(shader: GLshader) = GL20C.glCompileShader(shader.i)
+    fun compileShader(shader: GlShader) = GL20C.glCompileShader(shader.i)
 
     // --- [ glLinkProgram ] ---
 
@@ -205,7 +205,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glLinkProgram">Reference Page</a>
      */
-    fun linkProgram(program: GLprogram) = GL20C.glLinkProgram(program.i)
+    fun linkProgram(program: GlProgram) = GL20C.glLinkProgram(program.i)
 
     // --- [ glUseProgram ] ---
 
@@ -216,7 +216,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUseProgram">Reference Page</a>
      */
-    fun useProgram(program: GLprogram) = GL20C.glUseProgram(program.i)
+    fun useProgram(program: GlProgram) = GL20C.glUseProgram(program.i)
 
     // --- [ glValidateProgram ] ---
 
@@ -227,7 +227,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glValidateProgram">Reference Page</a>
      */
-    fun validateProgram(program: GLprogram) = GL20C.glValidateProgram(program.i)
+    fun validateProgram(program: GlProgram) = GL20C.glValidateProgram(program.i)
 
     // --- [ glUniform1f ] ---
 
@@ -448,7 +448,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShader">Reference Page</a>
      */
-    fun getShader(shader: GLshader, name: GetShader): Int = stak.intAddress { GL20C.nglGetShaderiv(shader.i, name.i, it) }
+    fun getShader(shader: GlShader, name: GetShader): Int = stak.intAddress { GL20C.nglGetShaderiv(shader.i, name.i, it) }
 
     // --- [ glGetProgramiv ] ---
 
@@ -462,7 +462,7 @@ interface gl20i {
      *
      * Everything except  GL_COMPUTE_WORK_GROUP_SIZE
      */
-    fun getProgram(program: GLprogram, pName: GetProgram): Int = stak.intAddress { GL20C.nglGetProgramiv(program.i, pName.i, it) }
+    fun getProgram(program: GlProgram, pName: GetProgram): Int = stak.intAddress { GL20C.nglGetProgramiv(program.i, pName.i, it) }
 
     // --- [ glGetShaderInfoLog ] ---
 
@@ -474,7 +474,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShaderInfoLog">Reference Page</a>
      */
-    infix fun getShaderInfoLog(shader: GLshader): String =
+    infix fun getShaderInfoLog(shader: GlShader): String =
             stak {
                 val maxLength = shader.infoLogLength
                 val infoLog = it.calloc(maxLength)
@@ -492,7 +492,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramInfoLog">Reference Page</a>
      */
-    infix fun getProgramInfoLog(program: GLprogram): String =
+    infix fun getProgramInfoLog(program: GlProgram): String =
             stak {
                 val maxLength = program.infoLogLength
                 val infoLog = it.calloc(maxLength)
@@ -511,7 +511,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetAttachedShaders">Reference Page</a>
      */
-    infix fun getAttachedShaders(program: GLprogram): GLshaders =
+    infix fun getAttachedShaders(program: GlProgram): GLshaders =
             stak {
                 val maxCount = program.attachedShadersCount
                 val shaders = intBufferBig(maxCount)
@@ -529,7 +529,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformLocation">Reference Page</a>
      */
-    fun getUniformLocation(program: GLprogram, name: String): UniformLocation =
+    fun getUniformLocation(program: GlProgram, name: String): UniformLocation =
             stak {
                 val nameEncoded = it.ASCII(name)
                 GL20C.nglGetUniformLocation(program.i, nameEncoded.adr)
@@ -547,7 +547,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniform">Reference Page</a>
      */
-    fun getActiveUniform(program: GLprogram, index: Int): Triple<String, Int, UniformType> =
+    fun getActiveUniform(program: GlProgram, index: Int): Triple<String, Int, UniformType> =
             stak {
                 val maxLength = program.activeUniformMaxLength
                 val name = it.calloc(maxLength).adr
@@ -568,7 +568,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun getUniformFloat(program: GLprogram, location: UniformLocation): Float =
+    fun getUniformFloat(program: GlProgram, location: UniformLocation): Float =
             stak {
                 val float = it.mallocFloat(1)
                 GL20C.nglGetUniformfv(program.i, location, float.adr)
@@ -583,7 +583,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun glGetUniformVec2(program: GLprogram, location: UniformLocation): Vec2 =
+    fun glGetUniformVec2(program: GlProgram, location: UniformLocation): Vec2 =
             stak {
                 val float = it.mallocFloat(Vec2.length)
                 GL20C.nglGetUniformfv(program.i, location, float.adr)
@@ -598,7 +598,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun glGetUniformVec3(program: GLprogram, location: UniformLocation): Vec3 =
+    fun glGetUniformVec3(program: GlProgram, location: UniformLocation): Vec3 =
             stak {
                 val float = it.mallocFloat(Vec3.length)
                 GL20C.nglGetUniformfv(program.i, location, float.adr)
@@ -613,7 +613,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun glGetUniformVec4(program: GLprogram, location: UniformLocation): Vec4 =
+    fun glGetUniformVec4(program: GlProgram, location: UniformLocation): Vec4 =
             stak {
                 val float = it.mallocFloat(Vec4.length)
                 GL20C.nglGetUniformfv(program.i, location, float.adr)
@@ -630,7 +630,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun getUniformInt(program: GLprogram, location: Int): Int =
+    fun getUniformInt(program: GlProgram, location: Int): Int =
             stak {
                 val int = it.callocInt(1)
                 GL20C.nglGetUniformiv(program.i, location, int.adr)
@@ -645,7 +645,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun getUniformVec2i(program: GLprogram, location: Int): Vec2i =
+    fun getUniformVec2i(program: GlProgram, location: Int): Vec2i =
             stak {
                 val int = it.callocInt(Vec2i.length)
                 GL20C.nglGetUniformiv(program.i, location, int.adr)
@@ -660,7 +660,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun getUniformVec3i(program: GLprogram, location: Int): Vec2i =
+    fun getUniformVec3i(program: GlProgram, location: Int): Vec2i =
             stak {
                 val int = it.callocInt(Vec2i.length)
                 GL20C.nglGetUniformiv(program.i, location, int.adr)
@@ -675,7 +675,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    fun getUniformVec4i(program: GLprogram, location: Int): Vec4i =
+    fun getUniformVec4i(program: GlProgram, location: Int): Vec4i =
             stak {
                 val int = it.callocInt(Vec4i.length)
                 GL20C.nglGetUniformiv(program.i, location, int.adr)
@@ -692,7 +692,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShaderSource">Reference Page</a>
      */
-    infix fun getShaderSource(shader: GLshader): String =
+    infix fun getShaderSource(shader: GlShader): String =
             stak {
                 val maxLength = shader.sourceLength
                 val source = it.malloc(maxLength).adr
@@ -1560,7 +1560,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindAttribLocation">Reference Page</a>
      */
-//    fun bindAttribLocation(program: GLprogram, index: Int, name: String) =
+//    fun bindAttribLocation(program: GlProgram, index: Int, name: String) =
 //            stak {
 //                val nameEncoded = it.ASCII(name)
 //                GL20C.nglBindAttribLocation(program.i, index, nameEncoded.adr)
@@ -1578,7 +1578,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveAttrib">Reference Page</a>
      */
-    fun getActiveAttrib(program: GLprogram, index: Int): Triple<String, Int, AttributeType> =
+    fun getActiveAttrib(program: GlProgram, index: Int): Triple<String, Int, AttributeType> =
             stak {
                 val maxLength = program.activeAttributeMaxLength
                 val length = it.malloc(3 * Int.BYTES).adr
@@ -1599,7 +1599,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetAttribLocation">Reference Page</a>
      */
-    fun getAttribLocation(program: GLprogram, name: String): Int =
+    fun getAttribLocation(program: GlProgram, name: String): Int =
             stak {
                 val nameEncoded = it.ASCII(name)
                 GL20C.nglGetAttribLocation(program.i, nameEncoded.adr)

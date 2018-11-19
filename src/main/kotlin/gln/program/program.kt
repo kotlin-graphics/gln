@@ -3,16 +3,12 @@
 package gln.program
 
 import glm_.bool
-import gln.GLshader
+import gln.GlShader
 import gln.ShaderType
 import gln.get
-import gln.gl20
 import org.lwjgl.opengl.*
-import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.lang.NullPointerException
-import java.util.stream.Collectors
 import kotlin.properties.Delegates
 
 
@@ -183,8 +179,8 @@ open class GlslProgram(
     operator fun plusAssign(shader: Int) = GL20.glAttachShader(name, shader)
     operator fun minusAssign(shader: Int) = GL20.glDetachShader(name, shader)
 
-    operator fun plusAssign(shader: GLshader) = GL20.glAttachShader(name, shader.i)
-    operator fun minusAssign(shader: GLshader) = GL20.glDetachShader(name, shader.i)
+    operator fun plusAssign(shader: GlShader) = GL20.glAttachShader(name, shader.i)
+    operator fun minusAssign(shader: GlShader) = GL20.glDetachShader(name, shader.i)
 
     fun link() = GL20.glLinkProgram(name)
 
@@ -237,7 +233,7 @@ open class GlslProgram(
         @JvmStatic
         fun fromRoot(root: String, shader: String): GlslProgram {
 
-            val shaderNames = arrayListOf<GLshader>()
+            val shaderNames = arrayListOf<GlShader>()
 
             val program = GlslProgram()
 
@@ -403,9 +399,9 @@ open class GlslProgram(
         }
 
         @Throws(Error::class)
-        fun createShaderFromSource(source: String, type: Int): GLshader {
+        fun createShaderFromSource(source: String, type: Int): GlShader {
 
-            val shader = GLshader.create(ShaderType(type)).apply {
+            val shader = GlShader.create(ShaderType(type)).apply {
                 source(source)
                 compile()
             }
@@ -438,9 +434,9 @@ open class GlslProgram(
 //        }
 
         @Throws(Error::class)
-        fun createShaderFromSource(source: Array<String>, type: Int): GLshader {
+        fun createShaderFromSource(source: Array<String>, type: Int): GlShader {
 
-            val shader = GLshader.create(ShaderType(type)).apply {
+            val shader = GlShader.create(ShaderType(type)).apply {
                 source(*source)
                 compile()
             }
@@ -451,7 +447,7 @@ open class GlslProgram(
         }
 
         @Throws(Exception::class)
-        fun createShaderFromPath(path: String, transform: ((String) -> String)? = null): GLshader {
+        fun createShaderFromPath(path: String, transform: ((String) -> String)? = null): GlShader {
 
             val lines = ClassLoader.getSystemResourceAsStream(path).use {
                 InputStreamReader(it).readLines()

@@ -24,15 +24,15 @@ inline class GlProgram(val i: Int) {
 
     // --- [ glAttachShader ] ---
 
-    infix fun attach(shader: GLshader) = GL20C.glAttachShader(i, shader.i)
+    infix fun attach(shader: GlShader) = GL20C.glAttachShader(i, shader.i)
 
-    operator fun plusAssign(shader: GLshader) = GL20C.glAttachShader(i, shader.i)
+    operator fun plusAssign(shader: GlShader) = GL20C.glAttachShader(i, shader.i)
 
     // --- [ glDetachShader ] ---
 
-    infix fun detach(shader: GLshader) = GL20C.glDetachShader(i, shader.i)
+    infix fun detach(shader: GlShader) = GL20C.glDetachShader(i, shader.i)
 
-    operator fun minusAssign(shader: GLshader) = GL20C.glDetachShader(i, shader.i)
+    operator fun minusAssign(shader: GlShader) = GL20C.glDetachShader(i, shader.i)
 
     // --- [ glShaderSource ] ---
 
@@ -150,6 +150,6 @@ inline class GlProgram(val i: Int) {
 
     companion object {
         // --- [ glCreateProgram ] ---
-        fun create() = GLprogram(GL20C.glCreateProgram())
+        fun create() = GlProgram(GL20C.glCreateProgram())
     }
 }

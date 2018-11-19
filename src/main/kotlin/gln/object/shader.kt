@@ -4,7 +4,11 @@ import glm_.bool
 import org.lwjgl.opengl.GL20C
 import java.nio.IntBuffer
 
-inline class GLshader(val i: Int) {
+@Deprecated("This class was renamed to GlShader", ReplaceWith("GlShader", "gln.`object`"))
+typealias GLshader = GlShader // TODO remove
+
+
+inline class GlShader(val i: Int) {
 
     // --- [ glDeleteShader ] ---
 
@@ -56,7 +60,7 @@ inline class GLshader(val i: Int) {
 
     companion object {
         // --- [ glCreateShader ] ---
-        fun create(type: ShaderType) = GLshader(GL20C.glCreateShader(type.i))
+        fun create(type: ShaderType) = GlShader(GL20C.glCreateShader(type.i))
     }
 }
 
