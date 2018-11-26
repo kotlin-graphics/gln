@@ -7,7 +7,7 @@ package gln
 
 import glm_.L
 import kool.adr
-import kool.intBufferBig
+import kool.IntBuffer
 import kool.rem
 import kool.remSize
 import gln.`object`.GlBuffer
@@ -316,7 +316,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
-    infix fun genQueries(count: Int): GlQueries = GlQueries(intBufferBig(count).apply { GL15C.nglGenQueries(rem, adr) })
+    infix fun genQueries(count: Int): GlQueries = GlQueries(IntBuffer(count).apply { GL15C.nglGenQueries(rem, adr) })
 
     /**
      * Generates query object names.

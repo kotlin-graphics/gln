@@ -79,7 +79,7 @@ fun glUniform(location: Int, floats: FloatArray) = when(floats.size){
     2 -> GL20C.glUniform2f(location, floats[0], floats[1])
     3 -> GL20C.glUniform3f(location, floats[0], floats[1], floats[2])
     4 -> GL20C.glUniform4f(location, floats[0], floats[1], floats[2], floats[3])
-    else -> throw Error()
+    else -> throw Exception()
 }
 
 fun glUniform(location: Int, ints: IntArray) = when(ints.size){
@@ -87,7 +87,7 @@ fun glUniform(location: Int, ints: IntArray) = when(ints.size){
     2 -> GL20C.glUniform2i(location, ints[0], ints[1])
     3 -> GL20C.glUniform3i(location, ints[0], ints[1], ints[2])
     4 -> GL20C.glUniform4i(location, ints[0], ints[1], ints[2], ints[3])
-    else -> throw Error()
+    else -> throw Exception()
 }
 
 

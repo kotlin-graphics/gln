@@ -986,7 +986,7 @@ inline class DataType(val i: Int) {
             GL11.GL_3_BYTES -> Vec3b.size
             GL11.GL_4_BYTES -> Vec4b.size
             GL11.GL_DOUBLE -> Double.BYTES
-            else -> throw Error()
+            else -> throw Exception()
         }
 }
 

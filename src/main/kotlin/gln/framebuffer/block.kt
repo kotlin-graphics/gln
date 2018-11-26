@@ -127,7 +127,7 @@ fun checkFramebuffer(location: String = "", throws: Boolean = true): Boolean {
                 else -> throw IllegalStateException()
             }}"
             if(throws)
-                throw Error(message)
+                throw Exception(message)
             else
                 System.err.println(message)
             false

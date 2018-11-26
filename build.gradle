@@ -9,9 +9,11 @@ group = 'com.github.kotlin-graphics'
 
 apply plugin: 'com.github.johnrengelman.shadow'
 
+ext.moduleName = 'com.github.kotlin_graphics.gln'
+
 buildscript {
 
-    ext.kotlinVersion = '1.3.0'
+    ext.kotlinVersion = '1.3.10'
 
     repositories {
         jcenter()   // shadow
@@ -33,7 +35,7 @@ dependencies {
     implementation "$kotlin-stdlib:$kotlinVersion"
     implementation "$kotlin-reflect:$kotlinVersion"
 
-    implementation 'com.github.kotlin-graphics:gli:9776ae45a3'
+    implementation 'com.github.kotlin-graphics:gli:332f512955594fc59b011a1b6e29a138fe3fc789'
 
     //testCompile 'io.kotlintest:kotlintest-runner-junit5:3.0.6'
 
@@ -81,4 +83,11 @@ compileKotlin {
 artifacts {
     archives sourcesJar
 //    archives javadocJar
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes('Automatic-Module-Name': moduleName)
+    }
 }

@@ -5,7 +5,7 @@ import glm_.vec3.Vec3i
 import gln.*
 import kool.cap
 import kool.free
-import kool.intBufferBig
+import kool.IntBuffer
 import org.lwjgl.opengl.ATITextureCompression3DC.GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI
 import org.lwjgl.opengl.EXTTextureCompressionLATC.*
 import org.lwjgl.opengl.EXTTextureCompressionS3TC.*
@@ -1120,7 +1120,7 @@ class Caps(profile: Profile) {
     inner class Formats {
 
         private val compressed by lazy {
-            val buffer = intBufferBig(limits.NUM_COMPRESSED_TEXTURE_FORMATS)
+            val buffer = IntBuffer(limits.NUM_COMPRESSED_TEXTURE_FORMATS)
             glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, buffer)
             (0 until buffer.cap).map { buffer[it] }.also {
                 buffer.free()

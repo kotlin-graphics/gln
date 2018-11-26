@@ -18,9 +18,9 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
 
-@Deprecated("use appBuffer instead")
+@Deprecated("use kool instead")
 val buf: ByteBuffer = MemoryUtil.memAlloc(256)
-@Deprecated("use appBuffer instead")
+@Deprecated("use kool instead")
 val bufAd = buf.adr
 
 operator fun IntBuffer.get(e: Enum<*>) = get(e.ordinal)
@@ -81,7 +81,7 @@ fun checkError(location: String = "", throws: Boolean = true): Boolean {
                 else -> throw IllegalStateException()
             }
             if (throws)
-                throw Error("OpenGL Error ($message) at $location")
+                throw Exception("OpenGL Error ($message) at $location")
             else
                 System.err.println(message)
             false
@@ -89,7 +89,7 @@ fun checkError(location: String = "", throws: Boolean = true): Boolean {
     }
 }
 
-val VERSION = "0.4.5"
+val VERSION = "0.4.6"
 
 fun main(args: Array<String>) {
 
@@ -114,5 +114,5 @@ val Buffer.glType: Int
         is ByteBuffer -> GL11C.GL_UNSIGNED_BYTE
         is ShortBuffer -> GL11C.GL_UNSIGNED_SHORT
         is IntBuffer -> GL11C.GL_UNSIGNED_INT
-        else -> throw Error("unsupported")
+        else -> throw Exception("unsupported")
     }

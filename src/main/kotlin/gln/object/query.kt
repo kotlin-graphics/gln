@@ -8,9 +8,6 @@ import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL20C
 import java.nio.IntBuffer
 
-@Deprecated("This class was renamed to GlQuery", ReplaceWith("GlQuery", "gln.`object`"))
-typealias GLquery = GlQuery // TODO remove
-
 inline class GlQuery(val i: Int) {
 
     // --- [ glBeginQuery ] ---
@@ -32,9 +29,6 @@ inline class GlQuery(val i: Int) {
     val valid: Boolean
         get() = GL20C.glIsQuery(i)
 }
-
-@Deprecated("This class was renamed to GlQueries", ReplaceWith("GlQueries", "gln.`object`"))
-typealias GLqueries = GlQueries // TODO remove
 
 inline class GlQueries(val i: IntBuffer) {
 

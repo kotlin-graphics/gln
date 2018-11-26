@@ -3,12 +3,10 @@
 package gln.program
 
 import glm_.bool
-import gln.GlShader
+import gln.`object`.GlShader
 import gln.ShaderType
 import gln.get
 import org.lwjgl.opengl.*
-import java.io.File
-import java.io.InputStreamReader
 import kotlin.properties.Delegates
 
 
@@ -153,6 +151,16 @@ open class GlslProgram(
 
     val infoLog: String
         get() = GL20.glGetProgramInfoLog(name)
+
+
+    fun use() = GL20.glUseProgram(name)
+    fun unuse() = GL20.glUseProgram(0)
+
+    fun <R> use(block: () -> R): R {
+        use()
+        return block().also { unuse() }
+    }
+
 
     companion object {
 
@@ -362,7 +370,6 @@ open class GlslProgram(
             return program
         }
 
-
 //        fun fromSources(vertSrc: Array<String>, fragSrc: Array<String>, geomSrc: Array<String>? = null): GlslProgram {
 //
 //            val program = GlslProgram()
@@ -384,20 +391,6 @@ open class GlslProgram(
 //
 //            return program
 //        }
-
-
-        // TODO remove deprecated
-        @Throws(Error::class)
-        @Deprecated("Moved to GlShader companion", ReplaceWith("GlShader.createFromSource(source, ShaderType(type))"))
-        fun createShaderFromSource(source: String, type: Int): GlShader = GlShader.createFromSource(source, ShaderType(type))
-
-        @Throws(Error::class)
-        @Deprecated("Moved to GlShader companion", ReplaceWith("GlShader.createFromSource(source, ShaderType(type))"))
-        fun createShaderFromSource(source: Array<String>, type: Int): GlShader = GlShader.createFromSource(source, ShaderType(type))
-
-        @Throws(Exception::class)
-        @Deprecated("Moved to GlShader companion", ReplaceWith("GlShader.createFromPath(path, transform)"))
-        fun createShaderFromPath(path: String, transform: ((String) -> String)? = null): GlShader = GlShader.createFromPath(path, transform)
 
         private val shaderExtensions = arrayOf(".vert", ".tesc", ".tese", ".geom", ".frag", ".comp")
     }

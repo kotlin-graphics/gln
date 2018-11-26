@@ -115,7 +115,7 @@ sealed class BufferTarget(val i: Int) {
             GL_TEXTURE_BUFFER -> BufferTarget2.Texture
             GL_TRANSFORM_FEEDBACK_BUFFER -> BufferTarget2.Transform
             GL_UNIFORM_BUFFER -> BufferTarget2.Uniform
-            else -> throw Error()
+            else -> throw Exception()
         }
     }
 }

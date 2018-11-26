@@ -1,14 +1,11 @@
-package gln
+package gln.`object`
 
 import glm_.bool
+import gln.ShaderType
+import gln.gl20
 import org.lwjgl.opengl.*
 import java.io.*
 import java.nio.IntBuffer
-
-@Deprecated("This class was renamed to GlShader", ReplaceWith("GlShader", "gln.`object`"))
-typealias GLshader = GlShader // TODO remove
-
-// TODO stop throwing Error and change to some exception type
 
 inline class GlShader(val i: Int) {
 
@@ -70,7 +67,7 @@ inline class GlShader(val i: Int) {
             compile()
 
             if(!compileStatus)
-                throw Error(infoLog)
+                throw Exception(infoLog)
         }
 
         fun createFromSource(sourceText: Array<String>, type: ShaderType) = create(type).apply {
@@ -79,7 +76,7 @@ inline class GlShader(val i: Int) {
             compile()
 
             if(!compileStatus)
-                throw Error(infoLog)
+                throw Exception(infoLog)
         }
 
         fun createFromPath(path: String, transform: ((String) -> String)? = null): GlShader {
@@ -98,13 +95,13 @@ inline class GlShader(val i: Int) {
             }
 
             try {
-                return GlShader.createFromSource(transform?.invoke(source) ?: source, ShaderType(path.type))
+                return createFromSource(transform?.invoke(source) ?: source, ShaderType(path.type))
             } catch (err: Exception) {
-                throw Error("Compiler failure in ${path.substringAfterLast('/')} shader: ${err.message}")
+                throw Exception("Compiler failure in ${path.substringAfterLast('/')} shader: ${err.message}")
             }
         }
 
-        fun createShaderFromPath(context: Class<*>, path: String): Int {
+        fun createFromPath(context: Class<*>, path: String): Int {
 
             val shader = GL20.glCreateShader(path.type)
 
@@ -157,7 +154,7 @@ inline class GlShader(val i: Int) {
                 "geom" -> GL32.GL_GEOMETRY_SHADER
                 "frag" -> GL20.GL_FRAGMENT_SHADER
                 "comp" -> GL43.GL_COMPUTE_SHADER
-                else -> throw Error("invalid shader extension")
+                else -> throw Exception("invalid shader extension")
             }
     }
 }

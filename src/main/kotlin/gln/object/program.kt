@@ -7,9 +7,6 @@ import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryStack.stackGet
 import java.lang.Exception
 
-@Deprecated("This class was renamed to GlProgram", ReplaceWith("GlProgram", "gln.`object`"))
-typealias GLprogram = GlProgram // TODO remove
-
 inline class GlProgram(val i: Int) {
 
     // --- [ glDeleteProgram ] ---

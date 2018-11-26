@@ -530,7 +530,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    infix fun genTextures(count: Int): GLtextures = GLtextures(intBufferBig(count).apply { GL11C.nglGenTextures(rem, adr) })
+    infix fun genTextures(count: Int): GLtextures = GLtextures(IntBuffer(count).apply { GL11C.nglGenTextures(rem, adr) })
 
     /**
      * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture

@@ -27,7 +27,9 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4s
+import gln.`object`.GLshaders
 import gln.`object`.GlProgram
+import gln.`object`.GlShader
 import gln.glf.VertexAttribute
 import kool.*
 import org.lwjgl.opengl.*
@@ -514,7 +516,7 @@ interface gl20i {
     infix fun getAttachedShaders(program: GlProgram): GLshaders =
             stak {
                 val maxCount = program.attachedShadersCount
-                val shaders = intBufferBig(maxCount)
+                val shaders = IntBuffer(maxCount)
                 GL20C.nglGetAttachedShaders(program.i, maxCount, NULL, shaders.adr)
                 GLshaders(shaders)
             }

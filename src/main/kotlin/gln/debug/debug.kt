@@ -72,7 +72,7 @@ fun glDebugMessageCallback(callback: (source: GlDebugSource, type: GlDebugType, 
 //        OpenGL43 -> GL43::nglDebugMessageControl
 //        GL_KHR_debug -> KHRDebug::nglDebugMessageControl
 //        GL_ARB_debug_output -> ARBDebugOutput::nglDebugMessageControlARB
-//        else -> throw Error()
+//        else -> throw Exception()
 //    //            if (caps.GL_AMD_debug_output)
 //    //                AMDDebugOutput.glDebugMessageEnableAMD(GL11.GL_DONT_CARE, GL11.GL_DONT_CARE,  GL43.GL_DEBUG_SEVERITY_NOTIFICATION, 0, false)
 //    }

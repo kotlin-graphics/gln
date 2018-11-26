@@ -71,7 +71,7 @@ object ProgramUse {
         set(value) = GL20.glUniform1i(uniform, value)
 
     var String.unitE: Enum<*>
-        get() = throw Error()
+        get() = throw Exception()
         set(value) = GL20.glUniform1i(uniform, value.ordinal)
 
 
