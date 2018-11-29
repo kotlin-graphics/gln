@@ -1,16 +1,19 @@
 package gln.cap
 
 import glm_.vec2.Vec2
-import glm_.vec3.Vec3i
-import gln.*
-import kool.cap
-import kool.free
+import gln.GL_COMPRESSED_RGBA_FXT1_3DFX
+import gln.GL_COMPRESSED_RGB_FXT1_3DFX
+import gln.GL_ETC1_RGB8_OES
+import gln.glGetVec2
 import kool.IntBuffer
+import kool.toList
+import kool.use
 import org.lwjgl.opengl.ATITextureCompression3DC.GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI
 import org.lwjgl.opengl.EXTTextureCompressionLATC.*
 import org.lwjgl.opengl.EXTTextureCompressionS3TC.*
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT
 import org.lwjgl.opengl.EXTTextureSRGB.*
+import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL33.GL_MAX_DUAL_SOURCE_DRAW_BUFFERS
 import org.lwjgl.opengl.GL43.*
 import org.lwjgl.opengl.GL44.GL_PRIMITIVE_RESTART_FOR_PATCHES_SUPPORTED
@@ -19,20 +22,34 @@ import org.lwjgl.opengl.GL45.GL_MAX_CULL_DISTANCES
 import org.lwjgl.opengl.KHRTextureCompressionASTCLDR.*
 import org.lwjgl.opengl.NVDeepTexture3D.GL_MAX_DEEP_3D_TEXTURE_DEPTH_NV
 import org.lwjgl.opengl.NVDeepTexture3D.GL_MAX_DEEP_3D_TEXTURE_WIDTH_HEIGHT_NV
+import java.io.File
 import java.io.PrintWriter
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.memberProperties
 
 /**
- * Created by GBarbieri on 10.03.2017.
+ * Spasi: "the ideal option for modern applications is: compatibility context + forwardCompatible. A compatibility context
+ * does not do extra validations that may cost performance and with `forwardCompatible == true` you don't risk using
+ * legacy functionality by mistake.
+ * LWJGL will not try to load deprecated functions, so calling them will crash but the context will actually expose them"
  */
+class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean = true) {
 
-class Caps(profile: Profile) {
+    val caps = GL.createCapabilities(forwardCompatible)
+
+    fun set() = GL.setCapabilities(caps)
+    fun unset() = GL.setCapabilities(null)
 
     @JvmField
     val version = Version(profile)
     @JvmField
     val extensions = Extensions()
+
+    init {
+        if (check(4, 3) || extensions.KHR_debug)
+            version.CONTEXT_FLAGS = glGetInteger(GL_CONTEXT_FLAGS)
+    }
+
     @JvmField
     val debug = Debug()
     @JvmField
@@ -48,13 +65,9 @@ class Caps(profile: Profile) {
         val MINOR_VERSION = glGetInteger(GL_MINOR_VERSION)
         @JvmField
         val MAJOR_VERSION = glGetInteger(GL_MAJOR_VERSION)
-        /** JVM custom */
-        val version = MAJOR_VERSION * 10 + MINOR_VERSION
-
-        //         val CONTEXT_FLAGS =
-//                if (check(4, 3) || glisExtensionAvailable("GL_KHR_debug"))
-//                    glGetInteger(GL_CONTEXT_FLAGS)
-//                else 0
+        /** It will be actually initialized later, after extensions */
+        @JvmField
+        var CONTEXT_FLAGS = 0
         @JvmField
         val NUM_EXTENSIONS = glGetInteger(GL_NUM_EXTENSIONS)
         @JvmField
@@ -66,11 +79,10 @@ class Caps(profile: Profile) {
         @JvmField
         val SHADING_LANGUAGE_VERSION = glGetString(GL_SHADING_LANGUAGE_VERSION)
         @JvmField
-        val NUM_SHADING_LANGUAGE_VERSIONS =
-                if (check(4, 3))
-                    glGetInteger(GL_NUM_SHADING_LANGUAGE_VERSIONS)
-                else 0
-
+        val NUM_SHADING_LANGUAGE_VERSIONS = when {
+            check(4, 3) -> glGetInteger(GL_NUM_SHADING_LANGUAGE_VERSIONS)
+            else -> 0
+        }
 
         private val glslVersions by lazy { (0 until NUM_SHADING_LANGUAGE_VERSIONS).map { glGetStringi(GL_SHADING_LANGUAGE_VERSION, it) } }
 
@@ -688,9 +700,6 @@ class Caps(profile: Profile) {
         var MAX_FRAMEBUFFER_HEIGHT = 0
         @JvmField
         var MAX_FRAMEBUFFER_LAYERS = 0
-        /** JVM custom */
-        @JvmField
-        var MAX_FRAMEBUFFER_SIZE = Vec3i()
         @JvmField
         var MAX_FRAMEBUFFER_SAMPLES = 0
         @JvmField
@@ -890,10 +899,6 @@ class Caps(profile: Profile) {
                 MAX_FRAMEBUFFER_HEIGHT = glGetInteger(GL_MAX_FRAMEBUFFER_HEIGHT)
                 MAX_FRAMEBUFFER_WIDTH = glGetInteger(GL_MAX_FRAMEBUFFER_WIDTH)
                 MAX_FRAMEBUFFER_LAYERS = glGetInteger(GL_MAX_FRAMEBUFFER_LAYERS)
-                MAX_FRAMEBUFFER_SIZE.put(
-                        MAX_FRAMEBUFFER_WIDTH,
-                        MAX_FRAMEBUFFER_HEIGHT,
-                        MAX_FRAMEBUFFER_LAYERS)
                 MAX_FRAMEBUFFER_SAMPLES = glGetInteger(GL_MAX_FRAMEBUFFER_SAMPLES)
             }
 
@@ -1094,8 +1099,8 @@ class Caps(profile: Profile) {
             }
 
             if (check(4, 1) || extensions.ARB_ES2_compatibility) {
-                IMPLEMENTATION_COLOR_READ_FORMAT = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_FORMAT) // TODO GliInternalFormat
-                IMPLEMENTATION_COLOR_READ_TYPE = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_TYPE) // TODO "
+                IMPLEMENTATION_COLOR_READ_FORMAT = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_FORMAT)
+                IMPLEMENTATION_COLOR_READ_TYPE = glGetInteger(GL_IMPLEMENTATION_COLOR_READ_TYPE)
             }
 
             if (check(2, 1)) {
@@ -1120,10 +1125,9 @@ class Caps(profile: Profile) {
     inner class Formats {
 
         private val compressed by lazy {
-            val buffer = IntBuffer(limits.NUM_COMPRESSED_TEXTURE_FORMATS)
-            glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, buffer)
-            (0 until buffer.cap).map { buffer[it] }.also {
-                buffer.free()
+            IntBuffer(limits.NUM_COMPRESSED_TEXTURE_FORMATS).use { buffer ->
+                glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, buffer)
+                buffer.toList()
             }
         }
 
@@ -1254,6 +1258,7 @@ class Caps(profile: Profile) {
         @JvmField
         val COMPRESSED_RGBA_FXT1_3DFX = has(GL_COMPRESSED_RGBA_FXT1_3DFX)
 
+        /*
         @JvmField
         val PALETTE4_RGB8_OES = has(GL_PALETTE4_RGB8_OES)
         @JvmField
@@ -1274,6 +1279,8 @@ class Caps(profile: Profile) {
         val PALETTE8_RGBA4_OES = has(GL_PALETTE8_RGBA4_OES)
         @JvmField
         val PALETTE8_RGB5_A1_OES = has(GL_PALETTE8_RGB5_A1_OES)
+        */
+
         @JvmField
         val ETC1_RGB8_OES = has(GL_ETC1_RGB8_OES)
 
@@ -1287,4 +1294,23 @@ class Caps(profile: Profile) {
     fun check(majorVersionRequire: Int, minorVersionRequire: Int) = version.check(majorVersionRequire, minorVersionRequire)
 
     enum class Profile(@JvmField val i: Int) { CORE(0x1), COMPATIBILITY(0x2), ES(0x4) }
+
+    fun to(path: String) {
+
+        File(path).printWriter().use {
+            val `-` = "--------------------------------------------------"
+            it.println("\n$`-` version $`-`")
+            version.write(it)
+            it.println("\n$`-` extensions $`-`")
+            extensions.write(it)
+            it.println("\n$`-` debug $`-`")
+            debug.write(it)
+            it.println("\n$`-` limits $`-`")
+            limits.write(it)
+            it.println("\n$`-` values $`-`")
+            values.write(it)
+            it.println("\n$`-` formats $`-`")
+            formats.write(it)
+        }
+    }
 }
