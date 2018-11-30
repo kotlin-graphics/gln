@@ -161,10 +161,10 @@ inline class GlProgram(val i: Int) {
         // --- [ glCreateProgram ] ---
         fun create() = GlProgram(GL20C.glCreateProgram())
 
-        inline fun init(block: ProgramBase.() -> Unit): Int {
+        inline fun init(block: ProgramBase.() -> Unit): GlProgram {
             ProgramBase.name = GL20.glCreateProgram()
             ProgramBase.block()
-            return ProgramBase.name
+            return GlProgram(ProgramBase.name)
         }
 
         fun createFromSource(vertSrc: String, fragSrc: String): GlProgram {
