@@ -8,8 +8,8 @@ import glm_.set
 import gln.buf
 import gln.bufAd
 import gln.buffer.bufferName
-import gln.get
 import gln.glf.VertexLayout
+import kool.get
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30

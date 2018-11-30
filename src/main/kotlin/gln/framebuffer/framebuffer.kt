@@ -3,7 +3,7 @@
 package gln.framebuffer
 
 
-import gln.get
+import kool.get
 import gln.renderbuffer.renderbufferName
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER

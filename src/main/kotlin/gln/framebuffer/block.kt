@@ -5,7 +5,7 @@ package gln.framebuffer
 import glm_.BYTES
 import gln.buf
 import gln.bufAd
-import gln.get
+import kool.get
 import gln.renderbuffer.renderbufferName
 import gln.texture.textureName
 import kool.adr

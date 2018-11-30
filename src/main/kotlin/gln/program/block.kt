@@ -10,7 +10,7 @@ import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import gln.buf
 import gln.bufAd
-import gln.get
+import kool.get
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
