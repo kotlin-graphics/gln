@@ -1,4 +1,4 @@
-package gln.`object`
+package gln.objects
 
 import glm_.bool
 import gln.*

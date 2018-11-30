@@ -3,7 +3,7 @@ package gln
 import glm_.bool
 import glm_.vec2.Vec2
 import glm_.vec4.Vec4
-import gln.`object`.*
+import gln.objects.*
 import kool.Ptr
 import kool.stak
 import org.lwjgl.opengl.*

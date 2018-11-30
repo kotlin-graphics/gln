@@ -1,4 +1,4 @@
-package gln.`object`
+package gln.objects
 
 import gln.QueryTarget
 import kool.Adr

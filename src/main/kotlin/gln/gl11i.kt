@@ -16,7 +16,7 @@ import glm_.vec2.Vec2i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
-import gln.`object`.GlTexture
+import gln.objects.GlTexture
 import kool.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11C

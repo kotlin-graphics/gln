@@ -1,4 +1,4 @@
-package gln.`object`
+package gln.objects
 
 
 import gli_.gl.InternalFormat

@@ -23,12 +23,6 @@ val buf: ByteBuffer = MemoryUtil.memAlloc(256)
 @Deprecated("use kool instead")
 val bufAd = buf.adr
 
-operator fun IntBuffer.get(e: Enum<*>) = get(e.ordinal)
-operator fun IntBuffer.set(e: Enum<*>, value: Int): IntBuffer = put(e.ordinal, value)
-operator fun IntArray.get(e: Enum<*>) = get(e.ordinal)
-operator fun IntArray.set(e: Enum<*>, int: Int) = set(e.ordinal, int)
-inline fun <reified T : Enum<T>> intArrayBig() = IntArray(enumValues<T>().size)
-
 
 inline fun glViewport(size: Vec2i) = GL11.glViewport(0, 0, size.x, size.y)
 inline fun glViewport(width: Int, height: Int) = GL11.glViewport(0, 0, width, height)

@@ -3,7 +3,7 @@
 package gln.program
 
 import glm_.bool
-import gln.`object`.GlShader
+import gln.objects.GlShader
 import gln.ShaderType
 import gln.get
 import org.lwjgl.opengl.*

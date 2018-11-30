@@ -27,9 +27,9 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4s
-import gln.`object`.GLshaders
-import gln.`object`.GlProgram
-import gln.`object`.GlShader
+import gln.objects.GLshaders
+import gln.objects.GlProgram
+import gln.objects.GlShader
 import gln.glf.VertexAttribute
 import kool.*
 import org.lwjgl.opengl.*
