@@ -3,9 +3,9 @@
 package gln.vertexArray
 
 import glm_.L
-import gln.get
 import gln.glf.VertexAttribute
 import gln.glf.VertexLayout
+import kool.get
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
 import java.nio.IntBuffer
