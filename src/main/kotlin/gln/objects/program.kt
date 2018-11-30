@@ -3,6 +3,7 @@ package gln.objects
 import glm_.bool
 import gln.*
 import gln.program.ProgramBase
+import gln.program.ProgramUse
 import kool.adr
 import kool.stak
 import org.lwjgl.opengl.*
@@ -42,13 +43,9 @@ inline class GlProgram(val i: Int) {
 
     fun use() = GL20C.glUseProgram(i)
 
-    inline fun withProgram(program: Int, block: ProgramBase.() -> Unit) {
-        ProgramBase.name = program
-        ProgramBase.block()
-    }
-    fun <R> use(block: ProgramBase.() -> R): R {
-        ProgramBase.name = i
-        return ProgramBase.block().also { ProgramBase.name = 0 }
+    fun <R> use(block: ProgramUse.() -> R): R {
+        ProgramUse.name = i
+        return ProgramUse.block().also { ProgramUse.name = 0 }
     }
 
     // --- [ glValidateProgram ] ---
