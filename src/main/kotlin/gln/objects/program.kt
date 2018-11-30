@@ -140,11 +140,21 @@ inline class GlProgram(val i: Int) {
 
     // --- [ glBindAttribLocation ] ---
 
-    fun bindAttribLocation(index: Int, name: String) = stak { GL20C.nglBindAttribLocation(i, index, it.ASCII(name).adr) }
+    fun bindAttribLocation(index: Int, name: String) {
+        val stack = stackGet()
+        val ptr = stack.pointer
+        GL20C.nglBindAttribLocation(i, index, stack.ASCII(name).adr)
+        stack.pointer = ptr
+    }
 
     // --- [ glBindFragDataLocation ] ---
 
-    fun bindFragDataLocation(colorNumber: Int, name: String) = stak { GL20C.nglBindAttribLocation(i, colorNumber, it.ASCII(name).adr) }
+    fun bindFragDataLocation(index: Int, name: String) {
+        val stack = stackGet()
+        val ptr = stack.pointer
+        GL20C.nglBindAttribLocation(i, index, stack.ASCII(name).adr)
+        stack.pointer = ptr
+    }
 
     // --- [ glGetActiveAttrib ] ---
 
