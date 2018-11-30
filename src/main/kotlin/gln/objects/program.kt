@@ -2,6 +2,7 @@ package gln.objects
 
 import glm_.bool
 import gln.*
+import gln.program.ProgramBase
 import kool.adr
 import kool.stak
 import org.lwjgl.opengl.*
@@ -40,9 +41,14 @@ inline class GlProgram(val i: Int) {
     // --- [ glUseProgram ] ---
 
     fun use() = GL20C.glUseProgram(i)
-    fun <R> use(block: (GlProgram) -> R): R {
-        GL20C.glUseProgram(i)
-        return block(this).also { GL20C.glUseProgram(0) }
+
+    inline fun withProgram(program: Int, block: ProgramBase.() -> Unit) {
+        ProgramBase.name = program
+        ProgramBase.block()
+    }
+    fun <R> use(block: ProgramBase.() -> R): R {
+        ProgramBase.name = i
+        return ProgramBase.block().also { ProgramBase.name = 0 }
     }
 
     // --- [ glValidateProgram ] ---
@@ -140,8 +146,6 @@ inline class GlProgram(val i: Int) {
 
     fun bindFragDataLocation(colorNumber: Int, name: String) = stak { GL20C.nglBindAttribLocation(i, colorNumber, it.ASCII(name).adr) }
 
-    // ***
-
     // --- [ glGetActiveAttrib ] ---
 
     fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl20.getActiveAttrib(this, index)
@@ -149,6 +153,12 @@ inline class GlProgram(val i: Int) {
     companion object {
         // --- [ glCreateProgram ] ---
         fun create() = GlProgram(GL20C.glCreateProgram())
+
+        inline fun init(block: ProgramBase.() -> Unit): Int {
+            ProgramBase.name = GL20.glCreateProgram()
+            ProgramBase.block()
+            return ProgramBase.name
+        }
 
         fun createFromSource(vertSrc: String, fragSrc: String): GlProgram {
 
