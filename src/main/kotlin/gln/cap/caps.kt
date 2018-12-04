@@ -1295,7 +1295,7 @@ class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean 
 
     enum class Profile(@JvmField val i: Int) { CORE(0x1), COMPATIBILITY(0x2), ES(0x4) }
 
-    fun to(path: String) {
+    fun writeTo(path: String) {
 
         File(path).printWriter().use {
             val `-` = "--------------------------------------------------"
