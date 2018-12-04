@@ -4,12 +4,13 @@ package gln.vertexArray
 
 
 import glm_.L
-import glm_.set
+import kool.get
 import gln.buf
 import gln.bufAd
 import gln.buffer.bufferName
 import gln.glf.VertexLayout
 import kool.get
+import kool.set
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30

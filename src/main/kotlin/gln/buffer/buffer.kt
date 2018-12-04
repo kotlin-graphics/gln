@@ -5,13 +5,13 @@ package gln.buffer
 import glm_.BYTES
 import glm_.L
 import glm_.mat4x4.Mat4
-import glm_.size
 import gln.buf
 import gln.bufAd
 import gln.buffer.BufferTarget.BufferTarget2
 import kool.get
 import kool.adr
 import kool.free
+import kool.rem
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL20
@@ -164,7 +164,7 @@ inline fun glBufferSubData(target: BufferTarget, mat: Mat4) {
 inline fun glBufferData(target: BufferTarget, data: FloatArray, usage: Usage) {
     val buffer = MemoryUtil.memAlloc(data.size * Float.BYTES)
     for (i in data.indices) buffer.putFloat(i * Float.BYTES, data[i])
-    GL15.nglBufferData(target.i, buffer.size.L, buffer.adr, usage.i)
+    GL15.nglBufferData(target.i, buffer.rem.L, buffer.adr, usage.i)
     buffer.free()
 }
 

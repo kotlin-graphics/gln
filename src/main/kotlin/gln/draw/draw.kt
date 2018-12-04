@@ -3,7 +3,6 @@
 package gln.draw
 
 import glm_.BYTES
-import glm_.size
 import kool.rem
 import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL11.*
@@ -45,8 +44,8 @@ inline fun glDrawArraysIndirect(indirect: ByteBuffer) = GL40.glDrawArraysIndirec
 inline fun glDrawArraysInstancedBaseInstance(count: Int, primCount: Int, baseInstance: Int) = glDrawArraysInstancedBaseInstance(GL11.GL_TRIANGLES, count, primCount, baseInstance)
 inline fun glDrawArraysInstancedBaseInstance(mode: Int, count: Int, primCount: Int, baseInstance: Int) = GL42.glDrawArraysInstancedBaseInstance(mode, 0, count, primCount, baseInstance)
 // TODO check primcount, also stride: Int = 0
-inline fun glMultiDrawArraysIndirect(indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.size / DrawArraysIndirectCommand_SIZE, 0)
-inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, indirect.size / DrawArraysIndirectCommand_SIZE, 0)
+inline fun glMultiDrawArraysIndirect(indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.rem / DrawArraysIndirectCommand_SIZE, 0)
+inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: ByteBuffer) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, indirect.rem / DrawArraysIndirectCommand_SIZE, 0)
 inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: ByteBuffer, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, primCount, 0)
 inline fun glMultiDrawArraysIndirect(indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(GL11.GL_TRIANGLES, indirect, indirect.rem / DrawArraysIndirectCommand_LENGTH, 0)
 inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntBuffer) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, indirect.rem / DrawArraysIndirectCommand_LENGTH, 0)
