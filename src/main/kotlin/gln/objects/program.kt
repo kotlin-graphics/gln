@@ -1,8 +1,11 @@
-package gln.`object`
+package gln.objects
 
 import glm_.bool
 import gln.*
+import gln.program.ProgramBase
+import gln.program.ProgramUse
 import kool.adr
+import kool.stak
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryStack.stackGet
 import java.lang.Exception
@@ -39,9 +42,10 @@ inline class GlProgram(val i: Int) {
     // --- [ glUseProgram ] ---
 
     fun use() = GL20C.glUseProgram(i)
-    fun <R> use(block: (GlProgram) -> R): R {
-        GL20C.glUseProgram(i)
-        return block(this).also { GL20C.glUseProgram(0) }
+
+    fun <R> use(block: ProgramUse.() -> R): R {
+        ProgramUse.name = i
+        return ProgramUse.block().also { ProgramUse.name = 0 }
     }
 
     // --- [ glValidateProgram ] ---
@@ -140,6 +144,15 @@ inline class GlProgram(val i: Int) {
         stack.pointer = ptr
     }
 
+    // --- [ glBindFragDataLocation ] ---
+
+    fun bindFragDataLocation(index: Int, name: String) {
+        val stack = stackGet()
+        val ptr = stack.pointer
+        GL20C.nglBindAttribLocation(i, index, stack.ASCII(name).adr)
+        stack.pointer = ptr
+    }
+
     // --- [ glGetActiveAttrib ] ---
 
     fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl20.getActiveAttrib(this, index)
@@ -148,56 +161,62 @@ inline class GlProgram(val i: Int) {
         // --- [ glCreateProgram ] ---
         fun create() = GlProgram(GL20C.glCreateProgram())
 
-	    fun createFromSource(vertSrc: String, fragSrc: String) : GlProgram {
+        inline fun init(block: ProgramBase.() -> Unit): GlProgram {
+            ProgramBase.name = GL20.glCreateProgram()
+            ProgramBase.block()
+            return GlProgram(ProgramBase.name)
+        }
 
-		    val program = GlProgram.create()
+        fun createFromSource(vertSrc: String, fragSrc: String): GlProgram {
 
-		    val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
-		    val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
+            val program = GlProgram.create()
 
-		    program += v
-		    program += f
+            val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
+            val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
 
-		    program.link()
+            program += v
+            program += f
 
-
-		    program -= v
-		    program -= f
-		    v.delete()
-		    f.delete()
-
-		    if (!program.linkStatus) throw Exception("Linker failure: ${program.infoLog}")
-
-		    return program
-	    }
-
-	    fun createFromSource(vertSrc: String, geomSrc: String, fragSrc: String): GlProgram {
-
-		    val program = GlProgram.create()
-
-		    val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
-		    val g = GlShader.createFromSource(geomSrc, ShaderType(GL32.GL_GEOMETRY_SHADER))
-		    val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
-
-		    program += v
-		    program += g
-		    program += f
-
-		    program.link()
+            program.link()
 
 
-		    program -= v
-		    program -= g
-		    program -= f
-		    v.delete()
-		    g.delete()
-		    f.delete()
+            program -= v
+            program -= f
+            v.delete()
+            f.delete()
 
-		    if (!program.linkStatus) throw Exception("Linker failure: ${program.infoLog}")
+            if (!program.linkStatus) throw Exception("Linker failure: ${program.infoLog}")
 
-		    return program
-	    }
+            return program
+        }
 
-	    // TODO createFromPath
+        fun createFromSource(vertSrc: String, geomSrc: String, fragSrc: String): GlProgram {
+
+            val program = GlProgram.create()
+
+            val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
+            val g = GlShader.createFromSource(geomSrc, ShaderType(GL32.GL_GEOMETRY_SHADER))
+            val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
+
+            program += v
+            program += g
+            program += f
+
+            program.link()
+
+
+            program -= v
+            program -= g
+            program -= f
+            v.delete()
+            g.delete()
+            f.delete()
+
+            if (!program.linkStatus) throw Exception("Linker failure: ${program.infoLog}")
+
+            return program
+        }
+
+        // TODO createFromPath
     }
 }

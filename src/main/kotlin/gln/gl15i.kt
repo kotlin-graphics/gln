@@ -10,10 +10,10 @@ import kool.adr
 import kool.IntBuffer
 import kool.rem
 import kool.remSize
-import gln.`object`.GlBuffer
-import gln.`object`.GLbuffers
-import gln.`object`.GlQueries
-import gln.`object`.GlQuery
+import gln.objects.GlBuffer
+import gln.objects.GLbuffers
+import gln.objects.GlQueries
+import gln.objects.GlQuery
 import kool.stak
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.system.APIUtil

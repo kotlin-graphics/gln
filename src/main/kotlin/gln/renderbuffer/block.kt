@@ -6,8 +6,8 @@ import glm_.BYTES
 import glm_.vec2.Vec2i
 import gln.buf
 import gln.bufAd
-import gln.get
 import kool.adr
+import kool.get
 import kool.pos
 import kool.rem
 import org.lwjgl.opengl.GL30

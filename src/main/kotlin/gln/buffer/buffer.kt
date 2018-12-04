@@ -9,7 +9,7 @@ import glm_.size
 import gln.buf
 import gln.bufAd
 import gln.buffer.BufferTarget.BufferTarget2
-import gln.get
+import kool.get
 import kool.adr
 import kool.free
 import org.lwjgl.opengl.GL

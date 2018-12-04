@@ -9,8 +9,8 @@ import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import gln.buf
 import gln.bufAd
-import gln.get
 import kool.adr
+import kool.get
 import kool.pos
 import kool.rem
 import org.lwjgl.opengl.*

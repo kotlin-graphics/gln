@@ -10,7 +10,7 @@ import glm_.vec4.Vec4
 import gln.buf
 import gln.bufAd
 import gln.buffer.BufferTarget.BufferTarget2
-import gln.get
+import kool.get
 import kool.adr
 import kool.pos
 import kool.rem

@@ -3,7 +3,7 @@
 package gln.renderbuffer
 
 import glm_.vec2.Vec2i
-import gln.get
+import kool.get
 import org.lwjgl.opengl.GL30
 import java.nio.IntBuffer
 import kotlin.properties.Delegates

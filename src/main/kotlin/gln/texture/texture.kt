@@ -10,8 +10,8 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
 import gln.buf
 import gln.bufAd
-import gln.get
 import kool.adr
+import kool.get
 import kool.pos
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.GL_TEXTURE_1D
