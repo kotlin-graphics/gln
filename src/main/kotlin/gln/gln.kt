@@ -83,7 +83,7 @@ fun checkError(location: String = "", throws: Boolean = true): Boolean {
     }
 }
 
-val VERSION = "0.4.6"
+val VERSION = "0.4.7"
 
 fun main(args: Array<String>) {
 
