@@ -10,9 +10,19 @@ import org.lwjgl.opengl.*
     https://opensource.apple.com/source/X11server/X11server-85/libGL/AppleSGLX-57/specs/enum.spec
  */
 
-inline class AttribMask(val i: Int)
+inline class AttribMask(val i: Int) {
 
-inline class ClearBufferMask(val i: Int)
+    infix fun and (other: AttribMask): AttribMask = AttribMask(i and other.i)
+    infix fun or (other: AttribMask): AttribMask = AttribMask(i or other.i)
+    fun inv() = AttribMask(i.inv())
+}
+
+inline class ClearBufferMask(val i: Int) {
+
+    infix fun and (other: ClearBufferMask): ClearBufferMask = ClearBufferMask(i and other.i)
+    infix fun or (other: ClearBufferMask): ClearBufferMask = ClearBufferMask(i or other.i)
+    fun inv() = ClearBufferMask(i.inv())
+}
 
 //###############################################################################
 //
