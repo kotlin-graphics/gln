@@ -33,6 +33,13 @@ object glf {
                 VertexAttribute(semantic.attr.POSITION, Vec4.length, VertexAttribType(GL_FLOAT), false, stride, 0))
     }
 
+    object pos3_col3 : VertexLayout {
+        val stride = Vec3.size * 2
+        override var attributes = arrayOf(
+                VertexAttribute(semantic.attr.POSITION, Vec3.length, VertexAttribType(GL_FLOAT), false, stride, 0),
+                VertexAttribute(semantic.attr.COLOR, Vec3.length, VertexAttribType(GL_FLOAT), false, stride, Vec3.size.L))
+    }
+
     object pos3_col4 : VertexLayout {
         val stride = Vec3.size + Vec4.size
         override var attributes = arrayOf(
