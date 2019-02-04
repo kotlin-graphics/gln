@@ -139,9 +139,11 @@ inline class GlShader(val i: Int) {
             return File(url.toURI()).readText() + "\n"
         }
 
-        private fun parseInclude(root: String, shader: String): String {
-            if (shader.startsWith('"') && shader.endsWith('"'))
-                shader.substring(1, shader.length - 1)
+        private fun parseInclude(root: String, shader_: String): String {
+            val shader = when {
+                shader_.startsWith('"') && shader_.endsWith('"') -> shader_.substring(1, shader_.length - 1)
+                else -> shader_
+            }
             val url = ClassLoader.getSystemResource("$root/$shader")
             return File(url.toURI()).readText() + "\n"
         }
