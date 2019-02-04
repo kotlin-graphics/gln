@@ -87,11 +87,10 @@ inline class GlShader(val i: Int) {
 
             var source = ""
             lines.forEach {
-                source +=
-                        if (it.startsWith("#include "))
-                            parseInclude(path.substringBeforeLast('/'), it.substring("#include ".length).trim())
-                        else it
-                source += '\n'
+                source += when {
+                    it.startsWith("#include ") -> parseInclude(path.substringBeforeLast('/'), it.substring("#include ".length).trim())
+                    else -> it
+                } + '\n'
             }
 
             try {
