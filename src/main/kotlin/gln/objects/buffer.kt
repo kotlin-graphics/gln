@@ -59,9 +59,9 @@ object GlBuffer {
         get() = gl15.getBufferPointer(target)
 
 
-    fun data(size: Int, usage: Usage) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
+    fun data(size: Int, usage: Usage = GL_STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
-    fun data(data: Buffer, usage: Usage) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
+    fun data(data: Buffer, usage: Usage = GL_STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
 
     fun subData(offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
     infix fun subData(data: Buffer) = GL15C.nglBufferSubData(target.i, 0, data.remSize.L, data.adr)
