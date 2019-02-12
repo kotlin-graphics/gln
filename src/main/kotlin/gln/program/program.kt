@@ -8,6 +8,7 @@ import gln.GL_GEOMETRY_SHADER
 import gln.GL_VERTEX_SHADER
 import gln.objects.GlShader
 import gln.ShaderType
+import gln.objects.GlProgram
 import kool.get
 import org.lwjgl.opengl.*
 import kotlin.properties.Delegates
@@ -30,6 +31,7 @@ inline fun glDeletePrograms(vararg programs: GlslProgram) = programs.forEach { G
 
 typealias ShaderSource = String
 
+/** Mainly for Java */
 open class GlslProgram(
         @JvmField
         var name: Int) {
@@ -38,7 +40,7 @@ open class GlslProgram(
 
     constructor() : this(GL20.glCreateProgram())
 
-    constructor(vert: GlShader, frag: GlShader) : this() {
+    constructor(vert: GlShader, frag: GlShader, block: GlProgram) : this() {
 
         plusAssign(vert)
         plusAssign(frag)

@@ -5,7 +5,6 @@ import gln.*
 import gln.program.ProgramBase
 import gln.program.ProgramUse
 import kool.adr
-import kool.stak
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryStack.stackGet
 import java.lang.Exception
@@ -43,9 +42,15 @@ inline class GlProgram(val i: Int) {
 
     fun use() = GL20C.glUseProgram(i)
 
-    fun <R> use(block: ProgramUse.() -> R): R {
-        ProgramUse.name = i
-        return ProgramUse.block().also { ProgramUse.name = 0 }
+    // JVM custom
+
+    fun unuse() = GL20C.glUseProgram(0)
+
+    inline fun use(block: ProgramUse.() -> Unit) {
+        ProgramUse.program = this
+        use()
+        ProgramUse.block()
+        unuse()
     }
 
     // --- [ glValidateProgram ] ---
@@ -135,6 +140,9 @@ inline class GlProgram(val i: Int) {
 
     infix fun getUniformI(location: Int): Int = gl20.getUniformInt(this, location)
 
+    // --- [ glGetAttribLocation ] ---
+    infix fun getAttribLocation(name: String): Int = GL20.glGetAttribLocation(i, name)
+
     // --- [ glBindAttribLocation ] ---
 
     fun bindAttribLocation(index: Int, name: String) {
@@ -143,6 +151,12 @@ inline class GlProgram(val i: Int) {
         GL20C.nglBindAttribLocation(i, index, stack.ASCII(name).adr)
         stack.pointer = ptr
     }
+
+    // --- [ glGetUniformBlockIndex ] ---
+    fun getUniformBlockIndex(uniformBlockName: CharSequence) = GL31C.glGetUniformBlockIndex(i, uniformBlockName)
+
+    // --- [ glUniformBlockBinding ] ---
+    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Int) = GL31C.glUniformBlockBinding(i, uniformBlockIndex, uniformBlockBinding)
 
     // --- [ glBindFragDataLocation ] ---
 
@@ -158,13 +172,40 @@ inline class GlProgram(val i: Int) {
     fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl20.getActiveAttrib(this, index)
 
     companion object {
+
+        val NULL = GlProgram(0)
+
         // --- [ glCreateProgram ] ---
         fun create() = GlProgram(GL20C.glCreateProgram())
 
         inline fun init(block: ProgramBase.() -> Unit): GlProgram {
-            ProgramBase.name = GL20.glCreateProgram()
+            ProgramBase.program = create()
             ProgramBase.block()
-            return GlProgram(ProgramBase.name)
+            return ProgramBase.program
+        }
+
+        inline fun init(vert: GlShader, frag: GlShader, block: ProgramBase.() -> Unit): GlProgram {
+            ProgramBase.apply {
+                program = create().apply {
+                    plusAssign(vert)
+                    plusAssign(frag)
+                }
+
+                block()
+
+                program.apply {
+                    link()
+
+                    if (!linkStatus)
+                        throw Exception("Linker failure: $infoLog")
+
+                    minusAssign(vert)
+                    minusAssign(frag)
+                    vert.delete()
+                    frag.delete()
+                }
+            }
+            return ProgramBase.program
         }
 
         fun createFromSource(vertSrc: String, fragSrc: String): GlProgram {

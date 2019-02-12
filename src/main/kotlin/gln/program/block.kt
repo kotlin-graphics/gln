@@ -10,63 +10,61 @@ import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import gln.buf
 import gln.bufAd
-import kool.get
+import gln.objects.GlProgram
+import gln.objects.GlShader
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
 
 
-inline fun initProgram(program: Enum<*>, block: ProgramBase.() -> Unit) = programName.set(program.ordinal, initProgram(block))
-inline fun initProgram(program: IntArray, block: ProgramBase.() -> Unit) = program.set(0, initProgram(block))
-inline fun initProgram(block: ProgramBase.() -> Unit): Int {
-    ProgramBase.name = GL20.glCreateProgram()
-    ProgramBase.block()
-    return ProgramBase.name
-}
-
-inline fun initPrograms(block: Programs.() -> Unit) = initPrograms(programName, block)
-inline fun initPrograms(programs: IntArray, block: Programs.() -> Unit) {
-    glCreatePrograms(programs)
-    Programs.names = programs
-    Programs.block()
-}
-
-inline fun usingProgram(program: GlslProgram, block: ProgramUse.() -> Unit) = usingProgram(program.name, block)
-inline fun usingProgram(program: Enum<*>, block: ProgramUse.() -> Unit) = usingProgram(programName[program], block)
-inline fun usingProgram(program: IntArray, block: ProgramUse.() -> Unit) = usingProgram(program[0], block)
-inline fun usingProgram(program: Int, block: ProgramUse.() -> Unit) {
-    ProgramUse.name = program //glUse
-    ProgramUse.block()
-    glUseProgram()
-}
-
-inline fun withProgram(program: GlslProgram, block: ProgramBase.() -> Unit) = withProgram(program.name, block)
-inline fun withProgram(program: Enum<*>, block: ProgramBase.() -> Unit) = withProgram(programName[program], block)
-inline fun withProgram(program: IntArray, block: ProgramBase.() -> Unit) = withProgram(program[0], block)
-inline fun withProgram(program: Int, block: ProgramBase.() -> Unit) {
-    ProgramBase.name = program
-    ProgramBase.block()
-}
+//inline fun initProgram(program: Enum<*>, block: ProgramBase.() -> Unit) = programName.set(program.ordinal, initProgram(block))
+//inline fun initProgram(program: IntArray, block: ProgramBase.() -> Unit) = program.set(0, initProgram(block))
+//inline fun initProgram(block: ProgramBase.() -> Unit): GlProgram {
+//    ProgramBase.program = GlProgram.create()
+//    ProgramBase.block()
+//    return ProgramBase.program
+//}
+//
+//inline fun initPrograms(block: Programs.() -> Unit) = initPrograms(programName, block)
+//inline fun initPrograms(programs: IntArray, block: Programs.() -> Unit) {
+//    glCreatePrograms(programs)
+//    Programs.names = programs
+//    Programs.block()
+//}
+//
+//inline fun usingProgram(program: GlslProgram, block: ProgramUse.() -> Unit) = usingProgram(program.name, block)
+//inline fun usingProgram(program: Enum<*>, block: ProgramUse.() -> Unit) = usingProgram(programName[program], block)
+//inline fun usingProgram(program: IntArray, block: ProgramUse.() -> Unit) = usingProgram(program[0], block)
+//inline fun usingProgram(program: Int, block: ProgramUse.() -> Unit) {
+//    ProgramUse.name = program //glUse
+//    ProgramUse.block()
+//    glUseProgram()
+//}
+//
+//inline fun withProgram(program: GlslProgram, block: ProgramBase.() -> Unit) = withProgram(program.name, block)
+//inline fun withProgram(program: Enum<*>, block: ProgramBase.() -> Unit) = withProgram(programName[program], block)
+//inline fun withProgram(program: IntArray, block: ProgramBase.() -> Unit) = withProgram(program[0], block)
+//inline fun withProgram(program: Int, block: ProgramBase.() -> Unit) {
+//    ProgramBase.program = program
+//    ProgramBase.block()
+//}
 
 object ProgramUse {
 
-    var name = 0
-        set(value) {
-            GL20.glUseProgram(value)
-            field = value
-        }
+    var program = GlProgram.NULL
 
-    val String.uniform get() = GL20.glGetUniformLocation(name, this)
+    val String.uniform: Int
+        get() = program.getUniformLocation(this)
 
-    var String.blockIndex
-        get() = GL31.glGetUniformBlockIndex(name, this)
-        set(value) = GL31.glUniformBlockBinding(name, blockIndex, value)
+    var String.blockIndex: Int
+        get() = program.getUniformBlockIndex(this)
+        set(value) = program.uniformBlockBinding(blockIndex, value)
 
-    var String.fragData
-        get() = -1
-        set(value) = GL30.glBindFragDataLocation(ProgramBase.name, value, this)
+    var String.fragData: Int
+        get() = throw Exception("invalid")
+        set(value) = program.bindFragDataLocation(value, this)
 
-    var String.unit
+    var String.unit: Int
         get() = uniform
         set(value) = GL20.glUniform1i(uniform, value)
 
@@ -75,7 +73,7 @@ object ProgramUse {
         set(value) = GL20.glUniform1i(uniform, value.ordinal)
 
 
-    fun link() = GL20.glLinkProgram(name)
+    fun link() = program.link()
 
     infix fun Int.to(location: Int) = GL20.glUniform1i(location, this)
     infix fun Float.to(location: Int) = GL20.glUniform1f(location, this)
@@ -146,52 +144,56 @@ object ProgramUse {
 
 object ProgramBase {
 
-    var name = 0
+    var program = GlProgram.NULL
 
-    val String.uniform get() = GL20.glGetUniformLocation(name, this)
+    val String.uniform: Int
+        get() = program.getUniformLocation(this)
 
-    var String.attrib
-        get() = GL20.glGetAttribLocation(name, this)
-        set(value) = GL20.glBindAttribLocation(name, value, this)
+    var String.attrib: Int
+        get() = program.getAttribLocation(this)
+        set(value) = program.bindAttribLocation(value, this)
 
-    var String.blockIndex
-        get() = GL31.glGetUniformBlockIndex(name, this)
-        set(value) = GL31.glUniformBlockBinding(name, blockIndex, value)
+    var String.blockIndex: Int
+        get() = program.getUniformBlockIndex(this)
+        set(value) = program.uniformBlockBinding(blockIndex, value)
 
-    var String.fragData
-        get() = -1
-        set(value) = GL30.glBindFragDataLocation(name, value, this)
+    var String.fragData: Int
+        get() = throw Exception("Invalid")
+        set(value) = program.bindFragDataLocation(value, this)
 
     // only get, no program use
     val String.unit get() = uniform
 
-    inline fun use(block: ProgramUse.() -> Unit) {
-        ProgramUse.name = name
-        ProgramUse.block()
-        GL20.glUseProgram(0)
+    inline fun use(crossinline block: ProgramUse.() -> Unit) {
+        ProgramUse.program = program
+        program.use {
+            ProgramUse.block()
+        }
     }
 
-    inline fun link() = GL20.glLinkProgram(name)
+    inline fun link() = program.link()
 
-    inline operator fun plusAssign(shader: Int) = GL20.glAttachShader(name, shader)
-    inline infix fun attach(shader: Int) = GL20.glAttachShader(name, shader)
-    inline fun attach(vararg shader: Int) = shader.forEach { GL20.glAttachShader(name, it) }
+    inline operator fun plusAssign(shader: Int) = program.attach(GlShader(shader))
+    inline operator fun plusAssign(shader: GlShader) = program.attach(shader)
+    inline infix fun attach(shader: Int) = program.attach(GlShader(shader))
+    inline infix fun attach(shader: GlShader) = program.attach(shader)
+    inline fun attach(vararg shader: Int) = shader.forEach { program += GlShader(it) }
 }
 
-object Programs {
-
-    lateinit var names: IntArray
-
-    inline fun with(index: Enum<*>, block: ProgramBase.() -> Unit) = with(index.ordinal, block)
-    inline fun with(index: Int, block: ProgramBase.() -> Unit) {
-        ProgramBase.name = names[index]
-        ProgramBase.block()
-    }
-
-    inline fun using(index: Enum<*>, block: ProgramUse.() -> Unit) = using(index.ordinal, block)
-    inline fun using(index: Int, block: ProgramUse.() -> Unit) {
-        ProgramUse.name = names[index]  // bind
-        ProgramUse.block()
-        GL20.glUseProgram(0)
-    }
-}
+//object Programs {
+//
+//    lateinit var names: IntArray
+//
+//    inline fun with(index: Enum<*>, block: ProgramBase.() -> Unit) = with(index.ordinal, block)
+//    inline fun with(index: Int, block: ProgramBase.() -> Unit) {
+//        ProgramBase.program = names[index]
+//        ProgramBase.block()
+//    }
+//
+//    inline fun using(index: Enum<*>, block: ProgramUse.() -> Unit) = using(index.ordinal, block)
+//    inline fun using(index: Int, block: ProgramUse.() -> Unit) {
+//        ProgramUse.program = names[index]  // bind
+//        ProgramUse.block()
+//        GL20.glUseProgram(0)
+//    }
+//}
