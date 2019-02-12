@@ -18,7 +18,6 @@ object GlBuffer {
     var i = 0
     var target = BufferTarget(GL15.GL_ARRAY_BUFFER)
 
-
     // --- [ glIsBuffer ] ---
 
     val valid: Boolean
