@@ -5,6 +5,7 @@ package gln.buffer
 import glm_.BYTES
 import glm_.L
 import glm_.mat4x4.Mat4
+import gln.Usage
 import gln.buf
 import gln.bufAd
 import gln.buffer.BufferTarget.BufferTarget2
@@ -38,19 +39,6 @@ var bufferName: IntBuffer by Delegates.notNull()
 inline fun glGenBuffer(buffer: KMutableProperty0<Int>) = buffer.set(GL15.glGenBuffers())
 inline fun glGenBuffer() = GL15.glGenBuffers()
 inline fun glDeleteBuffer(buffer: Int) = GL15.glDeleteBuffers(buffer)
-
-enum class Usage(val i: Int) {
-    StreamDraw(GL_STREAM_DRAW),
-    StreamRead(GL_STREAM_READ),
-    StreamCopy(GL_STREAM_COPY),
-    StaticDraw(GL_STATIC_DRAW),
-    StaticRead(GL_STATIC_READ),
-    StaticCopy(GL_STATIC_COPY),
-    DynamicDraw(GL_DYNAMIC_DRAW),
-    DynamicRead(GL_DYNAMIC_READ),
-    DynamicCopy(GL_DYNAMIC_COPY)
-}
-
 
 sealed class BufferTarget(val i: Int) {
 

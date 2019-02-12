@@ -6,11 +6,14 @@ import glm_.BYTES
 import glm_.L
 import glm_.mat4x4.Mat4
 import glm_.vec4.Vec4
+import gln.GL_STATIC_DRAW
+import gln.Usage
 import gln.buf
 import gln.bufAd
 import gln.buffer.BufferTarget.BufferTarget2
 import kool.*
 import org.lwjgl.opengl.GL15
+import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL31
 import org.lwjgl.system.MemoryUtil.NULL
@@ -93,25 +96,25 @@ object Buffer {
             field = value
         }
 
-    inline fun data(data: ShortArray, usage: Usage) = GL15.glBufferData(target.i, data, usage.i)
-    inline fun data(data: IntArray, usage: Usage) = GL15.glBufferData(target.i, data, usage.i)
-    inline fun data(data: LongArray, usage: Usage) = GL15.glBufferData(target.i, data, usage.i)
-    inline fun data(data: FloatArray, usage: Usage) = GL15.glBufferData(target.i, data, usage.i)
-    inline fun data(data: DoubleArray, usage: Usage) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: ShortArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: IntArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: LongArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: FloatArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: DoubleArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
 
-    inline fun data(data: ByteBuffer, usage: Usage) = GL15.nglBufferData(target.i, data.remaining().L, data.adr + data.pos, usage.i)
-    inline fun data(data: ShortBuffer, usage: Usage) = GL15.nglBufferData(target.i, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES, usage.i)
-    inline fun data(data: IntBuffer, usage: Usage) = GL15.nglBufferData(target.i, data.remaining().L * Int.BYTES, data.adr + data.pos * Int.BYTES, usage.i)
-    inline fun data(data: LongBuffer, usage: Usage) = GL15.nglBufferData(target.i, data.remaining().L * Long.BYTES, data.adr + data.pos * Long.BYTES, usage.i)
-    inline fun data(data: FloatBuffer, usage: Usage) = GL15.nglBufferData(target.i, data.remaining().L * Float.BYTES, data.adr + data.pos * Float.BYTES, usage.i)
-    inline fun data(data: DoubleBuffer, usage: Usage) = GL15.nglBufferData(target.i, data.remaining().L * Double.BYTES, data.adr + data.pos * Double.BYTES, usage.i)
+    inline fun data(data: ByteBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L, data.adr + data.pos, usage.i)
+    inline fun data(data: ShortBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES, usage.i)
+    inline fun data(data: IntBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Int.BYTES, data.adr + data.pos * Int.BYTES, usage.i)
+    inline fun data(data: LongBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Long.BYTES, data.adr + data.pos * Long.BYTES, usage.i)
+    inline fun data(data: FloatBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Float.BYTES, data.adr + data.pos * Float.BYTES, usage.i)
+    inline fun data(data: DoubleBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Double.BYTES, data.adr + data.pos * Double.BYTES, usage.i)
 
-    inline fun data(size: Int, data: Vec4, usage: Usage) {
+    inline fun data(size: Int, data: Vec4, usage: Usage = GL_STATIC_DRAW) {
         buf.putFloat(0, data.x).putFloat(Float.BYTES, data.y).putFloat(Float.BYTES * 2, data.z).putFloat(Float.BYTES * 3, data.w)
         GL15.nglBufferData(target.i, size.L, bufAd, usage.i)
     }
 
-    inline fun data(size: Int, usage: Usage) = GL15.nglBufferData(target.i, size.L, NULL, usage.i)
+    inline fun data(size: Int, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, size.L, NULL, usage.i)
 
     inline fun subData(offset: Int, data: ByteBuffer) = GL15.nglBufferSubData(target.i, offset.L, data.remaining().L, data.adr + data.pos)
     inline fun subData(offset: Int, data: ShortBuffer) = GL15.nglBufferSubData(target.i, offset.L, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES)
@@ -157,44 +160,26 @@ object Buffer {
     inline fun unmap() = GL15.glUnmapBuffer(target.i)
 }
 
+inline fun glGenBuffers(bufferName: IntBuffer, block: Buffers.() -> Unit) {
+    GL15C.glGenBuffers(bufferName)
+    Buffers.buffers = bufferName
+    Buffers.block()
+}
+
 object Buffers {
 
     lateinit var buffers: IntBuffer
     var target = 0
 
-    inline fun at(bufferIndex: Enum<*>, block: Buffer.() -> Unit) = at(bufferIndex.ordinal, block)
-    inline fun at(bufferIndex: Int, block: Buffer.() -> Unit) {
-        Buffer.target = BufferTarget of target
-        Buffer.name = buffers[bufferIndex] // bind
+    inline fun bindArray(enum: Enum<*>, block: Buffer.() -> Unit) = bind(BufferTarget.Array, enum, block)
+    inline fun bindElement(enum: Enum<*>, block: Buffer.() -> Unit) = bind(BufferTarget.ElementArray, enum, block)
+    inline fun bindUniform(enum: Enum<*>, block: Buffer.() -> Unit) = bind(BufferTarget2.Uniform, enum, block)
+
+    inline fun bind(target: BufferTarget, enum: Enum<*>, block: Buffer.() -> Unit) {
+        Buffer.target = target
+        Buffer.name = buffers[enum.ordinal] // bind
         Buffer.block()
-    }
-
-    inline fun withArrayAt(bufferIndex: Enum<*>, block: Buffer.() -> Unit) = withArrayAt(bufferIndex.ordinal, block)
-    inline fun withArrayAt(bufferIndex: Int, block: Buffer.() -> Unit) {
-        Buffer.target = BufferTarget.Array
-        Buffer.name = buffers[bufferIndex] // bind
-        Buffer.block()
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0)
-    }
-
-    //    inline fun withElement(block: Buffer.() -> Unit) = withElementAt(0, block)
-    inline fun withElementAt(bufferIndex: Enum<*>, block: Buffer.() -> Unit) = withElementAt(bufferIndex.ordinal, block)
-
-    inline fun withElementAt(bufferIndex: Int, block: Buffer.() -> Unit) {
-        Buffer.target = BufferTarget.ElementArray
-        Buffer.name = buffers[bufferIndex] // bind
-        Buffer.block()
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0)
-    }
-
-    //    inline fun withUniform(block: Buffer.() -> Unit) = withUniformAt(0, block)
-    inline fun withUniformAt(bufferIndex: Enum<*>, block: Buffer.() -> Unit) = withUniformAt(bufferIndex.ordinal, block)
-
-    inline fun withUniformAt(bufferIndex: Int, block: Buffer.() -> Unit) {
-        Buffer.target = BufferTarget2.Uniform
-        Buffer.name = buffers[bufferIndex] // bind
-        Buffer.block()
-        GL15.glBindBuffer(GL31.GL_UNIFORM_BUFFER, 0)
+        Buffer.name = 0
     }
 }
 
