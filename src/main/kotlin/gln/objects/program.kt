@@ -184,6 +184,10 @@ inline class GlProgram(val i: Int) {
             return ProgramBase.program
         }
 
+        /** for ogl-samples */
+        inline fun initFromPath(vert: String, frag: String, block: ProgramBase.() -> Unit): GlProgram =
+                init(GlShader.createFromPath(vert), GlShader.createFromPath(frag), block)
+
         inline fun init(vert: GlShader, frag: GlShader, block: ProgramBase.() -> Unit): GlProgram {
             ProgramBase.apply {
                 program = create().apply {
