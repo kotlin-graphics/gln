@@ -171,8 +171,8 @@ inline class GlProgram(val i: Int) {
 
             val program = GlProgram.create()
 
-            val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
-            val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
+            val v = GlShader.createFromSource(GL_VERTEX_SHADER, vertSrc)
+            val f = GlShader.createFromSource(GL_FRAGMENT_SHADER, fragSrc)
 
             program += v
             program += f
@@ -194,9 +194,9 @@ inline class GlProgram(val i: Int) {
 
             val program = GlProgram.create()
 
-            val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
-            val g = GlShader.createFromSource(geomSrc, ShaderType(GL32.GL_GEOMETRY_SHADER))
-            val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
+            val v = GlShader.createFromSource(GL_VERTEX_SHADER, vertSrc)
+            val g = GlShader.createFromSource(GL_GEOMETRY_SHADER, geomSrc)
+            val f = GlShader.createFromSource(GL_FRAGMENT_SHADER, fragSrc)
 
             program += v
             program += g

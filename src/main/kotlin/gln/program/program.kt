@@ -3,6 +3,9 @@
 package gln.program
 
 import glm_.bool
+import gln.GL_FRAGMENT_SHADER
+import gln.GL_GEOMETRY_SHADER
+import gln.GL_VERTEX_SHADER
 import gln.objects.GlShader
 import gln.ShaderType
 import kool.get
@@ -29,21 +32,40 @@ typealias ShaderSource = String
 
 open class GlslProgram(
         @JvmField
-        var name: Int = GL20.glCreateProgram()) {
+        var name: Int) {
 
     val uniforms = HashMap<String, Int>()
 
+    constructor() : this(GL20.glCreateProgram())
+
+    constructor(vert: GlShader, frag: GlShader) : this() {
+
+        plusAssign(vert)
+        plusAssign(frag)
+
+        link()
+
+        if (!linkStatus)
+            throw Exception("Linker failure: $infoLog")
+
+        minusAssign(vert)
+        minusAssign(frag)
+        vert.delete()
+        frag.delete()
+    }
+
     constructor(vertSrc: String, fragSrc: String) : this() {
 
-        val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
-        val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
+        val v = GlShader.createFromSource(GL_VERTEX_SHADER, vertSrc)
+        val f = GlShader.createFromSource(GL_FRAGMENT_SHADER, fragSrc)
 
         plusAssign(v)
         plusAssign(f)
 
         link()
 
-        if (!linkStatus) System.err.println("Linker failure: $infoLog")     // TODO change to exception
+        if (!linkStatus)
+            throw Exception("Linker failure: $infoLog")
 
         minusAssign(v)
         minusAssign(f)
@@ -53,9 +75,9 @@ open class GlslProgram(
 
     constructor(vertSrc: String, geomSrc: String, fragSrc: String) : this() {
 
-        val v = GlShader.createFromSource(vertSrc, ShaderType(GL20.GL_VERTEX_SHADER))
-        val g = GlShader.createFromSource(geomSrc, ShaderType(GL32.GL_GEOMETRY_SHADER))
-        val f = GlShader.createFromSource(fragSrc, ShaderType(GL20.GL_FRAGMENT_SHADER))
+        val v = GlShader.createFromSource(GL_VERTEX_SHADER, vertSrc)
+        val g = GlShader.createFromSource(GL_GEOMETRY_SHADER, geomSrc)
+        val f = GlShader.createFromSource(GL_FRAGMENT_SHADER, fragSrc)
 
         plusAssign(v)
         plusAssign(g)
@@ -63,7 +85,8 @@ open class GlslProgram(
 
         link()
 
-        if (!linkStatus) System.err.println("Linker failure: $infoLog")     // TODO change to exception
+        if (!linkStatus)
+            throw Exception("Linker failure: $infoLog")
 
         minusAssign(v)
         minusAssign(g)
@@ -121,21 +144,21 @@ open class GlslProgram(
 
     fun createProgram(shaderList: List<Int>): Int {
 
-        val program = GL20.glCreateProgram()
+        val program = GlslProgram()
 
-        shaderList.forEach { GL20.glAttachShader(program, it) }
+        shaderList.forEach { program += it }
 
-        GL20.glLinkProgram(program)
+        program.link()
 
-        if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
-            System.err.println("Linker failure: ${GL20.glGetProgramInfoLog(program)}")     // TODO change to exception
+        if (!program.linkStatus)
+            throw Exception("Linker failure: ${program.infoLog}")
 
         shaderList.forEach {
-            GL20.glDetachShader(program, it)
+            program -= it
             GL20.glDeleteShader(it)
         }
 
-        return program
+        return program.name
     }
 
     operator fun plusAssign(shader: Int) = GL20.glAttachShader(name, shader)

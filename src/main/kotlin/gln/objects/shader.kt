@@ -61,7 +61,7 @@ inline class GlShader(val i: Int) {
         // --- [ glCreateShader ] ---
         fun create(type: ShaderType) = GlShader(GL20C.glCreateShader(type.i))
 
-        fun createFromSource(sourceText: String, type: ShaderType) = create(type).apply {
+        fun createFromSource(type: ShaderType, sourceText: String) = create(type).apply {
 
             source(sourceText)
             compile()
@@ -70,7 +70,7 @@ inline class GlShader(val i: Int) {
                 throw Exception(infoLog)
         }
 
-        fun createFromSource(sourceText: Array<String>, type: ShaderType) = create(type).apply {
+        fun createFromSource(type: ShaderType, sourceText: Array<String>) = create(type).apply {
 
             source(*sourceText)
             compile()
@@ -94,7 +94,7 @@ inline class GlShader(val i: Int) {
             }
 
             try {
-                return createFromSource(transform?.invoke(source) ?: source, ShaderType(path.type))
+                return createFromSource(ShaderType(path.type), transform?.invoke(source) ?: source)
             } catch (err: Exception) {
                 throw Exception("Compiler failure in ${path.substringAfterLast('/')} shader: ${err.message}")
             }
@@ -130,6 +130,8 @@ inline class GlShader(val i: Int) {
 
             return shader
         }
+
+        // TODO #ifdef ?
 
         private fun parseInclude(context: Class<*>, root: String, shader: String): String {
             if (shader.startsWith('"') && shader.endsWith('"'))
