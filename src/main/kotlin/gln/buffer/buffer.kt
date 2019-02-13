@@ -9,9 +9,9 @@ import gln.Usage
 import gln.buf
 import gln.bufAd
 import gln.buffer.BufferTarget.BufferTarget2
-import kool.get
 import kool.adr
 import kool.free
+import kool.get
 import kool.rem
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL15
