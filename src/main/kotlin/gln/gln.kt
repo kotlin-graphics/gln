@@ -85,11 +85,6 @@ fun checkError(location: String = "", throws: Boolean = true): Boolean {
 
 val VERSION = "0.4.7"
 
-fun main(args: Array<String>) {
-
-
-}
-
 object gl11 : gl11i
 
 object gl15 : gl11i, gl12i, gl13i, gl14i, gl15i

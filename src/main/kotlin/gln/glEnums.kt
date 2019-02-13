@@ -2,7 +2,7 @@ package gln
 
 import org.lwjgl.opengl.*
 
-open class glEnum {
+abstract class glEnum {
 
     val DEPTH_BUFFER_BIT_ = AttribMask(GL11.GL_DEPTH_BUFFER_BIT)
     val STENCIL_BUFFER_BIT_ = AttribMask(GL11.GL_STENCIL_BUFFER_BIT)
@@ -1181,12 +1181,12 @@ val GL_DOUBLE_VEC4_ = AttributeType(GL40.GL_DOUBLE_VEC4)
 val GL_DOUBLE_MAT2_ = AttributeType(GL40.GL_DOUBLE_MAT2)
 val GL_DOUBLE_MAT3_ = AttributeType(GL40.GL_DOUBLE_MAT3)
 val GL_DOUBLE_MAT4_ = AttributeType(GL40.GL_DOUBLE_MAT4)
-val GL_GL_DOUBLE_MAT2x3 = AttributeType(GL40.GL_DOUBLE_MAT2x3)
-val GL_GL_DOUBLE_MAT2x4 = AttributeType(GL40.GL_DOUBLE_MAT2x4)
-val GL_GL_DOUBLE_MAT3x2 = AttributeType(GL40.GL_DOUBLE_MAT3x2)
-val GL_GL_DOUBLE_MAT3x4 = AttributeType(GL40.GL_DOUBLE_MAT3x4)
-val GL_GL_DOUBLE_MAT4x2 = AttributeType(GL40.GL_DOUBLE_MAT4x2)
-val GL_GL_DOUBLE_MAT4x3 = AttributeType(GL40.GL_DOUBLE_MAT4x3)
+val GL_DOUBLE_MAT2x3_ = AttributeType(GL40.GL_DOUBLE_MAT2x3)
+val GL_DOUBLE_MAT2x4_ = AttributeType(GL40.GL_DOUBLE_MAT2x4)
+val GL_DOUBLE_MAT3x2_ = AttributeType(GL40.GL_DOUBLE_MAT3x2)
+val GL_DOUBLE_MAT3x4_ = AttributeType(GL40.GL_DOUBLE_MAT3x4)
+val GL_DOUBLE_MAT4x2_ = AttributeType(GL40.GL_DOUBLE_MAT4x2)
+val GL_DOUBLE_MAT4x3_ = AttributeType(GL40.GL_DOUBLE_MAT4x3)
 
 
 val GL_BUFFER_BINDING = GetVertexAttrib(GL15.GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)

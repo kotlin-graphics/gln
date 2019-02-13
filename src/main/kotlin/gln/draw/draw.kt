@@ -3,37 +3,43 @@
 package gln.draw
 
 import glm_.BYTES
+import gln.draw.DrawMode.Companion.POINTS
+import gln.draw.DrawMode.Companion.TRIANGLES
 import kool.rem
 import org.lwjgl.opengl.*
-import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL32.*
 import org.lwjgl.opengl.GL40.GL_PATCHES
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
 
-enum class DrawMode(val i: Int) {
-    points(GL_POINTS),
-    lineStrip(GL_LINE_STRIP),
-    lineLoop(GL_LINE_LOOP),
-    lines(GL_LINES),
-    lineStripAdjacency(GL_LINE_STRIP_ADJACENCY),
-    linesAdjacency(GL_LINES_ADJACENCY),
-    triangleStrip(GL_TRIANGLE_STRIP),
-    triangleFan(GL_TRIANGLE_FAN),
-    triangles(GL_TRIANGLES),
-    triangleStripAdjacency(GL_TRIANGLE_STRIP_ADJACENCY),
-    trianglesAdjacency(GL_TRIANGLES_ADJACENCY),
-    patches(GL_PATCHES)
+inline class DrawMode(val i: Int) {
+    companion object {
+        val POINTS = DrawMode(GL_POINTS)
+        val LINE_STRIP = DrawMode(GL_LINE_STRIP)
+        val LINE_LOOP = DrawMode(GL_LINE_LOOP)
+        val LINES = DrawMode(GL_LINES)
+        val LINE_STRIP_ADJACENCY = DrawMode(GL_LINE_STRIP_ADJACENCY)
+        val LINES_ADJACENCY = DrawMode(GL_LINES_ADJACENCY)
+        val TRIANGLE_STRIP = DrawMode(GL_TRIANGLE_STRIP)
+        val TRIANGLE_FAN = DrawMode(GL_TRIANGLE_FAN)
+        val TRIANGLES = DrawMode(GL_TRIANGLES)
+        val TRIANGLE_STRIP_ADJACENCY = DrawMode(GL_TRIANGLE_STRIP_ADJACENCY)
+        val TRIANGLES_ADJACENCY = DrawMode(GL_TRIANGLES_ADJACENCY)
+        val PATCHES = DrawMode(GL_PATCHES)
+    }
 }
 
+fun main() {
+    glDrawArrays(POINTS, 0)
+}
 inline fun glDrawArrays(count: Int) = GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, count)
 inline fun glDrawArrays(mode: DrawMode, count: Int) = GL11.glDrawArrays(mode.i, 0, count)
 
 inline fun glMultiDrawArrays(first: IntArray, count: IntArray) = GL14.glMultiDrawArrays(GL11.GL_TRIANGLES, first, count)
 inline fun glMultiDrawArrays(first: IntBuffer, count: IntBuffer) = GL14.glMultiDrawArrays(GL11.GL_TRIANGLES, first, count)
 
-inline fun glDrawArraysInstanced(count: Int, primCount: Int) = glDrawArraysInstanced(DrawMode.triangles, count, primCount)
+inline fun glDrawArraysInstanced(count: Int, primCount: Int) = glDrawArraysInstanced(TRIANGLES, count, primCount)
 inline fun glDrawArraysInstanced(mode: DrawMode, count: Int, primCount: Int) = GL31.glDrawArraysInstanced(mode.i, 0, count, primCount)
 
 inline fun glDrawArraysIndirect(indirect: Long) = GL40.glDrawArraysIndirect(GL11.GL_TRIANGLES, indirect)
@@ -54,10 +60,10 @@ inline fun glMultiDrawArraysIndirect(indirect: IntArray) = GL43.glMultiDrawArray
 inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntArray) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, indirect.size / DrawArraysIndirectCommand_LENGTH, 0)
 inline fun glMultiDrawArraysIndirect(mode: DrawMode, indirect: IntArray, primCount: Int) = GL43.glMultiDrawArraysIndirect(mode.i, indirect, primCount, 0)
 
-inline fun glMultiDrawArraysIndirectBindlessNV(indirect: ByteBuffer, drawCount: Int, vertexBufferCount: Int) = glMultiDrawArraysIndirectBindlessNV(DrawMode.triangles, indirect, drawCount, vertexBufferCount)
+inline fun glMultiDrawArraysIndirectBindlessNV(indirect: ByteBuffer, drawCount: Int, vertexBufferCount: Int) = glMultiDrawArraysIndirectBindlessNV(TRIANGLES, indirect, drawCount, vertexBufferCount)
 inline fun glMultiDrawArraysIndirectBindlessNV(mode: DrawMode, indirect: ByteBuffer, drawCount: Int, vertexBufferCount: Int) = NVBindlessMultiDrawIndirect.glMultiDrawArraysIndirectBindlessNV(mode.i, indirect, drawCount, 0, vertexBufferCount)
 
-inline fun glMultiDrawArraysIndirectBindlessCountNV(indirect: ByteBuffer, drawCount: Long, maxDrawCount: Int, vertexBufferCount: Int) = glMultiDrawArraysIndirectBindlessCountNV(DrawMode.triangles, indirect, drawCount, maxDrawCount, vertexBufferCount)
+inline fun glMultiDrawArraysIndirectBindlessCountNV(indirect: ByteBuffer, drawCount: Long, maxDrawCount: Int, vertexBufferCount: Int) = glMultiDrawArraysIndirectBindlessCountNV(TRIANGLES, indirect, drawCount, maxDrawCount, vertexBufferCount)
 inline fun glMultiDrawArraysIndirectBindlessCountNV(mode: DrawMode, indirect: ByteBuffer, drawCount: Long, maxDrawCount: Int, vertexBufferCount: Int) = NVBindlessMultiDrawIndirectCount.glMultiDrawArraysIndirectBindlessCountNV(mode.i, indirect, drawCount, maxDrawCount, 0, vertexBufferCount)
 
 inline fun glDrawElements(count: Int) = GL11.glDrawElements(GL11.GL_TRIANGLES, count, GL11.GL_UNSIGNED_INT, 0)
