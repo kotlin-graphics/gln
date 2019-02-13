@@ -206,10 +206,10 @@ object Texture2d {
             field = name
         }
 
-    inline fun image(gliTexture: gli_.Texture) {
-        val format = gli.gl.translate(gliTexture.format, gliTexture.swizzles)
-        for (i in 0 until gliTexture.levels())
-            image(i, format.internal, gliTexture.extent(i), format.external, format.type, gliTexture.data(0, 0, i))
+    inline fun gli_.Texture.image() {
+        val format = gli.gl.translate(format, swizzles)
+        for (i in 0 until levels())
+            image(i, format.internal, extent(i), format.external, format.type, data(0, 0, i))
     }
 
     inline fun image(internalFormat: Int, width: Int, height: Int, format: Int, type: Int) = image(0, internalFormat, width, height, format, type)
