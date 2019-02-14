@@ -1,58 +1,48 @@
 package gln.depth
 
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL32
-import org.lwjgl.opengl.GL41
+import gln.texture.CompareFunc
+import kool.stak
+import org.lwjgl.opengl.*
 
 inline fun depth(block: ObjectDepth.() -> Unit) = ObjectDepth.block()
 
 object ObjectDepth {
 
-    val never = Func.never
-    val less = Func.less
-    val equal = Func.equal
-    val lEqual = Func.lEqual
-    val greater = Func.greater
-    val notEqual = Func.notEqual
-    val gEqual = Func.gEqual
-    val always = Func.always
-
-    var test = false
-        set(value) {
-            if (value)
-                GL11.glEnable(GL11.GL_DEPTH_TEST)
-            else
-                GL11.glDisable(GL11.GL_DEPTH_TEST)
-        }
-    var mask = true
-        set(value) {
-            GL11.glDepthMask(value)
-            field = value
-        }
-    var func = Func.less
-        set(value) {
-            GL11.glDepthFunc(func.i)
-            field = value
-        }
-    var range = 0.0..1.0
-        set(value) {
-            GL11.glDepthRange(value.start, value.endInclusive)
-            field = value
-        }
-    var rangef = 0f..1f
-        set(value) {
-            GL41.glDepthRangef(value.start, value.endInclusive)
-            field = value
-        }
-    var clamp = false
-        set(value) {
-            if (value)
-                GL11.glEnable(GL32.GL_DEPTH_CLAMP)
-            else
-                GL11.glDisable(GL32.GL_DEPTH_CLAMP)
+    var test: Boolean
+        get() = GL11C.glIsEnabled(GL11C.GL_DEPTH_TEST)
+        set(value) = when {
+            value -> GL11C.glEnable(GL11C.GL_DEPTH_TEST)
+            else -> GL11C.glDisable(GL11C.GL_DEPTH_TEST)
         }
 
-    enum class Func(val i: Int) { never(GL11.GL_NEVER), less(GL11.GL_LESS), equal(GL11.GL_EQUAL), lEqual(GL11.GL_LEQUAL),
-        greater(GL11.GL_GREATER), notEqual(GL11.GL_NOTEQUAL), gEqual(GL11.GL_GEQUAL), always(GL11.GL_ALWAYS)
-    }
+    var mask: Boolean
+        get() = GL11C.glGetBoolean(GL11C.GL_DEPTH_WRITEMASK)
+        set(value) = GL11C.glDepthMask(value)
+
+    var func: CompareFunc
+        get() = CompareFunc(GL11C.glGetInteger(GL11C.GL_DEPTH_FUNC))
+        set(value) = GL11C.glDepthFunc(func.i)
+
+    var range: ClosedFloatingPointRange<Double>
+        get() = stak {
+            val d = it.callocDouble(2)
+            GL11C.glGetDoublev(GL11C.GL_DEPTH_RANGE, d)
+            d[0]..d[1]
+        }
+        set(value) = GL11C.glDepthRange(value.start, value.endInclusive)
+
+    var rangef: ClosedFloatingPointRange<Float>
+        get() = stak {
+            val f = it.callocFloat(2)
+            GL11C.glGetFloatv(GL11C.GL_DEPTH_RANGE, f)
+            f[0]..f[1]
+        }
+        set(value) = GL41C.glDepthRangef(value.start, value.endInclusive)
+
+    var clamp: Boolean
+        get() = GL11C.glIsEnabled(GL32C.GL_DEPTH_CLAMP)
+        set(value) = when {
+            value -> GL11C.glEnable(GL32.GL_DEPTH_CLAMP)
+            else -> GL11C.glDisable(GL32.GL_DEPTH_CLAMP)
+        }
 }

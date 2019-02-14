@@ -16,7 +16,7 @@ interface glEnable {
 
     fun useBlend(buff: BufferMode, sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> Unit) {
         GL11C.glEnable(GL11C.GL_BLEND)
-        GL40.glBlendFunci(buff.i, sFactor.i, dFactor.i)
+        GL40C.glBlendFunci(buff.i, sFactor.i, dFactor.i)
         block()
         GL11C.glDisable(GL11C.GL_BLEND)
     }
@@ -27,11 +27,6 @@ interface glEnable {
         enabled -> GL30C.glEnable(GL30C.GL_CLIP_DISTANCE0 + index)
         else -> GL30C.glDisable(GL30C.GL_CLIP_DISTANCE0 + index)
     }
-
-
-
-
-
 
     var depthClamp: Boolean
         get() = GL11C.glIsEnabled(GL32.GL_DEPTH_CLAMP)
@@ -98,7 +93,7 @@ interface glEnable {
     fun depthFunc(func: CompareFunction, near: Float, far: Float, block: () -> Unit) {
         GL11C.glEnable(GL11.GL_DEPTH_TEST)
         GL11C.glDepthFunc(func.i)
-        GL41.glDepthRangef(near, far)
+        GL41C.glDepthRangef(near, far)
         block()
         GL11C.glDisable(GL11.GL_DEPTH_TEST)
     }
@@ -329,7 +324,7 @@ interface glEnable {
 
     fun sampleAlphaToOne(value: Float, invert: Boolean, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_SAMPLE_ALPHA_TO_ONE)
-        GL13.glSampleCoverage(value, invert)
+        GL13C.glSampleCoverage(value, invert)
         block()
         GL11C.glDisable(GL32.GL_SAMPLE_ALPHA_TO_ONE)
     }
@@ -413,8 +408,8 @@ interface glEnable {
 
     fun stencil(func: CompareFunction, ref: Int, mask: Int, sFail: StencilOp, dpFail: StencilOp, dpPass: StencilOp, block: () -> Unit) {
         GL11C.glEnable(GL32.GL_STENCIL)
-        GL11.glStencilFunc(func.i, ref, mask)
-        GL11.glStencilOp(sFail.i, dpFail.i, dpPass.i)
+        GL11C.glStencilFunc(func.i, ref, mask)
+        GL11C.glStencilOp(sFail.i, dpFail.i, dpPass.i)
         block()
         GL11C.glDisable(GL32.GL_STENCIL)
     }

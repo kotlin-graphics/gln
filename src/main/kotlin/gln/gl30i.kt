@@ -5,11 +5,20 @@
  */
 package gln
 
+import glm_.vec1.Vec1i
+import glm_.vec1.Vec1ui
+import glm_.vec2.Vec2i
+import glm_.vec3.Vec3
+import glm_.vec3.Vec3i
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import kool.adr
 import kool.stak
+import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
+import org.lwjgl.opengl.GL30C.*
+import unsigned.Uint
+import java.nio.FloatBuffer
 
 /**
  * The OpenGL functionality of a forward compatible context, up to version 3.0.
@@ -79,135 +88,180 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-//    public static void glClearBufferfv(@NativeType("GLenum") int buffer, @NativeType("GLint") int drawbuffer, @NativeType("GLfloat *") FloatBuffer value) {
-//        if (CHECKS) {
-//            check(value, 1);
-//        }
-//        nglClearBufferfv(buffer, drawbuffer, memAddress(value));
-//    }
-//
-//    // --- [ glClearBufferfi ] ---
-//
-//    /**
-//     * Clears an individual buffer of the currently bound framebuffer object to the {@link #GL_DRAW_FRAMEBUFFER DRAW_FRAMEBUFFER} binding.
-//     *
-//     * @param buffer     the buffer to clear. Must be:<br><table><tr><td>{@link #GL_DEPTH_STENCIL DEPTH_STENCIL}</td></tr></table>
-//     * @param drawbuffer the draw buffer to clear
-//     * @param depth      the depth value to clear the buffer to
-//     * @param stencil    the stencil value to clear the buffer to
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferfi">Reference Page</a>
-//     */
-//    public static native void glClearBufferfi(@NativeType("GLenum") int buffer, @NativeType("GLint") int drawbuffer, @NativeType("GLfloat") float depth, @NativeType("GLint") int stencil);
-//
-//    // --- [ glVertexAttribI1i ] ---
-//
-//    /**
-//     * Specifies the value of a pure integer generic vertex attribute. The y and z components are implicitly set to 0 and w to 1.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI1i(@NativeType("GLuint") int index, @NativeType("GLint") int x);
-//
-//    // --- [ glVertexAttribI2i ] ---
-//
-//    /**
-//     * Specifies the value of a pure integer generic vertex attribute. The z component is implicitly set to 0 and w to 1.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI2i(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y);
-//
-//    // --- [ glVertexAttribI3i ] ---
-//
-//    /**
-//     * Specifies the value of a pure integer generic vertex attribute. The w component is implicitly set to 1.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     * @param z     the vertex attribute z component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI3i(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z);
-//
-//    // --- [ glVertexAttribI4i ] ---
-//
-//    /**
-//     * Specifies the value of a pure integer generic vertex attribute.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     * @param z     the vertex attribute z component
-//     * @param w     the vertex attribute w component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI4i(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z, @NativeType("GLint") int w);
-//
-//    // --- [ glVertexAttribI1ui ] ---
-//
-//    /**
-//     * Specifies the value of an unsigned pure integer generic vertex attribute. The y and z components are implicitly set to 0 and w to 1.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI1ui(@NativeType("GLuint") int index, @NativeType("GLuint") int x);
-//
-//    // --- [ glVertexAttribI2ui ] ---
-//
-//    /**
-//     * Specifies the value of an unsigned pure integer generic vertex attribute. The z component is implicitly set to 0 and w to 1.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI2ui(@NativeType("GLuint") int index, @NativeType("GLuint") int x, @NativeType("GLuint") int y);
-//
-//    // --- [ glVertexAttribI3ui ] ---
-//
-//    /**
-//     * Specifies the value of an unsigned pure integer generic vertex attribute. The w component is implicitly set to 1.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     * @param z     the vertex attribute z component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI3ui(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z);
-//
-//    // --- [ glVertexAttribI4ui ] ---
-//
-//    /**
-//     * Specifies the value of an unsigned pure integer generic vertex attribute.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     * @param z     the vertex attribute z component
-//     * @param w     the vertex attribute w component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI4ui(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z, @NativeType("GLint") int w);
-//
+    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, value: FloatBuffer) = nglClearBufferfv(buffer.i, drawbuffer, value.adr)
+
+    // --- [ glClearBufferfi ] ---
+
+    /**
+     * Clears an individual buffer of the currently bound framebuffer object to the {@link #GL_DRAW_FRAMEBUFFER DRAW_FRAMEBUFFER} binding.
+     *
+     * @param buffer     the buffer to clear. Must be:<br><table><tr><td>{@link #GL_DEPTH_STENCIL DEPTH_STENCIL}</td></tr></table>
+     * @param drawbuffer the draw buffer to clear
+     * @param depth      the depth value to clear the buffer to
+     * @param stencil    the stencil value to clear the buffer to
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferfi">Reference Page</a>
+     */
+    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, depth: Float, stencil: Int) = glClearBufferfi(buffer.i, drawbuffer, depth, stencil)
+
+    // --- [ glVertexAttribI1i ] ---
+
+    /**
+     * Specifies the value of a pure integer generic vertex attribute. The y and z components are implicitly set to 0 and w to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, x: Int) = glVertexAttribI1i(index, x)
+
+    /**
+     * Specifies the value of a pure integer generic vertex attribute. The y and z components are implicitly set to 0 and w to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param v     the vertex attribute component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, v: Vec1i) = glVertexAttribI1i(index, v.x)
+
+    // --- [ glVertexAttribI2i ] ---
+
+    /**
+     * Specifies the value of a pure integer generic vertex attribute. The z component is implicitly set to 0 and w to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, x: Int, y: Int) = GL30C.glVertexAttribI2i(index, x, y)
+
+    /**
+     * Specifies the value of a pure integer generic vertex attribute. The z component is implicitly set to 0 and w to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param v     the vertex attribute components
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, v: Vec2i) = GL30C.glVertexAttribI2i(index, v.x, v.y)
+
+    // --- [ glVertexAttribI3i ] ---
+
+    /**
+     * Specifies the value of a pure integer generic vertex attribute. The w component is implicitly set to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     * @param z     the vertex attribute z component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, x: Int, y: Int, z: Int) = GL30C.glVertexAttribI3i(index, x, y, z)
+
+    /**
+     * Specifies the value of a pure integer generic vertex attribute. The w component is implicitly set to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param v     the vertex attribute components
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, v: Vec3i) = GL30C.glVertexAttribI3i(index, v.x, v.y, v.z)
+
+    // --- [ glVertexAttribI4i ] ---
+
+    /**
+     * Specifies the value of a pure integer generic vertex attribute.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     * @param z     the vertex attribute z component
+     * @param w     the vertex attribute w component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, x: Int, y: Int, z: Int, w: Int) = GL30C.glVertexAttribI4i(index, x, y, z, w)
+
+    /**
+     * Specifies the value of a pure integer generic vertex attribute.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param v     the vertex attribute components
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, v: Vec4i) = GL30C.glVertexAttribI4i(index, v.x, v.y, v.z, v.w)
+
+    // --- [ glVertexAttribI1ui ] ---
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute. The y and z components are implicitly set to 0 and w to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, x: Uint) = GL30C.glVertexAttribI1ui(index, x.v)
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute. The y and z components are implicitly set to 0 and w to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param v     the vertex attribute component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, v: Vec1ui) = GL30C.glVertexAttribI1ui(index, v.x.v)
+
+    // --- [ glVertexAttribI2ui ] ---
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute. The z component is implicitly set to 0 and w to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    public static native void glVertexAttribI2ui(@NativeType("GLuint") int index, @NativeType("GLuint") int x, @NativeType("GLuint") int y);
+
+    // --- [ glVertexAttribI3ui ] ---
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute. The w component is implicitly set to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     * @param z     the vertex attribute z component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    public static native void glVertexAttribI3ui(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z);
+
+    // --- [ glVertexAttribI4ui ] ---
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     * @param z     the vertex attribute z component
+     * @param w     the vertex attribute w component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    public static native void glVertexAttribI4ui(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z, @NativeType("GLint") int w);
+
 //    // --- [ glVertexAttribI1iv ] ---
 //
 //    /** Unsafe version of: {@link #glVertexAttribI1iv VertexAttribI1iv} */
