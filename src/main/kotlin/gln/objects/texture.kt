@@ -102,11 +102,11 @@ interface GlTexture {
     // glGetTexParameter / glTexParameter (setter)
 
     var magFilter: TextureMagFilter
-        get() = TextureMagFilter(gl11.getTexParameterI(target, TexParameter(GL11.GL_TEXTURE_MAG_FILTER)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL11.GL_TEXTURE_MAG_FILTER), value.i)
+        get() = TextureMagFilter(gl11.getTexParameter(target, TexParameter(GL11.GL_TEXTURE_MAG_FILTER)))
+        set(value) = gl11.texParameter(target, TexParameter(GL11.GL_TEXTURE_MAG_FILTER), value.i)
     var minFilter: TextureMinFilter
-        get() = TextureMinFilter(gl11.getTexParameterI(target, TexParameter(GL11.GL_TEXTURE_MIN_FILTER)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL11.GL_TEXTURE_MIN_FILTER), value.i)
+        get() = TextureMinFilter(gl11.getTexParameter(target, TexParameter(GL11.GL_TEXTURE_MIN_FILTER)))
+        set(value) = gl11.texParameter(target, TexParameter(GL11.GL_TEXTURE_MIN_FILTER), value.i)
     /** JVM custom */
     var filters: Pair<TextureMinFilter, TextureMagFilter>
         get() = minFilter to magFilter
@@ -117,11 +117,11 @@ interface GlTexture {
 
     var minLod: Float
         get() = gl11.getTexParameterF(target, TexParameter(GL12.GL_TEXTURE_MIN_LOD))
-        set(value) = gl11.texParameterF(target, TexParameter(GL12.GL_TEXTURE_MIN_LOD), value)
+        set(value) = gl11.texParameter(target, TexParameter(GL12.GL_TEXTURE_MIN_LOD), value)
 
     var maxLod: Float
         get() = gl11.getTexParameterF(target, TexParameter(GL12.GL_TEXTURE_MAX_LOD))
-        set(value) = gl11.texParameterF(target, TexParameter(GL12.GL_TEXTURE_MAX_LOD), value)
+        set(value) = gl11.texParameter(target, TexParameter(GL12.GL_TEXTURE_MAX_LOD), value)
     /** JVM custom */
     var lods: Pair<Float, Float>
         get() = minLod to maxLod
@@ -131,11 +131,11 @@ interface GlTexture {
         }
 
     var baseLevel: Int
-        get() = gl11.getTexParameterI(target, TexParameter(GL12.GL_TEXTURE_BASE_LEVEL))
-        set(value) = gl11.texParameterI(target, TexParameter(GL12.GL_TEXTURE_BASE_LEVEL), value)
+        get() = gl11.getTexParameter(target, TexParameter(GL12.GL_TEXTURE_BASE_LEVEL))
+        set(value) = gl11.texParameter(target, TexParameter(GL12.GL_TEXTURE_BASE_LEVEL), value)
     var maxLevel: Int
-        get() = gl11.getTexParameterI(target, TexParameter(GL12.GL_TEXTURE_MAX_LEVEL))
-        set(value) = gl11.texParameterI(target, TexParameter(GL12.GL_TEXTURE_MAX_LEVEL), value)
+        get() = gl11.getTexParameter(target, TexParameter(GL12.GL_TEXTURE_MAX_LEVEL))
+        set(value) = gl11.texParameter(target, TexParameter(GL12.GL_TEXTURE_MAX_LEVEL), value)
     /** JVM custom */
     var levels: IntRange
         get() = baseLevel..maxLevel
@@ -145,17 +145,17 @@ interface GlTexture {
         }
 
     var swizzleR: TextureSwizzle
-        get() = TextureSwizzle(gl11.getTexParameterI(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_R)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_R), value.i)
+        get() = TextureSwizzle(gl11.getTexParameter(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_R)))
+        set(value) = gl11.texParameter(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_R), value.i)
     var swizzleG: TextureSwizzle
-        get() = TextureSwizzle(gl11.getTexParameterI(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_G)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_G), value.i)
+        get() = TextureSwizzle(gl11.getTexParameter(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_G)))
+        set(value) = gl11.texParameter(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_G), value.i)
     var swizzleB: TextureSwizzle
-        get() = TextureSwizzle(gl11.getTexParameterI(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_B)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_B), value.i)
+        get() = TextureSwizzle(gl11.getTexParameter(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_B)))
+        set(value) = gl11.texParameter(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_B), value.i)
     var swizzleA: TextureSwizzle
-        get() = TextureSwizzle(gl11.getTexParameterI(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_A)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_A), value.i)
+        get() = TextureSwizzle(gl11.getTexParameter(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_A)))
+        set(value) = gl11.texParameter(target, TexParameter(GL33.GL_TEXTURE_SWIZZLE_A), value.i)
     var swizzleRGBA: Vec4i
         get () = Vec4i(swizzleR.i, swizzleG.i, swizzleB.i, swizzleA.i)
         set(value) {
@@ -166,14 +166,14 @@ interface GlTexture {
         }
 
     var wrapS: TextureWrapMode
-        get() = TextureWrapMode(gl11.getTexParameterI(target, TexParameter(GL11.GL_TEXTURE_WRAP_S)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL11.GL_TEXTURE_WRAP_S), value.i)
+        get() = TextureWrapMode(gl11.getTexParameter(target, TexParameter(GL11.GL_TEXTURE_WRAP_S)))
+        set(value) = gl11.texParameter(target, TexParameter(GL11.GL_TEXTURE_WRAP_S), value.i)
     var wrapT: TextureWrapMode
-        get() = TextureWrapMode(gl11.getTexParameterI(target, TexParameter(GL11.GL_TEXTURE_WRAP_T)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL11.GL_TEXTURE_WRAP_T), value.i)
+        get() = TextureWrapMode(gl11.getTexParameter(target, TexParameter(GL11.GL_TEXTURE_WRAP_T)))
+        set(value) = gl11.texParameter(target, TexParameter(GL11.GL_TEXTURE_WRAP_T), value.i)
     var wrapR: TextureWrapMode
-        get() = TextureWrapMode(gl11.getTexParameterI(target, TexParameter(GL12.GL_TEXTURE_WRAP_R)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL12.GL_TEXTURE_WRAP_R), value.i)
+        get() = TextureWrapMode(gl11.getTexParameter(target, TexParameter(GL12.GL_TEXTURE_WRAP_R)))
+        set(value) = gl11.texParameter(target, TexParameter(GL12.GL_TEXTURE_WRAP_R), value.i)
     /** JVM custom */
     var wrapST: Vec2i
         get() = Vec2i(wrapS.i, wrapT.i)
@@ -196,29 +196,29 @@ interface GlTexture {
         set(value) = GL11C.nglTexParameterfv(target.i, GL11.GL_TEXTURE_BORDER_COLOR, value.toBufferStack().adr)
 
     var compareMode: TextureCompareMode
-        get() = TextureCompareMode(gl11.getTexParameterI(target, TexParameter(GL14.GL_TEXTURE_COMPARE_MODE)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL14.GL_TEXTURE_COMPARE_MODE), value.i)
+        get() = TextureCompareMode(gl11.getTexParameter(target, TexParameter(GL14.GL_TEXTURE_COMPARE_MODE)))
+        set(value) = gl11.texParameter(target, TexParameter(GL14.GL_TEXTURE_COMPARE_MODE), value.i)
     var compareFunc: CompareFunction
-        get() = CompareFunction(gl11.getTexParameterI(target, TexParameter(GL14.GL_TEXTURE_COMPARE_FUNC)))
-        set(value) = gl11.texParameterI(target, TexParameter(GL14.GL_TEXTURE_COMPARE_FUNC), value.i)
+        get() = CompareFunction(gl11.getTexParameter(target, TexParameter(GL14.GL_TEXTURE_COMPARE_FUNC)))
+        set(value) = gl11.texParameter(target, TexParameter(GL14.GL_TEXTURE_COMPARE_FUNC), value.i)
     var viewMinLevel: Int
-        get() = gl11.getTexParameterI(target, TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER))
-        set(value) = gl11.texParameterI(target, TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER), value)
+        get() = gl11.getTexParameter(target, TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER))
+        set(value) = gl11.texParameter(target, TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER), value)
     var viewNumLevels: Int
-        get() = gl11.getTexParameterI(target, TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LEVELS))
-        set(value) = gl11.texParameterI(target, TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LEVELS), value)
+        get() = gl11.getTexParameter(target, TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LEVELS))
+        set(value) = gl11.texParameter(target, TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LEVELS), value)
     var viewMinLayer: Int
-        get() = gl11.getTexParameterI(target, TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER))
-        set(value) = gl11.texParameterI(target, TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER), value)
+        get() = gl11.getTexParameter(target, TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER))
+        set(value) = gl11.texParameter(target, TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER), value)
     var viewNumLayers: Int
-        get() = gl11.getTexParameterI(target, TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LAYERS))
-        set(value) = gl11.texParameterI(target, TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LAYERS), value)
+        get() = gl11.getTexParameter(target, TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LAYERS))
+        set(value) = gl11.texParameter(target, TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LAYERS), value)
 
     val imageFormatCompatibilityType: ImageFormatCompatibilityType
-        get() = ImageFormatCompatibilityType(gl11.getTexParameterI(target, TexParameter(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_TYPE)))
+        get() = ImageFormatCompatibilityType(gl11.getTexParameter(target, TexParameter(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_TYPE)))
 
     val textureImmutableFormat: Boolean
-        get() = gl11.getTexParameterI(target, TexParameter(GL42.GL_TEXTURE_IMMUTABLE_FORMAT)).bool
+        get() = gl11.getTexParameter<Int>(target, TexParameter(GL42.GL_TEXTURE_IMMUTABLE_FORMAT)).bool
 
     /** Tricky, just use with GL >= 4.5, https://stackoverflow.com/a/38308602/1047713 */
     val textureTarget: TextureTarget
