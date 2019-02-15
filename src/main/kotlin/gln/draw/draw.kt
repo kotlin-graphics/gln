@@ -3,6 +3,7 @@
 package gln.draw
 
 import glm_.BYTES
+import gln.DataType
 import gln.draw.DrawMode.Companion.POINTS
 import gln.draw.DrawMode.Companion.TRIANGLES
 import kool.rem
@@ -67,12 +68,12 @@ inline fun glMultiDrawArraysIndirectBindlessCountNV(indirect: ByteBuffer, drawCo
 inline fun glMultiDrawArraysIndirectBindlessCountNV(mode: DrawMode, indirect: ByteBuffer, drawCount: Long, maxDrawCount: Int, vertexBufferCount: Int) = NVBindlessMultiDrawIndirectCount.glMultiDrawArraysIndirectBindlessCountNV(mode.i, indirect, drawCount, maxDrawCount, 0, vertexBufferCount)
 
 inline fun glDrawElements(count: Int) = GL11.glDrawElements(GL11.GL_TRIANGLES, count, GL11.GL_UNSIGNED_INT, 0)
-inline fun glDrawElements(count: Int, type: Int) = GL11.glDrawElements(GL11.GL_TRIANGLES, count, type, 0)
-inline fun glDrawElements(mode: DrawMode, count: Int, type: Int) = GL11.glDrawElements(mode.i, count, type, 0)
+inline fun glDrawElements(count: Int, type: DataType) = GL11.glDrawElements(GL11.GL_TRIANGLES, count, type.i, 0)
+inline fun glDrawElements(mode: DrawMode, count: Int, type: DataType) = GL11.glDrawElements(mode.i, count, type.i, 0)
 
-inline fun glDrawElementsBaseVertex(count: Int, type: Int, indices_buffer_offset: Long, basevertex: Int) = GL32.glDrawElementsBaseVertex(GL11.GL_TRIANGLES, count, type, indices_buffer_offset, basevertex)
+inline fun glDrawElementsBaseVertex(count: Int, type: DataType, indices_buffer_offset: Long, basevertex: Int) = GL32.glDrawElementsBaseVertex(GL11.GL_TRIANGLES, count, type.i, indices_buffer_offset, basevertex)
 // TODO finish
-inline fun glDrawElementsInstancedBaseVertex(count: Int, type: Int, primcount: Int, basevertex: Int) = GL32.glDrawElementsInstancedBaseVertex(GL11.GL_TRIANGLES, count, type, 0, primcount, basevertex)
+inline fun glDrawElementsInstancedBaseVertex(count: Int, type: DataType, primcount: Int, basevertex: Int) = GL32.glDrawElementsInstancedBaseVertex(GL11.GL_TRIANGLES, count, type.i, 0, primcount, basevertex)
 
 
 /**
