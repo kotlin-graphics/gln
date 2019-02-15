@@ -4,6 +4,7 @@ import glm_.BYTES
 import glm_.bool
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
+import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
@@ -27,6 +28,13 @@ inline fun stak.vec2iAddress(block: (Ptr) -> Unit): Vec2i =
             val buf = it.malloc(Vec2i.size)
             block(buf.adr)
             Vec2i(buf)
+        }
+
+inline fun stak.vec3Address(block: (Ptr) -> Unit): Vec3 =
+        stak {
+            val buf = it.malloc(Vec3.size)
+            block(buf.adr)
+            Vec3(buf)
         }
 
 inline fun stak.vec3iAddress(block: (Ptr) -> Unit): Vec3i =
