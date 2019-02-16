@@ -60,7 +60,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 compileKotlin {
     kotlinOptions {
         freeCompilerArgs = ["-XXLanguage:+InlineClasses", "-Xjvm-default=enable"]
-        jvmTarget = "1.8"
+        jvmTarget = "1.6"
     }
 }
 
