@@ -5,16 +5,18 @@
  */
 package gln
 
+import glm_.L
 import glm_.vec1.Vec1i
 import glm_.vec1.Vec1ui
 import glm_.vec2.Vec2i
-import glm_.vec3.Vec3
+import glm_.vec2.Vec2ui
 import glm_.vec3.Vec3i
+import glm_.vec3.Vec3ui
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
+import gln.objects.GlProgram
 import kool.adr
 import kool.stak
-import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL30C.*
 import unsigned.Uint
@@ -230,40 +232,70 @@ interface gl30i {
      * @param y     the vertex attribute y component
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    fun vertexAttrib(index: GLuint, @NativeType("GLuint") int x, @NativeType("GLuint") int y);
-//
-//    // --- [ glVertexAttribI3ui ] ---
-//
-//    /**
-//     * Specifies the value of an unsigned pure integer generic vertex attribute. The w component is implicitly set to 1.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     * @param z     the vertex attribute z component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI3ui(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z);
-//
-//    // --- [ glVertexAttribI4ui ] ---
-//
-//    /**
-//     * Specifies the value of an unsigned pure integer generic vertex attribute.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     * @param z     the vertex attribute z component
-//     * @param w     the vertex attribute w component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribI4ui(@NativeType("GLuint") int index, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z, @NativeType("GLint") int w);
+     */
+    fun vertexAttrib(index: Int, x: Uint, y: Uint) = GL30C.glVertexAttribI2ui(index, x.v, y.v)
 
-//    // --- [ glVertexAttribI1iv ] ---
-//
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute. The z component is implicitly set to 0 and w to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param v     the vertex attribute
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, v: Vec2ui) = GL30C.glVertexAttribI2ui(index, v.x.v, v.y.v)
+
+    // --- [ glVertexAttribI3ui ] ---
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute. The w component is implicitly set to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     * @param z     the vertex attribute z component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun glVertexAttrib(index: Int, x: Uint, y: Uint, z: Uint) = GL30C.glVertexAttribI3ui(index, x.v, y.v, z.v)
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute. The w component is implicitly set to 1.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param v     the vertex attribute
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, v: Vec3ui) = GL30C.glVertexAttribI3ui(index, v.x.v, v.y.v, v.z.v)
+
+    // --- [ glVertexAttribI4ui ] ---
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     * @param z     the vertex attribute z component
+     * @param w     the vertex attribute w component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, x: Uint, y: Uint, z: Uint, w: Uint) = GL30C.glVertexAttribI4ui(index, x.v, y.v, z.v, w.v)
+
+    /**
+     * Specifies the value of an unsigned pure integer generic vertex attribute.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param v     the vertex attribute
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttrib(index: Int, v: Vec4ui) = GL30C.glVertexAttribI4ui(index, v.x.v, v.y.v, v.z.v, v.w.v)
+
+    // --- [ glVertexAttribI1iv ] --- TODO?
+
 //    /** Unsafe version of: {@link #glVertexAttribI1iv VertexAttribI1iv} */
 //    public static native void nglVertexAttribI1iv(int index, long v);
 //
@@ -502,58 +534,52 @@ interface gl30i {
 //        nglVertexAttribI4usv(index, memAddress(v));
 //    }
 //
-//    // --- [ glVertexAttribIPointer ] ---
-//
-//    /** Unsafe version of: {@link #glVertexAttribIPointer VertexAttribIPointer} */
-//    public static native void nglVertexAttribIPointer(int index, int size, int type, int stride, long pointer);
-//
-//    /**
-//     * Specifies the location and organization of a pure integer vertex attribute array.
-//     *
-//     * @param index   the index of the pure integer generic vertex attribute to be modified
-//     * @param size    the number of values per vertex that are stored in the array. The initial value is 4. One of:<br><table><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>{@link GL12#GL_BGRA BGRA}</td></tr></table>
-//     * @param type    the data type of each component in the array. One of:<br><table><tr><td>{@link GL11#GL_BYTE BYTE}</td><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_SHORT SHORT}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_INT INT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
-//     * @param stride  the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in
-//     *                the array. The initial value is 0.
-//     * @param pointer the vertex attribute data or the offset of the first component of the first generic vertex attribute in the array in the data store of the buffer
-//     *                currently bound to the {@link GL15#GL_ARRAY_BUFFER ARRAY_BUFFER} target. The initial value is 0.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIPointer">Reference Page</a>
-//     */
-//    public static void glVertexAttribIPointer(@NativeType("GLuint") int index, @NativeType("GLint") int size, @NativeType("GLenum") int type, @NativeType("GLsizei") int stride, @NativeType("void const *") ByteBuffer pointer) {
-//        nglVertexAttribIPointer(index, size, type, stride, memAddress(pointer));
-//    }
-//
-//    /**
-//     * Specifies the location and organization of a pure integer vertex attribute array.
-//     *
-//     * @param index   the index of the pure integer generic vertex attribute to be modified
-//     * @param size    the number of values per vertex that are stored in the array. The initial value is 4. One of:<br><table><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>{@link GL12#GL_BGRA BGRA}</td></tr></table>
-//     * @param type    the data type of each component in the array. One of:<br><table><tr><td>{@link GL11#GL_BYTE BYTE}</td><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_SHORT SHORT}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_INT INT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
-//     * @param stride  the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in
-//     *                the array. The initial value is 0.
-//     * @param pointer the vertex attribute data or the offset of the first component of the first generic vertex attribute in the array in the data store of the buffer
-//     *                currently bound to the {@link GL15#GL_ARRAY_BUFFER ARRAY_BUFFER} target. The initial value is 0.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIPointer">Reference Page</a>
-//     */
-//    public static void glVertexAttribIPointer(@NativeType("GLuint") int index, @NativeType("GLint") int size, @NativeType("GLenum") int type, @NativeType("GLsizei") int stride, @NativeType("void const *") long pointer) {
-//        nglVertexAttribIPointer(index, size, type, stride, pointer);
-//    }
-//
-//    /**
-//     * Specifies the location and organization of a pure integer vertex attribute array.
-//     *
-//     * @param index   the index of the pure integer generic vertex attribute to be modified
-//     * @param size    the number of values per vertex that are stored in the array. The initial value is 4. One of:<br><table><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>{@link GL12#GL_BGRA BGRA}</td></tr></table>
-//     * @param type    the data type of each component in the array. One of:<br><table><tr><td>{@link GL11#GL_BYTE BYTE}</td><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_SHORT SHORT}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_INT INT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
-//     * @param stride  the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in
-//     *                the array. The initial value is 0.
-//     * @param pointer the vertex attribute data or the offset of the first component of the first generic vertex attribute in the array in the data store of the buffer
-//     *                currently bound to the {@link GL15#GL_ARRAY_BUFFER ARRAY_BUFFER} target. The initial value is 0.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIPointer">Reference Page</a>
-//     */
+    // --- [ glVertexAttribIPointer ] ---
+
+    /** TODO?
+     * Specifies the location and organization of a pure integer vertex attribute array.
+     *
+     * @param index   the index of the pure integer generic vertex attribute to be modified
+     * @param size    the number of values per vertex that are stored in the array. The initial value is 4. One of:<br><table><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>{@link GL12#GL_BGRA BGRA}</td></tr></table>
+     * @param type    the data type of each component in the array. One of:<br><table><tr><td>{@link GL11#GL_BYTE BYTE}</td><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_SHORT SHORT}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_INT INT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
+     * @param stride  the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in
+     *                the array. The initial value is 0.
+     * @param pointer the vertex attribute data or the offset of the first component of the first generic vertex attribute in the array in the data store of the buffer
+     *                currently bound to the {@link GL15#GL_ARRAY_BUFFER ARRAY_BUFFER} target. The initial value is 0.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIPointer">Reference Page</a>
+     */
+//    fun vertexAttribIPointer(index: Int, size: Int, type: DataType, stride: Int, @NativeType("void const *") ByteBuffer pointer) =
+//        nglVertexAttribIPointer(index, size, type, stride, memAddress(pointer))
+
+    /**
+     * Specifies the location and organization of a pure integer vertex attribute array.
+     *
+     * @param index   the index of the pure integer generic vertex attribute to be modified
+     * @param size    the number of values per vertex that are stored in the array. The initial value is 4. One of:<br><table><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>{@link GL12#GL_BGRA BGRA}</td></tr></table>
+     * @param type    the data type of each component in the array. One of:<br><table><tr><td>{@link GL11#GL_BYTE BYTE}</td><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_SHORT SHORT}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_INT INT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
+     * @param stride  the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in
+     *                the array. The initial value is 0.
+     * @param pointer the vertex attribute data or the offset of the first component of the first generic vertex attribute in the array in the data store of the buffer
+     *                currently bound to the {@link GL15#GL_ARRAY_BUFFER ARRAY_BUFFER} target. The initial value is 0.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIPointer">Reference Page</a>
+     */
+    fun vertexAttribPointer(index: Int, size: Int, type: Int, stride: Int, pointer: Int) = nglVertexAttribIPointer(index, size, type, stride, pointer.L)
+
+    /**
+     * Specifies the location and organization of a pure integer vertex attribute array.
+     *
+     * @param index   the index of the pure integer generic vertex attribute to be modified
+     * @param size    the number of values per vertex that are stored in the array. The initial value is 4. One of:<br><table><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>{@link GL12#GL_BGRA BGRA}</td></tr></table>
+     * @param type    the data type of each component in the array. One of:<br><table><tr><td>{@link GL11#GL_BYTE BYTE}</td><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_SHORT SHORT}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_INT INT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
+     * @param stride  the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in
+     *                the array. The initial value is 0.
+     * @param pointer the vertex attribute data or the offset of the first component of the first generic vertex attribute in the array in the data store of the buffer
+     *                currently bound to the {@link GL15#GL_ARRAY_BUFFER ARRAY_BUFFER} target. The initial value is 0.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIPointer">Reference Page</a>
+     */
 //    public static void glVertexAttribIPointer(@NativeType("GLuint") int index, @NativeType("GLint") int size, @NativeType("GLenum") int type, @NativeType("GLsizei") int stride, @NativeType("void const *") ShortBuffer pointer) {
 //        nglVertexAttribIPointer(index, size, type, stride, memAddress(pointer));
 //    }
@@ -596,122 +622,123 @@ interface gl30i {
 //        nglGetVertexAttribIiv(index, pname, memAddress(params));
 //    }
 //
-//    /**
-//     * Returns the value of a pure integer generic vertex attribute parameter.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param pname the symbolic name of the vertex attribute parameter to be queried. Must be:<br><table><tr><td>{@link GL20#GL_CURRENT_VERTEX_ATTRIB CURRENT_VERTEX_ATTRIB}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetVertexAttribIi(@NativeType("GLuint") int index, @NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.callocInt(1);
-//            nglGetVertexAttribIiv(index, pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetVertexAttribIuiv ] ---
-//
-//    /** Unsafe version of: {@link #glGetVertexAttribIuiv GetVertexAttribIuiv} */
-//    public static native void nglGetVertexAttribIuiv(int index, int pname, long params);
-//
-//    /**
-//     * Unsigned version of {@link #glGetVertexAttribIiv GetVertexAttribIiv}.
-//     *
-//     * @param index  the index of the pure integer generic vertex attribute to be modified
-//     * @param pname  the symbolic name of the vertex attribute parameter to be queried. Must be:<br><table><tr><td>{@link GL20#GL_CURRENT_VERTEX_ATTRIB CURRENT_VERTEX_ATTRIB}</td></tr></table>
-//     * @param params returns the requested data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
-//     */
-//    public static void glGetVertexAttribIuiv(@NativeType("GLuint") int index, @NativeType("GLenum") int pname, @NativeType("GLuint *") IntBuffer params) {
-//        if (CHECKS) {
-//            check(params, 4);
-//        }
-//        nglGetVertexAttribIuiv(index, pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Unsigned version of {@link #glGetVertexAttribIiv GetVertexAttribIiv}.
-//     *
-//     * @param index the index of the pure integer generic vertex attribute to be modified
-//     * @param pname the symbolic name of the vertex attribute parameter to be queried. Must be:<br><table><tr><td>{@link GL20#GL_CURRENT_VERTEX_ATTRIB CURRENT_VERTEX_ATTRIB}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetVertexAttribIui(@NativeType("GLuint") int index, @NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.callocInt(1);
-//            nglGetVertexAttribIuiv(index, pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glUniform1ui ] ---
-//
-//    /**
-//     * Specifies the value of a uint uniform variable for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param v0       the uniform value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static native void glUniform1ui(@NativeType("GLint") int location, @NativeType("GLuint") int v0);
-//
-//    // --- [ glUniform2ui ] ---
-//
-//    /**
-//     * Specifies the value of a uvec2 uniform variable for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param v0       the uniform x value
-//     * @param v1       the uniform y value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static native void glUniform2ui(@NativeType("GLint") int location, @NativeType("GLuint") int v0, @NativeType("GLuint") int v1);
-//
-//    // --- [ glUniform3ui ] ---
-//
-//    /**
-//     * Specifies the value of a uvec3 uniform variable for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param v0       the uniform x value
-//     * @param v1       the uniform y value
-//     * @param v2       the uniform z value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static native void glUniform3ui(@NativeType("GLint") int location, @NativeType("GLuint") int v0, @NativeType("GLuint") int v1, @NativeType("GLuint") int v2);
-//
-//    // --- [ glUniform4ui ] ---
-//
-//    /**
-//     * Specifies the value of a uvec4 uniform variable for the current program object.
-//     *
-//     * @param location the location of the uniform variable to be modified
-//     * @param v0       the uniform x value
-//     * @param v1       the uniform y value
-//     * @param v2       the uniform z value
-//     * @param v3       the uniform w value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
-//     */
-//    public static native void glUniform4ui(@NativeType("GLint") int location, @NativeType("GLuint") int v0, @NativeType("GLuint") int v1, @NativeType("GLuint") int v2, @NativeType("GLuint") int v3);
-//
-//    // --- [ glUniform1uiv ] ---
+    /**
+     * Returns the value of a pure integer generic vertex attribute parameter.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param name the symbolic name of the vertex attribute parameter to be queried. Must be:<br><table><tr><td>{@link GL20#GL_CURRENT_VERTEX_ATTRIB CURRENT_VERTEX_ATTRIB}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
+     */
+    fun getVertexAttribI(index: Int, name: Int) = stak.intAddress { nglGetVertexAttribIiv(index, name, it) }
+
+    // --- [ glGetVertexAttribIuiv ] ---
+
+    /**
+     * Unsigned version of {@link #glGetVertexAttribIiv GetVertexAttribIiv}.
+     *
+     * @param index the index of the pure integer generic vertex attribute to be modified
+     * @param name the symbolic name of the vertex attribute parameter to be queried. Must be:<br><table><tr><td>{@link GL20#GL_CURRENT_VERTEX_ATTRIB CURRENT_VERTEX_ATTRIB}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
+     */
+    fun getVertexAttribIu(index: Int, name: Int) = Uint(stak.intAddress { nglGetVertexAttribIuiv(index, name, it) })
+
+    // --- [ glUniform1ui ] ---
+
+    /**
+     * Specifies the value of a uint uniform variable for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     */
+    fun uniform(location: Int, v: Uint) = GL30C.glUniform1ui(location, v.v)
+
+    /**
+     * Specifies the value of a uint uniform variable for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param v0       the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     */
+    fun uniform(location: Int, v0: Vec1ui) = GL30C.glUniform1ui(location, v0.x.v)
+
+    // --- [ glUniform2ui ] ---
+
+    /**
+     * Specifies the value of a uvec2 uniform variable for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param v0       the uniform x value
+     * @param v1       the uniform y value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     */
+    fun uniform(location: Int, v0: Uint, v1: Uint) = GL30C.glUniform2ui(location, v0.v, v1.v)
+
+    /**
+     * Specifies the value of a uvec2 uniform variable for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     */
+    fun uniform(location: Int, v: Vec2ui) = GL30C.glUniform2ui(location, v.x.v, v.y.v)
+
+    // --- [ glUniform3ui ] ---
+
+    /**
+     * Specifies the value of a uvec3 uniform variable for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param v0       the uniform x value
+     * @param v1       the uniform y value
+     * @param v2       the uniform z value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     */
+    fun uniform(location: Int, v0: Uint, v1: Uint, v2: Uint) = GL30C.glUniform3ui(location, v0.v, v1.v, v2.v)
+
+    /**
+     * Specifies the value of a uvec3 uniform variable for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     */
+    fun uniform(location: Int, v: Vec3ui) = GL30C.glUniform3ui(location, v.x.v, v.y.v, v.z.v)
+
+    // --- [ glUniform4ui ] ---
+
+    /**
+     * Specifies the value of a uvec4 uniform variable for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param v0       the uniform x value
+     * @param v1       the uniform y value
+     * @param v2       the uniform z value
+     * @param v3       the uniform w value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     */
+    fun uniform(location: Int, v0: Uint, v1: Uint, v2: Uint, v3: Uint) = GL30C.glUniform4ui(location, v0.v, v1.v, v2.v, v3.v)
+
+    /**
+     * Specifies the value of a uvec4 uniform variable for the current program object.
+     *
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
+     */
+    fun uniform(location: Int, v: Vec4ui) = GL30C.glUniform4ui(location, v.x.v, v.y.v, v.z.v, v.w.v)
+
+//    // --- [ glUniform1uiv ] --- TODO?
 //
 //    /**
 //     * Unsafe version of: {@link #glUniform1uiv Uniform1uiv}
@@ -816,97 +843,43 @@ interface gl30i {
 //        nglGetUniformuiv(program, location, memAddress(params));
 //    }
 //
-//    /**
-//     * Returns the uint value(s) of a uniform variable.
-//     *
-//     * @param program  the program object to be queried
-//     * @param location the location of the uniform variable to be queried
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetUniformui(@NativeType("GLuint") int program, @NativeType("GLint") int location) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.callocInt(1);
-//            nglGetUniformuiv(program, location, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glBindFragDataLocation ] ---
-//
-//    /** Unsafe version of: {@link #glBindFragDataLocation BindFragDataLocation} */
-//    public static native void nglBindFragDataLocation(int program, int colorNumber, long name);
-//
-//    /**
-//     * Binds a user-defined varying out variable to a fragment shader color number.
-//     *
-//     * @param program     the name of the program containing varying out variable whose binding to modify
-//     * @param colorNumber the color number to bind the user-defined varying out variable to
-//     * @param name        the name of the user-defined varying out variable whose binding to modify
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocation">Reference Page</a>
-//     */
-//    public static void glBindFragDataLocation(@NativeType("GLuint") int program, @NativeType("GLuint") int colorNumber, @NativeType("GLchar const *") ByteBuffer name) {
-//        if (CHECKS) {
-//            checkNT1(name);
-//        }
-//        nglBindFragDataLocation(program, colorNumber, memAddress(name));
-//    }
-//
-//    /**
-//     * Binds a user-defined varying out variable to a fragment shader color number.
-//     *
-//     * @param program     the name of the program containing varying out variable whose binding to modify
-//     * @param colorNumber the color number to bind the user-defined varying out variable to
-//     * @param name        the name of the user-defined varying out variable whose binding to modify
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocation">Reference Page</a>
-//     */
-//    public static void glBindFragDataLocation(@NativeType("GLuint") int program, @NativeType("GLuint") int colorNumber, @NativeType("GLchar const *") CharSequence name) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            ByteBuffer nameEncoded = stack.ASCII(name);
-//            nglBindFragDataLocation(program, colorNumber, memAddress(nameEncoded));
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetFragDataLocation ] ---
-//
-//    /** Unsafe version of: {@link #glGetFragDataLocation GetFragDataLocation} */
-//    public static native int nglGetFragDataLocation(int program, long name);
-//
-//    /**
-//     * Queries the bindings of color numbers to user-defined varying out variables.
-//     *
-//     * @param program the name of the program containing varying out variable whose binding to query
-//     * @param name    the name of the user-defined varying out variable whose binding to query
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataLocation">Reference Page</a>
-//     */
-//    @NativeType("GLint")
-//    public static int glGetFragDataLocation(@NativeType("GLuint") int program, @NativeType("GLchar const *") ByteBuffer name) {
-//        if (CHECKS) {
-//            checkNT1(name);
-//        }
-//        return nglGetFragDataLocation(program, memAddress(name));
-//    }
-//
-//    /**
-//     * Queries the bindings of color numbers to user-defined varying out variables.
-//     *
-//     * @param program the name of the program containing varying out variable whose binding to query
-//     * @param name    the name of the user-defined varying out variable whose binding to query
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataLocation">Reference Page</a>
-//     */
-//    @NativeType("GLint")
-//    public static int glGetFragDataLocation(@NativeType("GLuint") int program, @NativeType("GLchar const *") CharSequence name) {
+    /** TODO others? ie. 2ui, 3ui, 4ui
+     * Returns the uint value(s) of a uniform variable.
+     *
+     * @param program  the program object to be queried
+     * @param location the location of the uniform variable to be queried
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
+     */
+    fun getUniform(program: GlProgram, location: Int): Uint = Uint(stak.intAddress { nglGetUniformuiv(program.i, location, it) })
+
+    // --- [ glBindFragDataLocation ] ---
+
+      /**
+     * Binds a user-defined varying out variable to a fragment shader color number.
+     *
+     * @param program     the name of the program containing varying out variable whose binding to modify
+     * @param colorNumber the color number to bind the user-defined varying out variable to
+     * @param name        the name of the user-defined varying out variable whose binding to modify
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocation">Reference Page</a>
+     */
+    fun bindFragDataLocation(program: GlProgram, colorNumber: Int, name: CharSequence) = stak {
+          it.nASCII(name, true)
+          GL30C.nglBindFragDataLocation(program.i, colorNumber, it.pointerAddress)
+    }
+
+    // --- [ glGetFragDataLocation ] ---
+
+    /**
+     * Queries the bindings of color numbers to user-defined varying out variables.
+     *
+     * @param program the name of the program containing varying out variable whose binding to query
+     * @param name    the name of the user-defined varying out variable whose binding to query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataLocation">Reference Page</a>
+     */
+//    fun getFragDataLocation(program: GlProgram, name: CharSequence): Int = stak {
 //        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
 //        try {
 //            ByteBuffer nameEncoded = stack.ASCII(name);
