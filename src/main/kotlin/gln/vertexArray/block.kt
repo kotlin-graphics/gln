@@ -4,10 +4,8 @@ package gln.vertexArray
 
 
 import glm_.L
-import kool.get
 import gln.buf
 import gln.bufAd
-import gln.buffer.bufferName
 import gln.glf.VertexLayout
 import kool.get
 import kool.set
@@ -50,7 +48,6 @@ object VertexArray {
     var name = 0
         set(value) = GL30.glBindVertexArray(value)
 
-    inline fun array(array: Enum<*>, format: VertexLayout) = array(bufferName[array], format)
     inline fun array(array: IntBuffer, format: VertexLayout) = array(array[0], format)
     inline fun array(array: Int, format: VertexLayout) {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, array)
@@ -61,7 +58,6 @@ object VertexArray {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0)
     }
 
-    inline fun array(array: Enum<*>, format: VertexLayout, vararg offset: Int) = array(bufferName[array], format, *offset) // TODO check, slow operator
     inline fun array(array: IntBuffer, format: VertexLayout, vararg offset: Int) = array(array[0], format, *offset) // TODO check, slow operator
     inline fun array(array: Int, format: VertexLayout, vararg offset: Int) {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, array)
@@ -73,7 +69,6 @@ object VertexArray {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0)
     }
 
-    inline fun element(element: Enum<*>) = GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, bufferName[element])
     inline fun element(element: IntBuffer) = GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, element[0])
     inline fun element(element: Int) = GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, element)
 }
@@ -90,7 +85,6 @@ object VertexArrays {
 }
 
 
-inline fun withVertexLayout(array: Enum<*>, element: Enum<*>, format: VertexLayout, block: () -> Unit) = withVertexLayout(bufferName[array], bufferName[element], format, block)
 inline fun withVertexLayout(array: Int, element: Int, format: VertexLayout, block: () -> Unit) {
     GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, array)
     for (attr in format.attributes) {
@@ -104,7 +98,6 @@ inline fun withVertexLayout(array: Int, element: Int, format: VertexLayout, bloc
         GL20.glDisableVertexAttribArray(attr.index)
 }
 
-inline fun withVertexLayout(array: Enum<*>, format: VertexLayout, block: () -> Unit) = withVertexLayout(bufferName[array], format, block)
 inline fun withVertexLayout(array: IntBuffer, format: VertexLayout, block: () -> Unit) = withVertexLayout(array[0], format, block)
 inline fun withVertexLayout(array: Int, format: VertexLayout, block: () -> Unit) {
     GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, array)

@@ -60,7 +60,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindTexture">Reference Page</a>
      */
-    fun bindTexture(target: TextureTarget, texture: GlTexture) = GL11C.glBindTexture(target.i, texture.i)
+    fun bindTexture(target: TextureTarget, texture: GlTexture) = GL11C.glBindTexture(target.i, texture.name)
 
     // --- [ glBlendFunc ] ---
 
@@ -568,7 +568,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTexture(texture: GlTexture) = stak.intAddress(texture.i) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTexture(texture: GlTexture) = stak.intAddress(texture.name) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetError ] ---
 

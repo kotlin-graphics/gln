@@ -31,9 +31,6 @@ inline class DrawMode(val i: Int) {
     }
 }
 
-fun main() {
-    glDrawArrays(POINTS, 0)
-}
 inline fun glDrawArrays(count: Int) = GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, count)
 inline fun glDrawArrays(mode: DrawMode, count: Int) = GL11.glDrawArrays(mode.i, 0, count)
 

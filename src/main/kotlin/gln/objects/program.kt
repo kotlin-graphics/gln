@@ -175,7 +175,7 @@ inline class GlProgram(val i: Int) {
 
     companion object {
 
-        val NULL = GlProgram(0)
+        val NULL = GlProgram(-1)
 
         // --- [ glCreateProgram ] ---
         fun create() = GlProgram(GL20C.glCreateProgram())

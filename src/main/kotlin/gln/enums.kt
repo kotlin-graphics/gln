@@ -4922,25 +4922,42 @@ inline class TextureWrapMode(val i: Int) {
 
 inline class BufferTarget(val i: Int) {
     companion object {
-        val ARRAY_BUFFER = BufferTarget(GL15.GL_ARRAY_BUFFER)
-        val ATOMIC_COUNTER_BUFFER = BufferTarget(GL42.GL_ATOMIC_COUNTER_BUFFER)
-        val COPY_READ_BUFFER = BufferTarget(GL31.GL_COPY_READ_BUFFER)
-        val COPY_WRITE_BUFFER = BufferTarget(GL31.GL_COPY_WRITE_BUFFER)
-        val DISPATCH_INDIRECT_BUFFER = BufferTarget(GL43.GL_DISPATCH_INDIRECT_BUFFER)
-        val DRAW_INDIRECT_BUFFER = BufferTarget(GL40.GL_DRAW_INDIRECT_BUFFER)
-        val ELEMENT_ARRAY_BUFFER = BufferTarget(GL15.GL_ELEMENT_ARRAY_BUFFER)
-        val PIXEL_PACK_BUFFER = BufferTarget(GL21.GL_PIXEL_PACK_BUFFER)
-        val PIXEL_UNPACK_BUFFER = BufferTarget(GL21.GL_PIXEL_UNPACK_BUFFER)
-        val QUERY_BUFFER = BufferTarget(GL44C.GL_QUERY_BUFFER)
-        val SHADER_STORAGE_BUFFER = BufferTarget(GL43.GL_SHADER_STORAGE_BUFFER)
-        val TEXTURE_BUFFER = BufferTarget(GL31.GL_TEXTURE_BUFFER)
-        val TRANSFORM_FEEDBACK_BUFFER = BufferTarget(GL30.GL_TRANSFORM_FEEDBACK_BUFFER)
-        val UNIFORM_BUFFER = BufferTarget(GL31.GL_UNIFORM_BUFFER)
+        val ARRAY = BufferTarget(GL15.GL_ARRAY_BUFFER)
+        val ATOMIC_COUNTER = BufferTarget(GL42.GL_ATOMIC_COUNTER_BUFFER)
+        val COPY_READ = BufferTarget(GL31.GL_COPY_READ_BUFFER)
+        val COPY_WRITE = BufferTarget(GL31.GL_COPY_WRITE_BUFFER)
+        val DISPATCH_INDIRECT = BufferTarget(GL43.GL_DISPATCH_INDIRECT_BUFFER)
+        val DRAW_INDIRECT = BufferTarget(GL40.GL_DRAW_INDIRECT_BUFFER)
+        val ELEMENT_ARRAY = BufferTarget(GL15.GL_ELEMENT_ARRAY_BUFFER)
+        val PIXEL_PACK = BufferTarget(GL21.GL_PIXEL_PACK_BUFFER)
+        val PIXEL_UNPACK = BufferTarget(GL21.GL_PIXEL_UNPACK_BUFFER)
+        val QUERY = BufferTarget(GL44C.GL_QUERY_BUFFER)
+        val SHADER_STORAGE = BufferTarget(GL43.GL_SHADER_STORAGE_BUFFER)
+        val TEXTURE = BufferTarget(GL31.GL_TEXTURE_BUFFER)
+        val TRANSFORM_FEEDBACK = BufferTarget(GL30.GL_TRANSFORM_FEEDBACK_BUFFER)
+        val UNIFORM = BufferTarget(GL31.GL_UNIFORM_BUFFER)
     }
 }
 
-typealias BufferTargetFlags = Int
 
+inline class BufferTarget2(val i: Int) {
+    companion object {
+        /** Atomic counter storage */
+        val ATOMIC_COUNTER = BufferTarget2(GL42.GL_ATOMIC_COUNTER_BUFFER)
+
+        /** Read-write storage for shaders */
+        val SHADER_STORAGE = BufferTarget2(GL43.GL_SHADER_STORAGE_BUFFER)
+
+        /** Texture data buffer */
+        val TEXTURE = BufferTarget2(GL31.GL_TEXTURE_BUFFER)
+
+        /** Transform feedback buffer */
+        val TRANSFORM_FEEDBACK = BufferTarget2(GL31.GL_TRANSFORM_FEEDBACK_BUFFER)
+
+        /** Uniform block storage */
+        val UNIFORM = BufferTarget2(GL31.GL_UNIFORM_BUFFER)
+    }
+}
 
 //# ARB_vertex_program enum: (additional; see above)
 //# ARB_fragment_program enum: (additional; see above)

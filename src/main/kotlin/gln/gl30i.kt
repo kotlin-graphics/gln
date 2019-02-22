@@ -929,7 +929,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glMapBufferRange">Reference Page</a>
      */
-    fun glMapBufferRange(target: BufferTarget, offset: Int, length: Int, access: BufferTargetFlags): ByteBuffer? {
+    fun glMapBufferRange(target: BufferTarget, offset: Int, length: Int, access: BufferMapFlags): ByteBuffer? {
         val result = GL30C.nglMapBufferRange(target.i, offset.L, length.L, access)
         return memByteBufferSafe(result, length)
     }
@@ -1193,7 +1193,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture1D">Reference Page</a>
      */
     fun framebufferTexture1D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture1D(target.i, attachment, texTarget.i, texture.i, level)
+            GL30C.glFramebufferTexture1D(target.i, attachment, texTarget.i, texture.name, level)
 
     /**
      * Attaches a level of a 1D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1206,7 +1206,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture1D">Reference Page</a>
      */
     fun framebufferTexture1D(attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture1D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.i, level)
+            GL30C.glFramebufferTexture1D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.name, level)
 
     // --- [ glFramebufferTexture2D ] ---
 
@@ -1222,7 +1222,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture2D">Reference Page</a>
      */
     fun framebufferTexture2D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture2D(target.i, attachment, texTarget.i, texture.i, level)
+            GL30C.glFramebufferTexture2D(target.i, attachment, texTarget.i, texture.name, level)
 
     /**
      * Attaches a level of a 2D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1235,7 +1235,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture2D">Reference Page</a>
      */
     fun framebufferTexture2D(attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture2D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.i, level)
+            GL30C.glFramebufferTexture2D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.name, level)
 
     // --- [ glFramebufferTexture3D ] ---
 
@@ -1252,7 +1252,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture3D">Reference Page</a>
      */
     fun framebufferTexture3D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTexture3D(target.i, attachment, texTarget.i, texture.i, level, layer)
+            GL30C.glFramebufferTexture3D(target.i, attachment, texTarget.i, texture.name, level, layer)
 
     /**
      * Attaches a layer of a 3D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1266,7 +1266,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture3D">Reference Page</a>
      */
     fun framebufferTexture3D(attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTexture3D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.i, level, layer)
+            GL30C.glFramebufferTexture3D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.name, level, layer)
 
     // --- [ glFramebufferTextureLayer ] ---
 
@@ -1282,7 +1282,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
     fun framebufferTextureLayer(target: FramebufferTarget, attachment: Int, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTextureLayer(target.i, attachment, texture.i, level, layer)
+            GL30C.glFramebufferTextureLayer(target.i, attachment, texture.name, level, layer)
 
     /**
      * Attaches a single layer of a texture to a framebuffer
@@ -1295,7 +1295,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
     fun framebufferTextureLayer(attachment: Int, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTextureLayer(GL30C.GL_FRAMEBUFFER, attachment, texture.i, level, layer)
+            GL30C.glFramebufferTextureLayer(GL30C.GL_FRAMEBUFFER, attachment, texture.name, level, layer)
 
     // --- [ glFramebufferRenderbuffer ] ---
 

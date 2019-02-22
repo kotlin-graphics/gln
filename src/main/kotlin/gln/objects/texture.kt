@@ -7,7 +7,7 @@ import glm_.vec3.Vec3i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
 import gln.*
-import kool.adr
+import gln.texture.GlTextureDsl
 import kool.stak
 import org.lwjgl.opengl.*
 
@@ -52,12 +52,12 @@ import org.lwjgl.opengl.*
 //        get() = RECTANGLE
 //}
 
-inline class GlTexture(val i: Int) {
+inline class GlTexture(val name: Int = -1) {
 
     // --- [ glIsTexture ] ---
 
     val isValid: Boolean
-        get() = GL20C.glIsTexture(i)
+        get() = GL20C.glIsTexture(name)
 
     // glGetTexLevelParameter
 
@@ -200,16 +200,32 @@ inline class GlTexture(val i: Int) {
     val textureTarget: TextureTarget
         get() = TODO()
 
-    fun bind(target: TextureTarget) = GL11C.glBindTexture(target.i, i)
+    fun bind(target: TextureTarget) = GL11C.glBindTexture(target.i, name)
+    fun bind(target: TextureTarget, unit: Int) {
+        GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + unit)
+        GL11C.glBindTexture(target.i, name)
+    }
     fun unbind(target: TextureTarget) = GL11C.glBindTexture(target.i, 0)
-    fun <R> bound(target: TextureTarget, block: (GlTexture) -> R): R {
-        GL11C.glBindTexture(target.i, i)
-        return block(this).also { GL11C.glBindTexture(target.i, 0) }
+    fun bound(target: TextureTarget, block: GlTextureDsl.() -> Unit): GlTexture {
+        bind(target)
+        GlTextureDsl.name = name
+        GlTextureDsl.target = target
+        GlTextureDsl.block()
+        unbind(target)
+        return this
+    }
+    fun bound(target: TextureTarget, unit: Int, block: GlTextureDsl.() -> Unit): GlTexture {
+        bind(target, unit)
+        GlTextureDsl.name = name
+        GlTextureDsl.target = target
+        GlTextureDsl.block()
+        unbind(target)
+        return this
     }
 
     fun delete() = gl21.deleteTexture(this)
 
     companion object {
-        fun gen() = gl21.genTexture()
+        fun gen(): GlTexture = GlTexture(gl21.genTexture())
     }
 }
