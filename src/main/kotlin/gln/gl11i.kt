@@ -919,7 +919,7 @@ interface gl11i {
      * @param x      the left scissor rectangle coordinate
      * @param y      the bottom scissor rectangle coordinate
      * @param width  the scissor rectangle width
-     * @param height the scissor rectangle height
+     * @param getHeight the scissor rectangle height
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glScissor">Reference Page</a>
      */

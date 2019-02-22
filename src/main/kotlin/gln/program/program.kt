@@ -3,14 +3,11 @@
 package gln.program
 
 import glm_.bool
-import gln.GL_FRAGMENT_SHADER
-import gln.GL_GEOMETRY_SHADER
-import gln.GL_VERTEX_SHADER
-import gln.objects.GlShader
 import gln.ShaderType
 import gln.objects.GlProgram
+import gln.objects.GlShader
 import kool.get
-import org.lwjgl.opengl.*
+import org.lwjgl.opengl.GL20
 import kotlin.properties.Delegates
 
 
@@ -58,8 +55,8 @@ open class GlslProgram(
 
     constructor(vertSrc: String, fragSrc: String) : this() {
 
-        val v = GlShader.createFromSource(GL_VERTEX_SHADER, vertSrc)
-        val f = GlShader.createFromSource(GL_FRAGMENT_SHADER, fragSrc)
+        val v = GlShader.createFromSource(ShaderType.VERTEX_SHADER, vertSrc)
+        val f = GlShader.createFromSource(ShaderType.FRAGMENT_SHADER, fragSrc)
 
         plusAssign(v)
         plusAssign(f)
@@ -77,9 +74,9 @@ open class GlslProgram(
 
     constructor(vertSrc: String, geomSrc: String, fragSrc: String) : this() {
 
-        val v = GlShader.createFromSource(GL_VERTEX_SHADER, vertSrc)
-        val g = GlShader.createFromSource(GL_GEOMETRY_SHADER, geomSrc)
-        val f = GlShader.createFromSource(GL_FRAGMENT_SHADER, fragSrc)
+        val v = GlShader.createFromSource(ShaderType.VERTEX_SHADER, vertSrc)
+        val g = GlShader.createFromSource(ShaderType.GEOMETRY_SHADER, geomSrc)
+        val f = GlShader.createFromSource(ShaderType.FRAGMENT_SHADER, fragSrc)
 
         plusAssign(v)
         plusAssign(g)

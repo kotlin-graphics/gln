@@ -6,8 +6,8 @@ import glm_.BYTES
 import glm_.L
 import glm_.mat4x4.Mat4
 import glm_.vec4.Vec4
-import gln.GL_STATIC_DRAW
 import gln.Usage
+import gln.Usage.Companion.STATIC_DRAW
 import gln.buf
 import gln.bufAd
 import gln.buffer.BufferTarget.BufferTarget2
@@ -96,25 +96,25 @@ object Buffer {
             field = value
         }
 
-    inline fun data(data: ShortArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
-    inline fun data(data: IntArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
-    inline fun data(data: LongArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
-    inline fun data(data: FloatArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
-    inline fun data(data: DoubleArray, usage: Usage = GL_STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: ShortArray, usage: Usage = STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: IntArray, usage: Usage = STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: LongArray, usage: Usage = STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: FloatArray, usage: Usage = STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
+    inline fun data(data: DoubleArray, usage: Usage = STATIC_DRAW) = GL15.glBufferData(target.i, data, usage.i)
 
-    inline fun data(data: ByteBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L, data.adr + data.pos, usage.i)
-    inline fun data(data: ShortBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES, usage.i)
-    inline fun data(data: IntBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Int.BYTES, data.adr + data.pos * Int.BYTES, usage.i)
-    inline fun data(data: LongBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Long.BYTES, data.adr + data.pos * Long.BYTES, usage.i)
-    inline fun data(data: FloatBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Float.BYTES, data.adr + data.pos * Float.BYTES, usage.i)
-    inline fun data(data: DoubleBuffer, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Double.BYTES, data.adr + data.pos * Double.BYTES, usage.i)
+    inline fun data(data: ByteBuffer, usage: Usage = STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L, data.adr + data.pos, usage.i)
+    inline fun data(data: ShortBuffer, usage: Usage = STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES, usage.i)
+    inline fun data(data: IntBuffer, usage: Usage = STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Int.BYTES, data.adr + data.pos * Int.BYTES, usage.i)
+    inline fun data(data: LongBuffer, usage: Usage = STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Long.BYTES, data.adr + data.pos * Long.BYTES, usage.i)
+    inline fun data(data: FloatBuffer, usage: Usage = STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Float.BYTES, data.adr + data.pos * Float.BYTES, usage.i)
+    inline fun data(data: DoubleBuffer, usage: Usage = STATIC_DRAW) = GL15.nglBufferData(target.i, data.remaining().L * Double.BYTES, data.adr + data.pos * Double.BYTES, usage.i)
 
-    inline fun data(size: Int, data: Vec4, usage: Usage = GL_STATIC_DRAW) {
+    inline fun data(size: Int, data: Vec4, usage: Usage = STATIC_DRAW) {
         buf.putFloat(0, data.x).putFloat(Float.BYTES, data.y).putFloat(Float.BYTES * 2, data.z).putFloat(Float.BYTES * 3, data.w)
         GL15.nglBufferData(target.i, size.L, bufAd, usage.i)
     }
 
-    inline fun data(size: Int, usage: Usage = GL_STATIC_DRAW) = GL15.nglBufferData(target.i, size.L, NULL, usage.i)
+    inline fun data(size: Int, usage: Usage = STATIC_DRAW) = GL15.nglBufferData(target.i, size.L, NULL, usage.i)
 
     inline fun subData(offset: Int, data: ByteBuffer) = GL15.nglBufferSubData(target.i, offset.L, data.remaining().L, data.adr + data.pos)
     inline fun subData(offset: Int, data: ShortBuffer) = GL15.nglBufferSubData(target.i, offset.L, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES)

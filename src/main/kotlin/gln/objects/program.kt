@@ -34,6 +34,8 @@ inline class GlProgram(val i: Int) {
 
     // --- [ glShaderSource ] ---
 
+    fun source(source: String) = GL20C.glShaderSource(i, source)
+
     // --- [ glLinkProgram ] ---
 
     fun link() = GL20C.glLinkProgram(i)
@@ -60,85 +62,85 @@ inline class GlProgram(val i: Int) {
     // --- [ glGetProgramiv ] ---
 
     val deleteStatus: Boolean
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_DELETE_STATUS)).bool
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_DELETE_STATUS)).bool
 
     val linkStatus: Boolean
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_LINK_STATUS)).bool
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_LINK_STATUS)).bool
 
     val validateStatus: Boolean
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_VALIDATE_STATUS)).bool
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_VALIDATE_STATUS)).bool
 
     val infoLogLength: Int
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_INFO_LOG_LENGTH))
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_INFO_LOG_LENGTH))
 
     val attachedShadersCount: Int
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_ATTACHED_SHADERS))
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ATTACHED_SHADERS))
 
     val activeAtomicCounterBuffers: Int
-        get() = gl20.getProgram(this, GetProgram(GL42.GL_ACTIVE_ATOMIC_COUNTER_BUFFERS))
+        get() = gl21.getProgram(this, GetProgram(GL42.GL_ACTIVE_ATOMIC_COUNTER_BUFFERS))
 
     val activeAttributes: Int
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_ACTIVE_ATTRIBUTES))
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ACTIVE_ATTRIBUTES))
 
     val activeAttributeMaxLength: Int
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH))
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH))
 
     val activeUniforms: Int
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_ACTIVE_UNIFORMS))
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ACTIVE_UNIFORMS))
 
     val activeUniformMaxLength: Int
-        get() = gl20.getProgram(this, GetProgram(GL20C.GL_ACTIVE_UNIFORM_MAX_LENGTH))
+        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ACTIVE_UNIFORM_MAX_LENGTH))
 
     val binaryLength: Int
-        get() = gl20.getProgram(this, GetProgram(GL41.GL_PROGRAM_BINARY_LENGTH))
+        get() = gl21.getProgram(this, GetProgram(GL41.GL_PROGRAM_BINARY_LENGTH))
 
 //    val computeWorkGroupSize: Vec3i
 //        get() = stak.vec3iAddress { GL20C.nglGetProgramiv(i, GL43.GL_COMPUTE_WORK_GROUP_SIZE, it) }
 
     val transformFeedbackBufferMode: Int
-        get() = gl20.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_BUFFER_MODE))
+        get() = gl21.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_BUFFER_MODE))
 
     val transformFeedbackVaryings: Int
-        get() = gl20.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_VARYINGS))
+        get() = gl21.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_VARYINGS))
 
     val transformFeedbackVaryingMaxLength: Int
-        get() = gl20.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH))
+        get() = gl21.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH))
 
     val geometryVerticesOut: Int
-        get() = gl20.getProgram(this, GetProgram(GL41.GL_GEOMETRY_VERTICES_OUT))
+        get() = gl21.getProgram(this, GetProgram(GL41.GL_GEOMETRY_VERTICES_OUT))
 
     val geometryInputType: Int
-        get() = gl20.getProgram(this, GetProgram(GL41.GL_GEOMETRY_INPUT_TYPE))
+        get() = gl21.getProgram(this, GetProgram(GL41.GL_GEOMETRY_INPUT_TYPE))
 
     val geometryOutputType: Int
-        get() = gl20.getProgram(this, GetProgram(GL41.GL_GEOMETRY_OUTPUT_TYPE))
+        get() = gl21.getProgram(this, GetProgram(GL41.GL_GEOMETRY_OUTPUT_TYPE))
 
     // --- [ glGetProgramInfoLog ] ---
 
     val infoLog: String
-        get() = gl20.getProgramInfoLog(this)
+        get() = gl21.getProgramInfoLog(this)
 
     // --- [ glGetAttachedShaders ] ---
 
     val attachedShaders: GLshaders
-        get() = gl20.getAttachedShaders(this)
+        get() = gl21.getAttachedShaders(this)
 
     // --- [ glGetUniformLocation ] ---
 
-    infix fun getUniformLocation(name: String): Int = gl20.getUniformLocation(this, name)
-    operator fun get(name: String): Int = gl20.getUniformLocation(this, name)
+    infix fun getUniformLocation(name: String): Int = gl21.getUniformLocation(this, name)
+    operator fun get(name: String): Int = gl21.getUniformLocation(this, name)
 
     // --- [ glGetActiveUniform ] ---
 
-    infix fun getActiveUniform(index: Int): Triple<String, Int, UniformType> = gl20.getActiveUniform(this, index)
+    infix fun getActiveUniform(index: Int): Triple<String, Int, UniformType> = gl21.getActiveUniform(this, index)
 
     // --- [ glGetUniformfv ] ---
 
-    infix fun getUniformF(location: Int): Float = gl20.getUniformFloat(this, location)
+    infix fun getUniformF(location: Int): Float = gl21.getUniformFloat(this, location)
 
     // --- [ glGetUniformiv ] ---
 
-    infix fun getUniformI(location: Int): Int = gl20.getUniformInt(this, location)
+    infix fun getUniformI(location: Int): Int = gl21.getUniformInt(this, location)
 
     // --- [ glGetAttribLocation ] ---
     infix fun getAttribLocation(name: String): Int = GL20.glGetAttribLocation(i, name)
@@ -169,7 +171,7 @@ inline class GlProgram(val i: Int) {
 
     // --- [ glGetActiveAttrib ] ---
 
-    fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl20.getActiveAttrib(this, index)
+    fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl21.getActiveAttrib(this, index)
 
     companion object {
 
@@ -216,8 +218,8 @@ inline class GlProgram(val i: Int) {
 
             val program = GlProgram.create()
 
-            val v = GlShader.createFromSource(GL_VERTEX_SHADER, vertSrc)
-            val f = GlShader.createFromSource(GL_FRAGMENT_SHADER, fragSrc)
+            val v = GlShader.createFromSource(ShaderType.VERTEX_SHADER, vertSrc)
+            val f = GlShader.createFromSource(ShaderType.FRAGMENT_SHADER, fragSrc)
 
             program += v
             program += f
@@ -239,9 +241,9 @@ inline class GlProgram(val i: Int) {
 
             val program = GlProgram.create()
 
-            val v = GlShader.createFromSource(GL_VERTEX_SHADER, vertSrc)
-            val g = GlShader.createFromSource(GL_GEOMETRY_SHADER, geomSrc)
-            val f = GlShader.createFromSource(GL_FRAGMENT_SHADER, fragSrc)
+            val v = GlShader.createFromSource(ShaderType.VERTEX_SHADER, vertSrc)
+            val g = GlShader.createFromSource(ShaderType.GEOMETRY_SHADER, geomSrc)
+            val f = GlShader.createFromSource(ShaderType.FRAGMENT_SHADER, fragSrc)
 
             program += v
             program += g

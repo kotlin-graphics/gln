@@ -12,15 +12,30 @@ import org.lwjgl.opengl.*
 
 inline class AttribMask(val i: Int) {
 
-    infix fun and (other: AttribMask): AttribMask = AttribMask(i and other.i)
-    infix fun or (other: AttribMask): AttribMask = AttribMask(i or other.i)
+    companion object {
+        val DEPTH_BUFFER_BIT = AttribMask(GL11.GL_DEPTH_BUFFER_BIT)
+        val STENCIL_BUFFER_BIT = AttribMask(GL11.GL_STENCIL_BUFFER_BIT)
+        val COLOR_BUFFER_BIT = AttribMask(GL11.GL_COLOR_BUFFER_BIT)
+    }
+
+    infix fun and(other: AttribMask): AttribMask = AttribMask(i and other.i)
+    infix fun or(other: AttribMask): AttribMask = AttribMask(i or other.i)
     fun inv() = AttribMask(i.inv())
 }
 
 inline class ClearBufferMask(val i: Int) {
 
-    infix fun and (other: ClearBufferMask): ClearBufferMask = ClearBufferMask(i and other.i)
-    infix fun or (other: ClearBufferMask): ClearBufferMask = ClearBufferMask(i or other.i)
+    companion object {
+        val COLOR_BUFFER_BIT = ClearBufferMask(GL11.GL_COLOR_BUFFER_BIT)
+        val STENCIL_BUFFER_BIT = ClearBufferMask(GL11.GL_STENCIL_BUFFER_BIT)
+        val DEPTH_BUFFER_BIT = ClearBufferMask(GL11.GL_DEPTH_BUFFER_BIT)
+        val COLOR_STENCIL_BUFFER_BIT = ClearBufferMask(GL11.GL_COLOR_BUFFER_BIT or GL11.GL_STENCIL_BUFFER_BIT)
+        val COLOR_DEPTH_BUFFER_BIT = ClearBufferMask(GL11.GL_COLOR_BUFFER_BIT or GL11.GL_DEPTH_BUFFER_BIT)
+        val DEPTH_STENCIL_BUFFER_BIT = ClearBufferMask(GL11.GL_DEPTH_BUFFER_BIT or GL11.GL_STENCIL_BUFFER_BIT)
+    }
+
+    infix fun and(other: ClearBufferMask): ClearBufferMask = ClearBufferMask(i and other.i)
+    infix fun or(other: ClearBufferMask): ClearBufferMask = ClearBufferMask(i or other.i)
     fun inv() = ClearBufferMask(i.inv())
 }
 
@@ -56,7 +71,26 @@ inline class ClearBufferMask(val i: Int) {
 //
 //###############################################################################
 
-inline class DrawMode(val i: Int)
+inline class DrawMode(val i: Int) {
+
+    companion object {
+        val POINTS = DrawMode(GL11.GL_POINTS)
+        val LINES = DrawMode(GL11.GL_LINES)
+        val LINE_LOOP = DrawMode(GL11.GL_LINE_LOOP)
+        val LINE_STRIP = DrawMode(GL11.GL_LINE_STRIP)
+        val TRIANGLES = DrawMode(GL11.GL_TRIANGLES)
+        val TRIANGLE_STRIP = DrawMode(GL11.GL_TRIANGLE_STRIP)
+        val TRIANGLE_FAN = DrawMode(GL11.GL_TRIANGLE_FAN)
+        val QUADS = DrawMode(GL11.GL_QUADS)
+        val QUAD_STRIP = DrawMode(GL11.GL_QUAD_STRIP)
+        val POLYGON = DrawMode(GL11.GL_POLYGON)
+        val LINES_ADJACENCY = DrawMode(GL32.GL_LINES_ADJACENCY)
+        val LINE_STRIP_ADJACENCY = DrawMode(GL32.GL_LINE_STRIP_ADJACENCY)
+        val TRIANGLES_ADJACENCY = DrawMode(GL32.GL_TRIANGLES_ADJACENCY)
+        val TRIANGLE_STRIP_ADJACENCY = DrawMode(GL32.GL_TRIANGLE_STRIP_ADJACENCY)
+        val PATCHES = DrawMode(GL40.GL_PATCHES)
+    }
+}
 
 //###############################################################################
 //
@@ -81,13 +115,46 @@ inline class DrawMode(val i: Int)
 //
 //###############################################################################
 
-inline class BlendingFactor(val i: Int)
+inline class BlendingFactor(val i: Int) {
+
+    companion object {
+        val ZERO = BlendingFactor(GL11.GL_ZERO)
+        val ONE = BlendingFactor(GL11.GL_ONE)
+        val SRC_COLOR = BlendingFactor(GL11.GL_SRC_COLOR)
+        val ONE_MINUS_SRC_COLOR = BlendingFactor(GL11.GL_ONE_MINUS_SRC_COLOR)
+        val DST_COLOR = BlendingFactor(GL11.GL_DST_COLOR)
+        val ONE_MINUS_DST_COLOR = BlendingFactor(GL11.GL_ONE_MINUS_DST_COLOR)
+        val SRC_ALPHA = BlendingFactor(GL11.GL_SRC_ALPHA)
+        val ONE_MINUS_SRC_ALPHA = BlendingFactor(GL11.GL_ONE_MINUS_SRC_ALPHA)
+        val DST_ALPHA = BlendingFactor(GL11.GL_DST_ALPHA)
+        val ONE_MINUS_DST_ALPHA = BlendingFactor(GL11.GL_ONE_MINUS_DST_ALPHA)
+        val CONSTANT_COLOR = BlendingFactor(GL14.GL_CONSTANT_COLOR)
+        val ONE_MINUS_CONSTANT_COLOR = BlendingFactor(GL14.GL_ONE_MINUS_CONSTANT_COLOR)
+        val CONSTANT_ALPHA = BlendingFactor(GL14.GL_CONSTANT_ALPHA)
+        val ONE_MINUS_CONSTANT_ALPHA = BlendingFactor(GL14.GL_ONE_MINUS_CONSTANT_ALPHA)
+        val SRC_ALPHA_SATURATE = BlendingFactor(GL14.GL_SRC_ALPHA_SATURATE)
+        val SRC1_COLOR = BlendingFactor(GL33.GL_SRC1_COLOR)
+        val ONE_MINUS_SRC1_COLOR = BlendingFactor(GL33.GL_ONE_MINUS_SRC1_COLOR)
+        val SRC1_ALPHA = BlendingFactor(GL15.GL_SRC1_ALPHA)
+        val ONE_MINUS_SRC1_ALPHA = BlendingFactor(GL33.GL_ONE_MINUS_SRC1_ALPHA)
+    }
+}
 
 //###############################################################################
 
-inline class BlendEquationMode(val i: Int)
+inline class BlendEquationMode(val i: Int) {
 
-//###############################################################################
+    companion object {
+        val LOGIC_OP = BlendEquationMode(GL11.GL_LOGIC_OP)
+        val FUNC_ADD = BlendEquationMode(GL14.GL_FUNC_ADD)
+        val MIN = BlendEquationMode(GL14.GL_MIN)
+        val MAX = BlendEquationMode(GL14.GL_MAX)
+        val FUNC_SUBTRACT = BlendEquationMode(GL14.GL_FUNC_SUBTRACT)
+        val FUNC_REVERSE_SUBTRACT = BlendEquationMode(GL14.GL_FUNC_REVERSE_SUBTRACT)
+    }
+}
+
+//##############################################################################
 //
 //ColorMaterialFace enum:
 //use DrawBufferMode FRONT
@@ -153,23 +220,68 @@ inline class BlendEquationMode(val i: Int)
 //
 //###############################################################################
 
-inline class FaceMode(val i: Int)
+inline class FaceMode(val i: Int) {
+
+    companion object {
+        val FRONT = FaceMode(GL11.GL_FRONT)
+        val BACK = FaceMode(GL11.GL_BACK)
+        val FRONT_AND_BACK = FaceMode(GL11.GL_FRONT_AND_BACK)
+    }
+}
 
 //###############################################################################
 
-inline class CullFaceMode(val i: Int)
+inline class CullFaceMode(val i: Int) {
+
+    companion object {
+        val DISABLED = CullFaceMode(GL11.GL_FALSE)
+        val FRONT = CullFaceMode(GL11.GL_FRONT)
+        val BACK = CullFaceMode(GL11.GL_BACK)
+        val FRONT_AND_BACK = CullFaceMode(GL11.GL_FRONT_AND_BACK)
+    }
+}
 
 internal var _cullFaceEnabled = false
 
 //###############################################################################
 
 /** Depth, Stencil and textureCompareMode func */
-inline class CompareFunction(val i: Int)
+inline class CompareFunction(val i: Int) {
+
+    companion object {
+        val NEVER = CompareFunction(GL11.GL_NEVER)
+        val LESS = CompareFunction(GL11.GL_LESS)
+        val EQUAL = CompareFunction(GL11.GL_EQUAL)
+        val LEQUAL = CompareFunction(GL11.GL_LEQUAL)
+        val GREATER = CompareFunction(GL11.GL_GREATER)
+        val NOTEQUAL = CompareFunction(GL11.GL_NOTEQUAL)
+        val GEQUAL = CompareFunction(GL11.GL_GEQUAL)
+        val ALWAYS = CompareFunction(GL11.GL_ALWAYS)
+    }
+}
 
 //###############################################################################
 
 /** Draw and Read */
-inline class BufferMode(val i: Int)
+inline class BufferMode(val i: Int) {
+
+    companion object {
+        val NONE = BufferMode(GL11.GL_NONE)
+        val FRONT_LEFT = BufferMode(GL11.GL_FRONT_LEFT)
+        val FRONT_RIGHT = BufferMode(GL11.GL_FRONT_RIGHT)
+        val BACK_LEFT = BufferMode(GL11.GL_BACK_LEFT)
+        val BACK_RIGHT = BufferMode(GL11.GL_BACK_RIGHT)
+        val FRONT = BufferMode(GL11.GL_FRONT)
+        val BACK = BufferMode(GL11.GL_BACK)
+        val LEFT = BufferMode(GL11.GL_LEFT)
+        val RIGHT = BufferMode(GL11.GL_RIGHT)
+        val FRONT_AND_BACK = BufferMode(GL11.GL_FRONT_AND_BACK)
+        val AUX0 = BufferMode(GL11.GL_AUX0)
+        val AUX1 = BufferMode(GL11.GL_AUX1)
+        val AUX2 = BufferMode(GL11.GL_AUX2)
+        val AUX3 = BufferMode(GL11.GL_AUX3)
+    }
+}
 
 //###############################################################################
 
@@ -284,7 +396,25 @@ inline class BufferMode(val i: Int)
 
 //###############################################################################
 
-inline class ErrorCode(val i: Int)
+inline class ErrorCode(val i: Int) {
+
+    companion object {
+        val NO_ERROR = ErrorCode(GL11.GL_NO_ERROR)
+        val INVALID_ENUM = ErrorCode(GL11.GL_INVALID_ENUM)
+        val INVALID_VALUE = ErrorCode(GL11.GL_INVALID_VALUE)
+        val INVALID_OPERATION = ErrorCode(GL11.GL_INVALID_OPERATION)
+        val STACK_OVERFLOW = ErrorCode(GL11.GL_STACK_OVERFLOW)
+        val STACK_UNDERFLOW = ErrorCode(GL11.GL_STACK_UNDERFLOW)
+        val OUT_OF_MEMORY = ErrorCode(GL11.GL_OUT_OF_MEMORY)
+        val TABLE_TOO_LARGE_EXT = ErrorCode(ARBImaging.GL_TABLE_TOO_LARGE)
+        val TEXTURE_TOO_LARGE = ErrorCode(0x8065)
+        //# Additional error codes
+        //# VERSION_3_0 enum:
+//# ARB_framebuffer_object enum: (note: no ARB suffixes)
+//# EXT_framebuffer_object enum:
+        val INVALID_FRAMEBUFFER_OPERATION = ErrorCode(GL30.GL_INVALID_FRAMEBUFFER_OPERATION)
+    }
+}
 
 //###############################################################################
 //
@@ -348,7 +478,12 @@ inline class ErrorCode(val i: Int)
 //
 //###############################################################################
 
-inline class FrontFaceDirection(val i: Int)
+inline class FrontFaceDirection(val i: Int) {
+    companion object {
+        val CW = FrontFaceDirection(GL11.GL_CW)
+        val CCW = FrontFaceDirection(GL11.GL_CCW)
+    }
+}
 
 //###############################################################################
 //
@@ -910,18 +1045,88 @@ inline class FrontFaceDirection(val i: Int)
 //
 //###############################################################################
 
-inline class GetTexLevelParameter(val i: Int)
+inline class GetTexLevelParameter(val i: Int) {
+    companion object {
+        val WIDTH = GetTexLevelParameter(GL11.GL_TEXTURE_WIDTH)
+        val HEIGHT = GetTexLevelParameter(GL11.GL_TEXTURE_HEIGHT)
+        val DEPTH = GetTexLevelParameter(GL12.GL_TEXTURE_DEPTH)
+        val INTERNAL_FORMAT = GetTexLevelParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT)
+        val COMPONENTS = GetTexLevelParameter(GL11.GL_TEXTURE_COMPONENTS)
+        val RED_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_RED_TYPE)
+        val GREEN_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_GREEN_TYPE)
+        val BLUE_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_BLUE_TYPE)
+        val ALPHA_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_ALPHA_TYPE)
+        val DEPTH_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_DEPTH_TYPE)
+        val RED_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_RED_SIZE)
+        val GREEN_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_GREEN_SIZE)
+        val BLUE_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_BLUE_SIZE)
+        val ALPHA_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_ALPHA_SIZE)
+        val DEPTH_SIZE = GetTexLevelParameter(GL30.GL_TEXTURE_DEPTH_SIZE)
+        val COMPRESSED = GetTexLevelParameter(GL30.GL_TEXTURE_COMPRESSED)
+        val COMPRESSED_IMAGE_SIZE = GetTexLevelParameter(GL13.GL_TEXTURE_COMPRESSED_IMAGE_SIZE)
+        val BUFFER_OFFSET = GetTexLevelParameter(GL43.GL_TEXTURE_BUFFER_OFFSET)
+        val BUFFER_SIZE = GetTexLevelParameter(GL43.GL_TEXTURE_BUFFER_SIZE)
+    }
+}
 
 
-inline class TexParameter(val i: Int)
+inline class TexParameter(val i: Int){
+    companion object {
+        val DEPTH_STENCIL_MODE = TexParameter(GL43.GL_DEPTH_STENCIL_TEXTURE_MODE)
+        val IMAGE_FORMAT_COMPATIBILITY_TYPE = TexParameter(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_TYPE)
+        val BASE_LEVEL = TexParameter(GL12.GL_TEXTURE_BASE_LEVEL)
+        val BORDER_COLOR = TexParameter(GL11.GL_TEXTURE_BORDER_COLOR)
+        val COMPARE_MODE = TexParameter(GL14.GL_TEXTURE_COMPARE_MODE)
+        val COMPARE_FUNC = TexParameter(GL14.GL_TEXTURE_COMPARE_FUNC)
+        val IMMUTABLE_FORMAT = TexParameter(GL42.GL_TEXTURE_IMMUTABLE_FORMAT)
+        val IMMUTABLE_LEVELS = TexParameter(GL43.GL_TEXTURE_IMMUTABLE_LEVELS)
+        val LOD_BIAS = TexParameter(GL14.GL_TEXTURE_LOD_BIAS)
+        val MAG_FILTER = TexParameter(GL11.GL_TEXTURE_MAG_FILTER)
+        val MAX_LEVEL = TexParameter(GL12.GL_TEXTURE_MAX_LEVEL)
+        val MAX_LOD = TexParameter(GL12.GL_TEXTURE_MAX_LOD)
+        val MIN_FILTER = TexParameter(GL11.GL_TEXTURE_MIN_FILTER)
+        val MIN_LOD = TexParameter(GL12.GL_TEXTURE_MIN_LOD)
+        val SWIZZLE_R = TexParameter(GL33.GL_TEXTURE_SWIZZLE_R)
+        val SWIZZLE_G = TexParameter(GL33.GL_TEXTURE_SWIZZLE_G)
+        val SWIZZLE_B = TexParameter(GL33.GL_TEXTURE_SWIZZLE_B)
+        val SWIZZLE_A = TexParameter(GL33.GL_TEXTURE_SWIZZLE_A)
+        val SWIZZLE_RGBA = TexParameter(GL33.GL_TEXTURE_SWIZZLE_RGBA)
+        val TARGET = TexParameter(GL45.GL_TEXTURE_TARGET)
+        val VIEW_MIN_LAYER = TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LAYER)
+        val VIEW_MIN_LEVEL = TexParameter(GL43.GL_TEXTURE_VIEW_MIN_LEVEL)
+        val VIEW_NUM_LAYERS = TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LAYERS)
+        val VIEW_NUM_LEVELS = TexParameter(GL43.GL_TEXTURE_VIEW_NUM_LEVELS)
+        val WRAP_S = TexParameter(GL11.GL_TEXTURE_WRAP_S)
+        val WRAP_T = TexParameter(GL11.GL_TEXTURE_WRAP_T)
+        val WRAP_R = TexParameter(GL12.GL_TEXTURE_WRAP_R)
+    }
+}
 
 //###############################################################################
 
-inline class HintMode(val i: Int)
+inline class HintMode(val i: Int){
+    companion object {
+        val DONT_CARE = HintMode(GL11.GL_DONT_CARE)
+        val FASTEST = HintMode(GL11.GL_FASTEST)
+        val NICEST = HintMode(GL11.GL_NICEST)
+    }
+}
 
 //###############################################################################
 
-inline class HintTarget(val i: Int)
+inline class HintTarget(val i: Int) {
+    companion object {
+        val PERSPECTIVE_CORRECTION_HINT = HintTarget(GL11.GL_PERSPECTIVE_CORRECTION_HINT)
+        val POINT_SMOOTH_HINT = HintTarget(GL11.GL_POINT_SMOOTH_HINT)
+        val LINE_SMOOTH_HINT = HintTarget(GL11.GL_LINE_SMOOTH_HINT)
+        val POLYGON_SMOOTH_HINT = HintTarget(GL11.GL_POLYGON_SMOOTH_HINT)
+        val FOG_HINT = HintTarget(GL11.GL_FOG_HINT)
+        val PACK_CMYK_HINT_EXT = HintTarget(0x800e)
+        val UNPACK_CMYK_HINT_EXT = HintTarget(0x800f)
+        val TEXTURE_COMPRESSION_HINT = HintTarget(GL13.GL_TEXTURE_COMPRESSION_HINT)
+        val FRAGMENT_SHADER_DERIVATIVE_HINT = HintTarget(GL20.GL_FRAGMENT_SHADER_DERIVATIVE_HINT)
+    }
+}
 
 //###############################################################################
 //
@@ -986,6 +1191,29 @@ inline class HintTarget(val i: Int)
 //###############################################################################
 
 inline class DataType(val i: Int) {
+    companion object {
+        val BYTE = DataType(GL11.GL_BYTE)
+        val UNSIGNED_BYTE = DataType(GL11.GL_UNSIGNED_BYTE)
+        val SHORT = DataType(GL11.GL_SHORT)
+        val UNSIGNED_SHORT = DataType(GL11.GL_UNSIGNED_SHORT)
+        val INT = DataType(GL11.GL_INT)
+        val UNSIGNED_INT = DataType(GL11.GL_UNSIGNED_INT)
+        val FLOAT = DataType(GL11.GL_FLOAT)
+        val _2_BYTES = DataType(GL11.GL_2_BYTES)
+        val _3_BYTES = DataType(GL11.GL_3_BYTES)
+        val _4_BYTES = DataType(GL11.GL_4_BYTES)
+        val DOUBLE = DataType(GL11.GL_DOUBLE)
+        //# VERSION_3_0 enum:
+//# ARB_half_float_vertex enum: (note: no ARB suffixes)
+//# ARB_half_float_pixel enum:
+//# NV_half_float enum:
+        val HALF_FLOAT = DataType(GL30.GL_HALF_FLOAT) //    # 3.0 / ARB_half_float_vertex
+//#	HALF_FLOAT_ARB					= 0x140B
+//#	HALF_FLOAT_NV					= 0x140B
+
+//# OES_fixed_point enum:
+//val FIXED_OES = DataType(0x140C)
+    }
     val size: Int
         get() = when (i) {
             GL11.GL_BYTE, GL11.GL_UNSIGNED_BYTE -> Byte.BYTES
@@ -1021,7 +1249,27 @@ inline class DataType(val i: Int) {
 //
 //###############################################################################
 
-inline class LogicOp(val i: Int)
+inline class LogicOp(val i: Int){
+    companion object {
+        val DISABLED = LogicOp(GL11.GL_FALSE)
+        val CLEAR = LogicOp(GL11.GL_CLEAR)
+        val AND = LogicOp(GL11.GL_AND)
+        val AND_REVERSE = LogicOp(GL11.GL_AND_REVERSE)
+        val COPY = LogicOp(GL11.GL_COPY)
+        val AND_INVERTED = LogicOp(GL11.GL_AND_INVERTED)
+        val NOOP = LogicOp(GL11.GL_NOOP)
+        val XOR = LogicOp(GL11.GL_XOR)
+        val OR = LogicOp(GL11.GL_OR)
+        val NOR = LogicOp(GL11.GL_NOR)
+        val EQUIV = LogicOp(GL11.GL_EQUIV)
+        val INVERT = LogicOp(GL11.GL_INVERT)
+        val OR_REVERSE = LogicOp(GL11.GL_OR_REVERSE)
+        val COPY_INVERTED = LogicOp(GL11.GL_COPY_INVERTED)
+        val OR_INVERTED = LogicOp(GL11.GL_OR_INVERTED)
+        val NAND = LogicOp(GL11.GL_NAND)
+        val SET = LogicOp(GL11.GL_SET)
+    }
+}
 
 internal var _logicOpEnabled = false
 
@@ -1104,7 +1352,13 @@ internal var _logicOpEnabled = false
 //
 //###############################################################################
 
-inline class PixelCopyType(val i: Int)
+inline class PixelCopyType(val i: Int){
+    companion object {
+        val COLOR = PixelCopyType(GL11.GL_COLOR)
+        val DEPTH = PixelCopyType(GL11C.GL_DEPTH)
+        val STENCIL = PixelCopyType(GL11.GL_STENCIL)
+    }
+}
 
 //###############################################################################
 //
@@ -1147,7 +1401,26 @@ inline class PixelCopyType(val i: Int)
 //
 //###############################################################################
 
-inline class PixelStoreParameter(val i: Int)
+inline class PixelStoreParameter(val i: Int){
+    companion object {
+        val UNPACK_SWAP_BYTES = PixelStoreParameter(GL11.GL_UNPACK_SWAP_BYTES)
+        val UNPACK_LSB_FIRST = PixelStoreParameter(GL11.GL_UNPACK_LSB_FIRST)
+        val UNPACK_ROW_LENGTH = PixelStoreParameter(GL11.GL_UNPACK_ROW_LENGTH)
+        val UNPACK_SKIP_ROWS = PixelStoreParameter(GL11.GL_UNPACK_SKIP_ROWS)
+        val UNPACK_SKIP_PIXELS = PixelStoreParameter(GL11.GL_UNPACK_SKIP_PIXELS)
+        val UNPACK_ALIGNMENT = PixelStoreParameter(GL11.GL_UNPACK_ALIGNMENT)
+        val UNPACK_SKIP_IMAGES = PixelStoreParameter(GL12.GL_UNPACK_SKIP_IMAGES)
+        val UNPACK_IMAGE_HEIGHT = PixelStoreParameter(GL12.GL_UNPACK_IMAGE_HEIGHT)
+        val PACK_SWAP_BYTES = PixelStoreParameter(GL11.GL_PACK_SWAP_BYTES)
+        val PACK_LSB_FIRST = PixelStoreParameter(GL11.GL_PACK_LSB_FIRST)
+        val PACK_ROW_LENGTH = PixelStoreParameter(GL11.GL_PACK_ROW_LENGTH)
+        val PACK_SKIP_ROWS = PixelStoreParameter(GL11.GL_PACK_SKIP_ROWS)
+        val PACK_SKIP_PIXELS = PixelStoreParameter(GL11.GL_PACK_SKIP_PIXELS)
+        val PACK_ALIGNMENT = PixelStoreParameter(GL11.GL_PACK_ALIGNMENT)
+        val PACK_SKIP_IMAGES = PixelStoreParameter(GL12.GL_PACK_SKIP_IMAGES)
+        val PACK_IMAGE_HEIGHT = PixelStoreParameter(GL12.GL_PACK_IMAGE_HEIGHT)
+    }
+}
 
 //###############################################################################
 //
@@ -1243,7 +1516,13 @@ inline class PixelStoreParameter(val i: Int)
 //
 //###############################################################################
 
-inline class PolygonMode(val i: Int)
+inline class PolygonMode(val i: Int){
+    companion object {
+        val POINT = PolygonMode(GL11.GL_POINT)
+        val LINE = PolygonMode(GL11.GL_LINE)
+        val FILL = PolygonMode(GL11.GL_FILL)
+    }
+}
 
 //###############################################################################
 
@@ -1304,7 +1583,18 @@ inline class PolygonMode(val i: Int)
 //
 //###############################################################################
 
-inline class StencilOp(val i: Int)
+inline class StencilOp(val i: Int){
+    companion object {
+        val ZERO = StencilOp(GL11.GL_ZERO)
+        val KEEP = StencilOp(GL11.GL_KEEP)
+        val REPLACE = StencilOp(GL11.GL_REPLACE)
+        val INCR = StencilOp(GL11.GL_INCR)
+        val INCR_WRAP = StencilOp(GL14.GL_INCR_WRAP)
+        val DECR = StencilOp(GL11.GL_DECR)
+        val DECR_WRAP = StencilOp(GL14.GL_DECR_WRAP)
+        val INVERT = StencilOp(GL11.GL_INVERT)
+    }
+}
 
 //###############################################################################
 //
@@ -1380,11 +1670,25 @@ inline class StencilOp(val i: Int)
 //
 //###############################################################################
 
-inline class TextureMagFilter(val i: Int)
+inline class TextureMagFilter(val i: Int) {
+    companion object {
+        val NEAREST = TextureMagFilter(GL11.GL_NEAREST)
+        val LINEAR = TextureMagFilter(GL11.GL_LINEAR)
+    }
+}
 
 //###############################################################################
 
-inline class TextureMinFilter(val i: Int)
+inline class TextureMinFilter(val i: Int){
+    companion object {
+        val NEAREST = TextureMinFilter(GL11.GL_NEAREST)
+        val LINEAR = TextureMinFilter(GL11.GL_LINEAR)
+        val NEAREST_MIPMAP_NEAREST = TextureMinFilter(GL11.GL_NEAREST_MIPMAP_NEAREST)
+        val LINEAR_MIPMAP_NEAREST = TextureMinFilter(GL11.GL_LINEAR_MIPMAP_NEAREST)
+        val NEAREST_MIPMAP_LINEAR = TextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR)
+        val LINEAR_MIPMAP_LINEAR = TextureMinFilter(GL11.GL_LINEAR_MIPMAP_LINEAR)
+    }
+}
 
 //###############################################################################
 //
@@ -1422,11 +1726,44 @@ inline class TextureMinFilter(val i: Int)
 //
 //###############################################################################
 
-inline class TextureTarget(val i: Int) 
+inline class TextureTarget(val i: Int){
+    companion object {
+        val _1D = TextureTarget(GL11.GL_TEXTURE_1D)
+        val _2D = TextureTarget(GL11.GL_TEXTURE_2D)
+        val _3D = TextureTarget(GL12.GL_TEXTURE_3D)
+        val _1D_ARRAY = TextureTarget(GL30.GL_TEXTURE_1D_ARRAY)
+        val _2D_ARRAY = TextureTarget(GL30.GL_TEXTURE_2D_ARRAY)
+        val RECTANGLE = TextureTarget(GL31.GL_TEXTURE_RECTANGLE)
+        val _2D_MULTISAMPLE = TextureTarget(GL32C.GL_TEXTURE_2D_MULTISAMPLE)
+        val _2D_MULTISAMPLE_ARRAY = TextureTarget(GL32.GL_TEXTURE_2D_MULTISAMPLE_ARRAY)
+        val CUBE_MAP = TextureTarget(GL13.GL_TEXTURE_CUBE_MAP)
+        val CUBE_MAP_POSITIVE_X = TextureTarget(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X)
+        val CUBE_MAP_MEGATIVE_X = TextureTarget(GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_X)
+        val CUBE_MAP_POSITIVE_Y = TextureTarget(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Y)
+        val CUBE_MAP_MEGATIVE_Y = TextureTarget(GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y)
+        val CUBE_MAP_POSITIVE_Z = TextureTarget(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Z)
+        val CUBE_MAP_MEGATIVE_Z = TextureTarget(GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z)
+        val PROXY_1D = TextureTarget(GL11.GL_PROXY_TEXTURE_1D)
+        val PROXY_2D = TextureTarget(GL11.GL_PROXY_TEXTURE_2D)
+        val PROXY_3D = TextureTarget(GL12.GL_PROXY_TEXTURE_3D)
+        val PROXY_1D_ARRAY = TextureTarget(GL30.GL_PROXY_TEXTURE_1D_ARRAY)
+        val PROXY_2D_ARRAY = TextureTarget(GL30.GL_PROXY_TEXTURE_2D_ARRAY)
+        val PROXY_RECTANGLE = TextureTarget(GL31.GL_PROXY_TEXTURE_RECTANGLE)
+        val PROXY_2D_MULTISAMPLE = TextureTarget(GL32.GL_PROXY_TEXTURE_2D_MULTISAMPLE)
+        val PROXY_2D_MULTISAMPLE_ARRAY = TextureTarget(GL32.GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY)
+        val PROXY_CUBE_MAP = TextureTarget(GL32.GL_PROXY_TEXTURE_CUBE_MAP)
+        val BUFFER = TextureTarget(GL32.GL_TEXTURE_BUFFER)
+    }
+}
 
 //###############################################################################
 
-inline class TextureWrapMode(val i: Int)
+inline class TextureWrapMode(val i: Int) {
+    companion object {
+        val CLAMP = TextureWrapMode(GL11.GL_CLAMP)
+        val REPEAT = TextureWrapMode(GL11.GL_REPEAT)
+    }
+}
 
 //###############################################################################
 //
@@ -4583,7 +4920,26 @@ inline class TextureWrapMode(val i: Int)
 //#	VERTEX_ATTRIB_ARRAY_BUFFER_BINDING		= 0x889F
 //#	VERTEX_ATTRIB_ARRAY_BUFFER_BINDING_ARB		= 0x889F
 
-inline class BufferTarget(val i: Int)
+inline class BufferTarget(val i: Int) {
+    companion object {
+        val ARRAY_BUFFER = BufferTarget(GL15.GL_ARRAY_BUFFER)
+        val ATOMIC_COUNTER_BUFFER = BufferTarget(GL42.GL_ATOMIC_COUNTER_BUFFER)
+        val COPY_READ_BUFFER = BufferTarget(GL31.GL_COPY_READ_BUFFER)
+        val COPY_WRITE_BUFFER = BufferTarget(GL31.GL_COPY_WRITE_BUFFER)
+        val DISPATCH_INDIRECT_BUFFER = BufferTarget(GL43.GL_DISPATCH_INDIRECT_BUFFER)
+        val DRAW_INDIRECT_BUFFER = BufferTarget(GL40.GL_DRAW_INDIRECT_BUFFER)
+        val ELEMENT_ARRAY_BUFFER = BufferTarget(GL15.GL_ELEMENT_ARRAY_BUFFER)
+        val PIXEL_PACK_BUFFER = BufferTarget(GL21.GL_PIXEL_PACK_BUFFER)
+        val PIXEL_UNPACK_BUFFER = BufferTarget(GL21.GL_PIXEL_UNPACK_BUFFER)
+        val QUERY_BUFFER = BufferTarget(GL44C.GL_QUERY_BUFFER)
+        val SHADER_STORAGE_BUFFER = BufferTarget(GL43.GL_SHADER_STORAGE_BUFFER)
+        val TEXTURE_BUFFER = BufferTarget(GL31.GL_TEXTURE_BUFFER)
+        val TRANSFORM_FEEDBACK_BUFFER = BufferTarget(GL30.GL_TRANSFORM_FEEDBACK_BUFFER)
+        val UNIFORM_BUFFER = BufferTarget(GL31.GL_UNIFORM_BUFFER)
+    }
+}
+
+typealias BufferTargetFlags = Int
 
 
 //# ARB_vertex_program enum: (additional; see above)
@@ -4615,7 +4971,15 @@ inline class BufferTarget(val i: Int)
 //
 //# VERSION_1_5 enum: (Promoted for OpenGL 1.5)
 //# ARB_vertex_buffer_object enum: (additional; see above)
-inline class BufferAccess(val i: Int)
+inline class BufferAccess(val i: Int) {
+    companion object {
+        val READ_ONLY = BufferAccess(GL15.GL_READ_ONLY)
+        //#	READ_ONLY_ARB					= 0x88B8
+        val WRITE_ONLY = BufferAccess(GL15.GL_WRITE_ONLY)
+        //#	WRITE_ONLY_ARB					= 0x88B9
+        val READ_WRITE = BufferAccess(GL15.GL_READ_WRITE)
+    }
+}
 
 
 //#	READ_WRITE_ARB					= 0x88BA
@@ -4668,7 +5032,19 @@ inline class BufferAccess(val i: Int)
 //
 //# VERSION_1_5 enum: (Promoted for OpenGL 1.5)
 //# ARB_vertex_buffer_object enum: (additional; see above)
-inline class Usage(val i: Int)
+inline class Usage(val i: Int) {
+    companion object {
+        val STREAM_DRAW = Usage(GL15.GL_STREAM_DRAW)
+        val STREAM_READ = Usage(GL15.GL_STREAM_READ)
+        val STREAM_COPY = Usage(GL15.GL_STREAM_COPY)
+        val STATIC_DRAW = Usage(GL15.GL_STATIC_DRAW)
+        val STATIC_READ = Usage(GL15.GL_STATIC_READ)
+        val STATIC_COPY = Usage(GL15.GL_STATIC_COPY)
+        val DYNAMIC_DRAW = Usage(GL15.GL_DYNAMIC_DRAW)
+        val DYNAMIC_READ = Usage(GL15.GL_DYNAMIC_READ)
+        val DYNAMIC_COPY = Usage(GL15.GL_DYNAMIC_COPY)
+    }
+}
 
 //# VERSION_2_1 enum:
 //# ARB_pixel_buffer_object enum:
@@ -5308,7 +5684,12 @@ inline class Usage(val i: Int)
 //
 //# VERSION_2_0 enum:
 //#	POINT_SPRITE_COORD_ORIGIN			= 0x8CA0
-inline class PointSpriteCoordOrigin(val i: Int)
+inline class PointSpriteCoordOrigin(val i: Int) {
+    companion object {
+        val LOWER_LEFT = PointSpriteCoordOrigin(GL20.GL_LOWER_LEFT)
+        val UPPER_LEFT = PointSpriteCoordOrigin(GL20.GL_UPPER_LEFT)
+    }
+}
 
 //#	STENCIL_BACK_REF				= 0x8CA3
 //#	STENCIL_BACK_VALUE_MASK				= 0x8CA4
@@ -5755,7 +6136,15 @@ inline class PointSpriteCoordOrigin(val i: Int)
 //
 //# NV_future_use: 0x8E30-0x8E41
 
-inline class TextureSwizzle(val i: Int)
+inline class TextureSwizzle(val i: Int) {
+    companion object {
+        val SWIZZLE_R = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_R)
+        val SWIZZLE_G = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_G)
+        val SWIZZLE_B = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_B)
+        val SWIZZLE_A = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_A)
+        val SWIZZLE_RGBA = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_RGBA)
+    }
+}
 
 //# NV_future_use: 0x8E47-0x8E4F
 //
@@ -5867,60 +6256,389 @@ inline class TextureSwizzle(val i: Int)
 //
 //###############################################################################
 
-inline class ProvokeMode(val i: Int)
+inline class ProvokeMode(val i: Int) {
+    companion object {
+        val FIRST_VERTEX_CONVENTION = ProvokeMode(GL32.GL_FIRST_VERTEX_CONVENTION)
+        val LAST_VERTEX_CONVENTION = ProvokeMode(GL32.GL_LAST_VERTEX_CONVENTION)
+    }
+}
 
 //###############################################################################
 
-inline class DepthStencilTextureMode(val i: Int)
+inline class DepthStencilTextureMode(val i: Int) {
+    companion object {
+        val DEPTH_COMPONENT = DepthStencilTextureMode(GL32.GL_DEPTH_COMPONENT)
+        val STENCIL_COMPONENT = DepthStencilTextureMode(GL43.GL_STENCIL_COMPONENTS)
+    }
+}
 
 //###############################################################################
 
-inline class TextureCompareMode(val i: Int)
+inline class TextureCompareMode(val i: Int) {
+    companion object {
+        val COMPARE_REF_TO_TEXTURE = TextureCompareMode(GL30C.GL_COMPARE_REF_TO_TEXTURE)
+        val NONE = TextureCompareMode(GL11.GL_NONE)
+    }
+}
 
 //###############################################################################
 
-inline class ImageFormatCompatibilityType(val i: Int)
+inline class ImageFormatCompatibilityType(val i: Int) {
+    companion object {
+        val IMAGE_FORMAT_COMPATIBILITY_BY_SIZE = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_SIZE)
+        val IMAGE_FORMAT_COMPATIBILITY_BY_CLASS = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_CLASS)
+        val NONE = ImageFormatCompatibilityType(GL11.GL_NONE)
+    }
+}
 
 //###############################################################################
 
-inline class BufferParameter(val i: Int)
+inline class BufferParameter(val i: Int) {
+    companion object {
+        val ACCESS = BufferParameter(GL15.GL_BUFFER_ACCESS)
+        val ACCESS_FLAGS = BufferParameter(GL30.GL_BUFFER_ACCESS_FLAGS)
+        val IMMUTABLE_STORAGE = BufferParameter(GL44.GL_BUFFER_IMMUTABLE_STORAGE)
+        val MAPPED = BufferParameter(GL15.GL_BUFFER_MAPPED)
+        val MAP_LENGTH = BufferParameter(GL30.GL_BUFFER_MAP_LENGTH)
+        val MAP_OFFSET = BufferParameter(GL30.GL_BUFFER_MAP_OFFSET)
+        val SIZE = BufferParameter(GL15C.GL_BUFFER_SIZE)
+        val STORAGE_FLAGS = BufferParameter(GL44.GL_BUFFER_STORAGE_FLAGS)
+        val USAGE = BufferParameter(GL15.GL_BUFFER_USAGE)
+    }
+}
 
 //###############################################################################
 
-inline class QueryTarget(val i: Int)
+inline class QueryTarget(val i: Int) {
+    companion object {
+        val SAMPLES_PASSED = QueryTarget(GL15.GL_SAMPLES_PASSED)
+        val ANY_SAMPLES_PASSED = QueryTarget(GL33.GL_ANY_SAMPLES_PASSED)
+        val ANY_SAMPLES_PASSED_CONSERVATIVE = QueryTarget(GL43.GL_ANY_SAMPLES_PASSED_CONSERVATIVE)
+        val PRIMITIVES_GENERATED = QueryTarget(GL30.GL_PRIMITIVES_GENERATED)
+        val TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN = QueryTarget(GL30.GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN)
+        val TIME_ELAPSED = QueryTarget(GL33.GL_TIME_ELAPSED)
+        val TIMESTAMP = QueryTarget(GL33.GL_TIMESTAMP)
+    }
+}
 
 //###############################################################################
 
-inline class GetQuery(val i: Int)
+inline class GetQuery(val i: Int) {
+    companion object {
+        val CURRENT_QUERY = GetQuery(GL15.GL_CURRENT_QUERY)
+        val COUNTER_BITS = GetQuery(GL15.GL_QUERY_COUNTER_BITS)
+    }
+}
 
 //###############################################################################
 
-inline class GetQueryObject(val i: Int)
+inline class GetQueryObject(val i: Int) {
+    companion object {
+        val RESULT = GetQueryObject(GL15.GL_QUERY_RESULT)
+        val RESULT_NO_WAIT = GetQueryObject(GL44.GL_QUERY_RESULT_NO_WAIT)
+        val RESULT_AVAILABLE = GetQueryObject(GL15.GL_QUERY_RESULT_AVAILABLE)
+    }
+}
 
 //###############################################################################
 
-inline class ShaderType(val i: Int)
+inline class ShaderType(val i: Int) {
+    companion object {
+        val COMPUTE_SHADER = ShaderType(GL43.GL_COMPUTE_SHADER)
+        val VERTEX_SHADER = ShaderType(GL20.GL_VERTEX_SHADER)
+        val TESS_CONTROL_SHADER = ShaderType(GL40.GL_TESS_CONTROL_SHADER)
+        val TESS_EVALUATION_SHADER = ShaderType(GL40.GL_TESS_EVALUATION_SHADER)
+        val GEOMETRY_SHADER = ShaderType(GL32.GL_GEOMETRY_SHADER)
+        val FRAGMENT_SHADER = ShaderType(GL20.GL_FRAGMENT_SHADER)
+    }
+}
 
 //###############################################################################
 
-inline class GetShader(val i: Int)
+inline class GetShader(val i: Int) {
+    companion object {
+        val SHADER_TYPE = GetShader(GL20.GL_SHADER_TYPE)
+        val DELETE_STATUS = GetShader(GL20.GL_DELETE_STATUS)
+        val COMPILE_STATUS = GetShader(GL20.GL_COMPILE_STATUS)
+        val INFO_LOG_LENGTH = GetShader(GL20.GL_INFO_LOG_LENGTH)
+        val SHADER_SOURCE_LENGTH = GetShader(GL20.GL_SHADER_SOURCE_LENGTH)
+    }
+}
 
 //###############################################################################
 
-inline class GetProgram(val i: Int)
+inline class GetProgram(val i: Int) {
+    companion object {
+        val DELETE_STATUS_ = GetProgram(GL20.GL_DELETE_STATUS)
+        val LINK_STATUS = GetProgram(GL20.GL_LINK_STATUS)
+        val VALIDATE_STATUS = GetProgram(GL20.GL_VALIDATE_STATUS)
+        val INFO_LOG_LENGTH_ = GetProgram(GL20.GL_INFO_LOG_LENGTH)
+        val ATTACHED_SHADERS = GetProgram(GL20.GL_ATTACHED_SHADERS)
+        val ACTIVE_ATOMIC_COUNTER_BUFFERS = GetProgram(GL42.GL_ACTIVE_ATOMIC_COUNTER_BUFFERS)
+        val ACTIVE_ATTRIBUTES = GetProgram(GL20.GL_ACTIVE_ATTRIBUTES)
+        val ACTIVE_ATTRIBUTE_MAX_LENGTH = GetProgram(GL20.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH)
+        val ACTIVE_UNIFORMS = GetProgram(GL20.GL_ACTIVE_UNIFORMS)
+        val ACTIVE_UNIFORM_BLOCKS = GetProgram(GL31.GL_ACTIVE_UNIFORM_BLOCKS)
+        val ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH = GetProgram(GL31.GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH)
+        val ACTIVE_UNIFORM_MAX_LENGTH = GetProgram(GL20.GL_ACTIVE_UNIFORM_MAX_LENGTH)
+        //val COMPUTE_WORK_GROUP_SIZE = GetProgram(GL43.GL_COMPUTE_WORK_GROUP_SIZE) Vec3i
+        val PROGRAM_BINARY_LENGTH = GetProgram(GL41.GL_PROGRAM_BINARY_LENGTH)
+        val TRANSFORM_FEEDBACK_BUFFER_MODE = GetProgram(GL30.GL_TRANSFORM_FEEDBACK_BUFFER_MODE)
+        val TRANSFORM_FEEDBACK_VARYINGS = GetProgram(GL30.GL_TRANSFORM_FEEDBACK_VARYINGS)
+        val TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH = GetProgram(GL30.GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH)
+        val GEOMETRY_VERTICES_OUT = GetProgram(GL32.GL_GEOMETRY_VERTICES_OUT)
+        val GEOMETRY_INPUT_TYPE = GetProgram(GL32.GL_GEOMETRY_INPUT_TYPE)
+        val GEOMETRY_OUTPUT_TYPE = GetProgram(GL32.GL_GEOMETRY_OUTPUT_TYPE)
+    }
+}
 
 //###############################################################################
 
-inline class UniformType(val i: Int)
+inline class UniformType(val i: Int) {
+    companion object {
+        val FLOAT = UniformType(GL11.GL_FLOAT)
+        val FLOAT_VEC2 = UniformType(GL20.GL_FLOAT_VEC2)
+        val FLOAT_VEC3 = UniformType(GL20.GL_FLOAT_VEC3)
+        val FLOAT_VEC4 = UniformType(GL20.GL_FLOAT_VEC4)
+        val DOUBLE = UniformType(GL11.GL_DOUBLE)
+        val DOUBLE_VEC2 = UniformType(GL40.GL_DOUBLE_VEC2)
+        val DOUBLE_VEC3 = UniformType(GL40.GL_DOUBLE_VEC3)
+        val DOUBLE_VEC4 = UniformType(GL40.GL_DOUBLE_VEC4)
+        val INT = UniformType(GL11.GL_INT)
+        val INT_VEC2 = UniformType(GL20.GL_INT_VEC2)
+        val INT_VEC3 = UniformType(GL20.GL_INT_VEC3)
+        val INT_VEC4 = UniformType(GL20.GL_INT_VEC4)
+        val UNSIGNED_INT = UniformType(GL11.GL_UNSIGNED_INT)
+        val UNSIGNED_INT_VEC2 = UniformType(GL30.GL_UNSIGNED_INT_VEC2)
+        val UNSIGNED_INT_VEC3 = UniformType(GL30.GL_UNSIGNED_INT_VEC3)
+        val UNSIGNED_INT_VEC4 = UniformType(GL30.GL_UNSIGNED_INT_VEC4)
+        val BOOL = UniformType(GL20.GL_BOOL)
+        val BOOL_VEC2 = UniformType(GL20.GL_BOOL_VEC2)
+        val BOOL_VEC3 = UniformType(GL20.GL_BOOL_VEC3)
+        val BOOL_VEC4 = UniformType(GL20.GL_BOOL_VEC4)
+        val FLOAT_MAT2 = UniformType(GL20.GL_FLOAT_MAT2)
+        val FLOAT_MAT3 = UniformType(GL20.GL_FLOAT_MAT3)
+        val FLOAT_MAT4 = UniformType(GL20.GL_FLOAT_MAT4)
+        val FLOAT_MAT2x3 = UniformType(GL21.GL_FLOAT_MAT2x3)
+        val FLOAT_MAT2x4 = UniformType(GL21.GL_FLOAT_MAT2x4)
+        val FLOAT_MAT3x2 = UniformType(GL21.GL_FLOAT_MAT3x2)
+        val FLOAT_MAT3x4 = UniformType(GL21.GL_FLOAT_MAT3x4)
+        val FLOAT_MAT4x2 = UniformType(GL21.GL_FLOAT_MAT4x2)
+        val FLOAT_MAT4x3 = UniformType(GL21.GL_FLOAT_MAT4x3)
+        val DOUBLE_MAT2 = UniformType(GL40.GL_DOUBLE_MAT2)
+        val DOUBLE_MAT3 = UniformType(GL40.GL_DOUBLE_MAT3)
+        val DOUBLE_MAT4 = UniformType(GL40.GL_DOUBLE_MAT4)
+        val DOUBLE_MAT2x3 = UniformType(GL40.GL_DOUBLE_MAT2x3)
+        val DOUBLE_MAT2x4 = UniformType(GL40.GL_DOUBLE_MAT2x4)
+        val DOUBLE_MAT3x2 = UniformType(GL40.GL_DOUBLE_MAT3x2)
+        val DOUBLE_MAT3x4 = UniformType(GL40.GL_DOUBLE_MAT3x4)
+        val DOUBLE_MAT4x2 = UniformType(GL40.GL_DOUBLE_MAT4x2)
+        val DOUBLE_MAT4x3 = UniformType(GL40.GL_DOUBLE_MAT4x3)
+        val SAMPLER_1D = UniformType(GL20.GL_SAMPLER_1D)
+        val SAMPLER_2D = UniformType(GL20.GL_SAMPLER_2D)
+        val SAMPLER_3D = UniformType(GL20.GL_SAMPLER_3D)
+        val SAMPLER_CUBE = UniformType(GL20.GL_SAMPLER_CUBE)
+        val SAMPLER_1D_SHADOW = UniformType(GL20.GL_SAMPLER_1D_SHADOW)
+        val SAMPLER_2D_SHADOW = UniformType(GL20.GL_SAMPLER_2D_SHADOW)
+        val SAMPLER_1D_ARRAY_SHADOW = UniformType(GL30.GL_SAMPLER_1D_ARRAY_SHADOW)
+        val SAMPLER_2D_ARRAY_SHADOW = UniformType(GL30.GL_SAMPLER_2D_ARRAY_SHADOW)
+        val SAMPLER_2D_MULTISAMPLE = UniformType(GL32.GL_SAMPLER_2D_MULTISAMPLE)
+        val SAMPLER_2D_MULTISAMPLE_ARRAY = UniformType(GL32.GL_SAMPLER_2D_MULTISAMPLE_ARRAY)
+        val SAMPLER_CUBE_SHADOW = UniformType(GL30.GL_SAMPLER_CUBE_SHADOW)
+        val SAMPLER_BUFFER = UniformType(GL31.GL_SAMPLER_BUFFER)
+        val SAMPLER_2D_RECT = UniformType(GL31.GL_SAMPLER_2D_RECT)
+        val SAMPLER_2D_RECT_SHADOW = UniformType(GL31.GL_SAMPLER_2D_RECT_SHADOW)
+        val INT_SAMPLER_1D = UniformType(GL30.GL_INT_SAMPLER_1D)
+        val INT_SAMPLER_2D = UniformType(GL30.GL_INT_SAMPLER_2D)
+        val INT_SAMPLER_3D = UniformType(GL30.GL_INT_SAMPLER_3D)
+        val INT_SAMPLER_CUBE = UniformType(GL30.GL_INT_SAMPLER_CUBE)
+        val INT_SAMPLER_1D_ARRAY = UniformType(GL30.GL_INT_SAMPLER_1D_ARRAY)
+        val INT_SAMPLER_2D_ARRAY = UniformType(GL30.GL_INT_SAMPLER_2D_ARRAY)
+        val INT_SAMPLER_2D_MULTISAMPLE = UniformType(GL32.GL_INT_SAMPLER_2D_MULTISAMPLE)
+        val INT_SAMPLER_2D_MULTISAMPLE_ARRAY = UniformType(GL32.GL_INT_SAMPLER_2D_MULTISAMPLE_ARRAY)
+        val INT_SAMPLER_BUFFER = UniformType(GL31.GL_INT_SAMPLER_BUFFER)
+        val INT_SAMPLER_2D_RECT = UniformType(GL31.GL_INT_SAMPLER_2D_RECT)
+        val UNSIGNED_INT_SAMPLER_1D = UniformType(GL30.GL_UNSIGNED_INT_SAMPLER_1D)
+        val UNSIGNED_INT_SAMPLER_2D = UniformType(GL30.GL_UNSIGNED_INT_SAMPLER_2D)
+        val UNSIGNED_INT_SAMPLER_3D = UniformType(GL30.GL_UNSIGNED_INT_SAMPLER_3D)
+        val UNSIGNED_INT_SAMPLER_CUBE = UniformType(GL30.GL_UNSIGNED_INT_SAMPLER_CUBE)
+        val UNSIGNED_INT_SAMPLER_1D_ARRAY = UniformType(GL31.GL_UNSIGNED_INT_SAMPLER_1D_ARRAY)
+        val UNSIGNED_INT_SAMPLER_2D_ARRAY = UniformType(GL31.GL_UNSIGNED_INT_SAMPLER_2D_ARRAY)
+        val UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE = UniformType(GL32.GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE)
+        val UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY = UniformType(GL32.GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY)
+        val UNSIGNED_INT_SAMPLER_BUFFER = UniformType(GL31.GL_UNSIGNED_INT_SAMPLER_BUFFER)
+        val UNSIGNED_INT_SAMPLER_2D_RECT = UniformType(GL31.GL_UNSIGNED_INT_SAMPLER_2D_RECT)
+        val IMAGE_1D = UniformType(GL42.GL_IMAGE_1D)
+        val IMAGE_2D = UniformType(GL42.GL_IMAGE_2D)
+        val IMAGE_3D = UniformType(GL42.GL_IMAGE_3D)
+        val IMAGE_2D_RECT = UniformType(GL42.GL_IMAGE_2D_RECT)
+        val IMAGE_CUBE = UniformType(GL42.GL_IMAGE_CUBE)
+        val IMAGE_BUFFER = UniformType(GL42.GL_IMAGE_BUFFER)
+        val IMAGE_1D_ARRAY = UniformType(GL42.GL_IMAGE_1D_ARRAY)
+        val IMAGE_2D_ARRAY = UniformType(GL42.GL_IMAGE_2D_ARRAY)
+        val IMAGE_2D_MULTISAMPLE = UniformType(GL42.GL_IMAGE_2D_MULTISAMPLE)
+        val IMAGE_2D_MULTISAMPLE_ARRAY = UniformType(GL42.GL_IMAGE_2D_MULTISAMPLE_ARRAY)
+        val INT_IMAGE_1D = UniformType(GL42.GL_INT_IMAGE_1D)
+        val INT_IMAGE_2D = UniformType(GL42.GL_INT_IMAGE_2D)
+        val INT_IMAGE_3D = UniformType(GL42.GL_INT_IMAGE_3D)
+        val INT_IMAGE_2D_RECT = UniformType(GL42.GL_INT_IMAGE_2D_RECT)
+        val INT_IMAGE_CUBE = UniformType(GL42.GL_INT_IMAGE_CUBE)
+        val INT_IMAGE_BUFFER = UniformType(GL42.GL_INT_IMAGE_BUFFER)
+        val INT_IMAGE_1D_ARRAY = UniformType(GL42.GL_INT_IMAGE_1D_ARRAY)
+        val INT_IMAGE_2D_ARRAY = UniformType(GL42.GL_INT_IMAGE_2D_ARRAY)
+        val INT_IMAGE_2D_MULTISAMPLE = UniformType(GL42.GL_INT_IMAGE_2D_MULTISAMPLE)
+        val INT_IMAGE_2D_MULTISAMPLE_ARRAY = UniformType(GL42.GL_INT_IMAGE_2D_MULTISAMPLE_ARRAY)
+        val UNSIGNED_INT_IMAGE_1D = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_1D)
+        val UNSIGNED_INT_IMAGE_2D = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_2D)
+        val UNSIGNED_INT_IMAGE_3D = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_3D)
+        val UNSIGNED_INT_IMAGE_2D_RECT = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_2D_RECT)
+        val UNSIGNED_INT_IMAGE_CUBE = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_CUBE)
+        val UNSIGNED_INT_IMAGE_BUFFER = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_BUFFER)
+        val UNSIGNED_INT_IMAGE_1D_ARRAY = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_1D_ARRAY)
+        val UNSIGNED_INT_IMAGE_2D_ARRAY = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_2D_ARRAY)
+        val UNSIGNED_INT_IMAGE_2D_MULTISAMPLE = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE)
+        val UNSIGNED_INT_IMAGE_2D_MULTISAMPLE_ARRAY = UniformType(GL42.GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE_ARRAY)
+        val UNSIGNED_INT_ATOMIC_COUNTER = UniformType(GL42.GL_UNSIGNED_INT_ATOMIC_COUNTER)
+    }
+}
 
 //###############################################################################
 
-inline class VertexAttribType(val i: Int)
+inline class VertexAttribType(val i: Int) {
+    companion object {
+        val BYTE = VertexAttribType(GL11.GL_BYTE)
+        val UNSIGNED_BYTE = VertexAttribType(GL20.GL_UNSIGNED_BYTE)
+        val SHORT = VertexAttribType(GL20.GL_SHORT)
+        val UNSIGNED_SHORT = VertexAttribType(GL20.GL_UNSIGNED_SHORT)
+        val INT = VertexAttribType(GL11.GL_INT)
+        val UNSIGNED_INT = VertexAttribType(GL40.GL_UNSIGNED_INT)
+        val HALF_FLOAT = VertexAttribType(GL40.GL_HALF_FLOAT)
+        val FLOAT = VertexAttribType(GL40.GL_FLOAT)
+        val DOUBLE = VertexAttribType(GL11.GL_DOUBLE)
+        val FIXED = VertexAttribType(GL41.GL_FIXED)
+        val INT_2_10_10_10_REV = VertexAttribType(GL33.GL_INT_2_10_10_10_REV)
+        val UNSIGNED_INT_2_10_10_10_REV = VertexAttribType(GL12.GL_UNSIGNED_INT_2_10_10_10_REV)
+        val UNSIGNED_INT_10F_11F_11F_REV = VertexAttribType(GL30.GL_UNSIGNED_INT_10F_11F_11F_REV)
+    }
+}
 
 //###############################################################################
 
-inline class AttributeType(val i: Int)
+inline class AttributeType(val i: Int) {
+    companion object {
+        val FLOAT = AttributeType(GL11.GL_FLOAT)
+        val FLOAT_VEC2 = AttributeType(GL20.GL_FLOAT_VEC2)
+        val FLOAT_VEC3 = AttributeType(GL20.GL_FLOAT_VEC3)
+        val FLOAT_VEC4 = AttributeType(GL20.GL_FLOAT_VEC4)
+        val FLOAT_MAT2 = AttributeType(GL20.GL_FLOAT_MAT2)
+        val FLOAT_MAT3 = AttributeType(GL20.GL_FLOAT_MAT3)
+        val FLOAT_MAT4 = AttributeType(GL20.GL_FLOAT_MAT4)
+        val FLOAT_MAT2x3 = AttributeType(GL21.GL_FLOAT_MAT2x3)
+        val FLOAT_MAT2x4 = AttributeType(GL21.GL_FLOAT_MAT2x4)
+        val FLOAT_MAT3x2 = AttributeType(GL21.GL_FLOAT_MAT3x2)
+        val FLOAT_MAT3x4 = AttributeType(GL21.GL_FLOAT_MAT3x4)
+        val FLOAT_MAT4x2 = AttributeType(GL21.GL_FLOAT_MAT4x2)
+        val FLOAT_MAT4x3 = AttributeType(GL21.GL_FLOAT_MAT4x3)
+        val INT_VEC2 = AttributeType(GL20.GL_INT_VEC2)
+        val INT_VEC3 = AttributeType(GL20.GL_INT_VEC3)
+        val INT_VEC4 = AttributeType(GL20.GL_INT_VEC4)
+        val UNSIGNED_INT = AttributeType(GL11.GL_UNSIGNED_INT)
+        val UNSIGNED_INT_VEC2 = AttributeType(GL30.GL_UNSIGNED_INT_VEC2)
+        val UNSIGNED_INT_VEC3 = AttributeType(GL30.GL_UNSIGNED_INT_VEC3)
+        val UNSIGNED_INT_VEC4 = AttributeType(GL30.GL_UNSIGNED_INT_VEC4)
+        val DOUBLE = AttributeType(GL11.GL_DOUBLE)
+        val DOUBLE_VEC2 = AttributeType(GL40.GL_DOUBLE_VEC2)
+        val DOUBLE_VEC3 = AttributeType(GL40.GL_DOUBLE_VEC3)
+        val DOUBLE_VEC4 = AttributeType(GL40.GL_DOUBLE_VEC4)
+        val DOUBLE_MAT2 = AttributeType(GL40.GL_DOUBLE_MAT2)
+        val DOUBLE_MAT3 = AttributeType(GL40.GL_DOUBLE_MAT3)
+        val DOUBLE_MAT4 = AttributeType(GL40.GL_DOUBLE_MAT4)
+        val GL_DOUBLE_MAT2x3 = AttributeType(GL40.GL_DOUBLE_MAT2x3)
+        val GL_DOUBLE_MAT2x4 = AttributeType(GL40.GL_DOUBLE_MAT2x4)
+        val GL_DOUBLE_MAT3x2 = AttributeType(GL40.GL_DOUBLE_MAT3x2)
+        val GL_DOUBLE_MAT3x4 = AttributeType(GL40.GL_DOUBLE_MAT3x4)
+        val GL_DOUBLE_MAT4x2 = AttributeType(GL40.GL_DOUBLE_MAT4x2)
+        val GL_DOUBLE_MAT4x3 = AttributeType(GL40.GL_DOUBLE_MAT4x3)
+    }
+}
 
 //###############################################################################
 
-inline class GetVertexAttrib(val i: Int)
+inline class GetVertexAttrib(val i: Int) {
+    companion object {
+        val BUFFER_BINDING = GetVertexAttrib(GL15.GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)
+        val ENABLED = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED)
+        val SIZE = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_SIZE)
+        val STRIDE = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_STRIDE)
+        val TYPE = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_TYPE)
+        val NORMALIZED = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED)
+        val INTEGER = GetVertexAttrib(GL30.GL_VERTEX_ATTRIB_ARRAY_INTEGER)
+        val DIVISOR = GetVertexAttrib(GL33.GL_VERTEX_ATTRIB_ARRAY_DIVISOR)
+        val CURRENT = GetVertexAttrib(GL20.GL_CURRENT_VERTEX_ATTRIB)
+    }
+}
+
+//###############################################################################
+
+inline class ConditionalMode(val i: Int) {
+    companion object {
+        val GL_QUERY_WAIT = ConditionalMode(GL30C.GL_QUERY_WAIT)
+        val GL_QUERY_NO_WAIT = ConditionalMode(GL30C.GL_QUERY_NO_WAIT)
+        val GL_QUERY_BY_REGION_WAIT = ConditionalMode(GL30C.GL_QUERY_BY_REGION_WAIT)
+        val GL_QUERY_BY_REGION_NO_WAIT = ConditionalMode(GL30C.GL_QUERY_BY_REGION_NO_WAIT)
+        val GL_QUERY_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_WAIT_INVERTED)
+        val GL_QUERY_NO_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_NO_WAIT_INVERTED)
+        val GL_QUERY_BY_REGION_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_BY_REGION_WAIT_INVERTED)
+        val GL_QUERY_BY_REGION_NO_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_BY_REGION_NO_WAIT_INVERTED)
+    }
+}
+
+inline class ClampColor(val i: Int) {
+    companion object {
+        val TRUE = ClampColor(GL30C.GL_TRUE)
+        val FALSE = ClampColor(GL30C.GL_FALSE)
+        val FIXED_ONLY = ClampColor(GL30C.GL_FIXED_ONLY)
+    }
+}
+
+inline class GetRenderbuffer(val i: Int) {
+    companion object {
+        val WIDTH = GetRenderbuffer(GL30C.GL_RENDERBUFFER_WIDTH)
+        val HEIGHT = GetRenderbuffer(GL30C.GL_RENDERBUFFER_HEIGHT)
+        val INTERNAL_FORMAT = GetRenderbuffer(GL30C.GL_RENDERBUFFER_INTERNAL_FORMAT)
+        val SAMPLES = GetRenderbuffer(GL30C.GL_RENDERBUFFER_SAMPLES)
+        val RED_SIZE = GetRenderbuffer(GL30C.GL_RENDERBUFFER_RED_SIZE)
+        val GREEN_SIZE = GetRenderbuffer(GL30C.GL_RENDERBUFFER_GREEN_SIZE)
+        val BLUE_SIZE = GetRenderbuffer(GL30C.GL_RENDERBUFFER_BLUE_SIZE)
+        val ALPHA_SIZE = GetRenderbuffer(GL30C.GL_RENDERBUFFER_ALPHA_SIZE)
+        val DEPTH_SIZE = GetRenderbuffer(GL30C.GL_RENDERBUFFER_DEPTH_SIZE)
+        val STENCIL_SIZE = GetRenderbuffer(GL30C.GL_RENDERBUFFER_STENCIL_SIZE)
+    }
+}
+
+inline class FramebufferTarget(val i: Int){
+    companion object {
+        val BOTH = FramebufferTarget(GL30C.GL_FRAMEBUFFER)
+        val READ = FramebufferTarget(GL30C.GL_READ_FRAMEBUFFER)
+        val DRAW = FramebufferTarget(GL30C.GL_DRAW_FRAMEBUFFER)
+    }
+}
+
+inline class GetFramebufferAttachment(val i: Int) {
+    companion object {
+        val OBJECT_TYPE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE)
+        val OBJECT_NAME = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME)
+        val RED_SIZE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE)
+        val GREEN_SIZE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE)
+        val BLUE_SIZE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE)
+        val ALPHA_SIZE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE)
+        val DEPTH_SIZE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE)
+        val STENCIL_SIZE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE)
+        val COMPONENT_TYPE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE)
+        val COLOR_ENCODING = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING)
+        val TEXTURE_LEVEL = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL)
+        val TEXTURE_CUBE_MAP_FACE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE)
+        val LAYERED = GetFramebufferAttachment(GL32C.GL_FRAMEBUFFER_ATTACHMENT_LAYERED)
+        val TEXTURE_LAYER = GetFramebufferAttachment(GL32C.GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER)
+    }
+}

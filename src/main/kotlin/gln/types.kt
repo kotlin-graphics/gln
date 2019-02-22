@@ -21,11 +21,9 @@ inline class GLtextures(val i: IntBuffer) {
         get() = i.adr
 
     companion object {
-        fun gen(count: Int): GLtextures = gl20.genTextures(count)
+        fun gen(count: Int): GLtextures = gl21.genTextures(count)
     }
 
-    fun delete() = gl20.deleteTextures(this)
+    fun delete() = gl21::deleteTextures
 }
-
-typealias GLbitfield = Int
 

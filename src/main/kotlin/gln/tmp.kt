@@ -51,6 +51,13 @@ inline fun stak.vec4Address(block: (Ptr) -> Unit): Vec4 =
             Vec4(buf)
         }
 
+inline fun stak.vec4Address(vec: Vec4, block: (Ptr) -> Unit): Vec4 =
+        stak {
+            val buf = vec.toBuffer(it)
+            block(buf.adr)
+            Vec4(buf)
+        }
+
 inline fun stak.vec4Buffer(block: (FloatBuffer) -> Unit): Vec4 =
         stak {
             val buf = it.mallocFloat(Vec4.length)

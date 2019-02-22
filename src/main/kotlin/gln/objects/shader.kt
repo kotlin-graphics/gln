@@ -2,9 +2,10 @@ package gln.objects
 
 import glm_.bool
 import gln.ShaderType
-import gln.gl20
+import gln.gl21
 import org.lwjgl.opengl.*
-import java.io.*
+import java.io.File
+import java.io.InputStreamReader
 import java.nio.IntBuffer
 
 inline class GlShader(val i: Int) {
@@ -24,9 +25,9 @@ inline class GlShader(val i: Int) {
 
     // --- [ glShaderSource ] ---
 
-    infix fun source(source: CharSequence) = gl20.shaderSource(this, source)
+    infix fun source(source: CharSequence) = gl21.shaderSource(this, source)
 
-    fun source(vararg sources: CharSequence) = gl20.shaderSource(this, *sources)
+    fun source(vararg sources: CharSequence) = gl21.shaderSource(this, *sources)
 
     // --- [ glGetShaderiv ] ---
 
@@ -48,12 +49,12 @@ inline class GlShader(val i: Int) {
     // --- [ glGetShaderInfoLog ] ---
 
     val infoLog: String
-        get() = gl20.getShaderInfoLog(this)
+        get() = gl21.getShaderInfoLog(this)
 
     // --- [ glGetShaderSource ] ---
 
     val shaderSource: String
-        get() = gl20.getShaderSource(this)
+        get() = gl21.getShaderSource(this)
 
 
 
