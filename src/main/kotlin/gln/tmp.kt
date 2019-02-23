@@ -51,6 +51,7 @@ inline fun stak.vec4Address(block: (Ptr) -> Unit): Vec4 =
             Vec4(buf)
         }
 
+// TODO :Unit ?
 inline fun stak.vec4Address(vec: Vec4, block: (Ptr) -> Unit): Vec4 =
         stak {
             val buf = vec.toBuffer(it)

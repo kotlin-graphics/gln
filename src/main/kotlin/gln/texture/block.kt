@@ -7,10 +7,7 @@ import gli_.gli
 import glm_.BYTES
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
-import gln.TextureCompareMode
-import gln.TextureTarget
-import gln.buf
-import gln.bufAd
+import gln.*
 import kool.*
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
@@ -147,14 +144,14 @@ object GlTextureDsl {
         wrapR = r
     }
 
-    var compareFunc: CompareFunc
-        get() = CompareFunc(GL11C.glGetTexParameteri(target.i, GL14.GL_TEXTURE_COMPARE_FUNC))
+    var compareFunc: CompareFunction
+        get() = CompareFunction(GL11C.glGetTexParameteri(target.i, GL14.GL_TEXTURE_COMPARE_FUNC))
         set(value) = GL11C.glTexParameteri(target.i, GL14.GL_TEXTURE_COMPARE_FUNC, value.i)
     var compareMode: TextureCompareMode
         get() = TextureCompareMode(GL11C.glGetTexParameteri(target.i, GL14.GL_TEXTURE_COMPARE_MODE))
         set(value) = GL11C.glTexParameteri(target.i, GL14.GL_TEXTURE_COMPARE_MODE, value.i)
 
-    inline fun compare(func: CompareFunc, mode: TextureCompareMode) {
+    inline fun compare(func: CompareFunction, mode: TextureCompareMode) {
         compareFunc = func
         compareMode = mode
     }
@@ -194,19 +191,6 @@ inline class TexWrap(val i: Int) {
         val CLAMP_TO_EDGE = TexWrap(GL12C.GL_CLAMP_TO_EDGE)
         val MIRRORED_REPEAT = TexWrap(GL14C.GL_MIRRORED_REPEAT)
         val REPEAT = TexWrap(GL11C.GL_REPEAT)
-    }
-}
-
-inline class CompareFunc(val i: Int) {
-    companion object {
-        val LEQUAL = CompareFunc(GL11C.GL_LEQUAL)
-        val GEQUAL = CompareFunc(GL11C.GL_GEQUAL)
-        val LESS = CompareFunc(GL11C.GL_LESS)
-        val GREATER = CompareFunc(GL11C.GL_GREATER)
-        val EQUAL = CompareFunc(GL11C.GL_EQUAL)
-        val NOTEQUAL = CompareFunc(GL11C.GL_NOTEQUAL)
-        val ALWAYS = CompareFunc(GL11C.GL_ALWAYS)
-        val NEVER = CompareFunc(GL11C.GL_NEVER)
     }
 }
 
