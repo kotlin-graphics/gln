@@ -97,15 +97,15 @@ inline class GlTexture(val name: Int = -1) {
 
     // glGetTexParameter / glTexParameter (setter)
 
-    fun getMagFilter(target: TextureTarget): TextureMagFilter = TextureMagFilter(gl21.getTexParameter(target, TexParameter(GL11.GL_TEXTURE_MAG_FILTER)))
-    fun setMagFilter(target: TextureTarget, filter: TextureMagFilter) = gl21.texParameter(target, TexParameter(GL11.GL_TEXTURE_MAG_FILTER), filter.i)
+    fun getMagFilter(target: TextureTarget): MagFilter = MagFilter(gl21.getTexParameter(target, TexParameter(GL11.GL_TEXTURE_MAG_FILTER)))
+    fun setMagFilter(target: TextureTarget, filter: MagFilter) = gl21.texParameter(target, TexParameter(GL11.GL_TEXTURE_MAG_FILTER), filter.i)
 
-    fun getMinFilter(target: TextureTarget): TextureMinFilter = TextureMinFilter(gl21.getTexParameter(target, TexParameter(GL11.GL_TEXTURE_MIN_FILTER)))
-    fun setMinFilter(target: TextureTarget, filter: TextureMinFilter) = gl21.texParameter(target, TexParameter(GL11.GL_TEXTURE_MIN_FILTER), filter.i)
+    fun getMinFilter(target: TextureTarget): MinFilter = MinFilter(gl21.getTexParameter(target, TexParameter(GL11.GL_TEXTURE_MIN_FILTER)))
+    fun setMinFilter(target: TextureTarget, filter: MinFilter) = gl21.texParameter(target, TexParameter(GL11.GL_TEXTURE_MIN_FILTER), filter.i)
     /** JVM custom */
-    fun getFilters(target: TextureTarget): Pair<TextureMinFilter, TextureMagFilter> = getMinFilter(target) to getMagFilter(target)
+    fun getFilters(target: TextureTarget): Pair<MinFilter, MagFilter> = getMinFilter(target) to getMagFilter(target)
 
-    fun setFilters(target: TextureTarget, min: TextureMinFilter, mag: TextureMagFilter) {
+    fun setFilters(target: TextureTarget, min: MinFilter, mag: MagFilter) {
         setMinFilter(target, min)
         setMagFilter(target, mag)
     }

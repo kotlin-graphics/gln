@@ -1367,7 +1367,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
      */
-    fun blitFramebuffer(srcX0: Int, srcY0: Int, srcX1: Int, srcY1: Int, dstX0: Int, dstY0: Int, dstX1: Int, dstY1: Int, mask: AttribMask, filter: TextureMagFilter) =
+    fun blitFramebuffer(srcX0: Int, srcY0: Int, srcX1: Int, srcY1: Int, dstX0: Int, dstY0: Int, dstX1: Int, dstY1: Int, mask: AttribMask, filter: MagFilter) =
             GL30C.glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask.i, filter.i)
 
     /**
@@ -1380,7 +1380,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
      */
-    fun blitFramebuffer(src: Vec2i, dst: Vec2i, mask: AttribMask, filter: TextureMagFilter) =
+    fun blitFramebuffer(src: Vec2i, dst: Vec2i, mask: AttribMask, filter: MagFilter) =
             GL30C.glBlitFramebuffer(0, 0, src.x, src.y, 0, 0, dst.x, dst.y, mask.i, filter.i)
 
     /**
@@ -1392,7 +1392,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
      */
-    fun blitFramebuffer(size: Vec2i, mask: AttribMask, filter: TextureMagFilter) =
+    fun blitFramebuffer(size: Vec2i, mask: AttribMask, filter: MagFilter) =
             GL30C.glBlitFramebuffer(0, 0, size.x, size.y, 0, 0, size.x, size.y, mask.i, filter.i)
 
     /**
@@ -1404,7 +1404,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
      */
-    fun blitFramebuffer(size: Vec2i, filter: TextureMagFilter) =
+    fun blitFramebuffer(size: Vec2i, filter: MagFilter) =
             GL30C.glBlitFramebuffer(0, 0, size.x, size.y, 0, 0, size.x, size.y, GL30C.GL_COLOR_BUFFER_BIT, filter.i)
 
     // --- [ glGenerateMipmap ] ---

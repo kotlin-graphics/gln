@@ -1670,23 +1670,23 @@ inline class StencilOp(val i: Int){
 //
 //###############################################################################
 
-inline class TextureMagFilter(val i: Int) {
+inline class MagFilter(val i: Int) {
     companion object {
-        val NEAREST = TextureMagFilter(GL11.GL_NEAREST)
-        val LINEAR = TextureMagFilter(GL11.GL_LINEAR)
+        val NEAREST = MagFilter(GL11.GL_NEAREST)
+        val LINEAR = MagFilter(GL11.GL_LINEAR)
     }
 }
 
 //###############################################################################
 
-inline class TextureMinFilter(val i: Int){
+inline class MinFilter(val i: Int){
     companion object {
-        val NEAREST = TextureMinFilter(GL11.GL_NEAREST)
-        val LINEAR = TextureMinFilter(GL11.GL_LINEAR)
-        val NEAREST_MIPMAP_NEAREST = TextureMinFilter(GL11.GL_NEAREST_MIPMAP_NEAREST)
-        val LINEAR_MIPMAP_NEAREST = TextureMinFilter(GL11.GL_LINEAR_MIPMAP_NEAREST)
-        val NEAREST_MIPMAP_LINEAR = TextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR)
-        val LINEAR_MIPMAP_LINEAR = TextureMinFilter(GL11.GL_LINEAR_MIPMAP_LINEAR)
+        val NEAREST = MinFilter(GL11.GL_NEAREST)
+        val LINEAR = MinFilter(GL11.GL_LINEAR)
+        val NEAREST_MIPMAP_NEAREST = MinFilter(GL11.GL_NEAREST_MIPMAP_NEAREST)
+        val LINEAR_MIPMAP_NEAREST = MinFilter(GL11.GL_LINEAR_MIPMAP_NEAREST)
+        val NEAREST_MIPMAP_LINEAR = MinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR)
+        val LINEAR_MIPMAP_LINEAR = MinFilter(GL11.GL_LINEAR_MIPMAP_LINEAR)
     }
 }
 
