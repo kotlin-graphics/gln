@@ -1,8 +1,11 @@
 package gln.depth
 
-import gln.texture.CompareFunc
+import gln.CompareFunction
 import kool.stak
-import org.lwjgl.opengl.*
+import org.lwjgl.opengl.GL11C
+import org.lwjgl.opengl.GL32
+import org.lwjgl.opengl.GL32C
+import org.lwjgl.opengl.GL41C
 
 inline fun depth(block: ObjectDepth.() -> Unit) = ObjectDepth.block()
 
@@ -19,8 +22,8 @@ object ObjectDepth {
         get() = GL11C.glGetBoolean(GL11C.GL_DEPTH_WRITEMASK)
         set(value) = GL11C.glDepthMask(value)
 
-    var func: CompareFunc
-        get() = CompareFunc(GL11C.glGetInteger(GL11C.GL_DEPTH_FUNC))
+    var func: CompareFunction
+        get() = CompareFunction(GL11C.glGetInteger(GL11C.GL_DEPTH_FUNC))
         set(value) = GL11C.glDepthFunc(func.i)
 
     var range: ClosedFloatingPointRange<Double>
