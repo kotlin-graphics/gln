@@ -7,7 +7,6 @@ import gln.BufferAccess
 import gln.BufferTarget
 import gln.Usage
 import gln.buffer.GlBufferDsl
-import gln.buffer.GlBufferDSL
 import gln.buffer.GlBuffersDsl
 import gln.gl21
 import kool.*

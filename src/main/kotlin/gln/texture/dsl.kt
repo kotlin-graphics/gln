@@ -6,12 +6,12 @@ import gli_.gl
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import gln.CompareFunction
+import gln.DSA
 import gln.TextureCompareMode
 import gln.TextureTarget
 import kool.adr
 import kool.pos
 import kool.rem
-import oglSamples.DSA
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memAddress
@@ -71,12 +71,15 @@ object GlTextureDsl {
 
     var levels: IntRange
         get() = GL11C.glGetTexParameteri(target.i, GL12.GL_TEXTURE_BASE_LEVEL)..GL11C.glGetTexParameteri(target.i, GL12.GL_TEXTURE_MAX_LEVEL)
-        set(value) = if (DSA) {
-            GL45C.glTextureParameteri(name, GL12.GL_TEXTURE_BASE_LEVEL, value.first)
-            GL45C.glTextureParameteri(name, GL12.GL_TEXTURE_MAX_LEVEL, value.endInclusive)
-        } else {
-            GL11C.glTexParameteri(target.i, GL12.GL_TEXTURE_BASE_LEVEL, value.first)
-            GL11C.glTexParameteri(target.i, GL12.GL_TEXTURE_MAX_LEVEL, value.endInclusive)
+        set(value) = when {
+            DSA -> {
+                GL45C.glTextureParameteri(name, GL12.GL_TEXTURE_BASE_LEVEL, value.first)
+                GL45C.glTextureParameteri(name, GL12.GL_TEXTURE_MAX_LEVEL, value.endInclusive)
+            }
+            else -> {
+                GL11C.glTexParameteri(target.i, GL12.GL_TEXTURE_BASE_LEVEL, value.first)
+                GL11C.glTexParameteri(target.i, GL12.GL_TEXTURE_MAX_LEVEL, value.endInclusive)
+            }
         }
 
 //    inline fun gli_.Texture.image() { TODO
