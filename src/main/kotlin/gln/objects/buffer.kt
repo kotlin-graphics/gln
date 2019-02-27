@@ -99,6 +99,7 @@ inline class GlBuffers(val names: IntBuffer) {
     fun gen() = GL15C.glGenBuffers(names)
     inline fun gen(block: GlBuffersDsl.() -> Unit) {
         GL15C.glGenBuffers(names)
+        GlBuffersDsl.names = names
         GlBuffersDsl.block()
     }
 

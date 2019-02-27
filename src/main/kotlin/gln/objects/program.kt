@@ -17,7 +17,7 @@ inline class GlProgram(val i: Int) {
 
     // --- [ glIsProgram ] ---
 
-    val valid: Boolean
+    val isValid: Boolean
         get() = GL20C.glIsProgram(i)
 
     // --- [ glAttachShader ] ---
