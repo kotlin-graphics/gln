@@ -84,7 +84,7 @@ fun checkError(location: String = "", throws: Boolean = true): Boolean {
     }
 }
 
-val VERSION = "0.4.8"
+val VERSION = "0.4.7"
 
 
 val Buffer.glType: Int

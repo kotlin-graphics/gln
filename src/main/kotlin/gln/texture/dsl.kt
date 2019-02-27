@@ -3,12 +3,15 @@
 package gln.texture
 
 import gli_.gl
-import gli_.gli
-import glm_.BYTES
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
-import gln.*
-import kool.*
+import gln.CompareFunction
+import gln.TextureCompareMode
+import gln.TextureTarget
+import kool.adr
+import kool.pos
+import kool.rem
+import oglSamples.DSA
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memAddress
@@ -68,7 +71,10 @@ object GlTextureDsl {
 
     var levels: IntRange
         get() = GL11C.glGetTexParameteri(target.i, GL12.GL_TEXTURE_BASE_LEVEL)..GL11C.glGetTexParameteri(target.i, GL12.GL_TEXTURE_MAX_LEVEL)
-        set(value) {
+        set(value) = if (DSA) {
+            GL45C.glTextureParameteri(name, GL12.GL_TEXTURE_BASE_LEVEL, value.first)
+            GL45C.glTextureParameteri(name, GL12.GL_TEXTURE_MAX_LEVEL, value.endInclusive)
+        } else {
             GL11C.glTexParameteri(target.i, GL12.GL_TEXTURE_BASE_LEVEL, value.first)
             GL11C.glTexParameteri(target.i, GL12.GL_TEXTURE_MAX_LEVEL, value.endInclusive)
         }
@@ -167,7 +173,16 @@ object GlTextureDsl {
 //            GL11C.nglTexParameteriv(target.i, GL33.GL_TEXTURE_SWIZZLE_RGBA, bufAd)
 //        }
 
-    inline fun swizzle(r: Swizzle, g: Swizzle, b: Swizzle, a: Swizzle) {
+    var swizzles: gl.Swizzles
+        get() = throw Exception("Invalid")
+        set(value) {
+            GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, value.r.i)
+            GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, value.g.i)
+            GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, value.b.i)
+            GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, value.a.i)
+        }
+
+    inline fun swizzles(r: Swizzle, g: Swizzle, b: Swizzle, a: Swizzle) {
         GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, r.i)
         GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, g.i)
         GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, b.i)
@@ -202,18 +217,23 @@ inline class Swizzle(val i: Int) {
         val ALPHA = Swizzle(GL11C.GL_ALPHA)
     }
 }
-//
-//object Textures {
-//
-//    var target = 0
-//    lateinit var names: IntBuffer
-//
+
+object GlTexturesDsl {
+
+    //    var target = TextureTarget._1D
+    lateinit var names: IntBuffer
+
 //    inline fun image1d(level: Int, internalFormat: Int, width: Int, format: Int, type: Int, pixels: ByteBuffer) =
-//            GL11C.nglTexImage1D(target, level, internalFormat, width, 0, format, type, pixels.adr + pixels.pos)
+//            GL11C.nglTexImage1D(target.i, level, internalFormat, width, 0, format, type, pixels.adr + pixels.pos)
 //
 //    inline fun image2d(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) =
-//            GL11C.nglTexImage2D(target, level, internalFormat, width, height, 0, format, type, pixels.adr + pixels.pos)
-//
+//            GL11C.nglTexImage2D(target.i, level, internalFormat, width, height, 0, format, type, pixels.adr + pixels.pos)
+
+    inline operator fun Enum<*>.invoke(block: GlTextureDsl.() -> Unit) {
+//        GlTextureDsl.ta
+        GlTextureDsl.block()
+    }
+
 //    inline fun at1d(index: Enum<*>, block: Texture1d.() -> Unit) = at1d(index.ordinal, block)
 //    inline fun at1d(index: Int, block: Texture1d.() -> Unit) {
 //        Texture1d.name = names[index] // bind
@@ -225,4 +245,4 @@ inline class Swizzle(val i: Int) {
 //        Texture2d.name = names[index] // bind
 //        Texture2d.block()
 //    }
-//}
+}

@@ -8,6 +8,7 @@ import gln.glf.VertexLayout
 import kool.get
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
+import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty0
@@ -33,3 +34,21 @@ inline fun glDisableVertexAttribArray(layout: VertexLayout) = layout.attributes.
 inline fun glVertexAttribPointer(attribute: VertexAttribute) = with(attribute) { GL20.glVertexAttribPointer(index, size, type.i, normalized, interleavedStride, pointer.L) }
 inline fun glEnableVertexAttribArray(attribute: VertexAttribute) = GL20.glEnableVertexAttribArray(attribute.index)
 inline fun glDisableVertexAttribArray(attribute: VertexAttribute) = GL20.glDisableVertexAttribArray(attribute.index)
+
+
+inline class GlVertexArray(val name: Int = -1) {
+
+    fun bind() = GL30C.glBindVertexArray(name)
+    inline fun bound(block: () -> Unit): GlVertexArray {
+        GL30C.glBindVertexArray(name)
+        block()
+        GL30C.glBindVertexArray(0)
+        return this
+    }
+
+    fun delete() = GL30C.glDeleteVertexArrays(name)
+
+    companion object {
+        fun gen(): GlVertexArray = GlVertexArray(GL30C.glGenVertexArrays())
+    }
+}

@@ -11,7 +11,7 @@ import kool.IntBuffer
 import kool.rem
 import kool.remSize
 import gln.objects.GlBuffer
-import gln.objects.GLbuffers
+import gln.objects.GlBuffers
 import gln.objects.GlQueries
 import gln.objects.GlQuery
 import kool.stak
@@ -83,7 +83,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    infix fun genBuffers(count: Int): GLbuffers = GLbuffers.big(count).apply { GL15C.nglGenBuffers(rem, adr) }
+    infix fun genBuffers(count: Int): GlBuffers = GlBuffers(count).apply { GL15C.nglGenBuffers(rem, adr) }
 
     /**
      * Generates buffer object names.

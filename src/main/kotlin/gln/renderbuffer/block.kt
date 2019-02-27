@@ -14,14 +14,12 @@ import org.lwjgl.opengl.GL30
 import java.nio.IntBuffer
 
 
-inline fun initRenderbuffers(block: RenderBuffers.() -> Unit) = initRenderbuffers(renderbufferName, block)
 inline fun initRenderbuffers(renderbuffers: IntBuffer, block: RenderBuffers.() -> Unit) {
     GL30.nglGenRenderbuffers(renderbuffers.rem, renderbuffers.adr + renderbuffers.pos * Int.BYTES)
     RenderBuffers.names = renderbuffers
     RenderBuffers.block()
 }
 
-inline fun initRenderbuffer(renderbuffer: Enum<*>, block: RenderBuffer.() -> Unit) = renderbufferName.put(renderbuffer.ordinal, initRenderbuffer(block))
 inline fun initRenderbuffer(renderbuffer: IntBuffer, block: RenderBuffer.() -> Unit) = renderbuffer.put(0, initRenderbuffer(block))
 inline fun initRenderbuffer(block: RenderBuffer.() -> Unit): Int {
     GL30.nglGenRenderbuffers(1, bufAd)
@@ -31,7 +29,6 @@ inline fun initRenderbuffer(block: RenderBuffer.() -> Unit): Int {
     return res
 }
 
-inline fun withRenderbuffer(renderbuffer: Enum<*>, block: RenderBuffer.() -> Unit) = withRenderbuffer(renderbufferName[renderbuffer], block)
 inline fun withRenderbuffer(renderbuffer: IntBuffer, block: RenderBuffer.() -> Unit) = withRenderbuffer(renderbuffer[0], block)
 inline fun withRenderbuffer(renderbuffer: Int, block: RenderBuffer.() -> Unit) {
     RenderBuffer.name = renderbuffer
