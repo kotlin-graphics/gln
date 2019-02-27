@@ -3,22 +3,35 @@ package gln.objects
 
 import glm_.L
 import glm_.bool
-import gln.*
+import gln.BufferAccess
+import gln.BufferTarget
+import gln.Usage
+import gln.buffer.GLbufferDsl
+import gln.gl21
 import kool.*
 import org.lwjgl.opengl.*
-import org.lwjgl.system.APIUtil
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memByteBuffer
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
-inline class GlBuffer(val i: Int) {
+inline class GlBuffer(val name: Int = -1) {
 
     // --- [ glIsBuffer ] ---
 
     val isValid: Boolean
-        get() = GL20C.glIsBuffer(i)
+        get() = GL20C.glIsBuffer(name)
+
+    fun bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, name)
+    fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)
+    inline fun bind(target: BufferTarget, block: GLbufferDsl.() -> Boolean) {
+        bind(target)
+        GLbufferDsl.target = target
+        GLbufferDsl.buffer = this
+        GLbufferDsl.block()
+        unbind(target)
+    }
 
     // glGetBufferParameter*
 
@@ -39,10 +52,9 @@ inline class GlBuffer(val i: Int) {
     fun getStorageFlags(target: BufferTarget): Int = GL15C.glGetBufferParameteri(target.i, GL44.GL_BUFFER_STORAGE_FLAGS)
 
     fun getUsage(target: BufferTarget): Usage = Usage(GL15C.glGetBufferParameteri(target.i, GL15.GL_BUFFER_USAGE))
-
     // glGetBufferPointer
-
     fun pointer(target: BufferTarget): Ptr = gl21.getBufferPointer(target)
+
 
     fun data(target: BufferTarget, size: Int, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
@@ -53,7 +65,7 @@ inline class GlBuffer(val i: Int) {
 
     fun map(target: BufferTarget, access: BufferAccess): ByteBuffer? {
         val ptr = GL15C.nglMapBuffer(target.i, access.i)
-        return if(ptr != NULL) memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE)) else null
+        return if (ptr != NULL) memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE)) else null
     }
 
     infix fun unmap(target: BufferTarget): Boolean = GL15C.glUnmapBuffer(target.i)
