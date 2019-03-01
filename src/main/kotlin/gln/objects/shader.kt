@@ -5,7 +5,9 @@ import gln.ShaderType
 import gln.gl21
 import org.lwjgl.opengl.*
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.InputStreamReader
+import java.lang.RuntimeException
 import java.nio.IntBuffer
 
 inline class GlShader(val i: Int) {
@@ -62,13 +64,13 @@ inline class GlShader(val i: Int) {
         // --- [ glCreateShader ] ---
         fun create(type: ShaderType) = GlShader(GL20C.glCreateShader(type.i))
 
+        @Throws(Exception::class)
         fun createFromSource(type: ShaderType, sourceText: String) = create(type).apply {
-
             source(sourceText)
             compile()
-
-            if(!compileStatus)
-                throw Exception(infoLog)
+            if(!compileStatus) {
+                throw Exception("glShader compile status false: $infoLog")
+            }
         }
 
         fun createFromSource(type: ShaderType, sourceText: Array<String>) = create(type).apply {
@@ -80,11 +82,12 @@ inline class GlShader(val i: Int) {
                 throw Exception(infoLog)
         }
 
+        @Throws(Exception::class)
         fun createFromPath(path: String, transform: ((String) -> String)? = null): GlShader {
 
-            val lines = ClassLoader.getSystemResourceAsStream(path).use {
+            val lines = ClassLoader.getSystemResourceAsStream(path)?.use {
                 InputStreamReader(it).readLines()
-            }
+            } ?: throw FileNotFoundException("$path does not exist")
 
             var source = ""
             lines.forEach {
@@ -97,10 +100,11 @@ inline class GlShader(val i: Int) {
             try {
                 return createFromSource(ShaderType(path.type), transform?.invoke(source) ?: source)
             } catch (err: Exception) {
-                throw Exception("Compiler failure in ${path.substringAfterLast('/')} shader: ${err.message}")
+                throw RuntimeException("Compiler failure in ${path.substringAfterLast('/')} shader: ${err.message}")
             }
         }
 
+        @Throws(Exception::class)
         fun createFromPath(context: Class<*>, path: String): Int {
 
             val shader = GL20.glCreateShader(path.type)
@@ -125,8 +129,7 @@ inline class GlShader(val i: Int) {
             if (status == GL11.GL_FALSE) {
 
                 val strInfoLog = GL20.glGetShaderInfoLog(shader)
-
-                System.err.println("Compiler failure in ${path.substringAfterLast('/')} shader: $strInfoLog")
+                throw RuntimeException("Compiler failure in ${path.substringAfterLast('/')} shader: ${strInfoLog}")
             }
 
             return shader

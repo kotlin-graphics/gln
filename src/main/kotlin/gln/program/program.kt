@@ -8,6 +8,8 @@ import gln.objects.GlProgram
 import gln.objects.GlShader
 import kool.get
 import org.lwjgl.opengl.GL20
+import java.io.FileNotFoundException
+import java.lang.RuntimeException
 import kotlin.properties.Delegates
 
 
@@ -241,8 +243,10 @@ open class GlslProgram(
                     val shaderName = GlShader.createFromPath("$fullShader$ext")
                     program += shaderName
                     shaderNames += shaderName
-                } catch (exc: Exception) {
-//                    println("$fullShader$ext doesnt exist "+ exc.message)
+                } catch (exc: RuntimeException) {
+                    throw exc
+                } catch (exc: FileNotFoundException) {
+                    // silent ignore
                 }
             program.link()
 
