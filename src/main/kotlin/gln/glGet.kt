@@ -4,6 +4,8 @@ import glm_.bool
 import glm_.vec2.Vec2
 import glm_.vec4.Vec4
 import gln.objects.*
+import gln.renderbuffer.GlRenderbuffer
+import gln.vertexArray.GlVertexArray
 import kool.Ptr
 import kool.stak
 import org.lwjgl.opengl.*
@@ -116,8 +118,8 @@ interface glGet {
     val doublebuffer: Boolean
         get() = bool(GL11.GL_DOUBLEBUFFER)
 
-    val renderbufferBinding: GLrenderbuffer
-        get() = GLrenderbuffer(int(GL30.GL_RENDERBUFFER_BINDING))
+    val renderbufferBinding: GlRenderbuffer
+        get() = GlRenderbuffer(int(GL30.GL_RENDERBUFFER_BINDING))
 
     val sampleBuffers: Int
         get() = int(GL13.GL_SAMPLE_BUFFERS)
@@ -253,8 +255,8 @@ interface glGet {
         get() = long(GL31.GL_UNIFORM_BUFFER_START)
 
 
-    val vertexArrayBinding: GLvertexArray
-        get() = GLvertexArray(int(GL30.GL_VERTEX_ARRAY_BINDING))
+    val vertexArrayBinding: GlVertexArray
+        get() = GlVertexArray(int(GL30.GL_VERTEX_ARRAY_BINDING))
 
     val vertexBindingDivisor: Int
         get() = int(GL43.GL_VERTEX_BINDING_DIVISOR)

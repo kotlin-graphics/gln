@@ -11,12 +11,11 @@ import kool.IntBuffer
 import kool.rem
 import kool.remSize
 import gln.objects.GlBuffer
-import gln.objects.GLbuffers
+import gln.objects.GlBuffers
 import gln.objects.GlQueries
 import gln.objects.GlQuery
 import kool.stak
 import org.lwjgl.opengl.GL15C
-import org.lwjgl.system.APIUtil
 import org.lwjgl.system.MemoryUtil.*
 import unsigned.Uint
 import java.nio.Buffer
@@ -46,7 +45,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindBuffer">Reference Page</a>
      */
-    fun bindBuffer(target: BufferTarget, buffer: GlBuffer) = GL15C.glBindBuffer(target.i, buffer.i)
+    fun bindBuffer(target: BufferTarget, buffer: GlBuffer) = GL15C.glBindBuffer(target.i, buffer.name)
 
     // --- [ glDeleteBuffers ] ---
 
@@ -64,7 +63,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteBuffers">Reference Page</a>
      */
-    infix fun deleteBuffer(buffer: GlBuffer) = stak.intAddress(buffer.i) { GL15C.nglDeleteBuffers(1, it) }
+    infix fun deleteBuffer(buffer: GlBuffer) = stak.intAddress(buffer.name) { GL15C.nglDeleteBuffers(1, it) }
 
     // --- [ glGenBuffers ] ---
 
@@ -84,7 +83,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    infix fun genBuffers(count: Int): GLbuffers = GLbuffers.big(count).apply { GL15C.nglGenBuffers(rem, adr) }
+    infix fun genBuffers(count: Int): GlBuffers = GlBuffers(count).apply { GL15C.nglGenBuffers(rem, adr) }
 
     /**
      * Generates buffer object names.

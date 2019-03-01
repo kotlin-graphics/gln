@@ -2,51 +2,43 @@
 
 package gln.buffer
 
-import glm_.BYTES
 import glm_.L
 import glm_.mat4x4.Mat4
 import gln.BufferTarget
 import gln.Usage
 import gln.buf
 import gln.bufAd
-import kool.adr
-import kool.free
-import kool.rem
-import org.lwjgl.opengl.GL15
-import org.lwjgl.opengl.GL20
-import org.lwjgl.system.MemoryUtil
+import gln.objects.GlBuffers
+import kool.IntBuffer
+import org.lwjgl.opengl.GL15C
+import org.lwjgl.opengl.GL20C
 
 /**
  * Created by elect on 18/04/17.
  */
 
 
+fun glGenBuffers(size: Int) = GlBuffers(size).also { GL15C.glGenBuffers(it.names) }
+
+inline fun <reified E : Enum<E>> GlBuffers(): GlBuffers = GlBuffers(IntBuffer<E>())
+
 
 // ----- Mat4 ----- TODO others
 
-inline fun glBufferData(target: BufferTarget, mat: Mat4, usage: Usage) {
+inline fun glBufferData(target: BufferTarget, mat: Mat4, usage: Usage = Usage.STATIC_DRAW) {
     mat to buf
-    GL15.nglBufferData(target.i, Mat4.size.L, bufAd, usage.i)
+    GL15C.nglBufferData(target.i, Mat4.size.L, bufAd, usage.i)
 }
 
 inline fun glBufferSubData(target: BufferTarget, offset: Int, mat: Mat4) {
     mat to buf
-    GL15.nglBufferSubData(target.i, offset.L, Mat4.size.L, bufAd)
+    GL15C.nglBufferSubData(target.i, offset.L, Mat4.size.L, bufAd)
 }
 
 inline fun glBufferSubData(target: BufferTarget, mat: Mat4) {
     mat to buf
-    GL15.nglBufferSubData(target.i, 0L, Mat4.size.L, bufAd)
+    GL15C.nglBufferSubData(target.i, 0L, Mat4.size.L, bufAd)
 }
 
 
-inline fun glBufferData(target: BufferTarget, data: FloatArray, usage: Usage) {
-    val buffer = MemoryUtil.memAlloc(data.size * Float.BYTES)
-    for (i in data.indices) buffer.putFloat(i * Float.BYTES, data[i])
-    GL15.nglBufferData(target.i, buffer.rem.L, buffer.adr, usage.i)
-    buffer.free()
-}
-
-
-
-inline fun glDrawBuffers(vararg buffers: Int) = GL20.glDrawBuffers(buffers)
+inline fun glDrawBuffers(vararg buffers: Int) = GL20C.glDrawBuffers(buffers)

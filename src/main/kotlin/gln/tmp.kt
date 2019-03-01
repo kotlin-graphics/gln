@@ -16,6 +16,8 @@ import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.memGetInt
 import java.nio.FloatBuffer
 
+interface GlBufferEnum
+
 inline fun stak.vec2Address(block: (Ptr) -> Unit): Vec2 =
         stak {
             val buf = it.malloc(Vec2.size)
@@ -85,5 +87,11 @@ inline fun stak.vec4iAddress(vec4i: Vec4i, block: (Ptr) -> Unit) = stak {block(v
 
 
 typealias UniformLocation = Int
-/** One or more of:<br><table><tr><td>{@link #GL_MAP_READ_BIT MAP_READ_BIT}</td><td>{@link #GL_MAP_WRITE_BIT MAP_WRITE_BIT}</td><td>{@link #GL_MAP_INVALIDATE_RANGE_BIT MAP_INVALIDATE_RANGE_BIT}</td><td>{@link #GL_MAP_INVALIDATE_BUFFER_BIT MAP_INVALIDATE_BUFFER_BIT}</td></tr><tr><td>{@link #GL_MAP_FLUSH_EXPLICIT_BIT MAP_FLUSH_EXPLICIT_BIT}</td><td>{@link #GL_MAP_UNSYNCHRONIZED_BIT MAP_UNSYNCHRONIZED_BIT}</td></tr></table> */
+/** One or more of:
+ *  - GL_MAP_READ_BIT
+ *  - GL_MAP_WRITE_BIT
+ *  - GL_MAP_INVALIDATE_RANGE_BIT
+ *  - GL_MAP_INVALIDATE_BUFFER_BIT
+ *  - GL_MAP_FLUSH_EXPLICIT_BIT MAP_FLUSH_EXPLICIT_BIT
+ *  - GL_MAP_UNSYNCHRONIZED_BIT MAP_UNSYNCHRONIZED_BIT  */
 typealias BufferMapFlags = Int

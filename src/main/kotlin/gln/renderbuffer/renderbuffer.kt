@@ -5,6 +5,7 @@ package gln.renderbuffer
 import glm_.vec2.Vec2i
 import kool.get
 import org.lwjgl.opengl.GL30
+import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
 
@@ -17,9 +18,24 @@ inline fun glRenderbufferStorageMultisample(samples: Int, internalFormat: Int, s
 inline fun glBindRenderbuffer() = GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, 0)
 inline fun glBindRenderbuffer(renderbuffer: IntArray) = GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, renderbuffer[0])
 inline fun glBindRenderbuffer(renderbuffer: IntBuffer) = GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, renderbuffer[0])
-inline fun glBindRenderbuffer(renderbuffer: Enum<*>) = GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, renderbufferName[renderbuffer])
-
 
 inline fun glRenderbufferStorage(internalFormat: Int, width: Int, height: Int) = GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, internalFormat, width, height)
 inline fun glRenderbufferStorage(internalFormat: Int, size: Vec2i) = GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, internalFormat, size.x, size.y)
 inline fun glRenderbufferStorage(target: Int, internalFormat: Int, size: Vec2i) = GL30.glRenderbufferStorage(target, internalFormat, size.x, size.y)
+
+
+inline class GlRenderbuffer(val name: Int = -1) {
+
+    inline fun bind(block: RenderBuffer.() -> Unit): GlRenderbuffer {
+        GL30C.glBindRenderbuffer(GL30C.GL_RENDERBUFFER, name)
+        RenderBuffer.block()
+        GL30C.glBindRenderbuffer(GL30C.GL_RENDERBUFFER, 0)
+        return this
+    }
+
+    fun delete() = GL30C.glDeleteRenderbuffers(name)
+
+    companion object {
+        fun gen(): GlRenderbuffer = GlRenderbuffer(GL30C.glGenRenderbuffers())
+    }
+}

@@ -520,7 +520,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    infix fun genTextures(textures: GLtextures) = GL11C.nglGenTextures(textures.rem, textures.adr)
+    infix fun genTextures(textures: GlTextures) = GL11C.nglGenTextures(textures.rem, textures.adr)
 
     /**
      * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
@@ -530,7 +530,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    infix fun genTextures(count: Int): GLtextures = GLtextures(IntBuffer(count).apply { GL11C.nglGenTextures(rem, adr) })
+    infix fun genTextures(count: Int): GlTextures = GlTextures(IntBuffer(count).apply { GL11C.nglGenTextures(rem, adr) })
 
     /**
      * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
@@ -555,7 +555,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTextures(textures: GLtextures) = GL11C.nglDeleteTextures(textures.rem, textures.adr)
+    infix fun deleteTextures(textures: GlTextures) = GL11C.nglDeleteTextures(textures.rem, textures.adr)
 
     /**
      * Deletes texture objects. After a texture object is deleted, it has no contents or dimensionality, and its name is again unused. If a texture that is

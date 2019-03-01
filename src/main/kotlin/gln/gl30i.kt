@@ -18,6 +18,7 @@ import glm_.vec4.Vec4ui
 import gln.objects.GlProgram
 import gln.objects.GlQuery
 import gln.objects.GlTexture
+import gln.renderbuffer.GlRenderbuffer
 import kool.adr
 import kool.stak
 import org.lwjgl.opengl.GL30C
@@ -968,7 +969,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsRenderbuffer">Reference Page</a>
      */
-    fun glIsRenderbuffer(renderbuffer: GLrenderbuffer) = GL30C.glIsRenderbuffer(renderbuffer.i)
+    fun glIsRenderbuffer(renderbuffer: GlRenderbuffer) = GL30C.glIsRenderbuffer(renderbuffer.name)
 
     // --- [ glBindRenderbuffer ] ---
 
@@ -980,7 +981,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindRenderbuffer">Reference Page</a>
      */
-    fun glBindRenderbuffer(renderbuffer: GLrenderbuffer) = GL30C.glBindRenderbuffer(GL30C.GL_RENDERBUFFER, renderbuffer.i)
+    fun glBindRenderbuffer(renderbuffer: GlRenderbuffer) = GL30C.glBindRenderbuffer(GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     // --- [ glDeleteRenderbuffers ] ---
 
@@ -991,7 +992,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteRenderbuffers">Reference Page</a>
      */
-    fun glDeleteRenderbuffer(renderbuffer: GLrenderbuffer) = GL30C.glDeleteRenderbuffers(renderbuffer.i)
+    fun glDeleteRenderbuffer(renderbuffer: GlRenderbuffer) = GL30C.glDeleteRenderbuffers(renderbuffer.name)
 
     /**
      * Deletes renderbuffer objects.
@@ -1026,7 +1027,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenRenderbuffers">Reference Page</a>
      */
-    fun genRenderbuffer(): GLrenderbuffer = GLrenderbuffer(GL30C.glGenRenderbuffers())
+    fun genRenderbuffer(): GlRenderbuffer = GlRenderbuffer(GL30C.glGenRenderbuffers())
 
     // --- [ glRenderbufferStorage ] ---
 
@@ -1309,8 +1310,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
-    fun framebufferRenderbuffer(target: FramebufferTarget, attachment: Int, renderbuffer: GLrenderbuffer) =
-            GL30C.glFramebufferRenderbuffer(target.i, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.i)
+    fun framebufferRenderbuffer(target: FramebufferTarget, attachment: Int, renderbuffer: GlRenderbuffer) =
+            GL30C.glFramebufferRenderbuffer(target.i, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     /**
      * Attaches a renderbuffer as a logical buffer to the currently bound framebuffer object.
@@ -1321,8 +1322,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
-    fun framebufferRenderbuffer(attachment: Int, renderbuffer: GLrenderbuffer) =
-            GL30C.glFramebufferRenderbuffer(GL30C.GL_FRAMEBUFFER, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.i)
+    fun framebufferRenderbuffer(attachment: Int, renderbuffer: GlRenderbuffer) =
+            GL30C.glFramebufferRenderbuffer(GL30C.GL_FRAMEBUFFER, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     // --- [ glGetFramebufferAttachmentParameteriv ] ---
 

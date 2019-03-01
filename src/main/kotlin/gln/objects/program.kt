@@ -17,7 +17,7 @@ inline class GlProgram(val i: Int) {
 
     // --- [ glIsProgram ] ---
 
-    val valid: Boolean
+    val isValid: Boolean
         get() = GL20C.glIsProgram(i)
 
     // --- [ glAttachShader ] ---
@@ -48,11 +48,17 @@ inline class GlProgram(val i: Int) {
 
     fun unuse() = GL20C.glUseProgram(0)
 
+    inline fun used(block: ProgramUse.() -> Unit) {
+        ProgramUse.program = this
+        GL20C.glUseProgram(i)
+        ProgramUse.block()
+        GL20C.glUseProgram(0)
+    }
+
     inline fun use(block: ProgramUse.() -> Unit) {
         ProgramUse.program = this
-        use()
+        GL20C.glUseProgram(i)
         ProgramUse.block()
-        unuse()
     }
 
     // --- [ glValidateProgram ] ---
@@ -159,6 +165,7 @@ inline class GlProgram(val i: Int) {
 
     // --- [ glUniformBlockBinding ] ---
     fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Int) = GL31C.glUniformBlockBinding(i, uniformBlockIndex, uniformBlockBinding)
+    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Enum<*>) = GL31C.glUniformBlockBinding(i, uniformBlockIndex, uniformBlockBinding.ordinal)
 
     // --- [ glBindFragDataLocation ] ---
 

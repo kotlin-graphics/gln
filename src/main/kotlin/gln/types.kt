@@ -1,29 +1,40 @@
 package gln
 
+import gln.texture.GlTexturesDsl
 import kool.adr
 import kool.rem
-import org.lwjgl.system.MemoryUtil.NULL
+import org.lwjgl.opengl.GL45C
 import java.nio.IntBuffer
 
 
 inline class GLframebuffer(val i: Int)
 inline class GLprogramPipeline(val i: Int)
-inline class GLrenderbuffer(val i: Int)
 inline class GLsampler(val i: Int)
-inline class GLvertexArray(val i: Int)
 
-inline class GLtextures(val i: IntBuffer) {
+inline class GlTextures(val names: IntBuffer) {
 
     inline val rem: Int
-        get() = i.rem
+        get() = names.rem
 
     inline val adr: Long
-        get() = i.adr
+        get() = names.adr
 
     companion object {
-        fun gen(count: Int): GLtextures = gl21.genTextures(count)
+        fun gen(count: Int): GlTextures = gl21.genTextures(count)
     }
 
     fun delete() = gl21::deleteTextures
+
+//    inline operator fun invoke(block: GlTexturesDsl.() -> Unit) {
+//        GlTexturesDsl.names = i
+//        GlTexturesDsl.block()
+//    }
+//
+    fun create() = GL45C.glCreateBuffers(names)
+    inline fun create(block: GlTexturesDsl.() -> Unit) {
+        create()
+        GlTexturesDsl.names = names
+        GlTexturesDsl.block()
+    }
 }
 
