@@ -145,7 +145,6 @@ inline class BlendingFactor(val i: Int) {
 inline class BlendEquationMode(val i: Int) {
 
     companion object {
-        val LOGIC_OP = BlendEquationMode(GL11.GL_LOGIC_OP)
         val FUNC_ADD = BlendEquationMode(GL14.GL_FUNC_ADD)
         val MIN = BlendEquationMode(GL14.GL_MIN)
         val MAX = BlendEquationMode(GL14.GL_MAX)
