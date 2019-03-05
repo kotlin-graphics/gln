@@ -5,7 +5,6 @@ import org.lwjgl.opengl.*
 
 interface glEnable {
 
-
     var blend: Boolean
         get() = GL11C.glIsEnabled(GL11C.GL_BLEND)
         set(value) = when {
@@ -14,9 +13,10 @@ interface glEnable {
         }
 
 
-    fun useBlend(buff: BufferMode, sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> Unit) {
+    fun useBlend(sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> Unit) {
+
         GL11C.glEnable(GL11C.GL_BLEND)
-        GL40C.glBlendFunci(buff.i, sFactor.i, dFactor.i)
+        GL11C.glBlendFunc(sFactor.i, dFactor.i)
         block()
         GL11C.glDisable(GL11C.GL_BLEND)
     }
