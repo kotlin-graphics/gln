@@ -149,8 +149,9 @@ inline class GlShader(val i: Int) {
                 shader_.startsWith('"') && shader_.endsWith('"') -> shader_.substring(1, shader_.length - 1)
                 else -> shader_
             }
-            val url = ClassLoader.getSystemResource("$root/$shader")
-            return File(url.toURI()).readText() + "\n"
+            return ClassLoader.getSystemResourceAsStream("$root/$shader")?.use {
+                InputStreamReader(it).readText()
+            } ?: throw FileNotFoundException("[GlShader::parseInclude] $root/$shader does not exist")
         }
 
         private val String.type: Int
