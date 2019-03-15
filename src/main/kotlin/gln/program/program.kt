@@ -165,8 +165,8 @@ open class GlslProgram(
     operator fun plusAssign(shader: Int) = GL20.glAttachShader(name, shader)
     operator fun minusAssign(shader: Int) = GL20.glDetachShader(name, shader)
 
-    operator fun plusAssign(shader: GlShader) = GL20.glAttachShader(name, shader.i)
-    operator fun minusAssign(shader: GlShader) = GL20.glDetachShader(name, shader.i)
+    operator fun plusAssign(shader: GlShader) = GL20.glAttachShader(name, shader.name)
+    operator fun minusAssign(shader: GlShader) = GL20.glDetachShader(name, shader.name)
 
     fun link() = GL20.glLinkProgram(name)
 

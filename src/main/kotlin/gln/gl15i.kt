@@ -21,6 +21,7 @@ import unsigned.Uint
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
+import kotlin.reflect.KMutableProperty0
 
 /**
  * The OpenGL functionality of a forward compatible context, up to version 1.5.
@@ -63,7 +64,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteBuffers">Reference Page</a>
      */
-    infix fun deleteBuffer(buffer: GlBuffer) = stak.intAddress(buffer.name) { GL15C.nglDeleteBuffers(1, it) }
+    infix fun deleteBuffers(buffer: GlBuffer) = stak.intAddress(buffer.name) { GL15C.nglDeleteBuffers(1, it) }
 
     // --- [ glGenBuffers ] ---
 
@@ -74,7 +75,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    infix fun genBuffers(buffers: IntBuffer) = GL15C.nglGenBuffers(buffers.rem, buffers.adr)
+    infix fun genBuffers(buffers: GlBuffers) = GL15C.nglGenBuffers(buffers.rem, buffers.adr)
 
     /**
      * Generates buffer object names.
@@ -83,14 +84,23 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    infix fun genBuffers(count: Int): GlBuffers = GlBuffers(count).apply { GL15C.nglGenBuffers(rem, adr) }
+    infix fun genBuffers(count: Int): GlBuffers = GlBuffers(count).also(::genBuffers)
+
+    /**
+     * Generates buffer object names.
+     *
+     * @param buffer a buffer in which the generated buffer object names are stored
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
+     */
+    infix fun genBuffers(buffer: KMutableProperty0<GlBuffer>) = buffer.set(genBuffer())
 
     /**
      * Generates buffer object names.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    fun genBuffer() = stak.intAddress { GL15C.nglGenBuffers(1, it) }
+    fun genBuffer(): GlBuffer = GlBuffer(stak.intAddress { GL15C.nglGenBuffers(1, it) })
 
     // --- [ glIsBuffer ] ---
 
@@ -101,7 +111,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsBuffer">Reference Page</a>
      */
-    fun isBuffer(buffer: Int) = GL15C.glIsBuffer(buffer)
+    fun isBuffer(buffer: GlBuffer): Boolean = GL15C.glIsBuffer(buffer.name)
 
     // --- [ glBufferData ] ---
 
@@ -211,7 +221,7 @@ interface gl15i {
      */
     fun mapBuffer(target: BufferTarget, access: BufferAccess): ByteBuffer? {
         val ptr = GL15C.nglMapBuffer(target.i, access.i)
-        return if(ptr != NULL) memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE)) else null
+        return if (ptr != NULL) memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE)) else null
     }
 
     // --- [ glUnmapBuffer ] ---

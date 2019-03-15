@@ -1,48 +1,50 @@
 package gln.objects
 
 import glm_.bool
+import glm_.vec3.Vec3i
 import gln.*
 import gln.program.ProgramBase
 import gln.program.ProgramUse
 import kool.adr
+import kool.stak
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryStack.stackGet
 import java.lang.Exception
 
-inline class GlProgram(val i: Int) {
+inline class GlProgram(val name: Int) {
 
     // --- [ glDeleteProgram ] ---
 
-    fun delete() = GL20C.glDeleteProgram(i)
+    fun delete() = GL20C.glDeleteProgram(name)
 
     // --- [ glIsProgram ] ---
 
     val isValid: Boolean
-        get() = GL20C.glIsProgram(i)
+        get() = GL20C.glIsProgram(name)
 
     // --- [ glAttachShader ] ---
 
-    infix fun attach(shader: GlShader) = GL20C.glAttachShader(i, shader.i)
+    infix fun attach(shader: GlShader) = GL20C.glAttachShader(name, shader.name)
 
-    operator fun plusAssign(shader: GlShader) = GL20C.glAttachShader(i, shader.i)
+    operator fun plusAssign(shader: GlShader) = GL20C.glAttachShader(name, shader.name)
 
     // --- [ glDetachShader ] ---
 
-    infix fun detach(shader: GlShader) = GL20C.glDetachShader(i, shader.i)
+    infix fun detach(shader: GlShader) = GL20C.glDetachShader(name, shader.name)
 
-    operator fun minusAssign(shader: GlShader) = GL20C.glDetachShader(i, shader.i)
+    operator fun minusAssign(shader: GlShader) = GL20C.glDetachShader(name, shader.name)
 
     // --- [ glShaderSource ] ---
 
-    fun source(source: String) = GL20C.glShaderSource(i, source)
+    fun source(source: String) = GL20C.glShaderSource(name, source)
 
     // --- [ glLinkProgram ] ---
 
-    fun link() = GL20C.glLinkProgram(i)
+    fun link() = GL20C.glLinkProgram(name)
 
     // --- [ glUseProgram ] ---
 
-    fun use() = GL20C.glUseProgram(i)
+    fun use() = GL20C.glUseProgram(name)
 
     // JVM custom
 
@@ -50,135 +52,132 @@ inline class GlProgram(val i: Int) {
 
     inline fun used(block: ProgramUse.() -> Unit) {
         ProgramUse.program = this
-        GL20C.glUseProgram(i)
+        GL20C.glUseProgram(name)
         ProgramUse.block()
         GL20C.glUseProgram(0)
     }
 
     inline fun use(block: ProgramUse.() -> Unit) {
         ProgramUse.program = this
-        GL20C.glUseProgram(i)
+        GL20C.glUseProgram(name)
         ProgramUse.block()
     }
 
     // --- [ glValidateProgram ] ---
 
-    fun validate() = GL20C.glValidateProgram(i)
+    fun validate() = GL20C.glValidateProgram(name)
 
     // --- [ glGetProgramiv ] ---
 
     val deleteStatus: Boolean
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_DELETE_STATUS)).bool
+        get() = gl.getProgram(this, GetProgram.DELETE_STATUS)
 
     val linkStatus: Boolean
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_LINK_STATUS)).bool
+        get() = gl.getProgram(this, GetProgram.LINK_STATUS)
 
     val validateStatus: Boolean
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_VALIDATE_STATUS)).bool
+        get() = gl.getProgram(this, GetProgram.VALIDATE_STATUS)
 
     val infoLogLength: Int
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_INFO_LOG_LENGTH))
+        get() = gl.getProgram(this, GetProgram.INFO_LOG_LENGTH)
 
     val attachedShadersCount: Int
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ATTACHED_SHADERS))
+        get() = gl.getProgram(this, GetProgram.ATTACHED_SHADERS)
 
     val activeAtomicCounterBuffers: Int
-        get() = gl21.getProgram(this, GetProgram(GL42.GL_ACTIVE_ATOMIC_COUNTER_BUFFERS))
+        get() = gl.getProgram(this, GetProgram.ACTIVE_ATOMIC_COUNTER_BUFFERS)
 
     val activeAttributes: Int
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ACTIVE_ATTRIBUTES))
+        get() = gl.getProgram(this, GetProgram.ACTIVE_ATTRIBUTES)
 
     val activeAttributeMaxLength: Int
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH))
+        get() = gl.getProgram(this, GetProgram.ACTIVE_ATTRIBUTE_MAX_LENGTH)
 
     val activeUniforms: Int
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ACTIVE_UNIFORMS))
+        get() = gl.getProgram(this, GetProgram.ACTIVE_UNIFORMS)
 
     val activeUniformMaxLength: Int
-        get() = gl21.getProgram(this, GetProgram(GL20C.GL_ACTIVE_UNIFORM_MAX_LENGTH))
+        get() = gl.getProgram(this, GetProgram.ACTIVE_UNIFORM_MAX_LENGTH)
 
     val binaryLength: Int
-        get() = gl21.getProgram(this, GetProgram(GL41.GL_PROGRAM_BINARY_LENGTH))
+        get() = gl.getProgram(this, GetProgram.PROGRAM_BINARY_LENGTH)
 
-//    val computeWorkGroupSize: Vec3i
-//        get() = stak.vec3iAddress { GL20C.nglGetProgramiv(i, GL43.GL_COMPUTE_WORK_GROUP_SIZE, it) }
+    val computeWorkGroupSize: Vec3i
+        get() = gl.getProgram(this, GetProgram.COMPUTE_WORK_GROUP_SIZE)
 
     val transformFeedbackBufferMode: Int
-        get() = gl21.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_BUFFER_MODE))
+        get() = gl.getProgram(this, GetProgram.TRANSFORM_FEEDBACK_BUFFER_MODE)
 
     val transformFeedbackVaryings: Int
-        get() = gl21.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_VARYINGS))
+        get() = gl.getProgram(this, GetProgram.TRANSFORM_FEEDBACK_VARYINGS)
 
     val transformFeedbackVaryingMaxLength: Int
-        get() = gl21.getProgram(this, GetProgram(GL41.GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH))
+        get() = gl.getProgram(this, GetProgram.TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH)
 
     val geometryVerticesOut: Int
-        get() = gl21.getProgram(this, GetProgram(GL41.GL_GEOMETRY_VERTICES_OUT))
+        get() = gl.getProgram(this, GetProgram.GEOMETRY_VERTICES_OUT)
 
-    val geometryInputType: Int
-        get() = gl21.getProgram(this, GetProgram(GL41.GL_GEOMETRY_INPUT_TYPE))
+    val geometryInputType: GeometryInputType
+        get() = gl.getProgram(this, GetProgram.GEOMETRY_INPUT_TYPE)
 
-    val geometryOutputType: Int
-        get() = gl21.getProgram(this, GetProgram(GL41.GL_GEOMETRY_OUTPUT_TYPE))
+    val geometryOutputType: GeometryOutputType
+        get() = gl.getProgram(this, GetProgram.GEOMETRY_OUTPUT_TYPE)
 
     // --- [ glGetProgramInfoLog ] ---
 
     val infoLog: String
-        get() = gl21.getProgramInfoLog(this)
+        get() = gl.getProgramInfoLog(this)
 
     // --- [ glGetAttachedShaders ] ---
 
     val attachedShaders: GLshaders
-        get() = gl21.getAttachedShaders(this)
+        get() = gl.getAttachedShaders(this)
 
     // --- [ glGetUniformLocation ] ---
 
-    infix fun getUniformLocation(name: String): Int = gl21.getUniformLocation(this, name)
-    operator fun get(name: String): Int = gl21.getUniformLocation(this, name)
+    infix fun getUniformLocation(name: String): Int = gl.getUniformLocation(this, name)
+    operator fun get(name: String): Int = gl.getUniformLocation(this, name)
 
     // --- [ glGetActiveUniform ] ---
 
-    infix fun getActiveUniform(index: Int): Triple<String, Int, UniformType> = gl21.getActiveUniform(this, index)
+    infix fun getActiveUniform(index: Int): Triple<String, Int, UniformType> = gl.getActiveUniform(this, index)
 
-    // --- [ glGetUniformfv ] ---
+    // --- [ glGetUniform* ] ---
 
-    infix fun getUniformF(location: Int): Float = gl21.getUniformFloat(this, location)
-
-    // --- [ glGetUniformiv ] ---
-
-    infix fun getUniformI(location: Int): Int = gl21.getUniformInt(this, location)
+    inline infix fun <reified T> getUniform(location: Int): T =  gl.getUniform(this, location)
 
     // --- [ glGetAttribLocation ] ---
-    infix fun getAttribLocation(name: String): Int = GL20.glGetAttribLocation(i, name)
+    infix fun getAttribLocation(name: String): Int = GL20.glGetAttribLocation(this.name, name)
 
     // --- [ glBindAttribLocation ] ---
 
     fun bindAttribLocation(index: Int, name: String) {
         val stack = stackGet()
         val ptr = stack.pointer
-        GL20C.nglBindAttribLocation(i, index, stack.ASCII(name).adr)
+        GL20C.nglBindAttribLocation(this.name, index, stack.ASCII(name).adr)
         stack.pointer = ptr
     }
 
     // --- [ glGetUniformBlockIndex ] ---
-    fun getUniformBlockIndex(uniformBlockName: CharSequence) = GL31C.glGetUniformBlockIndex(i, uniformBlockName)
+    fun getUniformBlockIndex(uniformBlockName: CharSequence) = GL31C.glGetUniformBlockIndex(name, uniformBlockName)
 
     // --- [ glUniformBlockBinding ] ---
-    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Int) = GL31C.glUniformBlockBinding(i, uniformBlockIndex, uniformBlockBinding)
-    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Enum<*>) = GL31C.glUniformBlockBinding(i, uniformBlockIndex, uniformBlockBinding.ordinal)
+    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Int) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding)
+
+    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Enum<*>) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding.ordinal)
 
     // --- [ glBindFragDataLocation ] ---
 
     fun bindFragDataLocation(index: Int, name: String) {
         val stack = stackGet()
         val ptr = stack.pointer
-        GL20C.nglBindAttribLocation(i, index, stack.ASCII(name).adr)
+        GL20C.nglBindAttribLocation(this.name, index, stack.ASCII(name).adr)
         stack.pointer = ptr
     }
 
     // --- [ glGetActiveAttrib ] ---
 
-    fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl21.getActiveAttrib(this, index)
+    fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl.getActiveAttrib(this, index)
 
     companion object {
 

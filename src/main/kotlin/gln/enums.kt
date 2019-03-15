@@ -1069,7 +1069,7 @@ inline class GetTexLevelParameter(val i: Int) {
 }
 
 
-inline class TexParameter(val i: Int){
+inline class TexParameter(val i: Int) {
     companion object {
         val DEPTH_STENCIL_MODE = TexParameter(GL43.GL_DEPTH_STENCIL_TEXTURE_MODE)
         val IMAGE_FORMAT_COMPATIBILITY_TYPE = TexParameter(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_TYPE)
@@ -1103,7 +1103,7 @@ inline class TexParameter(val i: Int){
 
 //###############################################################################
 
-inline class HintMode(val i: Int){
+inline class HintMode(val i: Int) {
     companion object {
         val DONT_CARE = HintMode(GL11.GL_DONT_CARE)
         val FASTEST = HintMode(GL11.GL_FASTEST)
@@ -1213,6 +1213,7 @@ inline class DataType(val i: Int) {
 //# OES_fixed_point enum:
 //val FIXED_OES = DataType(0x140C)
     }
+
     val size: Int
         get() = when (i) {
             GL11.GL_BYTE, GL11.GL_UNSIGNED_BYTE -> Byte.BYTES
@@ -1248,7 +1249,7 @@ inline class DataType(val i: Int) {
 //
 //###############################################################################
 
-inline class LogicOp(val i: Int){
+inline class LogicOp(val i: Int) {
     companion object {
         val DISABLED = LogicOp(GL11.GL_FALSE)
         val CLEAR = LogicOp(GL11.GL_CLEAR)
@@ -1351,7 +1352,7 @@ internal var _logicOpEnabled = false
 //
 //###############################################################################
 
-inline class PixelCopyType(val i: Int){
+inline class PixelCopyType(val i: Int) {
     companion object {
         val COLOR = PixelCopyType(GL11.GL_COLOR)
         val DEPTH = PixelCopyType(GL11C.GL_DEPTH)
@@ -1400,7 +1401,7 @@ inline class PixelCopyType(val i: Int){
 //
 //###############################################################################
 
-inline class PixelStoreParameter(val i: Int){
+inline class PixelStoreParameter(val i: Int) {
     companion object {
         val UNPACK_SWAP_BYTES = PixelStoreParameter(GL11.GL_UNPACK_SWAP_BYTES)
         val UNPACK_LSB_FIRST = PixelStoreParameter(GL11.GL_UNPACK_LSB_FIRST)
@@ -1515,7 +1516,7 @@ inline class PixelStoreParameter(val i: Int){
 //
 //###############################################################################
 
-inline class PolygonMode(val i: Int){
+inline class PolygonMode(val i: Int) {
     companion object {
         val POINT = PolygonMode(GL11.GL_POINT)
         val LINE = PolygonMode(GL11.GL_LINE)
@@ -1582,7 +1583,7 @@ inline class PolygonMode(val i: Int){
 //
 //###############################################################################
 
-inline class StencilOp(val i: Int){
+inline class StencilOp(val i: Int) {
     companion object {
         val ZERO = StencilOp(GL11.GL_ZERO)
         val KEEP = StencilOp(GL11.GL_KEEP)
@@ -1678,7 +1679,7 @@ inline class MagFilter(val i: Int) {
 
 //###############################################################################
 
-inline class MinFilter(val i: Int){
+inline class MinFilter(val i: Int) {
     companion object {
         val NEAREST = MinFilter(GL11.GL_NEAREST)
         val LINEAR = MinFilter(GL11.GL_LINEAR)
@@ -1725,7 +1726,7 @@ inline class MinFilter(val i: Int){
 //
 //###############################################################################
 
-inline class TextureTarget(val i: Int){
+inline class TextureTarget(val i: Int) {
     companion object {
         val _1D = TextureTarget(GL11.GL_TEXTURE_1D)
         val _2D = TextureTarget(GL11.GL_TEXTURE_2D)
@@ -6385,10 +6386,10 @@ inline class GetShader(val i: Int) {
 
 inline class GetProgram(val i: Int) {
     companion object {
-        val DELETE_STATUS_ = GetProgram(GL20.GL_DELETE_STATUS)
+        val DELETE_STATUS = GetProgram(GL20.GL_DELETE_STATUS)
         val LINK_STATUS = GetProgram(GL20.GL_LINK_STATUS)
         val VALIDATE_STATUS = GetProgram(GL20.GL_VALIDATE_STATUS)
-        val INFO_LOG_LENGTH_ = GetProgram(GL20.GL_INFO_LOG_LENGTH)
+        val INFO_LOG_LENGTH = GetProgram(GL20.GL_INFO_LOG_LENGTH)
         val ATTACHED_SHADERS = GetProgram(GL20.GL_ATTACHED_SHADERS)
         val ACTIVE_ATOMIC_COUNTER_BUFFERS = GetProgram(GL42.GL_ACTIVE_ATOMIC_COUNTER_BUFFERS)
         val ACTIVE_ATTRIBUTES = GetProgram(GL20.GL_ACTIVE_ATTRIBUTES)
@@ -6397,7 +6398,7 @@ inline class GetProgram(val i: Int) {
         val ACTIVE_UNIFORM_BLOCKS = GetProgram(GL31.GL_ACTIVE_UNIFORM_BLOCKS)
         val ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH = GetProgram(GL31.GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH)
         val ACTIVE_UNIFORM_MAX_LENGTH = GetProgram(GL20.GL_ACTIVE_UNIFORM_MAX_LENGTH)
-        //val COMPUTE_WORK_GROUP_SIZE = GetProgram(GL43.GL_COMPUTE_WORK_GROUP_SIZE) Vec3i
+        val COMPUTE_WORK_GROUP_SIZE = GetProgram(GL43.GL_COMPUTE_WORK_GROUP_SIZE) // Vec3i
         val PROGRAM_BINARY_LENGTH = GetProgram(GL41.GL_PROGRAM_BINARY_LENGTH)
         val TRANSFORM_FEEDBACK_BUFFER_MODE = GetProgram(GL30.GL_TRANSFORM_FEEDBACK_BUFFER_MODE)
         val TRANSFORM_FEEDBACK_VARYINGS = GetProgram(GL30.GL_TRANSFORM_FEEDBACK_VARYINGS)
@@ -6632,11 +6633,20 @@ inline class GetRenderbuffer(val i: Int) {
     }
 }
 
-inline class FramebufferTarget(val i: Int){
+inline class FramebufferBindTarget(val i: Int) {
     companion object {
-        val BOTH = FramebufferTarget(GL30C.GL_FRAMEBUFFER)
-        val READ = FramebufferTarget(GL30C.GL_READ_FRAMEBUFFER)
-        val DRAW = FramebufferTarget(GL30C.GL_DRAW_FRAMEBUFFER)
+        /**  Calling glBindFramebuffer with target set to GL_FRAMEBUFFER binds framebuffer to both the read and draw framebuffer targets. */
+        val BOTH = FramebufferBindTarget(GL30C.GL_FRAMEBUFFER)
+        val READ = FramebufferBindTarget(GL30C.GL_READ_FRAMEBUFFER)
+        val DRAW = FramebufferBindTarget(GL30C.GL_DRAW_FRAMEBUFFER)
+    }
+}
+
+inline class FramebufferTarget_(val i: Int) {
+    companion object {
+        val BOTH = FramebufferTarget_(GL30C.GL_FRAMEBUFFER)
+        val READ = FramebufferTarget_(GL30C.GL_READ_FRAMEBUFFER)
+        val DRAW = FramebufferTarget_(GL30C.GL_DRAW_FRAMEBUFFER)
     }
 }
 
@@ -6656,5 +6666,23 @@ inline class GetFramebufferAttachment(val i: Int) {
         val TEXTURE_CUBE_MAP_FACE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE)
         val LAYERED = GetFramebufferAttachment(GL32C.GL_FRAMEBUFFER_ATTACHMENT_LAYERED)
         val TEXTURE_LAYER = GetFramebufferAttachment(GL32C.GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER)
+    }
+}
+
+inline class GeometryInputType(val i: Int) {
+    companion object {
+        val POINTS = GeometryInputType(GL11C.GL_POINTS)
+        val LINES = GeometryInputType(GL11C.GL_LINES)
+        val LINES_ADJACENCY = GeometryInputType(GL32C.GL_LINES_ADJACENCY)
+        val TRIANGLES = GeometryInputType(GL11C.GL_TRIANGLES)
+        val TRIANGLES_ADJACENCY = GeometryInputType(GL32C.GL_TRIANGLES_ADJACENCY)
+    }
+}
+
+inline class GeometryOutputType(val i: Int) {
+    companion object {
+        val POINTS = GeometryInputType(GL11C.GL_POINTS)
+        val LINE_STRIP = GeometryInputType(GL11C.GL_LINE_STRIP)
+        val TRIANGLE_STRIP = GeometryInputType(GL32C.GL_TRIANGLE_STRIP)
     }
 }

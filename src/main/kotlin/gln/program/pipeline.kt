@@ -20,7 +20,7 @@ inline class GlPipeline(val name: Int = -1) {
     }
 
     fun useStages(stages: Int, program: GlProgram): GlPipeline {
-        GL41C.glUseProgramStages(name, stages, program.i)
+        GL41C.glUseProgramStages(name, stages, program.name)
         return this
     }
 

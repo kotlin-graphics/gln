@@ -8,7 +8,6 @@ import gln.BufferTarget
 import gln.Usage
 import gln.buffer.GlBufferDsl
 import gln.buffer.GlBuffersDsl
-import gln.gl21
 import kool.*
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
@@ -68,8 +67,8 @@ inline class GlBuffer(val name: Int = -1) {
     fun getStorageFlags(target: BufferTarget): Int = GL15C.glGetBufferParameteri(target.i, GL44.GL_BUFFER_STORAGE_FLAGS)
 
     fun getUsage(target: BufferTarget): Usage = Usage(GL15C.glGetBufferParameteri(target.i, GL15.GL_BUFFER_USAGE))
-    // glGetBufferPointer
-    fun pointer(target: BufferTarget): Ptr = gl21.getBufferPointer(target)
+
+    fun getPointer(target: BufferTarget): Ptr = stak.pointerAddress { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) }
 
 
     fun data(target: BufferTarget, size: Int, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)

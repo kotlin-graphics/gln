@@ -26,7 +26,7 @@ import java.awt.Color
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
-import java.nio.ShortBuffer
+import kotlin.reflect.KMutableProperty0
 
 
 /**
@@ -61,6 +61,20 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindTexture">Reference Page</a>
      */
     fun bindTexture(target: TextureTarget, texture: GlTexture) = GL11C.glBindTexture(target.i, texture.name)
+
+    /**
+     * Binds the a texture to a texture target.
+     *
+     * <p>While a texture object is bound, GL operations on the target to which it is bound affect the bound object, and queries of the target to which it is
+     * bound return state from the bound object. If texture mapping of the dimensionality of the target to which a texture object is bound is enabled, the
+     * state of the bound texture object directs the texturing operation.</p>
+     *
+     * @param target  the texture target. One of:<br><table><tr><td>{@link #GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link #GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
+     * @param texture the texture object to bind
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBindTexture">Reference Page</a>
+     */
+    fun bind(target: TextureTarget, texture: GlTexture) = GL11C.glBindTexture(target.i, texture.name)
 
     // --- [ glBlendFunc ] ---
 
@@ -400,31 +414,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(mode: DrawMode, type: DataType, indices: ByteBuffer) = GL11C.nglDrawElements(mode.i, indices.rem * type.size, type.i, indices.adr)
-
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
-     * The i<sup>th</sup> element transferred by {@code DrawElements} will be taken from element {@code indices[i]} (if no element array buffer is bound), or
-     * from the element whose index is stored in the currently bound element array buffer at offset {@code indices + i}.
-     *
-     * @param mode    the kind of primitives being constructed. One of:<br><table><tr><td>{@link #GL_POINTS POINTS}</td><td>{@link #GL_LINE_STRIP LINE_STRIP}</td><td>{@link #GL_LINE_LOOP LINE_LOOP}</td><td>{@link #GL_LINES LINES}</td><td>{@link #GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link #GL_TRIANGLE_FAN TRIANGLE_FAN}</td></tr><tr><td>{@link #GL_TRIANGLES TRIANGLES}</td><td>{@link GL32#GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link GL32#GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td></tr></table>
-     * @param indices the index values
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
-     */
-    fun drawElements(mode: DrawMode, indices: ByteBuffer) = GL11C.nglDrawElements(mode.i, indices.rem, GL11C.GL_UNSIGNED_BYTE, indices.adr)
-
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
-     * The i<sup>th</sup> element transferred by {@code DrawElements} will be taken from element {@code indices[i]} (if no element array buffer is bound), or
-     * from the element whose index is stored in the currently bound element array buffer at offset {@code indices + i}.
-     *
-     * @param mode    the kind of primitives being constructed. One of:<br><table><tr><td>{@link #GL_POINTS POINTS}</td><td>{@link #GL_LINE_STRIP LINE_STRIP}</td><td>{@link #GL_LINE_LOOP LINE_LOOP}</td><td>{@link #GL_LINES LINES}</td><td>{@link #GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link #GL_TRIANGLE_FAN TRIANGLE_FAN}</td></tr><tr><td>{@link #GL_TRIANGLES TRIANGLES}</td><td>{@link GL32#GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link GL32#GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td></tr></table>
-     * @param indices the index values
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
-     */
-    fun drawElements(mode: DrawMode, indices: ShortBuffer) = GL11C.nglDrawElements(mode.i, indices.rem, GL11C.GL_UNSIGNED_SHORT, indices.adr)
+    fun drawElements(mode: DrawMode, type: DataType, indices: Buffer) = GL11C.nglDrawElements(mode.i, indices.rem * type.size, type.i, indices.adr)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -463,7 +453,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(type: DataType, indices: ByteBuffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.rem * type.size, type.i, indices.adr)
+    fun drawElements(type: DataType, indices: Buffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.rem * type.size, type.i, indices.adr)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -530,7 +520,17 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    infix fun genTextures(count: Int): GlTextures = GlTextures(IntBuffer(count).apply { GL11C.nglGenTextures(rem, adr) })
+    infix fun genTextures(count: Int): GlTextures = GlTextures(count).also(::genTextures)
+
+    /**
+     * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
+     * state and a dimensionality only when they are first bound, just as if they were unused.
+     *
+     * @param texture a scalar or buffer in which to place the returned texture names
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
+     */
+    infix fun genTexture(texture: KMutableProperty0<GlTexture>) = texture.set(genTexture())
 
     /**
      * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
@@ -538,7 +538,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    fun genTexture() = stak.intAddress { GL11C.nglGenTextures(1, it) }
+    fun genTexture(): GlTexture = GlTexture(stak.intAddress { GL11C.nglGenTextures(1, it) })
 
     // --- [ glDeleteTextures ] ---
 
@@ -568,7 +568,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTexture(texture: GlTexture) = stak.intAddress(texture.name) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTextures(texture: GlTexture) = stak.intAddress(texture.name) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetError ] ---
 
@@ -611,62 +611,6 @@ interface gl11i {
      */
     fun getTexImage(tex: TextureTarget, level: Int, format: ExternalFormat, type: TypeFormat, pixels: Adr) = GL11C.nglGetTexImage(tex.i, level, format.i, type.i, pixels)
 
-    // --- [ glGetTexLevelParameteriv ] --- TODO remove in favor of the inline reified?
-
-    /**
-     * Places integer information about texture image parameter {@code name} for level-of-detail {@code level} of the specified {@code target} into {@code params}.
-     *
-     * @param target the texture image target. One of:<br><table><tr><td>{@link #GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link #GL_PROXY_TEXTURE_2D PROXY_TEXTURE_2D}</td><td>{@link GL30#GL_PROXY_TEXTURE_1D_ARRAY PROXY_TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_PROXY_TEXTURE_RECTANGLE PROXY_TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_PROXY_TEXTURE_CUBE_MAP PROXY_TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link #GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td><td>{@link #GL_PROXY_TEXTURE_1D PROXY_TEXTURE_1D}</td><td>{@link GL12#GL_PROXY_TEXTURE_3D PROXY_TEXTURE_3D}</td></tr><tr><td>{@link GL30#GL_PROXY_TEXTURE_2D_ARRAY PROXY_TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_PROXY_TEXTURE_CUBE_MAP_ARRAY PROXY_TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL32#GL_PROXY_TEXTURE_2D_MULTISAMPLE PROXY_TEXTURE_2D_MULTISAMPLE}</td><td>{@link GL32#GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
-     * @param level  the level-of-detail number
-     * @param name  the parameter to query. One of:<br><table><tr><td>{@link #GL_TEXTURE_WIDTH TEXTURE_WIDTH}</td><td>{@link #GL_TEXTURE_HEIGHT TEXTURE_HEIGHT}</td><td>{@link GL12#GL_TEXTURE_DEPTH TEXTURE_DEPTH}</td><td>{@link GL32#GL_TEXTURE_SAMPLES TEXTURE_SAMPLES}</td></tr><tr><td>{@link GL32#GL_TEXTURE_FIXED_SAMPLE_LOCATIONS TEXTURE_FIXED_SAMPLE_LOCATIONS}</td><td>{@link #GL_TEXTURE_INTERNAL_FORMAT TEXTURE_INTERNAL_FORMAT}</td><td>{@link #GL_TEXTURE_RED_SIZE TEXTURE_RED_SIZE}</td><td>{@link #GL_TEXTURE_GREEN_SIZE TEXTURE_GREEN_SIZE}</td></tr><tr><td>{@link #GL_TEXTURE_BLUE_SIZE TEXTURE_BLUE_SIZE}</td><td>{@link #GL_TEXTURE_ALPHA_SIZE TEXTURE_ALPHA_SIZE}</td><td>{@link GL14#GL_TEXTURE_DEPTH_SIZE TEXTURE_DEPTH_SIZE}</td><td>{@link GL30#GL_TEXTURE_STENCIL_SIZE TEXTURE_STENCIL_SIZE}</td></tr><tr><td>{@link GL30#GL_TEXTURE_SHARED_SIZE TEXTURE_SHARED_SIZE}</td><td>{@link GL30#GL_TEXTURE_ALPHA_TYPE TEXTURE_ALPHA_TYPE}</td><td>{@link GL30#GL_TEXTURE_DEPTH_TYPE TEXTURE_DEPTH_TYPE}</td><td>{@link GL13#GL_TEXTURE_COMPRESSED TEXTURE_COMPRESSED}</td></tr><tr><td>{@link GL13#GL_TEXTURE_COMPRESSED_IMAGE_SIZE TEXTURE_COMPRESSED_IMAGE_SIZE}</td><td>{@link GL31#GL_TEXTURE_BUFFER_DATA_STORE_BINDING TEXTURE_BUFFER_DATA_STORE_BINDING}</td><td>{@link GL43#GL_TEXTURE_BUFFER_OFFSET TEXTURE_BUFFER_OFFSET}</td><td>{@link GL43#GL_TEXTURE_BUFFER_SIZE TEXTURE_BUFFER_SIZE}</td></tr></table>
-     * @param params a scalar or buffer in which to place the returned data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
-     */
-    fun getTexLevelParameterI(target: TextureTarget, level: Int, name: GetTexLevelParameter) = stak.intAddress { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) }
-
-    // --- [ glGetTexLevelParameterfv ] ---
-
-    /**
-     * Float version of {@link #glGetTexLevelParameteriv GetTexLevelParameteriv}.
-     *
-     * @param target the texture image target
-     * @param level  the level-of-detail number
-     * @param pName  the parameter to query
-     * @param params a scalar or buffer in which to place the returned data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
-     */
-    fun getTexLevelParameterF(target: TextureTarget, level: Int, pName: GetTexLevelParameter) = stak.floatAddress { GL11C.nglGetTexLevelParameterfv(target.i, level, pName.i, it) }
-
-    // --- [ glGetTexParameteriv ] ---
-
-    /**
-     * Place integer information about texture parameter {@code pName} for the specified {@code target} into {@code params}.
-     *
-     * @param target the texture target. One of:<br><table><tr><td>{@link #GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link #GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td></tr><tr><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
-     * @param pName  the parameter to query. One of:<br><table><tr><td>{@link GL12#GL_TEXTURE_BASE_LEVEL TEXTURE_BASE_LEVEL}</td><td>{@link #GL_TEXTURE_BORDER_COLOR TEXTURE_BORDER_COLOR}</td><td>{@link GL14#GL_TEXTURE_COMPARE_MODE TEXTURE_COMPARE_MODE}</td><td>{@link GL14#GL_TEXTURE_COMPARE_FUNC TEXTURE_COMPARE_FUNC}</td></tr><tr><td>{@link GL14#GL_TEXTURE_LOD_BIAS TEXTURE_LOD_BIAS}</td><td>{@link #GL_TEXTURE_MAG_FILTER TEXTURE_MAG_FILTER}</td><td>{@link GL12#GL_TEXTURE_MAX_LEVEL TEXTURE_MAX_LEVEL}</td><td>{@link GL12#GL_TEXTURE_MAX_LOD TEXTURE_MAX_LOD}</td></tr><tr><td>{@link #GL_TEXTURE_MIN_FILTER TEXTURE_MIN_FILTER}</td><td>{@link GL12#GL_TEXTURE_MIN_LOD TEXTURE_MIN_LOD}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_R TEXTURE_SWIZZLE_R}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_G TEXTURE_SWIZZLE_G}</td></tr><tr><td>{@link GL33#GL_TEXTURE_SWIZZLE_B TEXTURE_SWIZZLE_B}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_A TEXTURE_SWIZZLE_A}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_RGBA TEXTURE_SWIZZLE_RGBA}</td><td>{@link #GL_TEXTURE_WRAP_S TEXTURE_WRAP_S}</td></tr><tr><td>{@link #GL_TEXTURE_WRAP_T TEXTURE_WRAP_T}</td><td>{@link GL12#GL_TEXTURE_WRAP_R TEXTURE_WRAP_R}</td><td>{@link GL14#GL_DEPTH_TEXTURE_MODE DEPTH_TEXTURE_MODE}</td><td>{@link GL14#GL_GENERATE_MIPMAP GENERATE_MIPMAP}</td></tr><tr><td>{@link GL42#GL_IMAGE_FORMAT_COMPATIBILITY_TYPE IMAGE_FORMAT_COMPATIBILITY_TYPE}</td><td>{@link GL42#GL_TEXTURE_IMMUTABLE_FORMAT TEXTURE_IMMUTABLE_FORMAT}</td><td>{@link GL43#GL_TEXTURE_IMMUTABLE_LEVELS TEXTURE_IMMUTABLE_LEVELS}</td><td>{@link GL43#GL_TEXTURE_VIEW_MIN_LEVEL TEXTURE_VIEW_MIN_LEVEL}</td></tr><tr><td>{@link GL43#GL_TEXTURE_VIEW_NUM_LEVELS TEXTURE_VIEW_NUM_LEVELS}</td><td>{@link GL43#GL_TEXTURE_VIEW_MIN_LAYER TEXTURE_VIEW_MIN_LAYER}</td><td>{@link GL43#GL_TEXTURE_VIEW_NUM_LAYERS TEXTURE_VIEW_NUM_LAYERS}</td></tr></table>
-     * @param params a scalar or buffer in which to place the returned data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexParameter">Reference Page</a>
-     *
-     * Note: invalid for GL_TEXTURE_BORDER_COLOR or GL_TEXTURE_SWIZZLE_RGBA, use native
-     */
-    fun getTexParameterI(target: TextureTarget, pName: TexParameter) = stak.intAddress { GL11C.nglGetTexParameteriv(target.i, pName.i, it) }
-
-    // --- [ glGetTexParameterfv ] ---
-
-    /**
-     * Float version of {@link #glGetTexParameteriv GetTexParameteriv}.
-     *
-     * @param target the texture target
-     * @param pName  the parameter to query
-     * @param params a scalar or buffer in which to place the returned data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexParameter">Reference Page</a>
-     */
-    fun getTexParameterF(target: TextureTarget, pName: TexParameter) = stak.floatAddress { GL11C.nglGetTexParameterfv(target.i, pName.i, it) }
-
     // --- [ glHint ] ---
 
     /**
@@ -693,7 +637,7 @@ interface gl11i {
         get() = GL11C.glGetFloat(GL11C.GL_LINE_WIDTH)
         set(value) = GL11C.glLineWidth(value)
 
-    // --- [ glIsTexture ] --- TODO remove in favor of .isValid?
+    // --- [ glIsTexture ] --- TODO remove in favor of .isValid? Or rename?
 
     /**
      * Returns true if {@code texture} is the name of a texture object.
@@ -702,7 +646,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsTexture">Reference Page</a>
      */
-    fun isTexture(texture: Int) = GL11C.glIsTexture(texture)
+    fun isTexture(texture: GlTexture): Boolean = GL11C.glIsTexture(texture.name)
 
     // --- [ glLogicOp ] ---
 

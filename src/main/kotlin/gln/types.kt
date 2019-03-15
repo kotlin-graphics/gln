@@ -1,6 +1,7 @@
 package gln
 
 import gln.texture.GlTexturesDsl
+import kool.IntBuffer
 import kool.adr
 import kool.rem
 import org.lwjgl.opengl.GL45C
@@ -20,10 +21,10 @@ inline class GlTextures(val names: IntBuffer) {
         get() = names.adr
 
     companion object {
-        fun gen(count: Int): GlTextures = gl21.genTextures(count)
+        fun gen(count: Int): GlTextures = gl.genTextures(count)
     }
 
-    fun delete() = gl21::deleteTextures
+    fun delete() = gl.deleteTextures(this)
 
 //    inline operator fun invoke(block: GlTexturesDsl.() -> Unit) {
 //        GlTexturesDsl.names = i
@@ -38,3 +39,4 @@ inline class GlTextures(val names: IntBuffer) {
     }
 }
 
+fun GlTextures(size: Int) = GlTextures(IntBuffer(size))

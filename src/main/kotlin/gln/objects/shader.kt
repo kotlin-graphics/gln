@@ -2,61 +2,60 @@ package gln.objects
 
 import glm_.bool
 import gln.ShaderType
-import gln.gl21
+import gln.gl
 import org.lwjgl.opengl.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
-import java.lang.RuntimeException
 import java.nio.IntBuffer
 
-inline class GlShader(val i: Int) {
+inline class GlShader(val name: Int) {
 
     // --- [ glDeleteShader ] ---
 
-    fun delete() = GL20C.glDeleteShader(i)
+    fun delete() = GL20C.glDeleteShader(name)
 
     // --- [ glIsShader ] ---
 
     val valid: Boolean
-        get() = GL20C.glIsShader(i)
+        get() = GL20C.glIsShader(name)
 
     // --- [ glCompileShader ] ---
 
-    fun compile() = GL20C.glCompileShader(i)
+    fun compile() = GL20C.glCompileShader(name)
 
     // --- [ glShaderSource ] ---
 
-    infix fun source(source: CharSequence) = gl21.shaderSource(this, source)
+    infix fun source(source: CharSequence) = gl.shaderSource(this, source)
 
-    fun source(vararg sources: CharSequence) = gl21.shaderSource(this, *sources)
+    fun source(vararg sources: CharSequence) = gl.shaderSource(this, *sources)
 
     // --- [ glGetShaderiv ] ---
 
     val type: ShaderType
-        get() = ShaderType(GL20C.glGetShaderi(i, GL20C.GL_SHADER_TYPE))
+        get() = ShaderType(GL20C.glGetShaderi(name, GL20C.GL_SHADER_TYPE))
 
     val deleteStatus: Boolean
-        get() = GL20C.glGetShaderi(i, GL20C.GL_DELETE_STATUS).bool
+        get() = GL20C.glGetShaderi(name, GL20C.GL_DELETE_STATUS).bool
 
     val compileStatus: Boolean
-        get() = GL20C.glGetShaderi(i, GL20C.GL_COMPILE_STATUS).bool
+        get() = GL20C.glGetShaderi(name, GL20C.GL_COMPILE_STATUS).bool
 
     val infoLogLength: Int
-        get() = GL20C.glGetShaderi(i, GL20C.GL_INFO_LOG_LENGTH)
+        get() = GL20C.glGetShaderi(name, GL20C.GL_INFO_LOG_LENGTH)
 
     val sourceLength: Int
-        get() = GL20C.glGetShaderi(i, GL20C.GL_SHADER_SOURCE_LENGTH)
+        get() = GL20C.glGetShaderi(name, GL20C.GL_SHADER_SOURCE_LENGTH)
 
     // --- [ glGetShaderInfoLog ] ---
 
     val infoLog: String
-        get() = gl21.getShaderInfoLog(this)
+        get() = gl.getShaderInfoLog(this)
 
     // --- [ glGetShaderSource ] ---
 
     val shaderSource: String
-        get() = gl21.getShaderSource(this)
+        get() = gl.getShaderSource(this)
 
 
 

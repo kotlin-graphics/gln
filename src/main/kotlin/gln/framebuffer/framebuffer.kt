@@ -3,7 +3,10 @@
 package gln.framebuffer
 
 
+import kool.IntBuffer
+import kool.adr
 import kool.get
+import kool.rem
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER
 import org.lwjgl.opengl.GL30.GL_RENDERBUFFER
@@ -38,6 +41,13 @@ inline fun glFramebufferTexture(attachment: Int, texture: Int, level: Int = 0) =
 inline fun glCheckFramebufferStatus() = GL30.glCheckFramebufferStatus(GL_FRAMEBUFFER)
 
 
+inline class GlFramebuffers(val names: IntBuffer) {
+    val rem get() = names.rem
+    val adr get() = names.adr
+}
+
+fun GlFramebuffers(size: Int) = GlFramebuffers(IntBuffer(size))
+
 inline class GlFramebuffer(val name: Int = -1) {
 
     fun bind() = GL30C.glBindFramebuffer(GL30C.GL_FRAMEBUFFER, name)
@@ -45,7 +55,7 @@ inline class GlFramebuffer(val name: Int = -1) {
     fun bindRead() = GL30C.glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, name)
     fun bindDraw() = GL30C.glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, name)
 
-    inline fun bind(block: GlFramebufferDsl.() -> Unit): GlFramebuffer {
+    inline fun bound(block: GlFramebufferDsl.() -> Unit): GlFramebuffer {
         GL30C.glBindFramebuffer(GL30C.GL_FRAMEBUFFER, name)
         GlFramebufferDsl.name = name
         GlFramebufferDsl.block()

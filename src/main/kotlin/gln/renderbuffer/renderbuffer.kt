@@ -3,7 +3,10 @@
 package gln.renderbuffer
 
 import glm_.vec2.Vec2i
+import kool.IntBuffer
+import kool.adr
 import kool.get
+import kool.rem
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
@@ -23,6 +26,13 @@ inline fun glRenderbufferStorage(internalFormat: Int, width: Int, height: Int) =
 inline fun glRenderbufferStorage(internalFormat: Int, size: Vec2i) = GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, internalFormat, size.x, size.y)
 inline fun glRenderbufferStorage(target: Int, internalFormat: Int, size: Vec2i) = GL30.glRenderbufferStorage(target, internalFormat, size.x, size.y)
 
+
+inline class GlRenderbuffers(val names: IntBuffer) {
+    val rem get() = names.rem
+    val adr get() = names.adr
+}
+
+fun GlRenderbuffers(size: Int) = GlRenderbuffers(IntBuffer(size))
 
 inline class GlRenderbuffer(val name: Int = -1) {
 
