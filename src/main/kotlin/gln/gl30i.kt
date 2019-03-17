@@ -6,6 +6,7 @@
 package gln
 
 import gli_.gl
+import glm_.BYTES
 import glm_.L
 import glm_.vec1.Vec1i
 import glm_.vec1.Vec1ui
@@ -13,21 +14,27 @@ import glm_.vec2.Vec2i
 import glm_.vec2.Vec2ui
 import glm_.vec3.Vec3i
 import glm_.vec3.Vec3ui
+import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.framebuffer.GlFramebuffers
+import gln.objects.GlBuffer
 import gln.objects.GlProgram
 import gln.objects.GlQuery
 import gln.objects.GlTexture
 import gln.renderbuffer.GlRenderbuffer
 import gln.renderbuffer.GlRenderbuffers
+import gln.vertexArray.GlVertexArray
+import gln.vertexArray.GlVertexArrays
 import kool.adr
 import kool.stak
 import org.lwjgl.opengl.GL30C
-import org.lwjgl.system.MemoryUtil.memByteBufferSafe
+import org.lwjgl.system.MemoryUtil.*
 import unsigned.Uint
 import java.nio.ByteBuffer
 import java.nio.FloatBuffer
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.KMutableProperty0
 
 /**
  * The OpenGL functionality of a forward compatible context, up to version 3.0.
@@ -1150,7 +1157,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteFramebuffers">Reference Page</a>
      */
-    fun deleteFramebuffers(framebuffers: GlFramebuffers) =GL30C.nglDeleteFramebuffers(framebuffers.rem, framebuffers.adr)
+    fun deleteFramebuffers(framebuffers: GlFramebuffers) = GL30C.nglDeleteFramebuffers(framebuffers.rem, framebuffers.adr)
 
     /**
      * Deletes framebuffer objects.
@@ -1195,7 +1202,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCheckFramebufferStatus">Reference Page</a>
      */
-    fun checkFramebufferStatus(target: FramebufferBindTarget = FramebufferBindTarget.BOTH) = GL30C.glCheckFramebufferStatus(target.i)
+    fun checkFramebufferStatus(target: FramebufferTarget = FramebufferTarget.DRAW) = GL30C.glCheckFramebufferStatus(target.i)
 
     // --- [ glFramebufferTexture1D ] ---
 
@@ -1210,7 +1217,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture1D">Reference Page</a>
      */
-    fun framebufferTexture1D(target: FramebufferBindTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
+    fun framebufferTexture1D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
             GL30C.glFramebufferTexture1D(target.i, attachment, texTarget.i, texture.name, level)
 
     /**
@@ -1239,7 +1246,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture2D">Reference Page</a>
      */
-    fun framebufferTexture2D(target: FramebufferBindTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
+    fun framebufferTexture2D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
             GL30C.glFramebufferTexture2D(target.i, attachment, texTarget.i, texture.name, level)
 
     /**
@@ -1269,7 +1276,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture3D">Reference Page</a>
      */
-    fun framebufferTexture3D(target: FramebufferBindTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
+    fun framebufferTexture3D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
             GL30C.glFramebufferTexture3D(target.i, attachment, texTarget.i, texture.name, level, layer)
 
     /**
@@ -1299,7 +1306,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
-    fun framebufferTextureLayer(target: FramebufferBindTarget, attachment: Int, texture: GlTexture, level: Int, layer: Int) =
+    fun framebufferTextureLayer(target: FramebufferTarget, attachment: Int, texture: GlTexture, level: Int, layer: Int) =
             GL30C.glFramebufferTextureLayer(target.i, attachment, texture.name, level, layer)
 
     /**
@@ -1327,7 +1334,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
-    fun framebufferRenderbuffer(target: FramebufferBindTarget, attachment: Int, renderbuffer: GlRenderbuffer) =
+    fun framebufferRenderbuffer(target: FramebufferTarget, attachment: Int, renderbuffer: GlRenderbuffer) =
             GL30C.glFramebufferRenderbuffer(target.i, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     /**
@@ -1353,7 +1360,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
-    fun getFramebufferAttachmentParameter(target: FramebufferBindTarget, attachment: Int, name: GetFramebufferAttachment) =
+    fun getFramebufferAttachmentParameter(target: FramebufferTarget, attachment: Int, name: GetFramebufferAttachment) =
             GL30C.glGetFramebufferAttachmentParameteri(target.i, attachment, name.i)
 
     /**
@@ -1428,8 +1435,7 @@ interface gl30i {
     // --- [ glGenerateMipmap ] ---
 
     /**
-     * Generate mipmaps for a specified texture target.
-     *
+     * Generate mipmaps for a specified texture target.     *
      * @param target the target to which the texture whose mimaps to generate is bound. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link GL11#GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link #GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link #GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr></table>
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenerateMipmap">Reference Page</a>
@@ -1442,66 +1448,35 @@ interface gl30i {
      * Sets the integer value of a texture parameter.
      *
      * @param target the texture target
-     * @param pname  the symbolic name of a single-valued texture parameter
-     * @param params the value of {@code pname}
+     * @param name  the symbolic name of a single-valued texture parameter
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
      */
-//    public static void glTexParameterIiv(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("GLint const *") IntBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglTexParameterIiv(target, pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Sets the integer value of a texture parameter.
-//     *
-//     * @param target the texture target
-//     * @param pname  the symbolic name of a single-valued texture parameter
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
-//     */
-//    public static void glTexParameterIi(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("GLint const *") int param) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.ints(param);
-//            nglTexParameterIiv(target, pname, memAddress(params));
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
+    fun texParameter(target: TextureTarget, name: Int, param: Int) =
+            stak.intAddress(param) { GL30C.nglTexParameterIiv(target.i, name, it) }
+
+    /**
+     * Sets the integer value of a texture parameter. Only BORDER_COLOR and BORDER_COLOR
+     *
+     * @param target the texture target
+     * @param name  the symbolic name of a single-valued texture parameter
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
+     */
+    fun texParameter(target: TextureTarget, name: TexParameter, param: Vec4i) =
+            stak.vec4iAddress(param) { GL30C.nglTexParameterIiv(target.i, name.i, it) }
 
     // --- [ glTexParameterIuiv ] ---
-//
-//    /** Unsafe version of: {@link #glTexParameterIuiv TexParameterIuiv} */
-//    public static native void nglTexParameterIuiv(int target, int pname, long params);
-//
-//    /**
-//     * Sets the unsigned integer value of a texture parameter.
-//     *
-//     * @param target the texture target
-//     * @param pname  the symbolic name of a single-valued texture parameter
-//     * @param params the value of {@code pname}
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
-//     */
-//    public static void glTexParameterIuiv(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("GLuint const *") IntBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglTexParameterIuiv(target, pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Sets the unsigned integer value of a texture parameter.
-//     *
-//     * @param target the texture target
-//     * @param pname  the symbolic name of a single-valued texture parameter
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
-//     */
-//    public static void glTexParameterIui(@NativeType("GLenum") int target, @NativeType("GLenum") int pname, @NativeType("GLuint const *") int param) {
+
+    /**
+     * Sets the unsigned integer value of a texture parameter.
+     *
+     * @param target the texture target
+     * @param pname  the symbolic name of a single-valued texture parameter
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
+     */
+//    fun texParameterBorderColor(target: TextureTarget, param: Vec4ui) { TODO?
 //        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
 //        try {
 //            IntBuffer params = stack.ints(param);
@@ -1593,418 +1568,244 @@ interface gl30i {
 //        }
 //    }
 //
-//    // --- [ glColorMaski ] ---
-//
-//    /**
-//     * Enables and disables writing of frame buffer color components.
-//     *
-//     * @param buf the index of the draw buffer whose color mask to set
-//     * @param r   whether R values are written or not
-//     * @param g   whether G values are written or not
-//     * @param b   whether B values are written or not
-//     * @param a   whether A values are written or not
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glColorMaski">Reference Page</a>
-//     */
-//    public static native void glColorMaski(@NativeType("GLuint") int buf, @NativeType("GLboolean") boolean r, @NativeType("GLboolean") boolean g, @NativeType("GLboolean") boolean b, @NativeType("GLboolean") boolean a);
-//
-//    // --- [ glGetBooleani_v ] ---
-//
-//    /** Unsafe version of: {@link #glGetBooleani_v GetBooleani_v} */
-//    public static native void nglGetBooleani_v(int target, int index, long data);
-//
-//    /**
-//     * Queries the boolean value of an indexed state variable.
-//     *
-//     * @param target the indexed state to query
-//     * @param index  the index of the element being queried
-//     * @param data   a scalar or buffer in which to place the returned data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBooleani_v">Reference Page</a>
-//     */
-//    public static void glGetBooleani_v(@NativeType("GLenum") int target, @NativeType("GLuint") int index, @NativeType("GLboolean *") ByteBuffer data) {
-//        if (CHECKS) {
-//            check(data, 1);
-//        }
-//        nglGetBooleani_v(target, index, memAddress(data));
-//    }
-//
-//    /**
-//     * Queries the boolean value of an indexed state variable.
-//     *
-//     * @param target the indexed state to query
-//     * @param index  the index of the element being queried
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBooleani_v">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static boolean glGetBooleani(@NativeType("GLenum") int target, @NativeType("GLuint") int index) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            ByteBuffer data = stack.calloc(1);
-//            nglGetBooleani_v(target, index, memAddress(data));
-//            return data.get(0) != 0;
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetIntegeri_v ] ---
-//
-//    /** Unsafe version of: {@link #glGetIntegeri_v GetIntegeri_v} */
-//    public static native void nglGetIntegeri_v(int target, int index, long data);
-//
-//    /**
-//     * Queries the integer value of an indexed state variable.
-//     *
-//     * @param target the indexed state to query
-//     * @param index  the index of the element being queried
-//     * @param data   a scalar or buffer in which to place the returned data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetIntegeri_v">Reference Page</a>
-//     */
-//    public static void glGetIntegeri_v(@NativeType("GLenum") int target, @NativeType("GLuint") int index, @NativeType("GLint *") IntBuffer data) {
-//        if (CHECKS) {
-//            check(data, 1);
-//        }
-//        nglGetIntegeri_v(target, index, memAddress(data));
-//    }
-//
-//    /**
-//     * Queries the integer value of an indexed state variable.
-//     *
-//     * @param target the indexed state to query
-//     * @param index  the index of the element being queried
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetIntegeri_v">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetIntegeri(@NativeType("GLenum") int target, @NativeType("GLuint") int index) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer data = stack.callocInt(1);
-//            nglGetIntegeri_v(target, index, memAddress(data));
-//            return data.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glEnablei ] ---
-//
-//    /**
-//     * Enables an indexed capability.
-//     *
-//     * @param cap   the indexed capability to enable
-//     * @param index the index to enable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glEnablei">Reference Page</a>
-//     */
-//    public static native void glEnablei(@NativeType("GLenum") int cap, @NativeType("GLuint") int index);
-//
-//    // --- [ glDisablei ] ---
-//
-//    /**
-//     * Disables an indexed capability.
-//     *
-//     * @param target the indexed capability to disable
-//     * @param index  the index to disable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDisablei">Reference Page</a>
-//     */
-//    public static native void glDisablei(@NativeType("GLenum") int target, @NativeType("GLuint") int index);
-//
-//    // --- [ glIsEnabledi ] ---
-//
-//    /**
-//     * Tests whether an indexed capability is enabled.
-//     *
-//     * @param target the indexed capability to query
-//     * @param index  the index to query
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glIsEnabledi">Reference Page</a>
-//     */
-//    @NativeType("GLboolean")
-//    public static native boolean glIsEnabledi(@NativeType("GLenum") int target, @NativeType("GLuint") int index);
-//
-//    // --- [ glBindBufferRange ] ---
-//
-//    /**
-//     * Binds a range within a buffer object to an indexed buffer target.
-//     *
-//     * @param target the target of the bind operation. One of:<br><table><tr><td>{@link #GL_TRANSFORM_FEEDBACK_BUFFER TRANSFORM_FEEDBACK_BUFFER}</td><td>{@link GL31#GL_UNIFORM_BUFFER UNIFORM_BUFFER}</td><td>{@link GL42#GL_ATOMIC_COUNTER_BUFFER ATOMIC_COUNTER_BUFFER}</td><td>{@link GL43#GL_SHADER_STORAGE_BUFFER SHADER_STORAGE_BUFFER}</td></tr></table>
-//     * @param index  the index of the binding point within the array specified by {@code target}
-//     * @param buffer a buffer object to bind to the specified binding point
-//     * @param offset the starting offset in basic machine units into the buffer object {@code buffer}
-//     * @param size   the amount of data in machine units that can be read from the buffer object while used as an indexed target
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBindBufferRange">Reference Page</a>
-//     */
-//    public static native void glBindBufferRange(@NativeType("GLenum") int target, @NativeType("GLuint") int index, @NativeType("GLuint") int buffer, @NativeType("GLintptr") long offset, @NativeType("GLsizeiptr") long size);
-//
-//    // --- [ glBindBufferBase ] ---
-//
-//    /**
-//     * Binds a buffer object to an indexed buffer target.
-//     *
-//     * @param target the target of the bind operation. One of:<br><table><tr><td>{@link #GL_TRANSFORM_FEEDBACK_BUFFER TRANSFORM_FEEDBACK_BUFFER}</td><td>{@link GL31#GL_UNIFORM_BUFFER UNIFORM_BUFFER}</td><td>{@link GL42#GL_ATOMIC_COUNTER_BUFFER ATOMIC_COUNTER_BUFFER}</td><td>{@link GL43#GL_SHADER_STORAGE_BUFFER SHADER_STORAGE_BUFFER}</td></tr></table>
-//     * @param index  the index of the binding point within the array specified by {@code target}
-//     * @param buffer a buffer object to bind to the specified binding point
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBindBufferBase">Reference Page</a>
-//     */
-//    public static native void glBindBufferBase(@NativeType("GLenum") int target, @NativeType("GLuint") int index, @NativeType("GLuint") int buffer);
-//
-//    // --- [ glBeginTransformFeedback ] ---
-//
-//    /**
-//     * Starts transform feedback operation.
-//     *
-//     * @param primitiveMode the output type of the primitives that will be recorded into the buffer objects that are bound for transform feedback. One of:<br><table><tr><td>{@link GL11#GL_POINTS POINTS}</td><td>{@link GL11#GL_LINES LINES}</td><td>{@link GL11#GL_TRIANGLES TRIANGLES}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBeginTransformFeedback">Reference Page</a>
-//     */
-//    public static native void glBeginTransformFeedback(@NativeType("GLenum") int primitiveMode);
-//
-//    // --- [ glEndTransformFeedback ] ---
-//
-//    /**
-//     * Ends transform feedback operation.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glEndTransformFeedback">Reference Page</a>
-//     */
-//    public static native void glEndTransformFeedback();
-//
-//    // --- [ glTransformFeedbackVaryings ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glTransformFeedbackVaryings TransformFeedbackVaryings}
-//     *
-//     * @param count the number of varying variables used for transform feedback
-//     */
-//    public static native void nglTransformFeedbackVaryings(int program, int count, long varyings, int bufferMode);
-//
-//    /**
-//     * Specifies values to record in transform feedback buffers.
-//     *
-//     * @param program    the target program object
-//     * @param varyings   an array of {@code count} zero-terminated strings specifying the names of the varying variables to use for transform feedback
-//     * @param bufferMode the mode used to capture the varying variables when transform feedback is active. One of:<br><table><tr><td>{@link #GL_INTERLEAVED_ATTRIBS INTERLEAVED_ATTRIBS}</td><td>{@link #GL_SEPARATE_ATTRIBS SEPARATE_ATTRIBS}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTransformFeedbackVaryings">Reference Page</a>
-//     */
-//    public static void glTransformFeedbackVaryings(@NativeType("GLuint") int program, @NativeType("GLchar const **") PointerBuffer varyings, @NativeType("GLenum") int bufferMode) {
-//        nglTransformFeedbackVaryings(program, varyings.remaining(), memAddress(varyings), bufferMode);
-//    }
-//
-//    /**
-//     * Specifies values to record in transform feedback buffers.
-//     *
-//     * @param program    the target program object
-//     * @param varyings   an array of {@code count} zero-terminated strings specifying the names of the varying variables to use for transform feedback
-//     * @param bufferMode the mode used to capture the varying variables when transform feedback is active. One of:<br><table><tr><td>{@link #GL_INTERLEAVED_ATTRIBS INTERLEAVED_ATTRIBS}</td><td>{@link #GL_SEPARATE_ATTRIBS SEPARATE_ATTRIBS}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTransformFeedbackVaryings">Reference Page</a>
-//     */
-//    public static void glTransformFeedbackVaryings(@NativeType("GLuint") int program, @NativeType("GLchar const **") CharSequence[] varyings, @NativeType("GLenum") int bufferMode) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            long varyingsAddress = org.lwjgl.system.APIUtil.apiArray(stack, MemoryUtil::memASCII, varyings);
-//            nglTransformFeedbackVaryings(program, varyings.length, varyingsAddress, bufferMode);
-//            org.lwjgl.system.APIUtil.apiArrayFree(varyingsAddress, varyings.length);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    /**
-//     * Specifies values to record in transform feedback buffers.
-//     *
-//     * @param program    the target program object
-//     * @param bufferMode the mode used to capture the varying variables when transform feedback is active. One of:<br><table><tr><td>{@link #GL_INTERLEAVED_ATTRIBS INTERLEAVED_ATTRIBS}</td><td>{@link #GL_SEPARATE_ATTRIBS SEPARATE_ATTRIBS}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTransformFeedbackVaryings">Reference Page</a>
-//     */
-//    public static void glTransformFeedbackVaryings(@NativeType("GLuint") int program, @NativeType("GLchar const **") CharSequence varying, @NativeType("GLenum") int bufferMode) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            long varyingsAddress = org.lwjgl.system.APIUtil.apiArray(stack, MemoryUtil::memASCII, varying);
-//            nglTransformFeedbackVaryings(program, 1, varyingsAddress, bufferMode);
-//            org.lwjgl.system.APIUtil.apiArrayFree(varyingsAddress, 1);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetTransformFeedbackVarying ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glGetTransformFeedbackVarying GetTransformFeedbackVarying}
-//     *
-//     * @param bufSize the maximum number of characters, including the null terminator, that may be written into {@code name}
-//     */
-//    public static native void nglGetTransformFeedbackVarying(int program, int index, int bufSize, long length, long size, long type, long name);
-//
-//    /**
-//     * Retrieves information about varying variables selected for transform feedback.
-//     *
-//     * @param program the target program object
-//     * @param index   the index of the varying variable whose information to retrieve
-//     * @param length  a variable which will receive the number of characters written into {@code name}, excluding the null-terminator. If {@code length} is NULL no length is returned.
-//     * @param size    a variable that will receive the size of the varying
-//     * @param type    a variable that will receive the type of the varying
-//     * @param name    a buffer into which will be written the name of the varying
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedbackVarying">Reference Page</a>
-//     */
-//    public static void glGetTransformFeedbackVarying(@NativeType("GLuint") int program, @NativeType("GLuint") int index, @Nullable @NativeType("GLsizei *") IntBuffer length, @NativeType("GLsizei *") IntBuffer size, @NativeType("GLenum *") IntBuffer type, @NativeType("GLchar *") ByteBuffer name) {
-//        if (CHECKS) {
-//            checkSafe(length, 1);
-//            check(size, 1);
-//            check(type, 1);
-//        }
-//        nglGetTransformFeedbackVarying(program, index, name.remaining(), memAddressSafe(length), memAddress(size), memAddress(type), memAddress(name));
-//    }
-//
-//    /**
-//     * Retrieves information about varying variables selected for transform feedback.
-//     *
-//     * @param program the target program object
-//     * @param index   the index of the varying variable whose information to retrieve
-//     * @param bufSize the maximum number of characters, including the null terminator, that may be written into {@code name}
-//     * @param size    a variable that will receive the size of the varying
-//     * @param type    a variable that will receive the type of the varying
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedbackVarying">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static String glGetTransformFeedbackVarying(@NativeType("GLuint") int program, @NativeType("GLuint") int index, @NativeType("GLsizei") int bufSize, @NativeType("GLsizei *") IntBuffer size, @NativeType("GLenum *") IntBuffer type) {
-//        if (CHECKS) {
-//            check(size, 1);
-//            check(type, 1);
-//        }
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer length = stack.ints(0);
-//            ByteBuffer name = stack.malloc(bufSize);
-//            nglGetTransformFeedbackVarying(program, index, bufSize, memAddress(length), memAddress(size), memAddress(type), memAddress(name));
-//            return memASCII(name, length.get(0));
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    /**
-//     * Retrieves information about varying variables selected for transform feedback.
-//     *
-//     * @param program the target program object
-//     * @param index   the index of the varying variable whose information to retrieve
-//     * @param size    a variable that will receive the size of the varying
-//     * @param type    a variable that will receive the type of the varying
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedbackVarying">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static String glGetTransformFeedbackVarying(@NativeType("GLuint") int program, @NativeType("GLuint") int index, @NativeType("GLsizei *") IntBuffer size, @NativeType("GLenum *") IntBuffer type) {
-//        return glGetTransformFeedbackVarying(program, index, GL20.glGetProgrami(program, GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH), size, type);
-//    }
-//
-//    // --- [ glBindVertexArray ] ---
-//
-//    /**
-//     * Binds a vertex array object
-//     *
-//     * @param array the name of the vertex array to bind
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBindVertexArray">Reference Page</a>
-//     */
-//    public static native void glBindVertexArray(@NativeType("GLuint") int array);
-//
-//    // --- [ glDeleteVertexArrays ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glDeleteVertexArrays DeleteVertexArrays}
-//     *
-//     * @param n the number of vertex array objects to be deleted
-//     */
-//    public static native void nglDeleteVertexArrays(int n, long arrays);
-//
-//    /**
-//     * Deletes vertex array objects.
-//     *
-//     * @param arrays an array containing the n names of the objects to be deleted
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteVertexArrays">Reference Page</a>
-//     */
-//    public static void glDeleteVertexArrays(@NativeType("GLuint const *") IntBuffer arrays) {
-//        nglDeleteVertexArrays(arrays.remaining(), memAddress(arrays));
-//    }
-//
-//    /**
-//     * Deletes vertex array objects.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteVertexArrays">Reference Page</a>
-//     */
-//    public static void glDeleteVertexArrays(@NativeType("GLuint const *") int array) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer arrays = stack.ints(array);
-//            nglDeleteVertexArrays(1, memAddress(arrays));
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGenVertexArrays ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glGenVertexArrays GenVertexArrays}
-//     *
-//     * @param n the number of vertex array object names to generate
-//     */
-//    public static native void nglGenVertexArrays(int n, long arrays);
-//
-//    /**
-//     * Generates vertex array object names.
-//     *
-//     * @param arrays a buffer in which the generated vertex array object names are stored
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
-//     */
-//    public static void glGenVertexArrays(@NativeType("GLuint *") IntBuffer arrays) {
-//        nglGenVertexArrays(arrays.remaining(), memAddress(arrays));
-//    }
-//
-//    /**
-//     * Generates vertex array object names.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGenVertexArrays() {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer arrays = stack.callocInt(1);
-//            nglGenVertexArrays(1, memAddress(arrays));
-//            return arrays.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glIsVertexArray ] ---
-//
-//    /**
-//     * Determines if a name corresponds to a vertex array object.
-//     *
-//     * @param array a value that may be the name of a vertex array object
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glIsVertexArray">Reference Page</a>
-//     */
-//    @NativeType("GLboolean")
-//    public static native boolean glIsVertexArray(@NativeType("GLuint") int array);
-//
-//    /**
+    // --- [ glColorMaski ] ---
+
+    /**
+     * Enables and disables writing of frame buffer color components.
+     *
+     * @param buf the index of the draw buffer whose color mask to set
+     * @param r   whether R values are written or not
+     * @param g   whether G values are written or not
+     * @param b   whether B values are written or not
+     * @param a   whether A values are written or not
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glColorMaski">Reference Page</a>
+     */
+    fun colorMask(buf: Int, r: Boolean, g: Boolean, b: Boolean, a: Boolean) = GL30C.glColorMaski(buf, r, g, b, a)
+
+    /**
+     * Enables and disables writing of frame buffer color components.
+     *
+     * @param buf   the index of the draw buffer whose color mask to set
+     * @param rgba  whether RGBA values are written or not
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glColorMaski">Reference Page</a>
+     */
+    fun colorMask(buf: Int, rgba: Boolean) = GL30C.glColorMaski(buf, rgba, rgba, rgba, rgba)
+
+    /**
+     * Enables and disables writing of frame buffer color components.
+     *
+     * @param buf   the index of the draw buffer whose color mask to set
+     * @param rgba  whether RGBA values are written or not
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glColorMaski">Reference Page</a>
+     */
+    fun colorMask(buf: Int, rgba: Vec4bool) = GL30C.glColorMaski(buf, rgba.x, rgba.y, rgba.z, rgba.w)
+
+    // --- [ glGetBooleani_v ] ---
+    // inline reified with a to-do
+
+    // --- [ glEnablei ] ---
+
+    /**
+     * Enables an indexed capability.
+     *
+     * @param cap   the indexed capability to enable
+     * @param index the index to enable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glEnablei">Reference Page</a>
+     */
+    fun enable(cap: IndexedCap, index: Int) = GL30C.glEnablei(cap.i, index)
+
+    // --- [ glDisablei ] ---
+
+    /**
+     * Disables an indexed capability.
+     *
+     * @param cap the indexed capability to disable
+     * @param index  the index to disable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDisablei">Reference Page</a>
+     */
+    fun disable(cap: IndexedCap, index: Int) = GL30C.glDisablei(cap.i, index)
+
+    // --- [ glIsEnabledi ] ---
+
+    /**
+     * Tests whether an indexed capability is enabled.
+     *
+     * @param cap the indexed capability to query
+     * @param index  the index to query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glIsEnabledi">Reference Page</a>
+     */
+    fun isEnabled(cap: IndexedCap, index: Int) = GL30C.glIsEnabledi(cap.i, index)
+
+    // --- [ glBindBufferRange ] ---
+
+    /**
+     * Binds a range within a buffer object to an indexed buffer target.
+     *
+     * @param target the target of the bind operation. One of:<br><table><tr><td>{@link #GL_TRANSFORM_FEEDBACK_BUFFER TRANSFORM_FEEDBACK_BUFFER}</td><td>{@link GL31#GL_UNIFORM_BUFFER UNIFORM_BUFFER}</td><td>{@link GL42#GL_ATOMIC_COUNTER_BUFFER ATOMIC_COUNTER_BUFFER}</td><td>{@link GL43#GL_SHADER_STORAGE_BUFFER SHADER_STORAGE_BUFFER}</td></tr></table>
+     * @param index  the index of the binding point within the array specified by {@code target}
+     * @param buffer a buffer object to bind to the specified binding point
+     * @param offset the starting offset in basic machine units into the buffer object {@code buffer}
+     * @param size   the amount of data in machine units that can be read from the buffer object while used as an indexed target
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBindBufferRange">Reference Page</a>
+     */
+    fun bindBufferRange(target: BufferTarget2, index: Int, buffer: GlBuffer, offset: Int, size: Int) =
+            GL30C.glBindBufferRange(target.i, index, buffer.name, offset.L, size.L)
+
+    // --- [ glBindBufferBase ] ---
+
+    /**
+     * Binds a buffer object to an indexed buffer target.
+     *
+     * @param target the target of the bind operation. One of:<br><table><tr><td>{@link #GL_TRANSFORM_FEEDBACK_BUFFER TRANSFORM_FEEDBACK_BUFFER}</td><td>{@link GL31#GL_UNIFORM_BUFFER UNIFORM_BUFFER}</td><td>{@link GL42#GL_ATOMIC_COUNTER_BUFFER ATOMIC_COUNTER_BUFFER}</td><td>{@link GL43#GL_SHADER_STORAGE_BUFFER SHADER_STORAGE_BUFFER}</td></tr></table>
+     * @param index  the index of the binding point within the array specified by {@code target}
+     * @param buffer a buffer object to bind to the specified binding point
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBindBufferBase">Reference Page</a>
+     */
+    fun bindBufferBase(target: BufferTarget2, index: Int, buffer: GlBuffer) =
+            GL30C.glBindBufferBase(target.i, index, buffer.name)
+
+    // --- [ glBeginTransformFeedback ] ---
+
+    /**
+     * Starts transform feedback operation.
+     *
+     * @param primitiveMode the output type of the primitives that will be recorded into the buffer objects that are bound for transform feedback. One of:<br><table><tr><td>{@link GL11#GL_POINTS POINTS}</td><td>{@link GL11#GL_LINES LINES}</td><td>{@link GL11#GL_TRIANGLES TRIANGLES}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBeginTransformFeedback">Reference Page</a>
+     */
+    fun beginTransformFeedback(primitiveMode: PrimitiveMode) =
+            GL30C.glBeginTransformFeedback(primitiveMode.i)
+
+    // --- [ glEndTransformFeedback ] ---
+
+    /**
+     * Ends transform feedback operation.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glEndTransformFeedback">Reference Page</a>
+     */
+    fun endTransformFeedback() = GL30C.glEndTransformFeedback()
+
+    // --- [ glTransformFeedbackVaryings ] ---
+
+    /**
+     * Specifies values to record in transform feedback buffers.
+     *
+     * @param program    the target program object
+     * @param varyings   an array of {@code count} zero-terminated strings specifying the names of the varying variables to use for transform feedback
+     * @param bufferMode the mode used to capture the varying variables when transform feedback is active. One of:<br><table><tr><td>{@link #GL_INTERLEAVED_ATTRIBS INTERLEAVED_ATTRIBS}</td><td>{@link #GL_SEPARATE_ATTRIBS SEPARATE_ATTRIBS}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTransformFeedbackVaryings">Reference Page</a>
+     */
+    fun transformFeedbackVaryings(program: GlProgram, varyings: Array<CharSequence>, bufferMode: TransformBufferMode) =
+            GL30C.glTransformFeedbackVaryings(program.name, varyings, bufferMode.i)
+
+    // --- [ glGetTransformFeedbackVarying ] ---
+
+    /**
+     * Retrieves information about varying variables selected for transform feedback.
+     *
+     * @param program the target program object
+     * @param index   the index of the varying variable whose information to retrieve
+     * @param bufSize the maximum number of characters, including the null terminator, that may be written into {@code name}
+     * @param size    a variable that will receive the size of the varying
+     * @param type    a variable that will receive the type of the varying
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedbackVarying">Reference Page</a>
+     */
+    fun getTransformFeedbackVarying(program: GlProgram, index: Int): Triple<Int, Int, String> = stak {
+        val max = program.transformFeedbackVaryingMaxLength
+        val pLength = it.nmalloc(4, Int.BYTES * 3)
+        val pSize = pLength + Int.BYTES
+        val pType = pSize + Int.BYTES
+        val pName = it.malloc(max)
+        GL30C.nglGetTransformFeedbackVarying(program.name, index, max, pLength, pSize, pType, pName.adr)
+        val name = memASCII(pName, memGetInt(pLength))
+        Triple(memGetInt(pSize), memGetInt(pType), name)
+    }
+
+    // --- [ glBindVertexArray ] ---
+
+    /**
+     * Binds a vertex array object
+     *
+     * @param array the name of the vertex array to bind
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBindVertexArray">Reference Page</a>
+     */
+    fun bindVertexArray(array: GlVertexArray) = GL30C.glBindVertexArray(array.name)
+
+    // --- [ glDeleteVertexArrays ] ---
+
+    /**
+     * Deletes vertex array objects.
+     *
+     * @param arrays an array containing the n names of the objects to be deleted
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteVertexArrays">Reference Page</a>
+     */
+    fun deleteVertexArrays(arrays: GlVertexArrays) = GL30C.nglDeleteVertexArrays(arrays.rem, arrays.adr)
+
+    /**
+     * Deletes vertex array objects.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteVertexArrays">Reference Page</a>
+     */
+    fun deleteVertexArrays(array: GlVertexArray) = stak.intAddress(array.name) { GL30C.nglDeleteVertexArrays(1, it) }
+
+    // --- [ glGenVertexArrays ] ---
+
+    /**
+     * Generates vertex array object names.
+     *
+     * @param arrays a buffer in which the generated vertex array object names are stored
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
+     */
+    fun genVertexArrays(arrays: GlVertexArrays) = GL30C.nglGenVertexArrays(arrays.rem, arrays.adr)
+
+    /**
+     * Generates vertex array object names.
+     *
+     * @param size size of the generated vertex array object names
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
+     */
+    fun genVertexArrays(size: Int) = GlVertexArrays(size).also(::genVertexArrays)
+
+    /**
+     * Generates vertex array object names.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
+     */
+    fun genVertexArrays(array: KMutableProperty0<GlVertexArray>) = array.set(genVertexArrays())
+
+    /**
+     * Generates vertex array object names.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
+     */
+    fun genVertexArrays() = GlVertexArray(stak.intAddress { GL30C.nglGenVertexArrays(1, it) })
+
+    // --- [ glIsVertexArray ] ---
+
+    /**
+     * Determines if a name corresponds to a vertex array object.
+     *
+     * @param array a value that may be the name of a vertex array object
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glIsVertexArray">Reference Page</a>
+     */
+    fun isVertexArray(array: GlVertexArray): Boolean = GL30C.glIsVertexArray(array.name)
+
+//    /** TODO?
 //     * Array version of: {@link #glClearBufferiv ClearBufferiv}
 //     *
 //     * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>

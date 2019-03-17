@@ -13,6 +13,7 @@ import gln.objects.GlShader
 import kool.stak
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL20C
+import org.lwjgl.opengl.GL30C
 
 
 object gl :
@@ -125,8 +126,8 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShader">Reference Page</a>
      */
-    inline fun <reified T> getShader(shader: GlShader, name: GetShader): T = stak {s ->
-        when(T::class) {
+    inline fun <reified T> getShader(shader: GlShader, name: GetShader): T = stak { s ->
+        when (T::class) {
             Int::class -> s.intAddress { GL20C.nglGetShaderiv(shader.name, name.i, it) } as T
             Boolean::class -> s.intAddress { GL20C.nglGetShaderiv(shader.name, name.i, it) }.bool as T
             ShaderType::class -> ShaderType(s.intAddress { GL20C.nglGetShaderiv(shader.name, name.i, it) }) as T
@@ -147,7 +148,7 @@ object gl :
      * Everything except  GL_COMPUTE_WORK_GROUP_SIZE
      */
     inline fun <reified T> getProgram(program: GlProgram, name: GetProgram): T = stak { s ->
-        when(T::class) {
+        when (T::class) {
             Int::class -> s.intAddress { GL20C.nglGetProgramiv(program.name, name.i, it) } as T
             Boolean::class -> s.intAddress { GL20C.nglGetProgramiv(program.name, name.i, it) }.bool as T
             Vec3i::class -> s.vec3iAddress { GL20C.nglGetProgramiv(program.name, name.i, it) } as T // GL_COMPUTE_WORK_GROUP_SIZE
@@ -155,4 +156,38 @@ object gl :
         }
     }
 
+    /**
+     * Queries the T value of an indexed state variable.
+     *
+     * @param target the indexed state to query
+     * @param index  the index of the element being queried
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBooleani_v">Reference Page</a>
+     */
+//    inline fun <reified T> get(target: Get, @NativeType("GLuint") int index) { TODO?
+//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
+//        try {
+//            ByteBuffer data = stack.calloc(1);
+//            nglGetBooleani_v(target, index, memAddress(data));
+//            return data.get(0) != 0;
+//        } finally {
+//            stack.setPointer(stackPointer);
+//        }
+//    }
+
+    // --- [ glBeginTransformFeedback ] ---
+    // --- [ glEndTransformFeedback ] ---
+
+    /**
+     * transform feedback operation.
+     *
+     * @param primitiveMode the output type of the primitives that will be recorded into the buffer objects that are bound for transform feedback. One of:<br><table><tr><td>{@link GL11#GL_POINTS POINTS}</td><td>{@link GL11#GL_LINES LINES}</td><td>{@link GL11#GL_TRIANGLES TRIANGLES}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBeginTransformFeedback">Reference Page</a>
+     */
+    inline fun transformFeedback(primitiveMode: PrimitiveMode, block: () -> Unit) {
+        GL30C.glBeginTransformFeedback(primitiveMode.i)
+        block()
+        GL30C.glEndTransformFeedback()
+    }
 }

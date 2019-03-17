@@ -4949,7 +4949,7 @@ inline class BufferTarget2(val i: Int) {
         val SHADER_STORAGE = BufferTarget2(GL43.GL_SHADER_STORAGE_BUFFER)
 
         /** Texture data buffer */
-        val TEXTURE = BufferTarget2(GL31.GL_TEXTURE_BUFFER)
+//        val TEXTURE = BufferTarget2(GL31.GL_TEXTURE_BUFFER)
 
         /** Transform feedback buffer */
         val TRANSFORM_FEEDBACK = BufferTarget2(GL31.GL_TRANSFORM_FEEDBACK_BUFFER)
@@ -6642,11 +6642,11 @@ inline class FramebufferBindTarget(val i: Int) {
     }
 }
 
-inline class FramebufferTarget_(val i: Int) {
+inline class FramebufferTarget(val i: Int) {
     companion object {
-        val BOTH = FramebufferTarget_(GL30C.GL_FRAMEBUFFER)
-        val READ = FramebufferTarget_(GL30C.GL_READ_FRAMEBUFFER)
-        val DRAW = FramebufferTarget_(GL30C.GL_DRAW_FRAMEBUFFER)
+        val READ = FramebufferTarget(GL30C.GL_READ_FRAMEBUFFER)
+        /** GL_FRAMEBUFFER is equivalent to GL_DRAW_FRAMEBUFFER */
+        val DRAW = FramebufferTarget(GL30C.GL_DRAW_FRAMEBUFFER)
     }
 }
 
@@ -6681,8 +6681,30 @@ inline class GeometryInputType(val i: Int) {
 
 inline class GeometryOutputType(val i: Int) {
     companion object {
-        val POINTS = GeometryInputType(GL11C.GL_POINTS)
-        val LINE_STRIP = GeometryInputType(GL11C.GL_LINE_STRIP)
-        val TRIANGLE_STRIP = GeometryInputType(GL32C.GL_TRIANGLE_STRIP)
+        val POINTS = GeometryOutputType(GL11C.GL_POINTS)
+        val LINE_STRIP = GeometryOutputType(GL11C.GL_LINE_STRIP)
+        val TRIANGLE_STRIP = GeometryOutputType(GL32C.GL_TRIANGLE_STRIP)
+    }
+}
+
+inline class IndexedCap(val i: Int) {
+    companion object {
+        val BLEND = IndexedCap(GL11C.GL_BLEND)
+        val SCISSOR_TEST = IndexedCap(GL11C.GL_SCISSOR_TEST)
+    }
+}
+
+inline class PrimitiveMode(val i: Int) {
+    companion object {
+        val POINTS = PrimitiveMode(GL11C.GL_POINTS)
+        val LINES = PrimitiveMode(GL11C.GL_LINES)
+        val TRIANGLES = PrimitiveMode(GL11C.GL_TRIANGLES)
+    }
+}
+
+inline class TransformBufferMode(val i: Int) {
+    companion object {
+        val INTERLEAVED_ATTRIBS = TransformBufferMode(GL30C.GL_INTERLEAVED_ATTRIBS)
+        val SEPARATE_ATTRIBS = TransformBufferMode(GL30C.GL_SEPARATE_ATTRIBS)
     }
 }

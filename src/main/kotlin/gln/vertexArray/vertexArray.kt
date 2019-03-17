@@ -5,7 +5,10 @@ package gln.vertexArray
 import glm_.L
 import gln.glf.VertexAttribute
 import gln.glf.VertexLayout
+import kool.IntBuffer
+import kool.adr
 import kool.get
+import kool.rem
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
@@ -36,6 +39,12 @@ inline fun glEnableVertexAttribArray(attribute: VertexAttribute) = GL20.glEnable
 inline fun glDisableVertexAttribArray(attribute: VertexAttribute) = GL20.glDisableVertexAttribArray(attribute.index)
 
 
+fun GlVertexArrays(size: Int) = GlVertexArrays(IntBuffer(size))
+
+inline class GlVertexArrays(val names: IntBuffer) {
+    val rem get() = names.rem
+    val adr get() = names.adr
+}
 inline class GlVertexArray(val name: Int = -1) {
 
     fun bind() = GL30C.glBindVertexArray(name)
