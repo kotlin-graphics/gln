@@ -1,4 +1,4 @@
-package gln.toCheck
+package gln.misc
 
 import org.lwjgl.opengl.*
 

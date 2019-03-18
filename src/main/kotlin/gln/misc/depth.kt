@@ -1,4 +1,4 @@
-package gln.toCheck
+package gln.misc
 
 import gln.CompareFunction
 import kool.stak

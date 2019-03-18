@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package gln.toCheck
+package gln.misc
 
 import glm_.BYTES
 import glm_.f
