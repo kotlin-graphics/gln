@@ -1,4 +1,4 @@
-package gln.depth
+package gln.toCheck
 
 import gln.CompareFunction
 import kool.stak

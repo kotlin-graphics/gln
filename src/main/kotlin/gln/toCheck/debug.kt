@@ -1,4 +1,4 @@
-package gln.debug
+package gln.toCheck
 
 
 import org.lwjgl.opengl.GL11
