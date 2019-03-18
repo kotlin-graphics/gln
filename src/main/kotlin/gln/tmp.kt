@@ -14,8 +14,7 @@ import kool.Ptr
 import kool.adr
 import kool.stak
 import org.lwjgl.system.MemoryStack
-import org.lwjgl.system.MemoryUtil.memGetFloat
-import org.lwjgl.system.MemoryUtil.memGetInt
+import org.lwjgl.system.MemoryUtil.*
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
@@ -103,6 +102,12 @@ inline fun MemoryStack.intAddress(block: (Adr) -> Unit): Int {
     val adr = nmalloc(4, Int.BYTES)
     block(adr)
     return memGetInt(adr)
+}
+
+inline fun MemoryStack.longAddress(block: (Adr) -> Unit): Long {
+    val adr = nmalloc(8, Long.BYTES)
+    block(adr)
+    return memGetLong(adr)
 }
 
 inline fun MemoryStack.intBuffer(block: (IntBuffer) -> Unit): Int {

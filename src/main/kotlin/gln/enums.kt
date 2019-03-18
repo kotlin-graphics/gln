@@ -81,9 +81,6 @@ inline class DrawMode(val i: Int) {
         val TRIANGLES = DrawMode(GL11.GL_TRIANGLES)
         val TRIANGLE_STRIP = DrawMode(GL11.GL_TRIANGLE_STRIP)
         val TRIANGLE_FAN = DrawMode(GL11.GL_TRIANGLE_FAN)
-        val QUADS = DrawMode(GL11.GL_QUADS)
-        val QUAD_STRIP = DrawMode(GL11.GL_QUAD_STRIP)
-        val POLYGON = DrawMode(GL11.GL_POLYGON)
         val LINES_ADJACENCY = DrawMode(GL32.GL_LINES_ADJACENCY)
         val LINE_STRIP_ADJACENCY = DrawMode(GL32.GL_LINE_STRIP_ADJACENCY)
         val TRIANGLES_ADJACENCY = DrawMode(GL32.GL_TRIANGLES_ADJACENCY)
@@ -1224,7 +1221,7 @@ inline class DataType(val i: Int) {
             GL11.GL_3_BYTES -> Vec3b.size
             GL11.GL_4_BYTES -> Vec4b.size
             GL11.GL_DOUBLE -> Double.BYTES
-            else -> throw Exception()
+            else -> throw Exception("[DataType::size] Invalid value")
         }
 }
 
@@ -6707,4 +6704,19 @@ inline class TransformBufferMode(val i: Int) {
         val INTERLEAVED_ATTRIBS = TransformBufferMode(GL30C.GL_INTERLEAVED_ATTRIBS)
         val SEPARATE_ATTRIBS = TransformBufferMode(GL30C.GL_SEPARATE_ATTRIBS)
     }
+}
+
+inline class IndexType(val i: Int) {
+    companion object {
+        val UNSIGNED_BYTE = IndexType(GL11C.GL_UNSIGNED_BYTE)
+        val UNSIGNED_SHORT = IndexType(GL11C.GL_UNSIGNED_SHORT)
+        val UNSIGNED_INT = IndexType(GL11C.GL_UNSIGNED_INT)
+    }
+    val size: Int
+        get() = when (i) {
+            GL11.GL_UNSIGNED_BYTE -> Byte.BYTES
+            GL11.GL_UNSIGNED_SHORT -> Short.BYTES
+            GL11.GL_UNSIGNED_INT -> Int.BYTES
+            else -> throw Exception("[IndexType::size] Invalid value")
+        }
 }

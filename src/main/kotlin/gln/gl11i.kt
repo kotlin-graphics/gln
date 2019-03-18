@@ -401,7 +401,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(mode: DrawMode, count: Int, type: DataType = DataType(GL11.GL_UNSIGNED_INT), indices: Long = 0) = GL11C.nglDrawElements(mode.i, count, type.i, indices)
+    fun drawElements(mode: DrawMode, count: Int, type: IndexType = IndexType.UNSIGNED_INT, indices: Long = 0) = GL11C.nglDrawElements(mode.i, count, type.i, indices)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -414,7 +414,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(mode: DrawMode, type: DataType, indices: Buffer) = GL11C.nglDrawElements(mode.i, indices.rem * type.size, type.i, indices.adr)
+    fun drawElements(mode: DrawMode, type: IndexType, indices: Buffer) = GL11C.nglDrawElements(mode.i, indices.rem * type.size, type.i, indices.adr)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -441,7 +441,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(count: Int, type: DataType = DataType(GL11.GL_UNSIGNED_INT), indices: Ptr = 0L) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices)
+    fun drawElements(count: Int, type: IndexType = IndexType.UNSIGNED_INT, indices: Ptr = 0L) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
@@ -453,7 +453,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(type: DataType, indices: Buffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.rem * type.size, type.i, indices.adr)
+    fun drawElements(type: IndexType, indices: Buffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.rem * type.size, type.i, indices.adr)
 
     /**
      * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
