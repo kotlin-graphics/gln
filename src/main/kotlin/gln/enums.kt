@@ -6712,6 +6712,7 @@ inline class IndexType(val i: Int) {
         val UNSIGNED_SHORT = IndexType(GL11C.GL_UNSIGNED_SHORT)
         val UNSIGNED_INT = IndexType(GL11C.GL_UNSIGNED_INT)
     }
+
     val size: Int
         get() = when (i) {
             GL11.GL_UNSIGNED_BYTE -> Byte.BYTES
@@ -6719,4 +6720,13 @@ inline class IndexType(val i: Int) {
             GL11.GL_UNSIGNED_INT -> Int.BYTES
             else -> throw Exception("[IndexType::size] Invalid value")
         }
+}
+
+inline class SyncStatus(val i: Int) {
+    companion object {
+        val ALREADY_SIGNALED = SyncStatus(GL32C.GL_ALREADY_SIGNALED)
+        val TIMEOUT_EXPIRED = SyncStatus(GL32C.GL_TIMEOUT_EXPIRED)
+        val CONDITION_SATISFIED = SyncStatus(GL32C.GL_CONDITION_SATISFIED)
+        val WAIT_FAILED = SyncStatus(GL32C.GL_WAIT_FAILED)
+    }
 }

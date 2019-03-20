@@ -10,7 +10,7 @@ import kool.Ptr
 import kool.stak
 import org.lwjgl.opengl.*
 
-interface glGet {
+interface glGetSet {
 
     fun int(pName: Int) = GL11C.glGetInteger(pName)
     fun int(pName: Int, index: Int) = GL30C.glGetIntegeri(pName, index)
@@ -93,8 +93,18 @@ interface glGet {
 //    val pixelUnpackBufferBinding: GlBuffer
 //        get() = GlBuffer(int(GL21.GL_PIXEL_UNPACK_BUFFER_BINDING))
 
-    val pointFadeThresholdSize: Float
+    var pointFadeThresholdSize: Float
         get() = float(GL14.GL_POINT_FADE_THRESHOLD_SIZE)
+    // --- [ glPointParameterf ] ---
+        /**
+         * Sets the float value of a pointer parameter.
+         *
+         * @param pname the parameter to set. Must be:<br><table><tr><td>{@link #GL_POINT_FADE_THRESHOLD_SIZE POINT_FADE_THRESHOLD_SIZE}</td></tr></table>
+         * @param param the parameter value
+         *
+         * @see <a target="_blank" href="http://docs.gl/gl4/glPointParameterf">Reference Page</a>
+         */
+        set(value) = GL14C.glPointParameterf(GL14C.GL_POINT_FADE_THRESHOLD_SIZE, value)
 
     val primitiveRestartIndex: Int
         get() = int(GL31.GL_PRIMITIVE_RESTART_INDEX)
@@ -103,8 +113,17 @@ interface glGet {
         get() = int(GL41.GL_PROGRAM_PIPELINE_BINDING)
 
 
-    val provokingVertex: ProvokeMode
+    var provokingVertex: ProvokeMode
         get() = ProvokeMode(int(GL32.GL_PROVOKING_VERTEX))
+    // --- [ glProvokingVertex ] ---
+        /**
+         * Specifies the vertex to be used as the source of data for flat shaded varyings.
+         *
+         * @param mode the provoking vertex mode. One of:<br><table><tr><td>{@link #GL_FIRST_VERTEX_CONVENTION FIRST_VERTEX_CONVENTION}</td><td>{@link #GL_LAST_VERTEX_CONVENTION LAST_VERTEX_CONVENTION}</td></tr></table>
+         *
+         * @see <a target="_blank" href="http://docs.gl/gl4/glProvokingVertex">Reference Page</a>
+         */
+        set(value) = GL32C.glProvokingVertex(value.i)
 
     val polygonOffsetFactor: Float
         get() = float(GL11.GL_POLYGON_OFFSET_FACTOR)

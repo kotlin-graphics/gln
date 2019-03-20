@@ -129,18 +129,7 @@ interface gl14i {
         GL14C.nglMultiDrawElements(GL11C.GL_TRIANGLES, count.adr, type.i, indices.adr, count.rem)
 
     // --- [ glPointParameterf ] ---
-
-    /**
-     * Sets the float value of a pointer parameter.
-     *
-     * @param pname the parameter to set. Must be:<br><table><tr><td>{@link #GL_POINT_FADE_THRESHOLD_SIZE POINT_FADE_THRESHOLD_SIZE}</td></tr></table>
-     * @param param the parameter value
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glPointParameterf">Reference Page</a>
-     */
-    var pointFadeThresholdSize: Float
-        get() = GL11C.glGetFloat(GL14C.GL_POINT_FADE_THRESHOLD_SIZE)
-        set(value) = GL14C.glPointParameterf(GL14C.GL_POINT_FADE_THRESHOLD_SIZE, value)
+    // glGetSet
 
     // --- [ glPointParameteri ] ---
 

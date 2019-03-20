@@ -16,6 +16,7 @@ import org.lwjgl.opengl.*
 
 
 object gl :
+        glGetSet,
         gl11i, gl12i, gl13i, gl14i, gl15i,
         gl20i, gl21i,
         gl30i {
@@ -36,6 +37,7 @@ object gl :
     inline fun <reified T : Number> get(name: Int): T =
             when (T::class) {
                 Int::class -> stak.intAddress { GL11C.nglGetIntegerv(name, it) } as T
+                Long::class -> stak.longAddress { GL32C.nglGetInteger64v(name, it) } as T
                 Float::class -> stak.floatAddress { GL11C.nglGetIntegerv(name, it) } as T
                 else -> throw Exception("Invalid")
             }

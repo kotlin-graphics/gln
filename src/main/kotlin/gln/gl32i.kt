@@ -1,7 +1,18 @@
 package gln
 
+import gli_.gl
+import glm_.bool
+import glm_.vec2.Vec2i
+import glm_.vec3.Vec3i
+import gln.objects.GlTexture
 import kool.Ptr
+import kool.adr
+import kool.rem
+import kool.stak
+import org.lwjgl.PointerBuffer
 import org.lwjgl.opengl.GL32C
+import org.lwjgl.system.MemoryUtil.NULL
+import java.nio.IntBuffer
 
 /**
  * The OpenGL functionality up to version 3.2. Includes only Core Profile symbols.
@@ -42,7 +53,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsBaseVertex">Reference Page</a>
      */
     fun drawElementsBaseVertex(mode: DrawMode, count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
-        GL32C.nglDrawElementsBaseVertex(mode.i, count, type.i, indices, baseVertex)
+            GL32C.nglDrawElementsBaseVertex(mode.i, count, type.i, indices, baseVertex)
 
     /**
      * Renders primitives from array data with a per-element offset.
@@ -56,7 +67,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsBaseVertex">Reference Page</a>
      */
     fun drawElementsBaseVertex(count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
-        GL32C.nglDrawElementsBaseVertex(DrawMode.TRIANGLES.i, count, type.i, indices, baseVertex)
+            GL32C.nglDrawElementsBaseVertex(DrawMode.TRIANGLES.i, count, type.i, indices, baseVertex)
 
 //    /** TODO?
 //     * Renders primitives from array data with a per-element offset.
@@ -126,8 +137,23 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElementsBaseVertex">Reference Page</a>
      */
-    fun drawRangeElementsBaseVertex(mode: DrawMode = DrawMode.TRIANGLES, start: Int, end: Int, count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
-        GL32C.nglDrawRangeElementsBaseVertex(mode.i, start, end, count, type.i, indices, baseVertex)
+    fun drawRangeElementsBaseVertex(mode: DrawMode, start: Int, end: Int, count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
+            GL32C.nglDrawRangeElementsBaseVertex(mode.i, start, end, count, type.i, indices, baseVertex)
+
+    /**
+     * Renders primitives from array data with a per-element offset.
+     *
+     * @param start      the minimum array index contained in {@code indices}
+     * @param end        the maximum array index contained in {@code indices}
+     * @param count      the number of elements to be rendered
+     * @param type       the type of the values in {@code indices}. One of:<br><table><tr><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
+     * @param indices    a pointer to the location where the indices are stored
+     * @param baseVertex a constant that should be added to each element of {@code indices} when choosing elements from the enabled vertex arrays
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElementsBaseVertex">Reference Page</a>
+     */
+    fun drawRangeElementsBaseVertex(start: Int, end: Int, count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
+            GL32C.nglDrawRangeElementsBaseVertex(DrawMode.TRIANGLES.i, start, end, count, type.i, indices, baseVertex)
 
     /**
      * Renders primitives from array data with a per-element offset.
@@ -205,34 +231,39 @@ interface gl32i {
 //    public static void glDrawRangeElementsBaseVertex(@NativeType("GLenum") int mode, @NativeType("GLuint") int start, @NativeType("GLuint") int end, @NativeType("void const *") IntBuffer indices, @NativeType("GLint") int basevertex) {
 //        nglDrawRangeElementsBaseVertex(mode, start, end, indices.remaining(), GL11.GL_UNSIGNED_INT, memAddress(indices), basevertex);
 //    }
-//
-//    // --- [ glDrawElementsInstancedBaseVertex ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glDrawElementsInstancedBaseVertex DrawElementsInstancedBaseVertex}
-//     *
-//     * @param count the number of elements to be rendered
-//     * @param type  the type of the values in {@code indices}. One of:<br><table><tr><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
-//     */
-//    public static native void nglDrawElementsInstancedBaseVertex(int mode, int count, int type, long indices, int primcount, int basevertex);
-//
-//    /**
-//     * Renders multiple instances of a set of primitives from array data with a per-element offset.
-//     *
-//     * @param mode       the kind of primitives to render. One of:<br><table><tr><td>{@link GL11#GL_POINTS POINTS}</td><td>{@link GL11#GL_LINE_STRIP LINE_STRIP}</td><td>{@link GL11#GL_LINE_LOOP LINE_LOOP}</td><td>{@link GL11#GL_LINES LINES}</td><td>{@link GL11#GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link GL11#GL_TRIANGLE_FAN TRIANGLE_FAN}</td><td>{@link GL11#GL_TRIANGLES TRIANGLES}</td></tr><tr><td>{@link #GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link #GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link #GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link #GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td><td>{@link GL11#GL_POLYGON POLYGON}</td><td>{@link GL11#GL_QUADS QUADS}</td></tr><tr><td>{@link GL11#GL_QUAD_STRIP QUAD_STRIP}</td></tr></table>
-//     * @param count      the number of elements to be rendered
-//     * @param type       the type of the values in {@code indices}. One of:<br><table><tr><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
-//     * @param indices    a pointer to the location where the indices are stored
-//     * @param primcount  the number of instances of the indexed geometry that should be drawn
-//     * @param basevertex a constant that should be added to each element of indices when chosing elements from the enabled vertex arrays
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsInstancedBaseVertex">Reference Page</a>
-//     */
-//    public static void glDrawElementsInstancedBaseVertex(@NativeType("GLenum") int mode, @NativeType("GLsizei") int count, @NativeType("GLenum") int type, @NativeType("void const *") long indices, @NativeType("GLsizei") int primcount, @NativeType("GLint") int basevertex) {
-//        nglDrawElementsInstancedBaseVertex(mode, count, type, indices, primcount, basevertex);
-//    }
-//
-//    /**
+
+    // --- [ glDrawElementsInstancedBaseVertex ] ---
+
+    /**
+     * Renders multiple instances of a set of primitives from array data with a per-element offset.
+     *
+     * @param mode       the kind of primitives to render. One of:<br><table><tr><td>{@link GL11#GL_POINTS POINTS}</td><td>{@link GL11#GL_LINE_STRIP LINE_STRIP}</td><td>{@link GL11#GL_LINE_LOOP LINE_LOOP}</td><td>{@link GL11#GL_LINES LINES}</td><td>{@link GL11#GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link GL11#GL_TRIANGLE_FAN TRIANGLE_FAN}</td><td>{@link GL11#GL_TRIANGLES TRIANGLES}</td></tr><tr><td>{@link #GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link #GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link #GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link #GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td><td>{@link GL11#GL_POLYGON POLYGON}</td><td>{@link GL11#GL_QUADS QUADS}</td></tr><tr><td>{@link GL11#GL_QUAD_STRIP QUAD_STRIP}</td></tr></table>
+     * @param count      the number of elements to be rendered
+     * @param type       the type of the values in {@code indices}. One of:<br><table><tr><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
+     * @param indices    a pointer to the location where the indices are stored
+     * @param primCount  the number of instances of the indexed geometry that should be drawn
+     * @param baseVertex a constant that should be added to each element of indices when chosing elements from the enabled vertex arrays
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsInstancedBaseVertex">Reference Page</a>
+     */
+    fun drawElementsInstancedBaseVertex(mode: DrawMode, count: Int, type: IndexType, indices: Ptr, primCount: Int, baseVertex: Int) =
+            GL32C.nglDrawElementsInstancedBaseVertex(mode.i, count, type.i, indices, primCount, baseVertex)
+
+    /**
+     * Renders multiple instances of a set of primitives from array data with a per-element offset.
+     *
+     * @param count      the number of elements to be rendered
+     * @param type       the type of the values in {@code indices}. One of:<br><table><tr><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
+     * @param indices    a pointer to the location where the indices are stored
+     * @param primCount  the number of instances of the indexed geometry that should be drawn
+     * @param baseVertex a constant that should be added to each element of indices when chosing elements from the enabled vertex arrays
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsInstancedBaseVertex">Reference Page</a>
+     */
+    fun drawElementsInstancedBaseVertex(count: Int, type: IndexType, indices: Ptr, primCount: Int, baseVertex: Int) =
+            GL32C.nglDrawElementsInstancedBaseVertex(DrawMode.TRIANGLES.i, count, type.i, indices, primCount, baseVertex)
+
+//    /** TODO?
 //     * Renders multiple instances of a set of primitives from array data with a per-element offset.
 //     *
 //     * @param mode       the kind of primitives to render. One of:<br><table><tr><td>{@link GL11#GL_POINTS POINTS}</td><td>{@link GL11#GL_LINE_STRIP LINE_STRIP}</td><td>{@link GL11#GL_LINE_LOOP LINE_LOOP}</td><td>{@link GL11#GL_LINES LINES}</td><td>{@link GL11#GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link GL11#GL_TRIANGLE_FAN TRIANGLE_FAN}</td><td>{@link GL11#GL_TRIANGLES TRIANGLES}</td></tr><tr><td>{@link #GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link #GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link #GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link #GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td><td>{@link GL11#GL_POLYGON POLYGON}</td><td>{@link GL11#GL_QUADS QUADS}</td></tr><tr><td>{@link GL11#GL_QUAD_STRIP QUAD_STRIP}</td></tr></table>
@@ -288,304 +319,198 @@ interface gl32i {
 //    public static void glDrawElementsInstancedBaseVertex(@NativeType("GLenum") int mode, @NativeType("void const *") IntBuffer indices, @NativeType("GLsizei") int primcount, @NativeType("GLint") int basevertex) {
 //        nglDrawElementsInstancedBaseVertex(mode, indices.remaining(), GL11.GL_UNSIGNED_INT, memAddress(indices), primcount, basevertex);
 //    }
-//
-//    // --- [ glMultiDrawElementsBaseVertex ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glMultiDrawElementsBaseVertex MultiDrawElementsBaseVertex}
-//     *
-//     * @param primcount the size of the {@code count} array
-//     */
-//    public static native void nglMultiDrawElementsBaseVertex(int mode, long count, int type, long indices, int primcount, long basevertex);
-//
-//    /**
-//     * Renders multiple sets of primitives by specifying indices of array data elements and an offset to apply to each index.
-//     *
-//     * <p><b>LWJGL note</b>: Use {@link org.lwjgl.system.MemoryUtil#memAddress} to retrieve pointers to the index buffers.</p>
-//     *
-//     * @param mode       the kind of primitives to render. One of:<br><table><tr><td>{@link GL11#GL_POINTS POINTS}</td><td>{@link GL11#GL_LINE_STRIP LINE_STRIP}</td><td>{@link GL11#GL_LINE_LOOP LINE_LOOP}</td><td>{@link GL11#GL_LINES LINES}</td><td>{@link GL11#GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link GL11#GL_TRIANGLE_FAN TRIANGLE_FAN}</td><td>{@link GL11#GL_TRIANGLES TRIANGLES}</td></tr><tr><td>{@link #GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link #GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link #GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link #GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td><td>{@link GL11#GL_POLYGON POLYGON}</td><td>{@link GL11#GL_QUADS QUADS}</td></tr><tr><td>{@link GL11#GL_QUAD_STRIP QUAD_STRIP}</td></tr></table>
-//     * @param count      an array of the elements counts
-//     * @param type       the type of the values in {@code indices}. One of:<br><table><tr><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
-//     * @param indices    a pointer to the location where the indices are stored
-//     * @param basevertex a pointer to the location where the base vertices are stored
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsBaseVertex">Reference Page</a>
-//     */
-//    public static void glMultiDrawElementsBaseVertex(@NativeType("GLenum") int mode, @NativeType("GLsizei const *") IntBuffer count, @NativeType("GLenum") int type, @NativeType("void const **") PointerBuffer indices, @NativeType("GLint *") IntBuffer basevertex) {
-//        if (CHECKS) {
-//            check(indices, count.remaining());
-//            check(basevertex, count.remaining());
-//        }
-//        nglMultiDrawElementsBaseVertex(mode, memAddress(count), type, memAddress(indices), count.remaining(), memAddress(basevertex));
-//    }
-//
-//    // --- [ glProvokingVertex ] ---
-//
-//    /**
-//     * Specifies the vertex to be used as the source of data for flat shaded varyings.
-//     *
-//     * @param mode the provoking vertex mode. One of:<br><table><tr><td>{@link #GL_FIRST_VERTEX_CONVENTION FIRST_VERTEX_CONVENTION}</td><td>{@link #GL_LAST_VERTEX_CONVENTION LAST_VERTEX_CONVENTION}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProvokingVertex">Reference Page</a>
-//     */
-//    public static native void glProvokingVertex(@NativeType("GLenum") int mode);
-//
-//    // --- [ glTexImage2DMultisample ] ---
-//
-//    /**
-//     * Establishes the data storage, format, dimensions, and number of samples of a 2D multisample texture's image.
-//     *
-//     * @param target               the target of the operation. One of:<br><table><tr><td>{@link #GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td><td>{@link #GL_PROXY_TEXTURE_2D_MULTISAMPLE PROXY_TEXTURE_2D_MULTISAMPLE}</td></tr></table>
-//     * @param samples              the number of samples in the multisample texture's image
-//     * @param internalformat       the internal format to be used to store the multisample texture's image. {@code internalformat} must specify a color-renderable, depth-renderable,
-//     *                             or stencil-renderable format.
-//     * @param width                the width of the multisample texture's image, in texels
-//     * @param height               the height of the multisample texture's image, in texels
-//     * @param fixedsamplelocations whether the image will use identical sample locations and the same number of samples for all texels in the image, and the sample locations will not
-//     *                             depend on the internal format or size of the image
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage2DMultisample">Reference Page</a>
-//     */
-//    public static native void glTexImage2DMultisample(@NativeType("GLenum") int target, @NativeType("GLsizei") int samples, @NativeType("GLint") int internalformat, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height, @NativeType("GLboolean") boolean fixedsamplelocations);
-//
-//    // --- [ glTexImage3DMultisample ] ---
-//
-//    /**
-//     * Establishes the data storage, format, dimensions, and number of samples of a 3D multisample texture's image.
-//     *
-//     * @param target               the target of the operation. One of:<br><table><tr><td>{@link #GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td><td>{@link #GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
-//     * @param samples              the number of samples in the multisample texture's image
-//     * @param internalformat       the internal format to be used to store the multisample texture's image. {@code internalformat} must specify a color-renderable, depth-renderable,
-//     *                             or stencil-renderable format.
-//     * @param width                the width of the multisample texture's image, in texels
-//     * @param height               the height of the multisample texture's image, in texels
-//     * @param depth                the depth of the multisample texture's image, in texels
-//     * @param fixedsamplelocations whether the image will use identical sample locations and the same number of samples for all texels in the image, and the sample locations will not
-//     *                             depend on the internal format or size of the image
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage3DMultisample">Reference Page</a>
-//     */
-//    public static native void glTexImage3DMultisample(@NativeType("GLenum") int target, @NativeType("GLsizei") int samples, @NativeType("GLint") int internalformat, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height, @NativeType("GLsizei") int depth, @NativeType("GLboolean") boolean fixedsamplelocations);
-//
-//    // --- [ glGetMultisamplefv ] ---
-//
-//    /** Unsafe version of: {@link #glGetMultisamplefv GetMultisamplefv} */
-//    public static native void nglGetMultisamplefv(int pname, int index, long val);
-//
-//    /**
-//     * Retrieves the location of a sample.
-//     *
-//     * @param pname the sample parameter name. Must be:<br><table><tr><td>{@link #GL_SAMPLE_POSITION SAMPLE_POSITION}</td></tr></table>
-//     * @param index the index of the sample whose position to query
-//     * @param val   an array to receive the position of the sample
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetMultisample">Reference Page</a>
-//     */
-//    public static void glGetMultisamplefv(@NativeType("GLenum") int pname, @NativeType("GLuint") int index, @NativeType("GLfloat *") FloatBuffer val) {
-//        if (CHECKS) {
-//            check(val, 1);
-//        }
-//        nglGetMultisamplefv(pname, index, memAddress(val));
-//    }
-//
-//    /**
-//     * Retrieves the location of a sample.
-//     *
-//     * @param pname the sample parameter name. Must be:<br><table><tr><td>{@link #GL_SAMPLE_POSITION SAMPLE_POSITION}</td></tr></table>
-//     * @param index the index of the sample whose position to query
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetMultisample">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static float glGetMultisamplef(@NativeType("GLenum") int pname, @NativeType("GLuint") int index) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            FloatBuffer val = stack.callocFloat(1);
-//            nglGetMultisamplefv(pname, index, memAddress(val));
-//            return val.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glSampleMaski ] ---
-//
-//    /**
-//     * Sets the value of a sub-word of the sample mask.
-//     *
-//     * @param index which 32-bit sub-word of the sample mask to update
-//     * @param mask  the new value of the mask sub-word
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glSampleMaski">Reference Page</a>
-//     */
-//    public static native void glSampleMaski(@NativeType("GLuint") int index, @NativeType("GLbitfield") int mask);
-//
-//    // --- [ glFramebufferTexture ] ---
-//
-//    /**
-//     * Attaches a level of a texture object as a logical buffer to the currently bound framebuffer object.
-//     *
-//     * @param target     the framebuffer target. One of:<br><table><tr><td>{@link GL30#GL_FRAMEBUFFER FRAMEBUFFER}</td><td>{@link GL30#GL_READ_FRAMEBUFFER READ_FRAMEBUFFER}</td><td>{@link GL30#GL_DRAW_FRAMEBUFFER DRAW_FRAMEBUFFER}</td></tr></table>
-//     * @param attachment the attachment point of the framebuffer
-//     * @param texture    the texture object to attach to the framebuffer attachment point named by {@code attachment}
-//     * @param level      the mipmap level of {@code texture} to attach
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture">Reference Page</a>
-//     */
-//    public static native void glFramebufferTexture(@NativeType("GLenum") int target, @NativeType("GLenum") int attachment, @NativeType("GLuint") int texture, @NativeType("GLint") int level);
-//
-//    // --- [ glFenceSync ] ---
-//
-//    /**
-//     * Creates a new sync object and inserts it into the GL command stream.
-//     *
-//     * @param condition the condition that must be met to set the sync object's state to signaled. Must be:<br><table><tr><td>{@link #GL_SYNC_GPU_COMMANDS_COMPLETE SYNC_GPU_COMMANDS_COMPLETE}</td></tr></table>
-//     * @param flags     a bitwise combination of flags controlling the behavior of the sync object. No flags are presently defined for this operation and {@code flags} must
-//     *                  be zero.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glFenceSync">Reference Page</a>
-//     */
-//    @NativeType("GLsync")
-//    public static native long glFenceSync(@NativeType("GLenum") int condition, @NativeType("GLbitfield") int flags);
-//
-//    // --- [ glIsSync ] ---
-//
-//    /** Unsafe version of: {@link #glIsSync IsSync} */
-//    public static native boolean nglIsSync(long sync);
-//
-//    /**
-//     * Determines if a name corresponds to a sync object.
-//     *
-//     * @param sync a value that may be the name of a sync object
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glIsSync">Reference Page</a>
-//     */
-//    @NativeType("GLboolean")
-//    public static boolean glIsSync(@NativeType("GLsync") long sync) {
-//        if (CHECKS) {
-//            check(sync);
-//        }
-//        return nglIsSync(sync);
-//    }
-//
-//    // --- [ glDeleteSync ] ---
-//
-//    /** Unsafe version of: {@link #glDeleteSync DeleteSync} */
-//    public static native void nglDeleteSync(long sync);
-//
-//    /**
-//     * Deletes a sync object.
-//     *
-//     * @param sync the sync object to be deleted
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSync">Reference Page</a>
-//     */
-//    public static void glDeleteSync(@NativeType("GLsync") long sync) {
-//        if (CHECKS) {
-//            check(sync);
-//        }
-//        nglDeleteSync(sync);
-//    }
-//
-//    // --- [ glClientWaitSync ] ---
-//
-//    /** Unsafe version of: {@link #glClientWaitSync ClientWaitSync} */
-//    public static native int nglClientWaitSync(long sync, int flags, long timeout);
-//
-//    /**
-//     * Causes the client to block and wait for a sync object to become signaled. If {@code sync} is signaled when {@code glClientWaitSync} is called,
-//     * {@code glClientWaitSync} returns immediately, otherwise it will block and wait for up to timeout nanoseconds for {@code sync} to become signaled.
-//     *
-//     * <p>The return value is one of four status values:</p>
-//     *
-//     * <ul>
-//     * <li>{@link #GL_ALREADY_SIGNALED ALREADY_SIGNALED} indicates that sync was signaled at the time that glClientWaitSync was called.</li>
-//     * <li>{@link #GL_TIMEOUT_EXPIRED TIMEOUT_EXPIRED} indicates that at least timeout nanoseconds passed and sync did not become signaled.</li>
-//     * <li>{@link #GL_CONDITION_SATISFIED CONDITION_SATISFIED} indicates that sync was signaled before the timeout expired.</li>
-//     * <li>{@link #GL_WAIT_FAILED WAIT_FAILED} indicates that an error occurred. Additionally, an OpenGL error will be generated.</li>
-//     * </ul>
-//     *
-//     * @param sync    the sync object whose status to wait on
-//     * @param flags   a bitfield controlling the command flushing behavior. One or more of:<br><table><tr><td>0</td><td>{@link #GL_SYNC_FLUSH_COMMANDS_BIT SYNC_FLUSH_COMMANDS_BIT}</td></tr></table>
-//     * @param timeout the timeout, specified in nanoseconds, for which the implementation should wait for {@code sync} to become signaled
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glClientWaitSync">Reference Page</a>
-//     */
-//    @NativeType("GLenum")
-//    public static int glClientWaitSync(@NativeType("GLsync") long sync, @NativeType("GLbitfield") int flags, @NativeType("GLuint64") long timeout) {
-//        if (CHECKS) {
-//            check(sync);
-//        }
-//        return nglClientWaitSync(sync, flags, timeout);
-//    }
-//
-//    // --- [ glWaitSync ] ---
-//
-//    /** Unsafe version of: {@link #glWaitSync WaitSync} */
-//    public static native void nglWaitSync(long sync, int flags, long timeout);
-//
-//    /**
-//     * Causes the GL server to block and wait for a sync object to become signaled.
-//     *
-//     * <p>{@code glWaitSync} will always wait no longer than an implementation-dependent timeout. The duration of this timeout in nanoseconds may be queried by
-//     * with {@link #GL_MAX_SERVER_WAIT_TIMEOUT MAX_SERVER_WAIT_TIMEOUT}. There is currently no way to determine whether glWaitSync unblocked because the timeout expired or because the
-//     * sync object being waited on was signaled.</p>
-//     *
-//     * <p>If an error occurs, {@code glWaitSync} does not cause the GL server to block.</p>
-//     *
-//     * @param sync    the sync object whose status to wait on
-//     * @param flags   a bitfield controlling the command flushing behavior. Must be:<br><table><tr><td>0</td></tr></table>
-//     * @param timeout the timeout that the server should wait before continuing. Must be:<br><table><tr><td>{@link #GL_TIMEOUT_IGNORED TIMEOUT_IGNORED}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glWaitSync">Reference Page</a>
-//     */
-//    public static void glWaitSync(@NativeType("GLsync") long sync, @NativeType("GLbitfield") int flags, @NativeType("GLuint64") long timeout) {
-//        if (CHECKS) {
-//            check(sync);
-//        }
-//        nglWaitSync(sync, flags, timeout);
-//    }
-//
-//    // --- [ glGetInteger64v ] ---
-//
-//    /** Unsafe version of: {@link #glGetInteger64v GetInteger64v} */
-//    public static native void nglGetInteger64v(int pname, long params);
-//
-//    /**
-//     * Returns the 64bit integer value or values of a selected parameter.
-//     *
-//     * @param pname  the parameter value to be returned
-//     * @param params the value or values of the specified parameter
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetInteger64v">Reference Page</a>
-//     */
-//    public static void glGetInteger64v(@NativeType("GLenum") int pname, @NativeType("GLint64 *") LongBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetInteger64v(pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Returns the 64bit integer value or values of a selected parameter.
-//     *
-//     * @param pname the parameter value to be returned
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetInteger64v">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static long glGetInteger64(@NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            LongBuffer params = stack.callocLong(1);
-//            nglGetInteger64v(pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetInteger64i_v ] ---
+
+    // --- [ glMultiDrawElementsBaseVertex ] ---
+
+    /**
+     * Renders multiple sets of primitives by specifying indices of array data elements and an offset to apply to each index.
+     *
+     * <p><b>LWJGL note</b>: Use {@link org.lwjgl.system.MemoryUtil#memAddress} to retrieve pointers to the index buffers.</p>
+     *
+     * @param mode       the kind of primitives to render. One of:<br><table><tr><td>{@link GL11#GL_POINTS POINTS}</td><td>{@link GL11#GL_LINE_STRIP LINE_STRIP}</td><td>{@link GL11#GL_LINE_LOOP LINE_LOOP}</td><td>{@link GL11#GL_LINES LINES}</td><td>{@link GL11#GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link GL11#GL_TRIANGLE_FAN TRIANGLE_FAN}</td><td>{@link GL11#GL_TRIANGLES TRIANGLES}</td></tr><tr><td>{@link #GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link #GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link #GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link #GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td><td>{@link GL11#GL_POLYGON POLYGON}</td><td>{@link GL11#GL_QUADS QUADS}</td></tr><tr><td>{@link GL11#GL_QUAD_STRIP QUAD_STRIP}</td></tr></table>
+     * @param count      an array of the elements counts
+     * @param type       the type of the values in {@code indices}. One of:<br><table><tr><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
+     * @param indices    a pointer to the location where the indices are stored
+     * @param baseVertex a pointer to the location where the base vertices are stored
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsBaseVertex">Reference Page</a>
+     */
+    fun multiDrawElementsBaseVertex(mode: DrawMode, count: IntBuffer, type: IndexType, indices: PointerBuffer, baseVertex: IntBuffer) =
+            GL32C.nglMultiDrawElementsBaseVertex(mode.i, count.adr, type.i, indices.adr, count.rem, baseVertex.adr)
+
+    /**
+     * Renders multiple sets of primitives by specifying indices of array data elements and an offset to apply to each index.
+     *
+     * <p><b>LWJGL note</b>: Use {@link org.lwjgl.system.MemoryUtil#memAddress} to retrieve pointers to the index buffers.</p>
+     *
+     * @param count      an array of the elements counts
+     * @param type       the type of the values in {@code indices}. One of:<br><table><tr><td>{@link GL11#GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link GL11#GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link GL11#GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
+     * @param indices    a pointer to the location where the indices are stored
+     * @param baseVertex a pointer to the location where the base vertices are stored
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsBaseVertex">Reference Page</a>
+     */
+    fun multiDrawElementsBaseVertex(count: IntBuffer, type: IndexType, indices: PointerBuffer, baseVertex: IntBuffer) =
+            GL32C.nglMultiDrawElementsBaseVertex(DrawMode.TRIANGLES.i, count.adr, type.i, indices.adr, count.rem, baseVertex.adr)
+
+    // --- [ glProvokingVertex ] ---
+    // glGetSet
+
+    // --- [ glTexImage2DMultisample ] ---
+
+    /**
+     * Establishes the data storage, format, dimensions, and number of samples of a 2D multisample texture's image.
+     *
+     * @param samples              the number of samples in the multisample texture's image
+     * @param internalformat       the internal format to be used to store the multisample texture's image. {@code internalformat} must specify a color-renderable, depth-renderable,
+     *                             or stencil-renderable format.
+     * @param size                 the size of the multisample texture's image, in texels
+     * @param fixedSampleLocations whether the image will use identical sample locations and the same number of samples for all texels in the image, and the sample locations will not
+     *                             depend on the internal format or size of the image
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage2DMultisample">Reference Page</a>
+     */
+    fun texImage2dMS(samples: Int, internalformat: gl.InternalFormat, size: Vec2i, fixedSampleLocations: Boolean) =
+            GL32C.glTexImage2DMultisample(TextureTarget._2D_MULTISAMPLE.i, samples, internalformat.i, size.x, size.y, fixedSampleLocations)
+
+    // --- [ glTexImage3DMultisample ] ---
+
+    /**
+     * Establishes the data storage, format, dimensions, and number of samples of a 3D multisample texture's image.
+     *
+     * @param samples              the number of samples in the multisample texture's image
+     * @param internalformat       the internal format to be used to store the multisample texture's image. {@code internalformat} must specify a color-renderable, depth-renderable,
+     *                             or stencil-renderable format.
+     * @param size                 the size of the multisample texture's image, in texels
+     * @param fixedSampleLocations whether the image will use identical sample locations and the same number of samples for all texels in the image, and the sample locations will not
+     *                             depend on the internal format or size of the image
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage3DMultisample">Reference Page</a>
+     */
+    fun texImage3dMS(samples: Int, internalformat: gl.InternalFormat, size: Vec3i, fixedSampleLocations: Boolean) =
+            GL32C.glTexImage3DMultisample(TextureTarget._2D_MULTISAMPLE_ARRAY.i, samples, internalformat.i, size.x, size.y, size.z, fixedSampleLocations)
+
+    // --- [ glGetMultisamplefv ] ---
+
+    /**
+     * Retrieves the location of a sample.
+     *
+     * @param index the index of the sample whose position to query
+     * @return the position of the sample
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetMultisample">Reference Page</a>
+     */
+    fun getMultisample(index: Int): Float = stak.floatAddress { GL32C.nglGetMultisamplefv(GL32C.GL_SAMPLE_POSITION, index, it) }
+
+    // --- [ glSampleMaski ] ---
+
+    /**
+     * Sets the value of a sub-word of the sample mask.
+     *
+     * @param index which 32-bit sub-word of the sample mask to update
+     * @param mask  the new value of the mask sub-word
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glSampleMaski">Reference Page</a>
+     */
+    fun sampleMask(index: Int, mask: Int) = GL32C.glSampleMaski(index, mask)
+
+    // --- [ glFramebufferTexture ] ---
+
+    /**
+     * Attaches a level of a texture object as a logical buffer to the currently bound framebuffer object.
+     *
+     * @param target     the framebuffer target. One of:<br><table><tr><td>{@link GL30#GL_FRAMEBUFFER FRAMEBUFFER}</td><td>{@link GL30#GL_READ_FRAMEBUFFER READ_FRAMEBUFFER}</td><td>{@link GL30#GL_DRAW_FRAMEBUFFER DRAW_FRAMEBUFFER}</td></tr></table>
+     * @param attachment the attachment point of the framebuffer
+     * @param texture    the texture object to attach to the framebuffer attachment point named by {@code attachment}
+     * @param level      the mipmap level of {@code texture} to attach
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture">Reference Page</a>
+     */
+    fun framebufferTexture(target: FramebufferTarget, attachment: Int, texture: GlTexture, level: Int) =
+            GL32C.glFramebufferTexture(target.i, attachment, texture.name, level)
+
+    // --- [ glFenceSync ] ---
+
+    /**
+     * Creates a new sync object and inserts it into the GL command stream.
+     *
+     * @param condition the condition that must be met to set the sync object's state to signaled. Must be:<br><table><tr><td>{@link #GL_SYNC_GPU_COMMANDS_COMPLETE SYNC_GPU_COMMANDS_COMPLETE}</td></tr></table>
+     * @param flags     a bitwise combination of flags controlling the behavior of the sync object. No flags are presently defined for this operation and {@code flags} must
+     *                  be zero.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFenceSync">Reference Page</a>
+     */
+    fun fenceSync() = GlSync(GL32C.glFenceSync(GL32C.GL_SYNC_GPU_COMMANDS_COMPLETE, 0))
+
+    // --- [ glIsSync ] ---
+
+    /**
+     * Determines if a name corresponds to a sync object.
+     *
+     * @param sync a value that may be the name of a sync object
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glIsSync">Reference Page</a>
+     */
+    infix fun isSync(sync: GlSync) = GL32C.nglIsSync(sync.L)
+
+    // --- [ glDeleteSync ] ---
+
+    /**
+     * Deletes a sync object.
+     *
+     * @param sync the sync object to be deleted
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSync">Reference Page</a>
+     */
+    infix fun deleteSync(sync: GlSync) = GL32C.nglDeleteSync(sync.L)
+
+    // --- [ glClientWaitSync ] ---
+
+    /**
+     * Causes the client to block and wait for a sync object to become signaled. If {@code sync} is signaled when {@code glClientWaitSync} is called,
+     * {@code glClientWaitSync} returns immediately, otherwise it will block and wait for up to timeout nanoseconds for {@code sync} to become signaled.
+     *
+     * <p>The return value is one of four status values:</p>
+     *
+     * <ul>
+     * <li>{@link #GL_ALREADY_SIGNALED ALREADY_SIGNALED} indicates that sync was signaled at the time that glClientWaitSync was called.</li>
+     * <li>{@link #GL_TIMEOUT_EXPIRED TIMEOUT_EXPIRED} indicates that at least timeout nanoseconds passed and sync did not become signaled.</li>
+     * <li>{@link #GL_CONDITION_SATISFIED CONDITION_SATISFIED} indicates that sync was signaled before the timeout expired.</li>
+     * <li>{@link #GL_WAIT_FAILED WAIT_FAILED} indicates that an error occurred. Additionally, an OpenGL error will be generated.</li>
+     * </ul>
+     *
+     * @param sync          the sync object whose status to wait on
+     * @param flushFirst    then the equivalent of a glFlush will be issued before blocking on the sync object (GL_SYNC_FLUSH_COMMANDS_BIT)
+     * @param timeout       the timeout, specified in nanoseconds, for which the implementation should wait for {@code sync} to become signaled
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClientWaitSync">Reference Page</a>
+     */
+    fun clientWaitSync(sync: GlSync, flushFirst: Boolean, timeout: NanoSecond): SyncStatus =
+            SyncStatus(GL32C.nglClientWaitSync(sync.L, if (flushFirst) GL32C.GL_SYNC_FLUSH_COMMANDS_BIT else 0, timeout.L))
+
+    // --- [ glWaitSync ] ---
+
+    /**
+     * Causes the GL server to block and wait for a sync object to become signaled.
+     *
+     * <p>{@code glWaitSync} will always wait no longer than an implementation-dependent timeout. The duration of this timeout in nanoseconds may be queried by
+     * with {@link #GL_MAX_SERVER_WAIT_TIMEOUT MAX_SERVER_WAIT_TIMEOUT}. There is currently no way to determine whether glWaitSync unblocked because the timeout expired or because the
+     * sync object being waited on was signaled.</p>
+     *
+     * <p>If an error occurs, {@code glWaitSync} does not cause the GL server to block.</p>
+     *
+     * @param sync    the sync object whose status to wait on
+     * @param flags   a bitfield controlling the command flushing behavior. Must be:<br><table><tr><td>0</td></tr></table>
+     * @param timeout the timeout that the server should wait before continuing. Must be:<br><table><tr><td>{@link #GL_TIMEOUT_IGNORED TIMEOUT_IGNORED}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glWaitSync">Reference Page</a>
+     */
+    infix fun waitSync(sync: GlSync) = GL32C.glWaitSync(sync.L, 0, GL32C.GL_TIMEOUT_IGNORED)
+
+    // --- [ glGetInteger64v ] ---
+    // inline reified
+
+//    // --- [ glGetInteger64i_v ] --- TODO
 //
 //    /** Unsafe version of: {@link #glGetInteger64i_v GetInteger64i_v} */
 //    public static native void nglGetInteger64i_v(int pname, int index, long params);
@@ -599,7 +524,8 @@ interface gl32i {
 //     *
 //     * @see <a target="_blank" href="http://docs.gl/gl4/glGetInteger">Reference Page</a>
 //     */
-//    public static void glGetInteger64i_v(@NativeType("GLenum") int pname, @NativeType("GLuint") int index, @NativeType("GLint64 *") LongBuffer params) {
+//    public static void glGetInteger64i_v(@NativeType("GLenum") int pname, @NativeType("GLuint") int index, @NativeType("GLint64 *") LongBuffer params)
+//    {
 //        if (CHECKS) {
 //            check(params, 1);
 //        }
@@ -615,66 +541,29 @@ interface gl32i {
 //     * @see <a target="_blank" href="http://docs.gl/gl4/glGetInteger">Reference Page</a>
 //     */
 //    @NativeType("void")
-//    public static long glGetInteger64i(@NativeType("GLenum") int pname, @NativeType("GLuint") int index) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
+//    public static long glGetInteger64i(@NativeType("GLenum") int pname, @NativeType("GLuint") int index)
+//    {
+//        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
 //        try {
-//            LongBuffer params = stack.callocLong(1);
+//            LongBuffer params = stack . callocLong (1);
 //            nglGetInteger64i_v(pname, index, memAddress(params));
 //            return params.get(0);
 //        } finally {
 //            stack.setPointer(stackPointer);
 //        }
 //    }
-//
-//    // --- [ glGetSynciv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glGetSynciv GetSynciv}
-//     *
-//     * @param bufSize the size of the buffer whose address is given in {@code values}
-//     */
-//    public static native void nglGetSynciv(long sync, int pname, int bufSize, long length, long values);
-//
-//    /**
-//     * Queries the properties of a sync object.
-//     *
-//     * @param sync   the sync object whose properties to query
-//     * @param pname  the parameter whose value to retrieve from the sync object specified in {@code sync}. One of:<br><table><tr><td>{@link #GL_OBJECT_TYPE OBJECT_TYPE}</td><td>{@link #GL_SYNC_CONDITION SYNC_CONDITION}</td><td>{@link #GL_SYNC_STATUS SYNC_STATUS}</td><td>{@link #GL_SYNC_FLAGS SYNC_FLAGS}</td></tr></table>
-//     * @param length the address of an variable to receive the number of integers placed in {@code values}
-//     * @param values the address of an array to receive the values of the queried parameter
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetSync">Reference Page</a>
-//     */
-//    public static void glGetSynciv(@NativeType("GLsync") long sync, @NativeType("GLenum") int pname, @Nullable @NativeType("GLsizei *") IntBuffer length, @NativeType("GLint *") IntBuffer values) {
-//        if (CHECKS) {
-//            check(sync);
-//            checkSafe(length, 1);
-//        }
-//        nglGetSynciv(sync, pname, values.remaining(), memAddressSafe(length), memAddress(values));
-//    }
-//
-//    /**
-//     * Queries the properties of a sync object.
-//     *
-//     * @param sync   the sync object whose properties to query
-//     * @param pname  the parameter whose value to retrieve from the sync object specified in {@code sync}. One of:<br><table><tr><td>{@link #GL_OBJECT_TYPE OBJECT_TYPE}</td><td>{@link #GL_SYNC_CONDITION SYNC_CONDITION}</td><td>{@link #GL_SYNC_STATUS SYNC_STATUS}</td><td>{@link #GL_SYNC_FLAGS SYNC_FLAGS}</td></tr></table>
-//     * @param length the address of an variable to receive the number of integers placed in {@code values}
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetSync">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetSynci(@NativeType("GLsync") long sync, @NativeType("GLenum") int pname, @Nullable @NativeType("GLsizei *") IntBuffer length) {
-//        if (CHECKS) {
-//            check(sync);
-//            checkSafe(length, 1);
-//        }
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer values = stack.callocInt(1);
-//            nglGetSynciv(sync, pname, 1, memAddressSafe(length), memAddress(values));
-//            return values.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
+
+    // --- [ glGetSynciv ] ---
+
+    /**
+     * Queries the signaled status of a sync object.
+     *
+     * @param sync   the sync object whose properties to query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetSync">Reference Page</a>
+     */
+    fun isSyncSignaled(sync: GlSync): Boolean =
+            stak.intAddress {
+                GL32C.nglGetSynciv(sync.L, GL32C.GL_SYNC_STATUS, 1, NULL, it)
+            }.bool
 }

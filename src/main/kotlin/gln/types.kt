@@ -1,10 +1,14 @@
 package gln
 
+import glm_.bool
 import gln.texture.GlTexturesDsl
 import kool.IntBuffer
 import kool.adr
 import kool.rem
+import kool.stak
+import org.lwjgl.opengl.GL32C
 import org.lwjgl.opengl.GL45C
+import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.IntBuffer
 
 
@@ -26,12 +30,13 @@ inline class GlTextures(val names: IntBuffer) {
 
     fun delete() = gl.deleteTextures(this)
 
-//    inline operator fun invoke(block: GlTexturesDsl.() -> Unit) {
+    //    inline operator fun invoke(block: GlTexturesDsl.() -> Unit) {
 //        GlTexturesDsl.names = i
 //        GlTexturesDsl.block()
 //    }
 //
     fun create() = GL45C.glCreateBuffers(names)
+
     inline fun create(block: GlTexturesDsl.() -> Unit) {
         create()
         GlTexturesDsl.names = names
@@ -40,3 +45,27 @@ inline class GlTextures(val names: IntBuffer) {
 }
 
 fun GlTextures(size: Int) = GlTextures(IntBuffer(size))
+
+inline class GlSync(val L: Long) {
+
+    val isValid: Boolean
+        get() = GL32C.glIsSync(L)
+    val isInvalid: Boolean
+        get() = !GL32C.glIsSync(L)
+
+    fun delete() = GL32C.nglDeleteSync(L)
+
+    fun clientWait(flushFirst: Boolean, timeout: NanoSecond): SyncStatus =
+            SyncStatus(GL32C.nglClientWaitSync(L, if (flushFirst) GL32C.GL_SYNC_FLUSH_COMMANDS_BIT else 0, timeout.L))
+
+    val isSignaled: Boolean
+        get() = stak.intAddress {
+            GL32C.nglGetSynciv(L, GL32C.GL_SYNC_STATUS, 1, NULL, it)
+        }.bool
+
+    companion object {
+        fun new() = GlSync(GL32C.glFenceSync(GL32C.GL_SYNC_GPU_COMMANDS_COMPLETE, 0))
+    }
+}
+
+inline class NanoSecond(val L: Long)
