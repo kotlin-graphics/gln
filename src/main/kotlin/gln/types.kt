@@ -40,3 +40,5 @@ inline class GlTextures(val names: IntBuffer) {
 }
 
 fun GlTextures(size: Int) = GlTextures(IntBuffer(size))
+
+typealias UniformBlockIndex = Int

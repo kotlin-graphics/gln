@@ -6712,6 +6712,7 @@ inline class IndexType(val i: Int) {
         val UNSIGNED_SHORT = IndexType(GL11C.GL_UNSIGNED_SHORT)
         val UNSIGNED_INT = IndexType(GL11C.GL_UNSIGNED_INT)
     }
+
     val size: Int
         get() = when (i) {
             GL11.GL_UNSIGNED_BYTE -> Byte.BYTES
@@ -6719,4 +6720,70 @@ inline class IndexType(val i: Int) {
             GL11.GL_UNSIGNED_INT -> Int.BYTES
             else -> throw Exception("[IndexType::size] Invalid value")
         }
+}
+
+inline class InternalFormat(val i: Int) {
+    companion object {
+        val R8 = InternalFormat(GL30C.GL_R8)
+        val R16 = InternalFormat(GL30C.GL_R16)
+        val R16F = InternalFormat(GL30C.GL_R16F)
+        val R32F = InternalFormat(GL30C.GL_R32F)
+        val R8I = InternalFormat(GL30C.GL_R8I)
+        val R16I = InternalFormat(GL30C.GL_R16I)
+        val R32I = InternalFormat(GL30C.GL_R32I)
+        val R8UI = InternalFormat(GL30C.GL_R8UI)
+        val R16UI = InternalFormat(GL30C.GL_R16UI)
+        val R32UI = InternalFormat(GL30C.GL_R32UI)
+        val RG8 = InternalFormat(GL30C.GL_RG8)
+        val RG16 = InternalFormat(GL30C.GL_RG16)
+        val RG16F = InternalFormat(GL30C.GL_RG16F)
+        val RG32F = InternalFormat(GL30C.GL_RG32F)
+        val RG8I = InternalFormat(GL30C.GL_RG8I)
+        val RG16I = InternalFormat(GL30C.GL_RG16I)
+        val RG32I = InternalFormat(GL30C.GL_RG32I)
+        val RG8UI = InternalFormat(GL30C.GL_RG8UI)
+        val RG16UI = InternalFormat(GL30C.GL_RG16UI)
+        val RGB32F = InternalFormat(GL30C.GL_RGB32F)
+        val RGB32I = InternalFormat(GL30C.GL_RGB32I)
+        val RGB32UI = InternalFormat(GL30C.GL_RGB32UI)
+        val RGBA8 = InternalFormat(GL30C.GL_RGBA8)
+        val RGBA16 = InternalFormat(GL30C.GL_RGBA16)
+        val RGBA16F = InternalFormat(GL30C.GL_RGBA16F)
+        val RGBA32F = InternalFormat(GL30C.GL_RGBA32F)
+        val RGBA8I = InternalFormat(GL30C.GL_RGBA8I)
+        val RGBA16I = InternalFormat(GL30C.GL_RGBA16I)
+        val RGBA32I = InternalFormat(GL30C.GL_RGBA32I)
+        val RGBA8UI = InternalFormat(GL30C.GL_RGBA8UI)
+        val RGBA16UI = InternalFormat(GL30C.GL_RGBA16UI)
+        val RGBA32UI = InternalFormat(GL30C.GL_RGBA32UI)
+    }
+}
+
+inline class GetActiveUniform(val i: Int) {
+    companion object {
+        val UNIFORM_TYPE = GetActiveUniform(GL31C.GL_UNIFORM_TYPE)
+        val UNIFORM_SIZE = GetActiveUniform(GL31C.GL_UNIFORM_SIZE)
+        val UNIFORM_NAME_LENGTH = GetActiveUniform(GL31C.GL_UNIFORM_NAME_LENGTH)
+        val UNIFORM_BLOCK_INDEX = GetActiveUniform(GL31C.GL_UNIFORM_BLOCK_INDEX)
+        val UNIFORM_OFFSET = GetActiveUniform(GL31C.GL_UNIFORM_OFFSET)
+        val UNIFORM_ARRAY_STRIDE = GetActiveUniform(GL31C.GL_UNIFORM_ARRAY_STRIDE)
+        val UNIFORM_MATRIX_STRIDE = GetActiveUniform(GL31C.GL_UNIFORM_MATRIX_STRIDE)
+        val UNIFORM_IS_ROW_MAJOR = GetActiveUniform(GL31C.GL_UNIFORM_IS_ROW_MAJOR)
+        val UNIFORM_ATOMIC_COUNTER_BUFFER_INDEX = GetActiveUniform(GL42C.GL_UNIFORM_ATOMIC_COUNTER_BUFFER_INDEX)
+    }
+}
+
+inline class GetActiveUniformBlock(val i: Int) {
+    companion object {
+        val GL_UNIFORM_BLOCK_BINDING = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_BINDING)
+        val GL_UNIFORM_BLOCK_DATA_SIZE = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_DATA_SIZE)
+        val GL_UNIFORM_BLOCK_NAME_LENGTH = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_NAME_LENGTH)
+        val GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS)
+        val GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER)
+        val GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER = GetActiveUniformBlock(GL40C.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER)
+        val GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_EVALUATION_SHADER = GetActiveUniformBlock(GL40C.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_EVALUATION_SHADER)
+        val GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER)
+        val GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER)
+        val GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER  = GetActiveUniformBlock(GL43C.GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER)
+    }
 }

@@ -24,4 +24,6 @@ colorMask has also rgba: Boolean and Vec4bool overload
 
 glEnablei/glDisablei/glIsEnabledi are found as enable/disable/isEnabled with cap
 
-glGetTransformFeedbackVarying returns size, type and name as a triple 
+glGetTransformFeedbackVarying returns size, type and name as a triple
+
+glTexBuffer has a mandatory target, so it's inferred 

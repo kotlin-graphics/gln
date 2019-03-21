@@ -1,15 +1,15 @@
 package gln.objects
 
-import glm_.bool
 import glm_.vec3.Vec3i
 import gln.*
 import gln.program.ProgramBase
 import gln.program.ProgramUse
 import kool.adr
-import kool.stak
-import org.lwjgl.opengl.*
+import org.lwjgl.opengl.GL20
+import org.lwjgl.opengl.GL20C
+import org.lwjgl.opengl.GL31C
 import org.lwjgl.system.MemoryStack.stackGet
-import java.lang.Exception
+import java.nio.IntBuffer
 
 inline class GlProgram(val name: Int) {
 
@@ -144,7 +144,7 @@ inline class GlProgram(val name: Int) {
 
     // --- [ glGetUniform* ] ---
 
-    inline infix fun <reified T> getUniform(location: Int): T =  gl.getUniform(this, location)
+    inline infix fun <reified T> getUniform(location: Int): T = gl.getUniform(this, location)
 
     // --- [ glGetAttribLocation ] ---
     infix fun getAttribLocation(name: String): Int = GL20.glGetAttribLocation(this.name, name)
@@ -161,11 +161,6 @@ inline class GlProgram(val name: Int) {
     // --- [ glGetUniformBlockIndex ] ---
     fun getUniformBlockIndex(uniformBlockName: CharSequence) = GL31C.glGetUniformBlockIndex(name, uniformBlockName)
 
-    // --- [ glUniformBlockBinding ] ---
-    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Int) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding)
-
-    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Enum<*>) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding.ordinal)
-
     // --- [ glBindFragDataLocation ] ---
 
     fun bindFragDataLocation(index: Int, name: String) {
@@ -178,6 +173,106 @@ inline class GlProgram(val name: Int) {
     // --- [ glGetActiveAttrib ] ---
 
     fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl.getActiveAttrib(this, index)
+
+    // --- [ glGetUniformIndices ] ---
+
+    /**
+     * Retrieves the indices of a number of uniforms within a program object
+     *
+     * @param uniformNames   an array of pointers to buffers containing the names of the queried uniforms
+     * @return               an array that will receive the indices of the uniforms
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformIndices">Reference Page</a>
+     */
+    fun getUniformIndices(uniformNames: Array<CharSequence>): IntArray = gl.getUniformIndices(this, uniformNames)
+
+    // --- [ glGetActiveUniformsiv ] --- TODO rename?
+
+    /**
+     * Returns information about several active uniform variables for the specified program object.
+     *
+     * @param uniformIndices an array of {@code uniformCount} integers containing the indices of uniforms within {@code program}
+     * @param name          the property of the each uniform in {@code uniformIndices} that should be written into the corresponding element of {@code params}
+     * @param params         an array of {@code uniformCount} integers which are to receive the value of {@code name} for each uniform in {@code uniformIndices}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniforms">Reference Page</a>
+     */
+    fun getActiveUniformsiv(uniformIndices: IntBuffer, name: GetActiveUniform, params: IntBuffer) = gl.getActiveUniformsiv(this, uniformIndices, name, params)
+
+    /**
+     * Returns information about several active uniform variables for the specified program object.
+     *
+     * @param name   the property of the each uniform in {@code uniformIndices} that should be written into the corresponding element of {@code params}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniforms">Reference Page</a>
+     */
+    fun getActiveUniformsi(uniformIndex: Int, name: GetActiveUniform): Int = gl.getActiveUniformsi(this, uniformIndex, name)
+
+    // --- [ glGetActiveUniformName ] ---
+
+    /**
+     * Queries the name of an active uniform.
+     *
+     * @param uniformIndex the index of the active uniform whose name to query
+     * @param bufSize      the size of the buffer, in units of {@code GLchar}, of the buffer whose address is specified in {@code uniformName}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformName">Reference Page</a>
+     */
+    fun getActiveUniformName(uniformIndex: Int, bufSize: Int = getActiveUniformsi(uniformIndex, GetActiveUniform.UNIFORM_NAME_LENGTH)): String =
+            gl.getActiveUniformName(this, uniformIndex, bufSize)
+
+    // --- [ glGetUniformBlockIndex ] ---
+
+    /**
+     * Retrieves the index of a named uniform block.
+     *
+     * @param program          the name of a program containing the uniform block
+     * @param uniformBlockName an array of characters to containing the name of the uniform block whose index to retrieve
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformBlockIndex">Reference Page</a>
+     */
+    fun getUniformBlockIndex(program: GlProgram, uniformBlockName: CharSequence): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
+
+    // --- [ glGetActiveUniformBlockiv ] ---
+
+    /**
+     * Queries information about an active uniform block.
+     *
+     * @param uniformBlockIndex the index of the uniform block within {@code program}
+     * @param name             the name of the parameter to query. One of:<br><table><tr><td>{@link #GL_UNIFORM_BLOCK_BINDING UNIFORM_BLOCK_BINDING}</td><td>{@link #GL_UNIFORM_BLOCK_DATA_SIZE UNIFORM_BLOCK_DATA_SIZE}</td></tr><tr><td>{@link #GL_UNIFORM_BLOCK_NAME_LENGTH UNIFORM_BLOCK_NAME_LENGTH}</td><td>{@link #GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS UNIFORM_BLOCK_ACTIVE_UNIFORMS}</td></tr><tr><td>{@link #GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES}</td><td>{@link #GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER}</td></tr><tr><td>{@link #GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER}</td><td>{@link #GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER}</td></tr></table>
+     * @param params            the address of a variable to receive the result of the query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformBlock">Reference Page</a>
+     */
+    inline fun <reified T> getActiveUniformBlockiv(uniformBlockIndex: UniformBlockIndex, name: GetActiveUniformBlock): T = gl.getActiveUniformBlockiv(this, uniformBlockIndex, name)
+
+    // --- [ glGetActiveUniformBlockName ] ---
+
+    /**
+     * Retrieves the name of an active uniform block.
+     *
+     * @param uniformBlockIndex the index of the uniform block within {@code program}
+     * @param bufSize           the size of the buffer addressed by {@code uniformBlockName}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformBlockName">Reference Page</a>
+     */
+    fun getActiveUniformBlockName(uniformBlockIndex: UniformBlockIndex,
+                                  bufSize: Int = getActiveUniformBlockiv(uniformBlockIndex, GetActiveUniformBlock.GL_UNIFORM_BLOCK_NAME_LENGTH)): String =
+            gl.getActiveUniformBlockName(this, uniformBlockIndex, bufSize)
+
+    // --- [ glUniformBlockBinding ] ---
+
+    /**
+     * Assigns a binding point to an active uniform block.
+     *
+     * @param uniformBlockIndex   the index of the active uniform block within {@code program} whose binding to assign
+     * @param uniformBlockBinding the binding point to which to bind the uniform block with index {@code uniformBlockIndex} within {@code program}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glUniformBlockBinding">Reference Page</a>
+     */
+    fun uniformBlockBinding(uniformBlockIndex: UniformBlockIndex, uniformBlockBinding: Int) = gl.uniformBlockBinding(this, uniformBlockIndex, uniformBlockBinding)
+
+    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Enum<*>) = gl.uniformBlockBinding(this, uniformBlockIndex, uniformBlockBinding.ordinal)
 
     companion object {
 
