@@ -2,6 +2,28 @@ package gln
 
 import glm_.BYTES
 import glm_.i
+import glm_.mat2x2.Mat2
+import glm_.mat2x2.Mat2d
+import glm_.mat3x3.Mat3
+import glm_.mat3x3.Mat3d
+import glm_.mat4x4.Mat4
+import glm_.mat4x4.Mat4d
+import glm_.vec1.Vec1
+import glm_.vec1.Vec1d
+import glm_.vec1.Vec1i
+import glm_.vec1.Vec1ui
+import glm_.vec2.Vec2
+import glm_.vec2.Vec2d
+import glm_.vec2.Vec2i
+import glm_.vec2.Vec2ui
+import glm_.vec3.Vec3
+import glm_.vec3.Vec3d
+import glm_.vec3.Vec3i
+import glm_.vec3.Vec3ui
+import glm_.vec4.Vec4
+import glm_.vec4.Vec4d
+import glm_.vec4.Vec4i
+import glm_.vec4.Vec4ui
 import gln.objects.GlProgram
 import gln.program.GlPipeline
 import gln.program.GlPipelines
@@ -9,8 +31,12 @@ import kool.*
 import org.lwjgl.opengl.GL41C
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memGetInt
+import unsigned.Uint
 import java.nio.ByteBuffer
+import java.nio.DoubleBuffer
+import java.nio.FloatBuffer
 import java.nio.IntBuffer
+import kotlin.reflect.KMutableProperty0
 
 /**
  * The OpenGL functionality up to version 4.1. Includes only Core Profile symbols.
@@ -206,7 +232,7 @@ interface gl41i {
      */
     fun createShaderProgram(type: ShaderType, vararg strings: CharSequence): GlProgram = stak {
         val pStrings = it.PointerBuffer(strings.size)
-        for(i in strings.indices) pStrings[i] = it.UTF8(strings[i])
+        for (i in strings.indices) pStrings[i] = it.UTF8(strings[i])
         GlProgram(GL41C.nglCreateShaderProgramv(type.i, 1, pStrings.adr))
     }
 
@@ -266,6 +292,13 @@ interface gl41i {
      */
     fun genProgramPipelines(): GlPipeline = GlPipeline(stak.intAddress { GL41C.nglGenProgramPipelines(1, it) })
 
+    /**
+     * Reserves program pipeline object names.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenProgramPipelines">Reference Page</a>
+     */
+    fun genProgramPipelines(pipeline: KMutableProperty0<GlPipeline>) = pipeline.set(genProgramPipelines())
+
     // --- [ glIsProgramPipeline ] ---
 
     /**
@@ -275,285 +308,432 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsProgramPipeline">Reference Page</a>
      */
-//    @NativeType("GLboolean")
-//    public static native boolean glIsProgramPipeline(@NativeType("GLuint") int pipeline);
+    fun isProgramPipeline(pipeline: GlPipeline) = GL41C.glIsProgramPipeline(pipeline.name)
 
-//    // --- [ glGetProgramPipelineiv ] ---
-//
-//    /** Unsafe version of: {@link #glGetProgramPipelineiv GetProgramPipelineiv} */
-//    public static native void nglGetProgramPipelineiv(int pipeline, int pname, long params);
-//
-//    /**
-//     * Retrieves properties of a program pipeline object.
-//     *
-//     * @param pipeline the name of a program pipeline object whose parameter retrieve
-//     * @param pname    the name of the parameter to retrieve. One of:<br><table><tr><td>{@link #GL_ACTIVE_PROGRAM ACTIVE_PROGRAM}</td><td>{@link GL20#GL_INFO_LOG_LENGTH INFO_LOG_LENGTH}</td><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td></tr><tr><td>{@link GL40#GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td><td>{@link GL40#GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
-//     * @param params   a variable into which will be written the value or values of {@code pname} for {@code pipeline}
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipeline">Reference Page</a>
-//     */
-//    public static void glGetProgramPipelineiv(@NativeType("GLuint") int pipeline, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params)
-//    {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetProgramPipelineiv(pipeline, pname, memAddress(params));
-//    }
-//
-//    /**
-//     * Retrieves properties of a program pipeline object.
-//     *
-//     * @param pipeline the name of a program pipeline object whose parameter retrieve
-//     * @param pname    the name of the parameter to retrieve. One of:<br><table><tr><td>{@link #GL_ACTIVE_PROGRAM ACTIVE_PROGRAM}</td><td>{@link GL20#GL_INFO_LOG_LENGTH INFO_LOG_LENGTH}</td><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td></tr><tr><td>{@link GL40#GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td><td>{@link GL40#GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipeline">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetProgramPipelinei(@NativeType("GLuint") int pipeline, @NativeType("GLenum") int pname)
-//    {
-//        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-//        try {
-//            IntBuffer params = stack . callocInt (1);
-//            nglGetProgramPipelineiv(pipeline, pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glProgramUniform1i ] ---
-//
-//    /**
-//     * Specifies the value of an int uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform1i(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLint") int x);
-//
-//    // --- [ glProgramUniform2i ] ---
-//
-//    /**
-//     * Specifies the value of an ivec2 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform2i(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLint") int x, @NativeType("GLint") int y);
-//
-//    // --- [ glProgramUniform3i ] ---
-//
-//    /**
-//     * Specifies the value of an ivec3 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     * @param z        the uniform z value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform3i(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z);
-//
-//    // --- [ glProgramUniform4i ] ---
-//
-//    /**
-//     * Specifies the value of an ivec4 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     * @param z        the uniform z value
-//     * @param w        the uniform w value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform4i(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLint") int x, @NativeType("GLint") int y, @NativeType("GLint") int z, @NativeType("GLint") int w);
-//
-//    // --- [ glProgramUniform1ui ] ---
-//
-//    /**
-//     * Specifies the value of a uint uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform1ui(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLuint") int x);
-//
-//    // --- [ glProgramUniform2ui ] ---
-//
-//    /**
-//     * Specifies the value of a uvec2 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform2ui(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLuint") int x, @NativeType("GLuint") int y);
-//
-//    // --- [ glProgramUniform3ui ] ---
-//
-//    /**
-//     * Specifies the value of a uvec3 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     * @param z        the uniform z value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform3ui(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLuint") int x, @NativeType("GLuint") int y, @NativeType("GLuint") int z);
-//
-//    // --- [ glProgramUniform4ui ] ---
-//
-//    /**
-//     * Specifies the value of a uvec4 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     * @param z        the uniform z value
-//     * @param w        the uniform w value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform4ui(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLuint") int x, @NativeType("GLuint") int y, @NativeType("GLuint") int z, @NativeType("GLuint") int w);
-//
-//    // --- [ glProgramUniform1f ] ---
-//
-//    /**
-//     * Specifies the value of a float uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform1f(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLfloat") float x);
-//
-//    // --- [ glProgramUniform2f ] ---
-//
-//    /**
-//     * Specifies the value of a vec2 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform2f(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLfloat") float x, @NativeType("GLfloat") float y);
-//
-//    // --- [ glProgramUniform3f ] ---
-//
-//    /**
-//     * Specifies the value of a vec3 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     * @param z        the uniform z value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform3f(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLfloat") float x, @NativeType("GLfloat") float y, @NativeType("GLfloat") float z);
-//
-//    // --- [ glProgramUniform4f ] ---
-//
-//    /**
-//     * Specifies the value of a vec4 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     * @param z        the uniform z value
-//     * @param w        the uniform w value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform4f(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLfloat") float x, @NativeType("GLfloat") float y, @NativeType("GLfloat") float z, @NativeType("GLfloat") float w);
-//
-//    // --- [ glProgramUniform1d ] ---
-//
-//    /**
-//     * Specifies the value of a double uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform1d(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLdouble") double x);
-//
-//    // --- [ glProgramUniform2d ] ---
-//
-//    /**
-//     * Specifies the value of a dvec2 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform2d(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLdouble") double x, @NativeType("GLdouble") double y);
-//
-//    // --- [ glProgramUniform3d ] ---
-//
-//    /**
-//     * Specifies the value of a dvec3 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     * @param z        the uniform z value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform3d(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLdouble") double x, @NativeType("GLdouble") double y, @NativeType("GLdouble") double z);
-//
-//    // --- [ glProgramUniform4d ] ---
-//
-//    /**
-//     * Specifies the value of a dvec4 uniform variable for a specified program object.
-//     *
-//     * @param program  the handle of the program containing the uniform variable to be modified
-//     * @param location the location of the uniform variable to be modified
-//     * @param x        the uniform x value
-//     * @param y        the uniform y value
-//     * @param z        the uniform z value
-//     * @param w        the uniform w value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static native void glProgramUniform4d(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLdouble") double x, @NativeType("GLdouble") double y, @NativeType("GLdouble") double z, @NativeType("GLdouble") double w);
-//
-//    // --- [ glProgramUniform1iv ] ---
+    // --- [ glGetProgramPipelineiv ] ---
+
+    /**
+     * Retrieves properties of a program pipeline object.
+     *
+     * @param pipeline the name of a program pipeline object whose parameter retrieve
+     * @param name    the name of the parameter to retrieve. One of:<br><table><tr><td>{@link #GL_ACTIVE_PROGRAM ACTIVE_PROGRAM}</td><td>{@link GL20#GL_INFO_LOG_LENGTH INFO_LOG_LENGTH}</td><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td></tr><tr><td>{@link GL40#GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td><td>{@link GL40#GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipeline">Reference Page</a>
+     */
+    fun getProgramPipeline(pipeline: GlPipeline, name: GetProgramPipeline) =
+            stak.intAddress { GL41C.nglGetProgramPipelineiv(pipeline.name, name.i, it) }
+
+    // --- [ glProgramUniform1i ] ---
+
+    /**
+     * Specifies the value of an int uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Int) = GL41C.glProgramUniform1i(program.name, location, x)
+
+    /**
+     * Specifies the value of an int uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec1i) = GL41C.glProgramUniform1i(program.name, location, v.x)
+
+    // --- [ glProgramUniform2i ] ---
+
+    /**
+     * Specifies the value of an ivec2 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Int, y: Int) = GL41C.glProgramUniform2i(program.name, location, x, y)
+
+    /**
+     * Specifies the value of an ivec2 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec2i) = GL41C.glProgramUniform2i(program.name, location, v.x, v.y)
+
+    // --- [ glProgramUniform3i ] ---
+
+    /**
+     * Specifies the value of an ivec3 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Int, y: Int, z: Int) = GL41C.glProgramUniform3i(program.name, location, x, y, z)
+
+    /**
+     * Specifies the value of an ivec3 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec3i) = GL41C.glProgramUniform3i(program.name, location, v.x, v.y, v.z)
+
+    // --- [ glProgramUniform4i ] ---
+
+    /**
+     * Specifies the value of an ivec4 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     * @param w        the uniform w value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Int, y: Int, z: Int, w: Int) = GL41C.glProgramUniform4i(program.name, location, x, y, z, w)
+
+    /**
+     * Specifies the value of an ivec4 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec4i) = GL41C.glProgramUniform4i(program.name, location, v.x, v.y, v.z, v.w)
+
+    // --- [ glProgramUniform1ui ] ---
+
+    /**
+     * Specifies the value of a uint uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Uint) = GL41C.glProgramUniform1ui(program.name, location, x.v)
+
+    /**
+     * Specifies the value of a uint uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec1ui) = GL41C.glProgramUniform1ui(program.name, location, v.x.v)
+
+    // --- [ glProgramUniform2ui ] ---
+
+    /**
+     * Specifies the value of a uvec2 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Uint, y: Uint) = GL41C.glProgramUniform2ui(program.name, location, x.v, y.v)
+
+    /**
+     * Specifies the value of a uvec2 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec2ui) = GL41C.glProgramUniform2ui(program.name, location, v.x.v, v.y.v)
+
+    // --- [ glProgramUniform3ui ] ---
+
+    /**
+     * Specifies the value of a uvec3 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Uint, y: Uint, z: Uint) = GL41C.glProgramUniform3ui(program.name, location, x.v, y.v, z.v)
+
+    /**
+     * Specifies the value of a uvec3 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec3ui) = GL41C.glProgramUniform3ui(program.name, location, v.x.v, v.y.v, v.z.v)
+
+    // --- [ glProgramUniform4ui ] ---
+
+    /**
+     * Specifies the value of a uvec4 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     * @param w        the uniform w value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Uint, y: Uint, z: Uint, w: Uint) = GL41C.glProgramUniform4ui(program.name, location, x.v, y.v, z.v, w.v)
+
+    /**
+     * Specifies the value of a uvec4 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec4ui) = GL41C.glProgramUniform4ui(program.name, location, v.x.v, v.y.v, v.z.v, v.w.v)
+
+    // --- [ glProgramUniform1f ] ---
+
+    /**
+     * Specifies the value of a float uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Float) = GL41C.glProgramUniform1f(program.name, location, x)
+
+    /**
+     * Specifies the value of a float uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec1) = GL41C.glProgramUniform1f(program.name, location, v.x)
+
+    // --- [ glProgramUniform2f ] ---
+
+    /**
+     * Specifies the value of a vec2 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Float, y: Float) = GL41C.glProgramUniform2f(program.name, location, x, y)
+
+    /**
+     * Specifies the value of a vec2 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec2) = GL41C.glProgramUniform2f(program.name, location, v.x, v.y)
+
+    // --- [ glProgramUniform3f ] ---
+
+    /**
+     * Specifies the value of a vec3 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Float, y: Float, z: Float) = GL41C.glProgramUniform3f(program.name, location, x, y, z)
+
+    /**
+     * Specifies the value of a vec3 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec3) = GL41C.glProgramUniform3f(program.name, location, v.x, v.y, v.z)
+
+    // --- [ glProgramUniform4f ] ---
+
+    /**
+     * Specifies the value of a vec4 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     * @param w        the uniform w value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Float, y: Float, z: Float, w: Float) = GL41C.glProgramUniform4f(program.name, location, x, y, z, w)
+
+    /**
+     * Specifies the value of a vec4 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec4) = GL41C.glProgramUniform4f(program.name, location, v.x, v.y, v.z, v.w)
+
+    // --- [ glProgramUniform1d ] ---
+
+    /**
+     * Specifies the value of a double uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Double) = GL41C.glProgramUniform1d(program.name, location, x)
+
+    /**
+     * Specifies the value of a double uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec1d) = GL41C.glProgramUniform1d(program.name, location, v.x)
+
+    // --- [ glProgramUniform2d ] ---
+
+    /**
+     * Specifies the value of a dvec2 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Double, y: Double) = GL41C.glProgramUniform2d(program.name, location, x, y)
+
+    /**
+     * Specifies the value of a dvec2 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec2d) = GL41C.glProgramUniform2d(program.name, location, v.x, v.y)
+
+    // --- [ glProgramUniform3d ] ---
+
+    /**
+     * Specifies the value of a dvec3 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Double, y: Double, z: Double) = GL41C.glProgramUniform3d(program.name, location, x, y, z)
+
+    /**
+     * Specifies the value of a dvec3 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec3d) = GL41C.glProgramUniform3d(program.name, location, v.x, v.y, v.z)
+
+    // --- [ glProgramUniform4d ] ---
+
+    /**
+     * Specifies the value of a dvec4 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param x        the uniform x value
+     * @param y        the uniform y value
+     * @param z        the uniform z value
+     * @param w        the uniform w value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, x: Double, y: Double, z: Double, w: Double) = GL41C.glProgramUniform4d(program.name, location, x, y, z, w)
+
+    /**
+     * Specifies the value of a dvec4 uniform variable for a specified program object.
+     *
+     * @param program  the handle of the program containing the uniform variable to be modified
+     * @param location the location of the uniform variable to be modified
+     * @param v        the uniform value
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, v: Vec4d) = GL41C.glProgramUniform4d(program.name, location, v.x, v.y, v.z, v.w)
+
+//    // --- [ glProgramUniform1iv ] --- TODO?
 //
 //    /**
 //     * Unsafe version of: {@link #glProgramUniform1iv ProgramUniform1iv}
@@ -921,158 +1101,97 @@ interface gl41i {
 //        nglProgramUniform4dv(program, location, value.remaining() > > 2, memAddress(value));
 //    }
 //
-//    // --- [ glProgramUniformMatrix2fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix2fv ProgramUniformMatrix2fv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix2fv(int program, int location, int count, boolean transpose, long value);
-//
-//    /**
-//     * Specifies the value of a single mat2 uniform variable or a mat2 uniform variable array for the current program object.
-//     *
-//     * @param program   the handle of the program containing the uniform variable to be modified
-//     * @param location  the location of the uniform variable to be modified
-//     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
-//     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static void glProgramUniformMatrix2fv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglProgramUniformMatrix2fv(program, location, value.remaining() > > 2, transpose, memAddress(value));
-//    }
-//
-//    // --- [ glProgramUniformMatrix3fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix3fv ProgramUniformMatrix3fv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix3fv(int program, int location, int count, boolean transpose, long value);
-//
-//    /**
-//     * Specifies the value of a single mat3 uniform variable or a mat3 uniform variable array for the current program object.
-//     *
-//     * @param program   the handle of the program containing the uniform variable to be modified
-//     * @param location  the location of the uniform variable to be modified
-//     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
-//     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static void glProgramUniformMatrix3fv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglProgramUniformMatrix3fv(program, location, value.remaining() / 9, transpose, memAddress(value));
-//    }
-//
-//    // --- [ glProgramUniformMatrix4fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix4fv ProgramUniformMatrix4fv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix4fv(int program, int location, int count, boolean transpose, long value);
-//
-//    /**
-//     * Specifies the value of a single mat4 uniform variable or a mat4 uniform variable array for the current program object.
-//     *
-//     * @param program   the handle of the program containing the uniform variable to be modified
-//     * @param location  the location of the uniform variable to be modified
-//     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
-//     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static void glProgramUniformMatrix4fv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglProgramUniformMatrix4fv(program, location, value.remaining() > > 4, transpose, memAddress(value));
-//    }
-//
-//    // --- [ glProgramUniformMatrix2dv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix2dv ProgramUniformMatrix2dv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix2dv(int program, int location, int count, boolean transpose, long value);
-//
-//    /**
-//     * Specifies the value of a single dmat2 uniform variable or a dmat2 uniform variable array for the current program object.
-//     *
-//     * @param program   the handle of the program containing the uniform variable to be modified
-//     * @param location  the location of the uniform variable to be modified
-//     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
-//     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static void glProgramUniformMatrix2dv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLdouble const *") DoubleBuffer value)
-//    {
-//        nglProgramUniformMatrix2dv(program, location, value.remaining() > > 2, transpose, memAddress(value));
-//    }
-//
-//    // --- [ glProgramUniformMatrix3dv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix3dv ProgramUniformMatrix3dv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix3dv(int program, int location, int count, boolean transpose, long value);
-//
-//    /**
-//     * Specifies the value of a single dmat3 uniform variable or a dmat3 uniform variable array for the current program object.
-//     *
-//     * @param program   the handle of the program containing the uniform variable to be modified
-//     * @param location  the location of the uniform variable to be modified
-//     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
-//     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static void glProgramUniformMatrix3dv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLdouble const *") DoubleBuffer value)
-//    {
-//        nglProgramUniformMatrix3dv(program, location, value.remaining() / 9, transpose, memAddress(value));
-//    }
-//
-//    // --- [ glProgramUniformMatrix4dv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix4dv ProgramUniformMatrix4dv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix4dv(int program, int location, int count, boolean transpose, long value);
-//
-//    /**
-//     * Specifies the value of a single dmat4 uniform variable or a dmat4 uniform variable array for the current program object.
-//     *
-//     * @param program   the handle of the program containing the uniform variable to be modified
-//     * @param location  the location of the uniform variable to be modified
-//     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
-//     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
-//     */
-//    public static void glProgramUniformMatrix4dv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLdouble const *") DoubleBuffer value)
-//    {
-//        nglProgramUniformMatrix4dv(program, location, value.remaining() > > 4, transpose, memAddress(value));
-//    }
-//
-//    // --- [ glProgramUniformMatrix2x3fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix2x3fv ProgramUniformMatrix2x3fv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix2x3fv(int program, int location, int count, boolean transpose, long value);
+    // --- [ glProgramUniformMatrix2fv ] ---
+
+    /**
+     * Specifies the value of a single mat2 uniform variable or a mat2 uniform variable array for the current program object.
+     *
+     * @param program   the handle of the program containing the uniform variable to be modified
+     * @param location  the location of the uniform variable to be modified
+     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
+     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, value: Mat2) =
+            stak { GL41C.nglProgramUniformMatrix2fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+
+    // --- [ glProgramUniformMatrix3fv ] ---
+
+    /**
+     * Specifies the value of a single mat3 uniform variable or a mat3 uniform variable array for the current program object.
+     *
+     * @param program   the handle of the program containing the uniform variable to be modified
+     * @param location  the location of the uniform variable to be modified
+     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
+     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, value: Mat3) =
+            stak { GL41C.nglProgramUniformMatrix3fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+
+    // --- [ glProgramUniformMatrix4fv ] ---
+
+    /**
+     * Specifies the value of a single mat4 uniform variable or a mat4 uniform variable array for the current program object.
+     *
+     * @param program   the handle of the program containing the uniform variable to be modified
+     * @param location  the location of the uniform variable to be modified
+     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
+     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, value: Mat4) =
+            stak { GL41C.nglProgramUniformMatrix4fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+
+    // --- [ glProgramUniformMatrix2dv ] ---
+
+    /**
+     * Specifies the value of a single dmat2 uniform variable or a dmat2 uniform variable array for the current program object.
+     *
+     * @param program   the handle of the program containing the uniform variable to be modified
+     * @param location  the location of the uniform variable to be modified
+     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
+     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, value: Mat2d) =
+            stak { GL41C.nglProgramUniformMatrix2dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+
+    // --- [ glProgramUniformMatrix3dv ] ---
+
+    /**
+     * Specifies the value of a single dmat3 uniform variable or a dmat3 uniform variable array for the current program object.
+     *
+     * @param program   the handle of the program containing the uniform variable to be modified
+     * @param location  the location of the uniform variable to be modified
+     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
+     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, value: Mat3d) =
+            stak { GL41C.nglProgramUniformMatrix3dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+
+    // --- [ glProgramUniformMatrix4dv ] ---
+
+    /**
+     * Specifies the value of a single dmat4 uniform variable or a dmat4 uniform variable array for the current program object.
+     *
+     * @param program   the handle of the program containing the uniform variable to be modified
+     * @param location  the location of the uniform variable to be modified
+     * @param transpose whether to transpose the matrix as the values are loaded into the uniform variable
+     * @param value     an array of {@code count} values that will be used to update the specified uniform matrix variable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
+     */
+    fun programUniform(program: GlProgram, location: UniformLocation, value: Mat4d) =
+            stak { GL41C.nglProgramUniformMatrix4dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+
+//    // --- [ glProgramUniformMatrix2x3fv ] --- TODO
 //
 //    /**
 //     * Specifies the value of a single mat2x3 uniform variable or a mat2x3 uniform variable array for the current program object.
@@ -1084,19 +1203,12 @@ interface gl41i {
 //     *
 //     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
 //     */
-//    public static void glProgramUniformMatrix2x3fv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglProgramUniformMatrix2x3fv(program, location, value.remaining() / 6, transpose, memAddress(value));
-//    }
+//    fun programUniform(program: GlProgram, location: UniformLocation, value: Mat2x3): Nothing = TODO()
+////    {
+////        nglProgramUniformMatrix2x3fv(program, location, value.remaining() / 6, transpose, memAddress(value));
+////    }
 //
 //    // --- [ glProgramUniformMatrix3x2fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix3x2fv ProgramUniformMatrix3x2fv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix3x2fv(int program, int location, int count, boolean transpose, long value);
 //
 //    /**
 //     * Specifies the value of a single mat3x2 uniform variable or a mat3x2 uniform variable array for the current program object.
@@ -1108,19 +1220,12 @@ interface gl41i {
 //     *
 //     * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
 //     */
-//    public static void glProgramUniformMatrix3x2fv(@NativeType("GLuint") int program, @NativeType("GLint") int location, @NativeType("GLboolean") boolean transpose, @NativeType("GLfloat const *") FloatBuffer value)
-//    {
-//        nglProgramUniformMatrix3x2fv(program, location, value.remaining() / 6, transpose, memAddress(value));
-//    }
+//    fun programUniform(program: GlProgram, location: UniformLocation, value: Mat3x2): Nothing = TODO()
+////    {
+////        nglProgramUniformMatrix3x2fv(program, location, value.remaining() / 6, transpose, memAddress(value));
+////    }
 //
 //    // --- [ glProgramUniformMatrix2x4fv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glProgramUniformMatrix2x4fv ProgramUniformMatrix2x4fv}
-//     *
-//     * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
-//     */
-//    public static native void nglProgramUniformMatrix2x4fv(int program, int location, int count, boolean transpose, long value);
 //
 //    /**
 //     * Specifies the value of a single mat2x4 uniform variable or a mat2x4 uniform variable array for the current program object.
@@ -1352,135 +1457,129 @@ interface gl41i {
 //    {
 //        nglProgramUniformMatrix4x3dv(program, location, value.remaining() / 12, transpose, memAddress(value));
 //    }
-//
-//    // --- [ glValidateProgramPipeline ] ---
-//
-//    /**
-//     * Validates a program pipeline object against current GL state.
-//     *
-//     * @param pipeline the name of a program pipeline object to validate
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glValidateProgramPipeline">Reference Page</a>
-//     */
-//    public static native void glValidateProgramPipeline(@NativeType("GLuint") int pipeline);
-//
-//    // --- [ glGetProgramPipelineInfoLog ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glGetProgramPipelineInfoLog GetProgramPipelineInfoLog}
-//     *
-//     * @param bufSize the maximum number of characters, including the null terminator, that may be written into {@code infoLog}
-//     */
-//    public static native void nglGetProgramPipelineInfoLog(int pipeline, int bufSize, long length, long infoLog);
-//
-//    /**
-//     * Retrieves the info log string from a program pipeline object.
-//     *
-//     * @param pipeline the name of a program pipeline object from which to retrieve the info log
-//     * @param length   a variable into which will be written the number of characters written into {@code infoLog}
-//     * @param infoLog  an array of characters into which will be written the info log for {@code pipeline}
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipelineInfoLog">Reference Page</a>
-//     */
-//    public static void glGetProgramPipelineInfoLog(@NativeType("GLuint") int pipeline, @Nullable @NativeType("GLsizei *") IntBuffer length, @NativeType("GLchar *") ByteBuffer infoLog)
-//    {
-//        if (CHECKS) {
-//            checkSafe(length, 1);
-//        }
-//        nglGetProgramPipelineInfoLog(pipeline, infoLog.remaining(), memAddressSafe(length), memAddress(infoLog));
-//    }
-//
-//    /**
-//     * Retrieves the info log string from a program pipeline object.
-//     *
-//     * @param pipeline the name of a program pipeline object from which to retrieve the info log
-//     * @param bufSize  the maximum number of characters, including the null terminator, that may be written into {@code infoLog}
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipelineInfoLog">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static String glGetProgramPipelineInfoLog(@NativeType("GLuint") int pipeline, @NativeType("GLsizei") int bufSize)
-//    {
-//        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-//        ByteBuffer infoLog = memAlloc (bufSize);
-//        try {
-//            IntBuffer length = stack . ints (0);
-//            nglGetProgramPipelineInfoLog(pipeline, bufSize, memAddress(length), memAddress(infoLog));
-//            return memUTF8(infoLog, length.get(0));
-//        } finally {
-//            memFree(infoLog);
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    /**
-//     * Retrieves the info log string from a program pipeline object.
-//     *
-//     * @param pipeline the name of a program pipeline object from which to retrieve the info log
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipelineInfoLog">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static String glGetProgramPipelineInfoLog(@NativeType("GLuint") int pipeline)
-//    {
-//        return glGetProgramPipelineInfoLog(pipeline, glGetProgramPipelinei(pipeline, GL20.GL_INFO_LOG_LENGTH));
-//    }
-//
-//    // --- [ glVertexAttribL1d ] ---
-//
-//    /**
-//     * Specifies the value of a generic vertex attribute. The y and z components are implicitly set to 0.0 and w to 1.0.
-//     *
-//     * @param index the index of the generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribL1d(@NativeType("GLuint") int index, @NativeType("GLdouble") double x);
-//
-//    // --- [ glVertexAttribL2d ] ---
-//
-//    /**
-//     * Specifies the value of a generic vertex attribute. The y component is implicitly set to 0.0 and w to 1.0.
-//     *
-//     * @param index the index of the generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribL2d(@NativeType("GLuint") int index, @NativeType("GLdouble") double x, @NativeType("GLdouble") double y);
-//
-//    // --- [ glVertexAttribL3d ] ---
-//
-//    /**
-//     * Specifies the value of a generic vertex attribute. The w is implicitly set to 1.0.
-//     *
-//     * @param index the index of the generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     * @param z     the vertex attribute z component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribL3d(@NativeType("GLuint") int index, @NativeType("GLdouble") double x, @NativeType("GLdouble") double y, @NativeType("GLdouble") double z);
-//
-//    // --- [ glVertexAttribL4d ] ---
-//
-//    /**
-//     * Specifies the value of a generic vertex attribute.
-//     *
-//     * @param index the index of the generic vertex attribute to be modified
-//     * @param x     the vertex attribute x component
-//     * @param y     the vertex attribute y component
-//     * @param z     the vertex attribute z component
-//     * @param w     the vertex attribute w component
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
-//     */
-//    public static native void glVertexAttribL4d(@NativeType("GLuint") int index, @NativeType("GLdouble") double x, @NativeType("GLdouble") double y, @NativeType("GLdouble") double z, @NativeType("GLdouble") double w);
-//
-//    // --- [ glVertexAttribL1dv ] ---
+
+    // --- [ glValidateProgramPipeline ] ---
+
+    /**
+     * Validates a program pipeline object against current GL state.
+     *
+     * @param pipeline the name of a program pipeline object to validate
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glValidateProgramPipeline">Reference Page</a>
+     */
+    fun validateProgramPipeline(pipeline: GlPipeline) = GL41C.glValidateProgramPipeline(pipeline.name)
+
+    // --- [ glGetProgramPipelineInfoLog ] ---
+
+    /**
+     * Retrieves the info log string from a program pipeline object.
+     *
+     * @param pipeline the name of a program pipeline object from which to retrieve the info log
+     * @param bufSize  the maximum number of characters, including the null terminator, that may be written into {@code infoLog}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipelineInfoLog">Reference Page</a>
+     */
+    fun getProgramPipelineInfoLog(pipeline: GlPipeline,
+                                  bufSize: Int = getProgramPipeline(pipeline, GetProgramPipeline.INFO_LOG_LENGTH)): String =
+            stak.asciiAddress(bufSize) { pLength, pString ->
+                GL41C.nglGetProgramPipelineInfoLog(pipeline.name, bufSize, pLength, pString)
+            }
+
+    // --- [ glVertexAttribL1d ] ---
+
+    /**
+     * Specifies the value of a generic vertex attribute. The y and z components are implicitly set to 0.0 and w to 1.0.
+     *
+     * @param index the index of the generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttribL(index: Int, x: Double) = GL41C.glVertexAttribL1d(index, x)
+
+    /**
+     * Specifies the value of a generic vertex attribute. The y and z components are implicitly set to 0.0 and w to 1.0.
+     *
+     * @param index the index of the generic vertex attribute to be modified
+     * @param v     the vertex attribute v component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttribL(index: Int, v: Vec1d) = GL41C.glVertexAttribL1d(index, v.x)
+
+    // --- [ glVertexAttribL2d ] ---
+
+    /**
+     * Specifies the value of a generic vertex attribute. The y component is implicitly set to 0.0 and w to 1.0.
+     *
+     * @param index the index of the generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttribL(index: Int, x: Double, y: Double) = GL41C.glVertexAttribL2d(index, x, y)
+
+    /**
+     * Specifies the value of a generic vertex attribute. The y component is implicitly set to 0.0 and w to 1.0.
+     *
+     * @param index the index of the generic vertex attribute to be modified
+     * @param v     the vertex attribute
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttribL(index: Int, v: Vec2d) = GL41C.glVertexAttribL2d(index, v.x, v.y)
+
+    // --- [ glVertexAttribL3d ] ---
+
+    /**
+     * Specifies the value of a generic vertex attribute. The w is implicitly set to 1.0.
+     *
+     * @param index the index of the generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     * @param z     the vertex attribute z component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttribL(index: Int, x: Double, y: Double, z: Double) = GL41C.glVertexAttribL3d(index, x, y, z)
+
+    /**
+     * Specifies the value of a generic vertex attribute. The w is implicitly set to 1.0.
+     *
+     * @param index the index of the generic vertex attribute to be modified
+     * @param v     the vertex attribute
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttribL(index: Int, v: Vec3d) = GL41C.glVertexAttribL3d(index, v.x, v.y, v.z)
+
+    // --- [ glVertexAttribL4d ] ---
+
+    /**
+     * Specifies the value of a generic vertex attribute.
+     *
+     * @param index the index of the generic vertex attribute to be modified
+     * @param x     the vertex attribute x component
+     * @param y     the vertex attribute y component
+     * @param z     the vertex attribute z component
+     * @param w     the vertex attribute w component
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttribL(index: Int, x: Double, y: Double, z: Double, w: Double) = GL41C.glVertexAttribL4d(index, x, y, z, w)
+
+    /**
+     * Specifies the value of a generic vertex attribute.
+     *
+     * @param index the index of the generic vertex attribute to be modified
+     * @param v     the vertex attribute
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttrib">Reference Page</a>
+     */
+    fun vertexAttribL(index: Int, v: Vec4d) = GL41C.glVertexAttribL4d(index, v.x, v.y, v.z, v.w)
+
+//    // --- [ glVertexAttribL1dv ] --- TODO?
 //
 //    /** Unsafe version of: {@link #glVertexAttribL1dv VertexAttribL1dv} */
 //    public static native void nglVertexAttribL1dv(int index, long v);
@@ -1648,240 +1747,132 @@ interface gl41i {
 //        nglGetVertexAttribLdv(index, pname, memAddress(params));
 //    }
 //
-//    // --- [ glViewportArrayv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glViewportArrayv ViewportArrayv}
-//     *
-//     * @param count the number of viewports to set
-//     */
-//    public static native void nglViewportArrayv(int first, int count, long v);
-//
-//    /**
-//     * Sets multiple viewports.
-//     *
-//     * @param first the first viewport to set
-//     * @param v     an array containing the viewport parameters
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glViewportArrayv">Reference Page</a>
-//     */
-//    public static void glViewportArrayv(@NativeType("GLuint") int first, @NativeType("GLfloat const *") FloatBuffer v)
-//    {
-//        nglViewportArrayv(first, v.remaining() > > 2, memAddress(v));
-//    }
-//
-//    // --- [ glViewportIndexedf ] ---
-//
-//    /**
-//     * Sets a specified viewport.
-//     *
-//     * @param index the viewport to set
-//     * @param x     the left viewport coordinate
-//     * @param y     the bottom viewport coordinate
-//     * @param w     the viewport width
-//     * @param h     the viewport height
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glViewportIndexedf">Reference Page</a>
-//     */
-//    public static native void glViewportIndexedf(@NativeType("GLuint") int index, @NativeType("GLfloat") float x, @NativeType("GLfloat") float y, @NativeType("GLfloat") float w, @NativeType("GLfloat") float h);
-//
-//    // --- [ glViewportIndexedfv ] ---
-//
-//    /** Unsafe version of: {@link #glViewportIndexedfv ViewportIndexedfv} */
-//    public static native void nglViewportIndexedfv(int index, long v);
-//
-//    /**
-//     * Pointer version of {@link #glViewportIndexedf ViewportIndexedf}.
-//     *
-//     * @param index the viewport to set
-//     * @param v     the viewport parameters
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glViewportIndexed">Reference Page</a>
-//     */
-//    public static void glViewportIndexedfv(@NativeType("GLuint") int index, @NativeType("GLfloat const *") FloatBuffer v)
-//    {
-//        if (CHECKS) {
-//            check(v, 4);
-//        }
-//        nglViewportIndexedfv(index, memAddress(v));
-//    }
-//
-//    // --- [ glScissorArrayv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glScissorArrayv ScissorArrayv}
-//     *
-//     * @param count the number of scissor boxes to modify
-//     */
-//    public static native void nglScissorArrayv(int first, int count, long v);
-//
-//    /**
-//     * Defines the scissor box for multiple viewports.
-//     *
-//     * @param first the index of the first viewport whose scissor box to modify
-//     * @param v     an array containing the left, bottom, width and height of each scissor box, in that order
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glScissorArrayv">Reference Page</a>
-//     */
-//    public static void glScissorArrayv(@NativeType("GLuint") int first, @NativeType("GLint const *") IntBuffer v)
-//    {
-//        nglScissorArrayv(first, v.remaining() > > 2, memAddress(v));
-//    }
-//
-//    // --- [ glScissorIndexed ] ---
-//
-//    /**
-//     * Defines the scissor box for a specific viewport.
-//     *
-//     * @param index  the index of the viewport whose scissor box to modify
-//     * @param left   the left scissor box coordinate
-//     * @param bottom the bottom scissor box coordinate
-//     * @param width  the scissor box width
-//     * @param height the scissor box height
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glScissorIndexed">Reference Page</a>
-//     */
-//    public static native void glScissorIndexed(@NativeType("GLuint") int index, @NativeType("GLint") int left, @NativeType("GLint") int bottom, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height);
-//
-//    // --- [ glScissorIndexedv ] ---
-//
-//    /** Unsafe version of: {@link #glScissorIndexedv ScissorIndexedv} */
-//    public static native void nglScissorIndexedv(int index, long v);
-//
-//    /**
-//     * Pointer version of {@link #glScissorIndexed ScissorIndexed}.
-//     *
-//     * @param index the index of the viewport whose scissor box to modify
-//     * @param v     an array containing the left, bottom, width and height of each scissor box, in that order
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glScissorIndexed">Reference Page</a>
-//     */
-//    public static void glScissorIndexedv(@NativeType("GLuint") int index, @NativeType("GLint const *") IntBuffer v)
-//    {
-//        if (CHECKS) {
-//            check(v, 4);
-//        }
-//        nglScissorIndexedv(index, memAddress(v));
-//    }
-//
-//    // --- [ glDepthRangeArrayv ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glDepthRangeArrayv DepthRangeArrayv}
-//     *
-//     * @param count the number of viewports whose depth range to update
-//     */
-//    public static native void nglDepthRangeArrayv(int first, int count, long v);
-//
-//    /**
-//     * Specifies mapping of depth values from normalized device coordinates to window coordinates for a specified set of viewports.
-//     *
-//     * @param first the index of the first viewport whose depth range to update
-//     * @param v     n array containing the near and far values for the depth range of each modified viewport
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDepthRangeArrayv">Reference Page</a>
-//     */
-//    public static void glDepthRangeArrayv(@NativeType("GLuint") int first, @NativeType("GLdouble const *") DoubleBuffer v)
-//    {
-//        nglDepthRangeArrayv(first, v.remaining() > > 1, memAddress(v));
-//    }
-//
-//    // --- [ glDepthRangeIndexed ] ---
-//
-//    /**
-//     * Specifies mapping of depth values from normalized device coordinates to window coordinates for a specified viewport.
-//     *
-//     * @param index the index of the viewport whose depth range to update
-//     * @param zNear the mapping of the near clipping plane to window coordinates. The initial value is 0.
-//     * @param zFar  the mapping of the far clipping plane to window coordinates. The initial value is 1.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glDepthRangeIndexed">Reference Page</a>
-//     */
-//    public static native void glDepthRangeIndexed(@NativeType("GLuint") int index, @NativeType("GLdouble") double zNear, @NativeType("GLdouble") double zFar);
-//
-//    // --- [ glGetFloati_v ] ---
-//
-//    /** Unsafe version of: {@link #glGetFloati_v GetFloati_v} */
-//    public static native void nglGetFloati_v(int target, int index, long data );
-//
-//    /**
-//     * Queries the float value of an indexed state variable.
-//     *
-//     * @param target the indexed state to query
-//     * @param index  the index of the element being queried
-//     * @param data   a scalar or buffer in which to place the returned data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFloati_v">Reference Page</a>
-//     */
-//    public static void glGetFloati_v(@NativeType("GLenum") int target, @NativeType("GLuint") int index, @NativeType("GLfloat *") FloatBuffer data )
-//    {
-//        if (CHECKS) {
-//            check(data, 1);
-//        }
-//        nglGetFloati_v(target, index, memAddress(data));
-//    }
-//
-//    /**
-//     * Queries the float value of an indexed state variable.
-//     *
-//     * @param target the indexed state to query
-//     * @param index  the index of the element being queried
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFloati_v">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static float glGetFloati(@NativeType("GLenum") int target, @NativeType("GLuint") int index)
-//    {
-//        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-//        try {
-//            FloatBuffer data = stack . callocFloat (1);
-//            nglGetFloati_v(target, index, memAddress(data));
-//            return data.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetDoublei_v ] ---
-//
-//    /** Unsafe version of: {@link #glGetDoublei_v GetDoublei_v} */
-//    public static native void nglGetDoublei_v(int target, int index, long data );
-//
-//    /**
-//     * Queries the double value of an indexed state variable.
-//     *
-//     * @param target the indexed state to query
-//     * @param index  the index of the element being queried
-//     * @param data   a scalar or buffer in which to place the returned data
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetDoublei_v">Reference Page</a>
-//     */
-//    public static void glGetDoublei_v(@NativeType("GLenum") int target, @NativeType("GLuint") int index, @NativeType("GLdouble *") DoubleBuffer data )
-//    {
-//        if (CHECKS) {
-//            check(data, 1);
-//        }
-//        nglGetDoublei_v(target, index, memAddress(data));
-//    }
-//
-//    /**
-//     * Queries the double value of an indexed state variable.
-//     *
-//     * @param target the indexed state to query
-//     * @param index  the index of the element being queried
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetDoublei_v">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static double glGetDoublei(@NativeType("GLenum") int target, @NativeType("GLuint") int index)
-//    {
-//        MemoryStack stack = stackGet (); int stackPointer = stack . getPointer ();
-//        try {
-//            DoubleBuffer data = stack . callocDouble (1);
-//            nglGetDoublei_v(target, index, memAddress(data));
-//            return data.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
+    // --- [ glViewportArrayv ] ---
+
+    /**
+     * Sets multiple viewports.
+     *
+     * @param first the first viewport to set
+     * @param v     an array containing the viewport parameters
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glViewportArrayv">Reference Page</a>
+     */
+    fun viewportArray(first: Int, v: FloatBuffer) = GL41C.nglViewportArrayv(first, v.rem shr 2, v.adr)
+
+    // --- [ glViewportIndexedf ] ---
+
+    /**
+     * Sets a specified viewport.
+     *
+     * @param index the viewport to set
+     * @param x     the left viewport coordinate
+     * @param y     the bottom viewport coordinate
+     * @param w     the viewport width
+     * @param h     the viewport height
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glViewportIndexedf">Reference Page</a>
+     */
+    fun viewportIndexed(index: Int, x: Float, y: Float, z: Float, w: Float) = GL41C.glViewportIndexedf(index, x, y, z, w)
+
+    /**
+     * Sets a specified viewport.
+     *
+     * @param index     the viewport to set
+     * @param viewport  the viewport
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glViewportIndexedf">Reference Page</a>
+     */
+    fun viewportIndexed(index: Int, viewport: Vec4) = GL41C.glViewportIndexedf(index, viewport.x, viewport.y, viewport.z, viewport.w)
+
+    // --- [ glViewportIndexedfv ] ---
+
+    /**
+     * Pointer version of {@link #glViewportIndexedf ViewportIndexedf}.
+     *
+     * @param index the viewport to set
+     * @param v     the viewport parameters
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glViewportIndexed">Reference Page</a>
+     */
+    fun viewportIndexed(index: Int, v: FloatBuffer) = GL41C.nglViewportIndexedfv(index, v.adr)
+
+    // --- [ glScissorArrayv ] ---
+
+    /**
+     * Defines the scissor box for multiple viewports.
+     *
+     * @param first the index of the first viewport whose scissor box to modify
+     * @param v     an array containing the left, bottom, width and height of each scissor box, in that order
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glScissorArrayv">Reference Page</a>
+     */
+    fun scissorArray(first: Int, v: IntBuffer) = GL41C.nglScissorArrayv(first, v.rem shr 2, v.adr)
+
+    // --- [ glScissorIndexed ] ---
+
+    /**
+     * Defines the scissor box for a specific viewport.
+     *
+     * @param index  the index of the viewport whose scissor box to modify
+     * @param left   the left scissor box coordinate
+     * @param bottom the bottom scissor box coordinate
+     * @param width  the scissor box width
+     * @param height the scissor box height
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glScissorIndexed">Reference Page</a>
+     */
+    fun scissorIndexed(index: Int, left: Int, bottom: Int, width: Int, height: Int) = GL41C.glScissorIndexed(index, left, bottom, width, height)
+
+    /**
+     * Defines the scissor box for a specific viewport.
+     *
+     * @param index     the index of the viewport whose scissor box to modify
+     * @param scissor   the scissor box
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glScissorIndexed">Reference Page</a>
+     */
+    fun scissorIndexed(index: Int, scissor: Vec4i) = GL41C.glScissorIndexed(index, scissor.x, scissor.y, scissor.z, scissor.w)
+
+    // --- [ glScissorIndexedv ] ---
+
+    /**
+     * Pointer version of {@link #glScissorIndexed ScissorIndexed}.
+     *
+     * @param index the index of the viewport whose scissor box to modify
+     * @param v     an array containing the left, bottom, width and height of each scissor box, in that order
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glScissorIndexed">Reference Page</a>
+     */
+    fun scissorIndexed(index: Int, v: IntBuffer) = GL41C.nglScissorIndexedv(index, v.adr)
+
+    // --- [ glDepthRangeArrayv ] ---
+
+    /**
+     * Specifies mapping of depth values from normalized device coordinates to window coordinates for a specified set of viewports.
+     *
+     * @param first the index of the first viewport whose depth range to update
+     * @param v     n array containing the near and far values for the depth range of each modified viewport
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDepthRangeArrayv">Reference Page</a>
+     */
+    fun depthRangeArray(first: Int, v: DoubleBuffer) = GL41C.nglDepthRangeArrayv(first, v.rem shr 1, v.adr)
+
+    // --- [ glDepthRangeIndexed ] ---
+
+    /**
+     * Specifies mapping of depth values from normalized device coordinates to window coordinates for a specified viewport.
+     *
+     * @param index the index of the viewport whose depth range to update
+     * @param zNear the mapping of the near clipping plane to window coordinates. The initial value is 0.
+     * @param zFar  the mapping of the far clipping plane to window coordinates. The initial value is 1.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDepthRangeIndexed">Reference Page</a>
+     */
+    fun depthRangeIndexed(index: Int, zNear: Double, zFar: Double) = GL41C.glDepthRangeIndexed(index, zNear, zFar)
+
+    // --- [ glGetFloati_v ] ---
+    // inline reified
+
+    // --- [ glGetDoublei_v ] ---
+    // inline reified
 }

@@ -6871,3 +6871,15 @@ inline class ProgramParameter(val i: Int) {
         val PROGRAM_SEPARABLE = ProgramParameter(GL41C.GL_PROGRAM_SEPARABLE)
     }
 }
+
+inline class GetProgramPipeline(val i: Int) {
+    companion object {
+        val ACTIVE_PROGRAM = GetProgramPipeline(GL41C.GL_ACTIVE_PROGRAM)
+        val VERTEX_SHADER = GetProgramPipeline(GL41C.GL_VERTEX_SHADER)
+        val TESS_CONTROL_SHADER = GetProgramPipeline(GL41C.GL_TESS_CONTROL_SHADER)
+        val TESS_EVALUATION_SHADER = GetProgramPipeline(GL41C.GL_TESS_EVALUATION_SHADER)
+        val GEOMETRY_SHADER = GetProgramPipeline(GL41C.GL_GEOMETRY_SHADER)
+        val FRAGMENT_SHADER = GetProgramPipeline(GL41C.GL_FRAGMENT_SHADER)
+        val INFO_LOG_LENGTH = GetProgramPipeline(GL41C.GL_INFO_LOG_LENGTH)
+    }
+}

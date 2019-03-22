@@ -30,7 +30,7 @@ object gl :
         gl11i, gl12i, gl13i, gl14i, gl15i,
         gl20i, gl21i,
         gl30i, gl31i, gl32i, gl33i,
-        gl40i, gl41i {
+        gl40i, gl41i, gl43i {
 
     // --- [ glGet* ] ---
 
@@ -314,6 +314,27 @@ object gl :
             GlQuery::class -> GlQuery(s.intAddress { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_CURRENT_QUERY, it) }) as T
             Int::class -> s.intAddress { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_QUERY_COUNTER_BITS, it) } as T
             else -> throw Exception("[gln.gl.glGetQueryIndexediv] invalid T")
+        }
+    }
+
+    // --- [ glGet*i ] ---
+
+    /**
+     * Queries the T value of an indexed state variable.
+     *
+     * @param target the indexed state to query
+     * @param index  the index of the element being queried
+     * @param data   a scalar or buffer in which to place the returned data
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFloati_v">Reference Page</a>
+     */
+    inline fun <reified T> get(target: Int, index: Int): T = stak { s ->
+        when (T::class) {
+            // --- [ glGetFloati_v ] ---
+            Float::class -> s.floatAddress { GL41C.nglGetFloati_v(target, index, it) } as T
+            // --- [ glGetDoublei_v ] ---
+            Double::class -> s.doubleAddress { GL41C.nglGetDoublei_v(target, index, it) } as T
+            else -> throw Exception("[gln.gl.get] invalid T")
         }
     }
 }

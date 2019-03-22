@@ -90,3 +90,8 @@ glClearDepthf is simply glClearDepth with `Float`
 glGetProgramBinary/ glProgramBinary uses a ProgramBinary class holding data and format 
 
 since both the names of programParameter are boolean, programParameter expects a boolean 
+
+glProgramUniform* becomes programUniform
+glProgramUniformMatrix* becomes programUniform
+
+glVertexAttribL* becomes vertexAttribL

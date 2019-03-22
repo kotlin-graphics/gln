@@ -2,7 +2,28 @@ package gln.objects
 
 import glm_.BYTES
 import glm_.bool
+import glm_.mat2x2.Mat2
+import glm_.mat2x2.Mat2d
+import glm_.mat3x3.Mat3
+import glm_.mat3x3.Mat3d
+import glm_.mat4x4.Mat4
+import glm_.mat4x4.Mat4d
+import glm_.vec1.Vec1
+import glm_.vec1.Vec1d
+import glm_.vec1.Vec1i
+import glm_.vec1.Vec1ui
+import glm_.vec2.Vec2
+import glm_.vec2.Vec2d
+import glm_.vec2.Vec2i
+import glm_.vec2.Vec2ui
+import glm_.vec3.Vec3
+import glm_.vec3.Vec3d
 import glm_.vec3.Vec3i
+import glm_.vec3.Vec3ui
+import glm_.vec4.Vec4
+import glm_.vec4.Vec4d
+import glm_.vec4.Vec4i
+import glm_.vec4.Vec4ui
 import gln.*
 import gln.program.ProgramBase
 import gln.program.ProgramUse
@@ -16,6 +37,7 @@ import org.lwjgl.opengl.GL20C
 import org.lwjgl.opengl.GL31C
 import org.lwjgl.system.MemoryStack.stackGet
 import org.lwjgl.system.MemoryUtil
+import unsigned.Uint
 import java.lang.Exception
 import java.nio.IntBuffer
 
@@ -96,14 +118,13 @@ inline class GlProgram(val name: Int) {
     /**
      * Queries the name of an active shader subroutine.
      *
-     * @param program    the name of the program containing the subroutine
      * @param shaderType the shader stage from which to query the subroutine name. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
      * @param index      the index of the shader subroutine uniform
      * @param bufSize    the size of the buffer whose address is given in {@code name}
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveSubroutineName">Reference Page</a>
      */
-    fun getActiveSubroutineName(program: GlProgram, shaderType: ShaderType, index: Int, bufSize: Int = GL40C.glGetProgramStagei(program.name, shaderType.i, GL40C.GL_ACTIVE_SUBROUTINE_MAX_LENGTH)): String = gl.getActiveSubroutineName(this, shaderType, index, bufSize)
+    fun getActiveSubroutineName(shaderType: ShaderType, index: Int, bufSize: Int = getStage(shaderType, GetProgramStage.ACTIVE_SUBROUTINE_MAX_LENGTH)): String = gl.getActiveSubroutineName(this, shaderType, index, bufSize)
 
     // --- [ glGetActiveSubroutineUniformiv ] ---
 
@@ -288,11 +309,6 @@ inline class GlProgram(val name: Int) {
         get() = gl.getProgram(this, GetProgram.PROGRAM_SEPARABLE)
         set(value) = gl.programParameter(this, ProgramParameter.PROGRAM_SEPARABLE, value)
 
-    // --- [ glUniformBlockBinding ] ---
-    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Int) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding) // TODO gl.
-
-    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Enum<*>) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding.ordinal) // TODO gl.
-
     // --- [ glGetUniformLocation ] ---
 
     infix fun getUniformLocation(name: String): UniformLocation = gl.getUniformLocation(this, name)
@@ -310,12 +326,68 @@ inline class GlProgram(val name: Int) {
 
     fun link() = GL20C.glLinkProgram(name)
 
+    // --- [ glProgramUniform* ] ---
+
+    fun programUniform(location: UniformLocation, x: Int) = GL41C.glProgramUniform1i(name, location, x)
+    fun programUniform(location: UniformLocation, v: Vec1i) = GL41C.glProgramUniform1i(name, location, v.x)
+
+    fun programUniform(location: UniformLocation, x: Int, y: Int) = GL41C.glProgramUniform2i(name, location, x, y)
+    fun programUniform(location: UniformLocation, v: Vec2i) = GL41C.glProgramUniform2i(name, location, v.x, v.y)
+
+    fun programUniform(location: UniformLocation, x: Int, y: Int, z: Int) = GL41C.glProgramUniform3i(name, location, x, y, z)
+    fun programUniform(location: UniformLocation, v: Vec3i) = GL41C.glProgramUniform3i(name, location, v.x, v.y, v.z)
+
+    fun programUniform(location: UniformLocation, x: Int, y: Int, z: Int, w: Int) = GL41C.glProgramUniform4i(name, location, x, y, z, w)
+    fun programUniform(location: UniformLocation, v: Vec4i) = GL41C.glProgramUniform4i(name, location, v.x, v.y, v.z, v.w)
+
+    fun programUniform(location: UniformLocation, x: Uint) = GL41C.glProgramUniform1ui(name, location, x.v)
+    fun programUniform(location: UniformLocation, v: Vec1ui) = GL41C.glProgramUniform1ui(name, location, v.x.v)
+
+    fun programUniform(location: UniformLocation, x: Uint, y: Uint) = GL41C.glProgramUniform2ui(name, location, x.v, y.v)
+    fun programUniform(location: UniformLocation, v: Vec2ui) = GL41C.glProgramUniform2ui(name, location, v.x.v, v.y.v)
+
+    fun programUniform(location: UniformLocation, x: Uint, y: Uint, z: Uint) = GL41C.glProgramUniform3ui(name, location, x.v, y.v, z.v)
+    fun programUniform(location: UniformLocation, v: Vec3ui) = GL41C.glProgramUniform3ui(name, location, v.x.v, v.y.v, v.z.v)
+
+    fun programUniform(location: UniformLocation, x: Uint, y: Uint, z: Uint, w: Uint) = GL41C.glProgramUniform4ui(name, location, x.v, y.v, z.v, w.v)
+    fun programUniform(location: UniformLocation, v: Vec4ui) = GL41C.glProgramUniform4ui(name, location, v.x.v, v.y.v, v.z.v, v.w.v)
+
+    fun programUniform(location: UniformLocation, x: Float) = GL41C.glProgramUniform1f(name, location, x)
+    fun programUniform(location: UniformLocation, v: Vec1) = GL41C.glProgramUniform1f(name, location, v.x)
+
+    fun programUniform(location: UniformLocation, x: Float, y: Float) = GL41C.glProgramUniform2f(name, location, x, y)
+    fun programUniform(location: UniformLocation, v: Vec2) = GL41C.glProgramUniform2f(name, location, v.x, v.y)
+
+    fun programUniform(location: UniformLocation, x: Float, y: Float, z: Float) = GL41C.glProgramUniform3f(name, location, x, y, z)
+    fun programUniform(location: UniformLocation, v: Vec3) = GL41C.glProgramUniform3f(name, location, v.x, v.y, v.z)
+
+    fun programUniform(location: UniformLocation, x: Float, y: Float, z: Float, w: Float) = GL41C.glProgramUniform4f(name, location, x, y, z, w)
+    fun programUniform(location: UniformLocation, v: Vec4) = GL41C.glProgramUniform4f(name, location, v.x, v.y, v.z, v.w)
+
+    fun programUniform(location: UniformLocation, x: Double) = GL41C.glProgramUniform1d(name, location, x)
+    fun programUniform(location: UniformLocation, v: Vec1d) = GL41C.glProgramUniform1d(name, location, v.x)
+
+    fun programUniform(location: UniformLocation, x: Double, y: Double) = GL41C.glProgramUniform2d(name, location, x, y)
+    fun programUniform(location: UniformLocation, v: Vec2d) = GL41C.glProgramUniform2d(name, location, v.x, v.y)
+
+    fun programUniform(location: UniformLocation, x: Double, y: Double, z: Double) = GL41C.glProgramUniform3d(name, location, x, y, z)
+    fun programUniform(location: UniformLocation, v: Vec3d) = GL41C.glProgramUniform3d(name, location, v.x, v.y, v.z)
+
+    fun programUniform(location: UniformLocation, x: Double, y: Double, z: Double, w: Double) = GL41C.glProgramUniform4d(name, location, x, y, z, w)
+    fun programUniform(location: UniformLocation, v: Vec4d) = GL41C.glProgramUniform4d(name, location, v.x, v.y, v.z, v.w)
+
+    // --- [ glProgramUniformMatrix* ] ---
+
+    fun programUniform(location: UniformLocation, value: Mat2) = gl.programUniform(this, location, value)
+    fun programUniform(location: UniformLocation, value: Mat3) = gl.programUniform(this, location, value)
+    fun programUniform(location: UniformLocation, value: Mat4) = gl.programUniform(this, location, value)
+    fun programUniform(location: UniformLocation, value: Mat2d) = gl.programUniform(this, location, value)
+    fun programUniform(location: UniformLocation, value: Mat3d) = gl.programUniform(this, location, value)
+    fun programUniform(location: UniformLocation, value: Mat4d) = gl.programUniform(this, location, value)
+
     // --- [ glShaderSource ] ---
 
     fun source(source: String) = GL20C.glShaderSource(name, source)
-
-    // --- [ glGetUniformBlockIndex ] ---
-    fun getUniformBlockIndex(uniformBlockName: CharSequence) = GL31C.glGetUniformBlockIndex(name, uniformBlockName)  // TODO gl.
 
     // --- [ glUseProgram ] ---
 
@@ -337,9 +409,14 @@ inline class GlProgram(val name: Int) {
         ProgramUse.block()
     }
 
-    // --- [ glValidateProgram ] ---
+    // --- [ glValidateProgramPipeline ] ---
 
-    fun validate() = GL20C.glValidateProgram(name)
+    /**
+     * Validates a program pipeline object against current GL state.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glValidateProgramPipeline">Reference Page</a>
+     */
+    fun validate() = GL41C.glValidateProgramPipeline(name)
 
     // --- [ glGetUniformIndices ] ---
 
@@ -393,12 +470,11 @@ inline class GlProgram(val name: Int) {
     /**
      * Retrieves the index of a named uniform block.
      *
-     * @param program          the name of a program containing the uniform block
      * @param uniformBlockName an array of characters to containing the name of the uniform block whose index to retrieve
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformBlockIndex">Reference Page</a>
      */
-    fun getUniformBlockIndex(program: GlProgram, uniformBlockName: CharSequence): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
+    fun getUniformBlockIndex(uniformBlockName: CharSequence): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
 
     // --- [ glGetActiveUniformBlockiv ] ---
 

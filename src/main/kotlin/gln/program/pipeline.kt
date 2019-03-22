@@ -1,5 +1,6 @@
 package gln.program
 
+import gln.GetProgramPipeline
 import gln.gl
 import gln.objects.GlProgram
 import kool.Adr
@@ -53,6 +54,44 @@ inline class GlPipeline(val name: Int = 0) {
      */
     fun bind() = GL41C.glBindProgramPipeline(name)
 
+    // --- [ glGetProgramPipelineiv ] ---
+
+    /**
+     * Retrieves properties of a program pipeline object.
+     *
+     * @param name    the name of the parameter to retrieve. One of:<br><table><tr><td>{@link #GL_ACTIVE_PROGRAM ACTIVE_PROGRAM}</td><td>{@link GL20#GL_INFO_LOG_LENGTH INFO_LOG_LENGTH}</td><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td></tr><tr><td>{@link GL40#GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td><td>{@link GL40#GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipeline">Reference Page</a>
+     */
+    fun getProgramPipeline(name: GetProgramPipeline) = gl.getProgramPipeline(this, name)
+
+    // --- [ glGetProgramPipelineInfoLog ] ---
+
+    /**
+     * Retrieves the info log string from a program pipeline object.
+     *
+     * @param pipeline the name of a program pipeline object from which to retrieve the info log
+     * @param bufSize  the maximum number of characters, including the null terminator, that may be written into {@code infoLog}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipelineInfoLog">Reference Page</a>
+     */
+    fun getInfoLog(bufSize: Int = getProgramPipeline(GetProgramPipeline.INFO_LOG_LENGTH)): String = gl.getProgramPipelineInfoLog(this, bufSize)
+
+    // --- [ glIsProgramPipeline ] ---
+
+    /**
+     * Determines if a name corresponds to a program pipeline object.
+     *
+     * @param pipeline a value that may be the name of a program pipeline object
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glIsProgramPipeline">Reference Page</a>
+     */
+    val isValid: Boolean
+        get() = GL41C.glIsProgramPipeline(name)
+
+    val isInvalid: Boolean
+        get() = !GL41C.glIsProgramPipeline(name)
+
     // --- [ glUseProgramStages ] ---
 
     /**
@@ -66,7 +105,6 @@ inline class GlPipeline(val name: Int = 0) {
      */
     fun useProgramStages(stages: Int, program: GlProgram) = gl.useProgramStages(this, stages, program)
 
-    fun delete() = GL30C.glDeleteFramebuffers(name)
 
     companion object {
         fun gen(): GlPipeline = GlPipeline(GL41C.glGenProgramPipelines())
