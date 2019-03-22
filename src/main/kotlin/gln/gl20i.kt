@@ -218,7 +218,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUseProgram">Reference Page</a>
      */
-    fun useProgram(program: GlProgram) = GL20C.glUseProgram(program.name)
+    fun useProgram(program: GlProgram = GlProgram.NULL) = GL20C.glUseProgram(program.name)
 
     // --- [ glValidateProgram ] ---
 
@@ -1420,11 +1420,8 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindAttribLocation">Reference Page</a>
      */
-//    fun bindAttribLocation(program: GlProgram, index: Int, name: String) =
-//            stak {
-//                val nameEncoded = it.ASCII(name)
-//                GL20C.nglBindAttribLocation(program.i, index, nameEncoded.adr)
-//            }
+    fun bindAttribLocation(program: GlProgram, index: Int, name: CharSequence) =
+            stak.asciiAddress(name) { GL20C.nglBindAttribLocation(program.name, index, it) }
 
     // --- [ glGetActiveAttrib ] ---
 

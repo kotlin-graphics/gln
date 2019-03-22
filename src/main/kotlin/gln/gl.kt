@@ -2,24 +2,32 @@ package gln
 
 import glm_.bool
 import glm_.vec2.Vec2
+import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i
+import glm_.vec2.Vec2ui
 import glm_.vec3.Vec3
+import glm_.vec3.Vec3d
 import glm_.vec3.Vec3i
+import glm_.vec3.Vec3ui
 import glm_.vec4.Vec4
+import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
+import glm_.vec4.Vec4ui
 import gln.objects.GlBuffer
 import gln.objects.GlProgram
 import gln.objects.GlQuery
 import gln.objects.GlShader
 import kool.stak
 import org.lwjgl.opengl.*
+import unsigned.Uint
 
 
 object gl :
         glGetSet,
         gl11i, gl12i, gl13i, gl14i, gl15i,
         gl20i, gl21i,
-        gl30i {
+        gl30i, /*gl31i,*/ gl32i, gl33i,
+        gl40i, gl41i {
 
     // --- [ glGet* ] ---
 
@@ -38,7 +46,7 @@ object gl :
             when (T::class) {
                 Int::class -> stak.intAddress { GL11C.nglGetIntegerv(name, it) } as T
                 Long::class -> stak.longAddress { GL32C.nglGetInteger64v(name, it) } as T
-                Float::class -> stak.floatAddress { GL11C.nglGetIntegerv(name, it) } as T
+                Float::class -> stak.floatAddress { GL11C.nglGetFloatv(name, it) } as T
                 else -> throw Exception("Invalid")
             }
 
@@ -57,7 +65,7 @@ object gl :
             when (T::class) {
                 Int::class -> stak.intAddress { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) } as T
                 Float::class -> stak.floatAddress { GL11C.nglGetTexLevelParameterfv(target.i, level, name.i, it) } as T
-                Boolean::class -> stak.intAddress { GL11C.nglGetTexLevelParameterfv(target.i, level, name.i, it) }.bool as T
+                Boolean::class -> stak.intAddress { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) }.bool as T
                 else -> throw Exception("Invalid")
             }
 
@@ -75,7 +83,7 @@ object gl :
             when (T::class) {
                 Int::class -> stak.intAddress { GL11C.nglGetTexParameteriv(target.i, name.i, it) } as T
                 Float::class -> stak.floatAddress { GL11C.nglGetTexParameterfv(target.i, name.i, it) } as T
-                Boolean::class -> stak.intAddress { GL11C.nglGetTexParameterfv(target.i, name.i, it) }.bool as T
+                Boolean::class -> stak.intAddress { GL11C.nglGetTexParameteriv(target.i, name.i, it) }.bool as T
                 else -> throw Exception("Invalid")
             }
 
@@ -113,6 +121,14 @@ object gl :
             Vec2i::class -> s.vec2iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
             Vec3i::class -> s.vec3iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
             Vec4i::class -> s.vec4iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
+            Uint::class -> Uint(s.intAddress { GL20C.nglGetUniformiv(program.name, location, it) }) as T
+            Vec2ui::class -> s.vec2uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
+            Vec3ui::class -> s.vec3uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
+            Vec4ui::class -> s.vec4uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
+            Double::class -> s.doubleAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
+            Vec2d::class -> s.vec2dAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
+            Vec3d::class -> s.vec3dAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
+            Vec4d::class -> s.vec4dAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
             else -> throw Exception("[gln.gl.getUniform] invalid T")
         }
     }
@@ -203,12 +219,70 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
      */
-    inline fun <reified T> getBufferParam(target: GlBuffer, param: BufferParameter): T = stak { s ->
+    inline fun <reified T> getBufferParameter(target: GlBuffer, param: BufferParameter): T = stak { s ->
         when (T::class) {
             Int::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.name, param.i, it) } as T
             Long::class -> s.longAddress { GL32C.nglGetBufferParameteri64v(target.name, param.i, it) } as T
             Boolean::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.name, param.i, it) }.bool as T
             else -> throw Exception("[gln.gl.getBufferParam] invalid T")
+        }
+    }
+
+    // --- [ glGetSamplerParameteriv ] ---
+
+    /**
+     * Return the value(s) of a sampler parameter.
+     *
+     * @param sampler the name of the sampler object from which to retrieve parameters
+     * @param pname   the symbolic name of a sampler parameter. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_WRAP_S TEXTURE_WRAP_S}</td><td>{@link GL11#GL_TEXTURE_WRAP_T TEXTURE_WRAP_T}</td><td>{@link GL12#GL_TEXTURE_WRAP_R TEXTURE_WRAP_R}</td><td>{@link GL11#GL_TEXTURE_MIN_FILTER TEXTURE_MIN_FILTER}</td><td>{@link GL11#GL_TEXTURE_MAG_FILTER TEXTURE_MAG_FILTER}</td></tr><tr><td>{@link GL12#GL_TEXTURE_MIN_LOD TEXTURE_MIN_LOD}</td><td>{@link GL12#GL_TEXTURE_MAX_LOD TEXTURE_MAX_LOD}</td><td>{@link GL14#GL_TEXTURE_LOD_BIAS TEXTURE_LOD_BIAS}</td><td>{@link GL14#GL_TEXTURE_COMPARE_MODE TEXTURE_COMPARE_MODE}</td><td>{@link GL14#GL_TEXTURE_COMPARE_FUNC TEXTURE_COMPARE_FUNC}</td></tr><tr><td>,</td><td>{@link GL11#GL_TEXTURE_BORDER_COLOR TEXTURE_BORDER_COLOR}</td></tr></table>
+     * @param params  the sampler parameters
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetSamplerParameter">Reference Page</a>
+     */
+    inline fun <reified T> getSamplerParameter(target: GlBuffer, param: SamplerParameter): T = stak { s ->
+        when (T::class) {
+            Int::class -> s.intAddress { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) } as T
+            Float::class -> s.floatAddress { GL33C.nglGetSamplerParameterfv(target.name, param.i, it) } as T
+            Vec4i::class -> s.vec4iAddress { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) } as T
+            Vec4ui::class -> s.vec4uiAddress { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) } as T
+            Long::class -> s.longAddress { GL32C.nglGetBufferParameteri64v(target.name, param.i, it) } as T
+            Boolean::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.name, param.i, it) }.bool as T
+            else -> throw Exception("[gln.gl.getBufferParam] invalid T")
+        }
+    }
+
+    // --- [ glBeginQueryIndexed / glEndQueryIndexed ] ---
+
+    /**
+     * Incapsulate code into Begins/Ends of query object on an indexed target
+     *
+     * @param target the target type of query object established between {@code glBeginQueryIndexed} and the subsequent {@link #glEndQueryIndexed EndQueryIndexed}. One of:<br><table><tr><td>{@link GL15#GL_SAMPLES_PASSED SAMPLES_PASSED}</td><td>{@link GL30#GL_PRIMITIVES_GENERATED PRIMITIVES_GENERATED}</td><td>{@link GL30#GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN}</td><td>{@link GL33#GL_TIME_ELAPSED TIME_ELAPSED}</td></tr><tr><td>{@link GL33#GL_TIMESTAMP TIMESTAMP}</td><td>{@link GL33#GL_ANY_SAMPLES_PASSED ANY_SAMPLES_PASSED}</td><td>{@link GL43#GL_ANY_SAMPLES_PASSED_CONSERVATIVE ANY_SAMPLES_PASSED_CONSERVATIVE}</td></tr></table>
+     * @param index  the index of the query target upon which to begin the query
+     * @param id     the name of a query object
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBeginQueryIndexed">Reference Page</a>
+     */
+    inline fun queryIndexed(target: QueryIndexedTarget, index: Int, id: GlQuery, block: () -> Unit) {
+        GL40C.glBeginQueryIndexed(target.i, index, id.name)
+        block()
+        GL40C.glEndQueryIndexed(target.i, index)
+    }
+
+    // --- [ glGetQueryIndexediv ] ---
+
+    /**
+     * Returns parameters of an indexed query object target.
+     *
+     * @param target a query object target. One of:<br><table><tr><td>{@link GL15#GL_SAMPLES_PASSED SAMPLES_PASSED}</td><td>{@link GL30#GL_PRIMITIVES_GENERATED PRIMITIVES_GENERATED}</td><td>{@link GL30#GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN}</td><td>{@link GL33#GL_TIME_ELAPSED TIME_ELAPSED}</td></tr><tr><td>{@link GL33#GL_TIMESTAMP TIMESTAMP}</td><td>{@link GL33#GL_ANY_SAMPLES_PASSED ANY_SAMPLES_PASSED}</td><td>{@link GL43#GL_ANY_SAMPLES_PASSED_CONSERVATIVE ANY_SAMPLES_PASSED_CONSERVATIVE}</td></tr></table>
+     * @param index  the index of the query object target
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryIndexed">Reference Page</a>
+     */
+    inline fun <reified T> getQueryIndexed(target: QueryIndexedTarget, index: Int): T = stak { s ->
+        when (T::class) {
+            GlQuery::class -> GlQuery(s.intAddress { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_CURRENT_QUERY, it) }) as T
+            Int::class -> s.intAddress { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_QUERY_COUNTER_BITS, it) } as T
+            else -> throw Exception("[gln.gl.glGetQueryIndexediv] invalid T")
         }
     }
 }

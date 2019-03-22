@@ -112,28 +112,28 @@ inline class DrawMode(val i: Int) {
 //
 //###############################################################################
 
-inline class BlendingFactor(val i: Int) {
+inline class BlendFactor(val i: Int) {
 
     companion object {
-        val ZERO = BlendingFactor(GL11.GL_ZERO)
-        val ONE = BlendingFactor(GL11.GL_ONE)
-        val SRC_COLOR = BlendingFactor(GL11.GL_SRC_COLOR)
-        val ONE_MINUS_SRC_COLOR = BlendingFactor(GL11.GL_ONE_MINUS_SRC_COLOR)
-        val DST_COLOR = BlendingFactor(GL11.GL_DST_COLOR)
-        val ONE_MINUS_DST_COLOR = BlendingFactor(GL11.GL_ONE_MINUS_DST_COLOR)
-        val SRC_ALPHA = BlendingFactor(GL11.GL_SRC_ALPHA)
-        val ONE_MINUS_SRC_ALPHA = BlendingFactor(GL11.GL_ONE_MINUS_SRC_ALPHA)
-        val DST_ALPHA = BlendingFactor(GL11.GL_DST_ALPHA)
-        val ONE_MINUS_DST_ALPHA = BlendingFactor(GL11.GL_ONE_MINUS_DST_ALPHA)
-        val CONSTANT_COLOR = BlendingFactor(GL14.GL_CONSTANT_COLOR)
-        val ONE_MINUS_CONSTANT_COLOR = BlendingFactor(GL14.GL_ONE_MINUS_CONSTANT_COLOR)
-        val CONSTANT_ALPHA = BlendingFactor(GL14.GL_CONSTANT_ALPHA)
-        val ONE_MINUS_CONSTANT_ALPHA = BlendingFactor(GL14.GL_ONE_MINUS_CONSTANT_ALPHA)
-        val SRC_ALPHA_SATURATE = BlendingFactor(GL14.GL_SRC_ALPHA_SATURATE)
-        val SRC1_COLOR = BlendingFactor(GL33.GL_SRC1_COLOR)
-        val ONE_MINUS_SRC1_COLOR = BlendingFactor(GL33.GL_ONE_MINUS_SRC1_COLOR)
-        val SRC1_ALPHA = BlendingFactor(GL15.GL_SRC1_ALPHA)
-        val ONE_MINUS_SRC1_ALPHA = BlendingFactor(GL33.GL_ONE_MINUS_SRC1_ALPHA)
+        val ZERO = BlendFactor(GL11.GL_ZERO)
+        val ONE = BlendFactor(GL11.GL_ONE)
+        val SRC_COLOR = BlendFactor(GL11.GL_SRC_COLOR)
+        val ONE_MINUS_SRC_COLOR = BlendFactor(GL11.GL_ONE_MINUS_SRC_COLOR)
+        val DST_COLOR = BlendFactor(GL11.GL_DST_COLOR)
+        val ONE_MINUS_DST_COLOR = BlendFactor(GL11.GL_ONE_MINUS_DST_COLOR)
+        val SRC_ALPHA = BlendFactor(GL11.GL_SRC_ALPHA)
+        val ONE_MINUS_SRC_ALPHA = BlendFactor(GL11.GL_ONE_MINUS_SRC_ALPHA)
+        val DST_ALPHA = BlendFactor(GL11.GL_DST_ALPHA)
+        val ONE_MINUS_DST_ALPHA = BlendFactor(GL11.GL_ONE_MINUS_DST_ALPHA)
+        val CONSTANT_COLOR = BlendFactor(GL14.GL_CONSTANT_COLOR)
+        val ONE_MINUS_CONSTANT_COLOR = BlendFactor(GL14.GL_ONE_MINUS_CONSTANT_COLOR)
+        val CONSTANT_ALPHA = BlendFactor(GL14.GL_CONSTANT_ALPHA)
+        val ONE_MINUS_CONSTANT_ALPHA = BlendFactor(GL14.GL_ONE_MINUS_CONSTANT_ALPHA)
+        val SRC_ALPHA_SATURATE = BlendFactor(GL14.GL_SRC_ALPHA_SATURATE)
+        val SRC1_COLOR = BlendFactor(GL33.GL_SRC1_COLOR)
+        val ONE_MINUS_SRC1_COLOR = BlendFactor(GL33.GL_ONE_MINUS_SRC1_COLOR)
+        val SRC1_ALPHA = BlendFactor(GL15.GL_SRC1_ALPHA)
+        val ONE_MINUS_SRC1_ALPHA = BlendFactor(GL33.GL_ONE_MINUS_SRC1_ALPHA)
     }
 }
 
@@ -1095,6 +1095,22 @@ inline class TexParameter(val i: Int) {
         val WRAP_S = TexParameter(GL11.GL_TEXTURE_WRAP_S)
         val WRAP_T = TexParameter(GL11.GL_TEXTURE_WRAP_T)
         val WRAP_R = TexParameter(GL12.GL_TEXTURE_WRAP_R)
+    }
+}
+
+inline class SamplerParameter(val i: Int) {
+    companion object {
+        val BORDER_COLOR = SamplerParameter(GL11.GL_TEXTURE_BORDER_COLOR)
+        val COMPARE_MODE = SamplerParameter(GL14.GL_TEXTURE_COMPARE_MODE)
+        val COMPARE_FUNC = SamplerParameter(GL14.GL_TEXTURE_COMPARE_FUNC)
+        val LOD_BIAS = SamplerParameter(GL14.GL_TEXTURE_LOD_BIAS)
+        val MAG_FILTER = SamplerParameter(GL11.GL_TEXTURE_MAG_FILTER)
+        val MAX_LOD = SamplerParameter(GL12.GL_TEXTURE_MAX_LOD)
+        val MIN_FILTER = SamplerParameter(GL11.GL_TEXTURE_MIN_FILTER)
+        val MIN_LOD = SamplerParameter(GL12.GL_TEXTURE_MIN_LOD)
+        val WRAP_S = SamplerParameter(GL11.GL_TEXTURE_WRAP_S)
+        val WRAP_T = SamplerParameter(GL11.GL_TEXTURE_WRAP_T)
+        val WRAP_R = SamplerParameter(GL12.GL_TEXTURE_WRAP_R)
     }
 }
 
@@ -6335,6 +6351,16 @@ inline class QueryTarget(val i: Int) {
     }
 }
 
+inline class QueryIndexedTarget(val i: Int) {
+    companion object {
+        val SAMPLES_PASSED = QueryTarget(GL15.GL_SAMPLES_PASSED)
+        val ANY_SAMPLES_PASSED = QueryTarget(GL33.GL_ANY_SAMPLES_PASSED)
+        val PRIMITIVES_GENERATED = QueryTarget(GL30.GL_PRIMITIVES_GENERATED)
+        val TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN = QueryTarget(GL30.GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN)
+        val TIME_ELAPSED = QueryTarget(GL33.GL_TIME_ELAPSED)
+    }
+}
+
 //###############################################################################
 
 inline class GetQuery(val i: Int) {
@@ -6403,6 +6429,8 @@ inline class GetProgram(val i: Int) {
         val GEOMETRY_VERTICES_OUT = GetProgram(GL32.GL_GEOMETRY_VERTICES_OUT)
         val GEOMETRY_INPUT_TYPE = GetProgram(GL32.GL_GEOMETRY_INPUT_TYPE)
         val GEOMETRY_OUTPUT_TYPE = GetProgram(GL32.GL_GEOMETRY_OUTPUT_TYPE)
+        val PROGRAM_BINARY_RETRIEVABLE_HINT  = GetProgram(GL41C.GL_PROGRAM_BINARY_RETRIEVABLE_HINT )
+        val PROGRAM_SEPARABLE  = GetProgram(GL41C.GL_PROGRAM_SEPARABLE ) // TODO check if valid to get
     }
 }
 
@@ -6728,5 +6756,52 @@ inline class SyncStatus(val i: Int) {
         val TIMEOUT_EXPIRED = SyncStatus(GL32C.GL_TIMEOUT_EXPIRED)
         val CONDITION_SATISFIED = SyncStatus(GL32C.GL_CONDITION_SATISFIED)
         val WAIT_FAILED = SyncStatus(GL32C.GL_WAIT_FAILED)
+    }
+}
+
+inline class GetActiveSubroutineUniform(val i: Int) {
+    companion object {
+        val NUM_COMPATIBLE_SUBROUTINES = GetActiveSubroutineUniform(GL40C.GL_NUM_COMPATIBLE_SUBROUTINES)
+        @Deprecated("use getActiveSubroutineUniformCompatibles instead")
+        val COMPATIBLE_SUBROUTINES = GetActiveSubroutineUniform(GL40C.GL_COMPATIBLE_SUBROUTINES)
+        val UNIFORM_SIZE = GetActiveSubroutineUniform(GL40C.GL_UNIFORM_SIZE)
+        val UNIFORM_NAME_LENGTH = GetActiveSubroutineUniform(GL40C.GL_UNIFORM_NAME_LENGTH)
+    }
+}
+
+inline class GetProgramStage(val i: Int) {
+    companion object {
+        val ACTIVE_SUBROUTINE_UNIFORMS = GetProgramStage(GL40C.GL_ACTIVE_SUBROUTINE_UNIFORMS)
+        val ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS = GetProgramStage(GL40C.GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS)
+        val ACTIVE_SUBROUTINES = GetProgramStage(GL40C.GL_ACTIVE_SUBROUTINES)
+        val ACTIVE_SUBROUTINE_UNIFORM_MAX_LENGTH = GetProgramStage(GL40C.GL_ACTIVE_SUBROUTINE_UNIFORM_MAX_LENGTH)
+        val ACTIVE_SUBROUTINE_MAX_LENGTH = GetProgramStage(GL40C.GL_ACTIVE_SUBROUTINE_MAX_LENGTH)
+    }
+}
+
+inline class PatchParameter(val i: Int) {
+    companion object {
+        @Deprecated("use patchVertices instead")
+        val PATCH_VERTICES = PatchParameter(GL40C.GL_PATCH_VERTICES)
+        val PATCH_DEFAULT_OUTER_LEVEL = PatchParameter(GL40C.GL_PATCH_DEFAULT_OUTER_LEVEL)
+        val PATCH_DEFAULT_INNER_LEVEL = PatchParameter(GL40C.GL_PATCH_DEFAULT_INNER_LEVEL)
+    }
+}
+
+inline class PrecisionType(val i: Int) {
+    companion object {
+        val LOW_FLOAT = PrecisionType(GL41C.GL_LOW_FLOAT)
+        val MEDIUM_FLOAT = PrecisionType(GL41C.GL_MEDIUM_FLOAT)
+        val HIGH_FLOAT = PrecisionType(GL41C.GL_HIGH_FLOAT)
+        val LOW_INT = PrecisionType(GL41C.GL_LOW_INT)
+        val MEDIUM_INT = PrecisionType(GL41C.GL_MEDIUM_INT)
+        val HIGH_INT = PrecisionType(GL41C.GL_HIGH_INT)
+    }
+}
+
+inline class ProgramParameter(val i: Int) {
+    companion object {
+        val PROGRAM_BINARY_RETRIEVABLE_HINT = ProgramParameter(GL41C.GL_PROGRAM_BINARY_RETRIEVABLE_HINT)
+        val PROGRAM_SEPARABLE = ProgramParameter(GL41C.GL_PROGRAM_SEPARABLE)
     }
 }

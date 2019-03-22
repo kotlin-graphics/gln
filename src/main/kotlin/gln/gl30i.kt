@@ -33,7 +33,6 @@ import org.lwjgl.system.MemoryUtil.*
 import unsigned.Uint
 import java.nio.ByteBuffer
 import java.nio.FloatBuffer
-import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KMutableProperty0
 
 /**
@@ -890,10 +889,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocation">Reference Page</a>
      */
-    fun bindFragDataLocation(program: GlProgram, colorNumber: Int, name: CharSequence) = stak {
-        it.nASCII(name, true)
-        GL30C.nglBindFragDataLocation(program.name, colorNumber, it.pointerAddress)
-    }
+    fun bindFragDataLocation(program: GlProgram, colorNumber: Int, name: CharSequence) =
+            stak.asciiAddress(name) { GL30C.nglBindFragDataLocation(program.name, colorNumber, it) }
 
     // --- [ glGetFragDataLocation ] ---
 
@@ -920,7 +917,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBeginConditionalRender">Reference Page</a>
      */
-    fun beginConditionalRender(id: GlQuery, mode: ConditionalMode) = GL30C.glBeginConditionalRender(id.i, mode.i)
+    fun beginConditionalRender(id: GlQuery, mode: ConditionalMode) = GL30C.glBeginConditionalRender(id.name, mode.i)
 
     // --- [ glEndConditionalRender ] ---
 
@@ -1727,7 +1724,7 @@ interface gl30i {
         val pType = pSize + Int.BYTES
         val pName = it.malloc(max)
         GL30C.nglGetTransformFeedbackVarying(program.name, index, max, pLength, pSize, pType, pName.adr)
-        val name = memASCII(pName, memGetInt(pLength))
+        val name = memASCII(pName, memGetInt(pLength)) // TODO Ptr with new lwjgl once the needed method (Ptr, Lenght) gets public
         Triple(memGetInt(pSize), memGetInt(pType), name)
     }
 

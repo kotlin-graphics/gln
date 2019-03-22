@@ -86,7 +86,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFunc">Reference Page</a>
      */
-    fun blendFunc(sFactor: BlendingFactor, dFactor: BlendingFactor) = GL11C.glBlendFunc(sFactor.i, dFactor.i)
+    fun blendFunc(sFactor: BlendFactor, dFactor: BlendFactor) = GL11C.glBlendFunc(sFactor.i, dFactor.i)
 
     /**
      * Specifies the weighting factors used by the blend equation, for both RGB and alpha functions and for all draw buffers.
@@ -97,7 +97,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFunc">Reference Page</a>
      */
-    fun <R> blendFunc(sFactor: BlendingFactor, dFactor: BlendingFactor, block: () -> R): R {
+    fun <R> blendFunc(sFactor: BlendFactor, dFactor: BlendFactor, block: () -> R): R {
         GL11C.glEnable(GL11C.GL_BLEND)
         GL11C.glBlendFunc(sFactor.i, dFactor.i)
         return block().also {

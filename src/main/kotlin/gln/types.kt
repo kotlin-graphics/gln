@@ -7,14 +7,15 @@ import kool.adr
 import kool.rem
 import kool.stak
 import org.lwjgl.opengl.GL32C
+import org.lwjgl.opengl.GL40C
 import org.lwjgl.opengl.GL45C
 import org.lwjgl.system.MemoryUtil.NULL
+import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
 
 inline class GLframebuffer(val i: Int)
 inline class GLprogramPipeline(val i: Int)
-inline class GLsampler(val i: Int)
 
 inline class GlTextures(val names: IntBuffer) {
 
@@ -69,3 +70,33 @@ inline class GlSync(val L: Long) {
 }
 
 inline class NanoSecond(val L: Long)
+
+inline class Subroutine(val p: Pair<Int, UniformLocation>) {
+    val index: Int
+        get() = p.first
+    val uniformLocation: UniformLocation
+        get() = p.second
+}
+
+typealias UniformLocation = Int
+typealias AttribLocation = Int
+
+/** One or more of:
+ *  - GL_MAP_READ_BIT
+ *  - GL_MAP_WRITE_BIT
+ *  - GL_MAP_INVALIDATE_RANGE_BIT
+ *  - GL_MAP_INVALIDATE_BUFFER_BIT
+ *  - GL_MAP_FLUSH_EXPLICIT_BIT MAP_FLUSH_EXPLICIT_BIT
+ *  - GL_MAP_UNSYNCHRONIZED_BIT MAP_UNSYNCHRONIZED_BIT  */
+typealias BufferMapFlags = Int
+
+inline class ShaderPrecisionFormat(val p: Pair<IntRange, Int>) {
+    val range: IntRange
+        get() = p.first
+    val precision: Int
+        get() = p.second
+}
+
+typealias BinaryFormat = Int
+
+class ProgramBinary(val data: ByteBuffer, val format: BinaryFormat)

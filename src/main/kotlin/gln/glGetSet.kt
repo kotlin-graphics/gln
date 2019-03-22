@@ -5,6 +5,7 @@ import glm_.vec2.Vec2
 import glm_.vec4.Vec4
 import gln.objects.*
 import gln.renderbuffer.GlRenderbuffer
+import gln.sampler.GlSampler
 import gln.vertexArray.GlVertexArray
 import kool.Ptr
 import kool.stak
@@ -31,11 +32,11 @@ interface glGetSet {
         get() = int(GL15.GL_ARRAY_BUFFER_BINDING)
 
 
-    val blendDstAlpha: BlendingFactor
-        get() = BlendingFactor(int(GL14.GL_BLEND_DST_ALPHA))
+    val blendDstAlpha: BlendFactor
+        get() = BlendFactor(int(GL14.GL_BLEND_DST_ALPHA))
 
-    val blendDstRgb: BlendingFactor
-        get() = BlendingFactor(int(GL14.GL_BLEND_DST_RGB))
+    val blendDstRgb: BlendFactor
+        get() = BlendFactor(int(GL14.GL_BLEND_DST_RGB))
 
     val blendEquationRgb: BlendEquationMode
         get() = BlendEquationMode(int(GL20.GL_BLEND_EQUATION_RGB))
@@ -43,11 +44,11 @@ interface glGetSet {
     val blendEquationAlpha: BlendEquationMode
         get() = BlendEquationMode(int(GL20.GL_BLEND_EQUATION_ALPHA))
 
-    val blendSrcAlpha: BlendingFactor
-        get() = BlendingFactor(int(GL14.GL_BLEND_SRC_ALPHA))
+    val blendSrcAlpha: BlendFactor
+        get() = BlendFactor(int(GL14.GL_BLEND_SRC_ALPHA))
 
-    val blendSrcRgb: BlendingFactor
-        get() = BlendingFactor(int(GL14.GL_BLEND_SRC_RGB))
+    val blendSrcRgb: BlendFactor
+        get() = BlendFactor(int(GL14.GL_BLEND_SRC_RGB))
 
 
     val dispatchIndirectBufferBinding: Int
@@ -152,8 +153,8 @@ interface glGetSet {
     fun sampleMaskValue(index: Int): Int =
             stak.intAddress { GL30.nglGetIntegeri_v(GL32.GL_SAMPLE_MASK_VALUE, index, it) }
 
-    val samplerBinding: GLsampler
-        get() = GLsampler(int(GL33.GL_SAMPLER_BINDING))
+    val samplerBinding: GlSampler
+        get() = GlSampler(int(GL33.GL_SAMPLER_BINDING))
 
     val samples: Int
         get() = int(GL13.GL_SAMPLES)

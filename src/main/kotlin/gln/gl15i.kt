@@ -298,7 +298,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteQueries">Reference Page</a>
      */
-    fun deleteQuery(id: GlQuery) = stak.intAddress(id.i) { GL15C.nglDeleteQueries(1, it) }
+    fun deleteQuery(id: GlQuery) = stak.intAddress(id.name) { GL15C.nglDeleteQueries(1, it) }
 
     // --- [ glIsQuery ] ---
 
@@ -309,7 +309,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsQuery">Reference Page</a>
      */
-    fun isQuery(id: GlQuery) = GL15C.glIsQuery(id.i)
+    fun isQuery(id: GlQuery) = GL15C.glIsQuery(id.name)
 
     // --- [ glBeginQuery ] ---
 
@@ -321,7 +321,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBeginQuery">Reference Page</a>
      */
-    fun beginQuery(target: QueryTarget, id: GlQuery) = GL15C.glBeginQuery(target.i, id.i)
+    fun beginQuery(target: QueryTarget, id: GlQuery) = GL15C.glBeginQuery(target.i, id.name)
 
     // --- [ glEndQuery ] ---
 
@@ -356,7 +356,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
      */
-    fun getQueryObjectI(id: GlQuery, pName: GetQueryObject): Int = stak.intAddress { GL15C.nglGetQueryObjectiv(id.i, pName.i, it) }
+    fun getQueryObjectI(id: GlQuery, pName: GetQueryObject): Int = stak.intAddress { GL15C.nglGetQueryObjectiv(id.name, pName.i, it) }
 
     // --- [ glGetQueryObjectuiv ] ---
 
@@ -368,5 +368,5 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
      */
-    fun getQueryObjectUI(id: GlQuery, pName: GetQueryObject): Uint = Uint(stak.intAddress { GL15C.nglGetQueryObjectiv(id.i, pName.i, it) })
+    fun getQueryObjectUI(id: GlQuery, pName: GetQueryObject): Uint = Uint(stak.intAddress { GL15C.nglGetQueryObjectiv(id.name, pName.i, it) })
 }

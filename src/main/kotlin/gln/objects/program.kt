@@ -1,26 +1,21 @@
 package gln.objects
 
+import glm_.BYTES
 import glm_.bool
 import glm_.vec3.Vec3i
 import gln.*
 import gln.program.ProgramBase
 import gln.program.ProgramUse
+import kool.ByteBuffer
 import kool.adr
+import kool.rem
 import kool.stak
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryStack.stackGet
+import org.lwjgl.system.MemoryUtil
 import java.lang.Exception
 
 inline class GlProgram(val name: Int) {
-
-    // --- [ glDeleteProgram ] ---
-
-    fun delete() = GL20C.glDeleteProgram(name)
-
-    // --- [ glIsProgram ] ---
-
-    val isValid: Boolean
-        get() = GL20C.glIsProgram(name)
 
     // --- [ glAttachShader ] ---
 
@@ -28,44 +23,143 @@ inline class GlProgram(val name: Int) {
 
     operator fun plusAssign(shader: GlShader) = GL20C.glAttachShader(name, shader.name)
 
+    var binary: ProgramBinary
+    // --- [ glGetProgramBinary ] ---
+        /**
+         * Returns a binary representation of a program object's compiled and linked executable source.
+         *
+         * @param program      the name of a program object whose binary representation to retrieve
+         * @param length       the address of a variable to receive the number of bytes written into {@code binary}
+         * @param binaryFormat a variable to receive a token indicating the format of the binary data returned by the GL
+         * @param binary       an array into which the GL will return {@code program}'s binary representation
+         *
+         * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramBinary">Reference Page</a>
+         */
+        get() {
+            val data = ByteBuffer(binaryLength)
+            val format = stak.intAddress { GL41C.nglGetProgramBinary(name, data.rem, MemoryUtil.NULL, it, data.adr) }
+            return ProgramBinary(data, format)
+        }
+    // --- [ glProgramBinary ] ---
+        /**
+         * Loads a program object with a program binary.
+         *
+         * @param program      the name of a program object into which to load a program binary
+         * @param binaryFormat the format of the binary data in binary
+         * @param binary       an array containing the binary to be loaded into {@code program}
+         *
+         * @see <a target="_blank" href="http://docs.gl/gl4/glProgramBinary">Reference Page</a>
+         */
+        set(value) = GL41C.nglProgramBinary(name, value.format, value.data.adr, value.data.rem)
+
+    // --- [ glBindAttribLocation ] ---
+
+    fun bindAttribLocation(index: Int, name: String) = gl.bindAttribLocation(this, index, name)
+
+    // --- [ glBindFragDataLocation ] ---
+
+    fun bindFragDataLocation(index: Int, name: String) = gl.bindFragDataLocation(this, index, name)
+
+    // --- [ glBindFragDataLocationIndexed ] ---
+
+    /**
+     * Binds a user-defined varying out variable to a fragment shader color number and index.
+     *
+     * @param colorNumber the color number to bind the user-defined varying out variable to
+     * @param index       the index of the color input to bind the user-defined varying out variable to
+     * @param name        the name of the user-defined varying out variable whose binding to modify
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocationIndexed">Reference Page</a>
+     */
+    fun bindFragDataLocationIndexed(colorNumber: Int, index: Int, name: CharSequence) = gl.bindFragDataLocationIndexed(this, colorNumber, index, name)
+
+    // --- [ glDeleteProgram ] ---
+
+    fun delete() = GL20C.glDeleteProgram(name)
+
     // --- [ glDetachShader ] ---
 
     infix fun detach(shader: GlShader) = GL20C.glDetachShader(name, shader.name)
 
     operator fun minusAssign(shader: GlShader) = GL20C.glDetachShader(name, shader.name)
 
-    // --- [ glShaderSource ] ---
+    // --- [ glGetActiveAttrib ] ---
 
-    fun source(source: String) = GL20C.glShaderSource(name, source)
+    fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl.getActiveAttrib(this, index)
 
-    // --- [ glLinkProgram ] ---
+    // --- [ glGetActiveSubroutineName ] ---
 
-    fun link() = GL20C.glLinkProgram(name)
+    /**
+     * Queries the name of an active shader subroutine.
+     *
+     * @param program    the name of the program containing the subroutine
+     * @param shaderType the shader stage from which to query the subroutine name. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     * @param index      the index of the shader subroutine uniform
+     * @param bufSize    the size of the buffer whose address is given in {@code name}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveSubroutineName">Reference Page</a>
+     */
+    fun getActiveSubroutineName(program: GlProgram, shaderType: ShaderType, index: Int, bufSize: Int = GL40C.glGetProgramStagei(program.name, shaderType.i, GL40C.GL_ACTIVE_SUBROUTINE_MAX_LENGTH)): String = gl.getActiveSubroutineName(this, shaderType, index, bufSize)
 
-    // --- [ glUseProgram ] ---
+    // --- [ glGetActiveSubroutineUniformiv ] ---
 
-    fun use() = GL20C.glUseProgram(name)
+    /**
+     * Queries a property of an active shader subroutine uniform.
+     *
+     * @param shaderType the shader stage from which to query for the subroutine parameter. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     * @param index      the index of the shader subroutine uniform
+     * @param name       the parameter of the shader subroutine uniform to query. One of:<br><table><tr><td>{@link #GL_NUM_COMPATIBLE_SUBROUTINES NUM_COMPATIBLE_SUBROUTINES}</td><td>{@link #GL_COMPATIBLE_SUBROUTINES COMPATIBLE_SUBROUTINES}</td><td>{@link GL31#GL_UNIFORM_SIZE UNIFORM_SIZE}</td><td>{@link GL31#GL_UNIFORM_NAME_LENGTH UNIFORM_NAME_LENGTH}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveSubroutineUniform">Reference Page</a>
+     */
+    fun getActiveSubroutineUniform(shaderType: ShaderType, index: Int, name: GetActiveSubroutineUniform): Int = gl.getActiveSubroutineUniform(this, shaderType, index, name)
 
-    // JVM custom
+    /**
+     * @return GL_COMPATIBLE_SUBROUTINES of an active shader subroutine uniform.
+     *
+     * @param shaderType the shader stage from which to query for the subroutine parameter. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     * @param index      the index of the shader subroutine uniform
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveSubroutineUniform">Reference Page</a>
+     */
+    fun getActiveSubroutineUniformCompatibles(shaderType: ShaderType, index: Int): IntArray = gl.getActiveSubroutineUniformCompatibles(this, shaderType, index)
 
-    fun unuse() = GL20C.glUseProgram(0)
+    // --- [ glGetActiveSubroutineUniformName ] ---
 
-    inline fun used(block: ProgramUse.() -> Unit) {
-        ProgramUse.program = this
-        GL20C.glUseProgram(name)
-        ProgramUse.block()
-        GL20C.glUseProgram(0)
-    }
+    /**
+     * Queries the name of an active shader subroutine uniform.
+     *
+     * @param shaderType the shader stage from which to query for the subroutine parameter. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     * @param index      the index of the shader subroutine uniform
+     * @param bufSize    the size of the buffer whose address is given in {@code name}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveSubroutineUniformName">Reference Page</a>
+     */
+    fun getActiveSubroutineUniformName(shaderType: ShaderType, index: Int, bufSize: Int = getActiveSubroutineUniform(shaderType, index, GetActiveSubroutineUniform.UNIFORM_NAME_LENGTH)): String = gl.getActiveSubroutineUniformName(this, shaderType, index, bufSize)
 
-    inline fun use(block: ProgramUse.() -> Unit) {
-        ProgramUse.program = this
-        GL20C.glUseProgram(name)
-        ProgramUse.block()
-    }
+    // --- [ glGetActiveUniform ] ---
 
-    // --- [ glValidateProgram ] ---
+    infix fun getActiveUniform(index: Int): Triple<String, Int, UniformType> = gl.getActiveUniform(this, index)
 
-    fun validate() = GL20C.glValidateProgram(name)
+    // --- [ glGetAttachedShaders ] ---
+
+    val attachedShaders: GLshaders
+        get() = gl.getAttachedShaders(this)
+
+    // --- [ glGetAttribLocation ] ---
+    infix fun getAttribLocation(name: String): AttribLocation = gl.getAttribLocation(this, name)
+
+    // --- [ glGetFragDataIndex ] ---
+
+    /**
+     * Queries the bindings of color indices to user-defined varying out variables.
+     *
+     * @param program the name of the program containing varying out variable whose binding to query
+     * @param name    the name of the user-defined varying out variable whose index to query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataIndex">Reference Page</a>
+     */
+    infix fun getFragDataIndex(name: CharSequence): Int = gl.getFragDataIndex(this, name)
 
     // --- [ glGetProgramiv ] ---
 
@@ -128,60 +222,124 @@ inline class GlProgram(val name: Int) {
     val infoLog: String
         get() = gl.getProgramInfoLog(this)
 
-    // --- [ glGetAttachedShaders ] ---
+    // --- [ glGetProgramStageiv ] ---
 
-    val attachedShaders: GLshaders
-        get() = gl.getAttachedShaders(this)
+    /**
+     * Retrieves properties of a program object corresponding to a specified shader stage.
+     *
+     * @param shaderType the shader stage from which to query for the subroutine parameter. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     * @param name      the parameter of the shader to query. One of:<br><table><tr><td>{@link #GL_ACTIVE_SUBROUTINES ACTIVE_SUBROUTINES}</td><td>{@link #GL_ACTIVE_SUBROUTINE_UNIFORMS ACTIVE_SUBROUTINE_UNIFORMS}</td></tr><tr><td>{@link #GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS}</td><td>{@link #GL_ACTIVE_SUBROUTINE_MAX_LENGTH ACTIVE_SUBROUTINE_MAX_LENGTH}</td></tr><tr><td>{@link #GL_ACTIVE_SUBROUTINE_UNIFORM_MAX_LENGTH ACTIVE_SUBROUTINE_UNIFORM_MAX_LENGTH}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramStage">Reference Page</a>
+     */
+    fun getStage(shaderType: ShaderType, name: GetProgramStage): Int = gl.getProgramStage(this, shaderType, name)
 
-    // --- [ glGetUniformLocation ] ---
+    // --- [ glGetSubroutineIndex ] ---
 
-    infix fun getUniformLocation(name: String): Int = gl.getUniformLocation(this, name)
-    operator fun get(name: String): Int = gl.getUniformLocation(this, name)
+    /**
+     * Retrieves the index of a subroutine function of a given shader stage within a program.
+     *
+     * @param shaderType the shader stage from which to query for subroutine function index. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     * @param name       the name of the subroutine function whose index to query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineIndex">Reference Page</a>
+     */
+    fun getSubroutineIndex(shaderType: ShaderType, name: CharSequence): Int = gl.getSubroutineIndex(this, shaderType, name)
 
-    // --- [ glGetActiveUniform ] ---
+    // --- [ glGetSubroutineUniformLocation ] ---
 
-    infix fun getActiveUniform(index: Int): Triple<String, Int, UniformType> = gl.getActiveUniform(this, index)
+    /**
+     * Retrieves the location of a subroutine uniform of a given shader stage within a program.
+     *
+     * @param shaderType the shader stage from which to query for subroutine uniform index. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     * @param name       the name of the subroutine uniform whose index to query.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineUniformLocation">Reference Page</a>
+     */
+    fun getSubroutineUniformLocation(shaderType: ShaderType, name: CharSequence): Int = gl.getSubroutineUniformLocation(this, shaderType, name)
+
+    // --- [ glGetSubroutineIndex / glGetSubroutineUniformLocation ] ---
+
+    /**
+     * Retrieves the index and the uniform location of a subroutine uniform of a given shader stage within a program.
+     *
+     * @param shaderType the shader stage from which to query for subroutine uniform index. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_SHADER VERTEX_SHADER}</td><td>{@link GL20#GL_FRAGMENT_SHADER FRAGMENT_SHADER}</td><td>{@link GL32#GL_GEOMETRY_SHADER GEOMETRY_SHADER}</td><td>{@link #GL_TESS_CONTROL_SHADER TESS_CONTROL_SHADER}</td></tr><tr><td>{@link #GL_TESS_EVALUATION_SHADER TESS_EVALUATION_SHADER}</td></tr></table>
+     * @param name       the name of the subroutine uniform whose index to query.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineUniformLocation">Reference Page</a>
+     */
+    fun getSubroutine(shaderType: ShaderType, name: CharSequence): Subroutine = gl.getSubroutine(this, shaderType, name)
 
     // --- [ glGetUniform* ] ---
 
-    inline infix fun <reified T> getUniform(location: Int): T =  gl.getUniform(this, location)
+    inline infix fun <reified T> getUniform(location: UniformLocation): T = gl.getUniform(this, location)
 
-    // --- [ glGetAttribLocation ] ---
-    infix fun getAttribLocation(name: String): Int = GL20.glGetAttribLocation(this.name, name)
+    // --- [ glProgramParameteri ] ---
 
-    // --- [ glBindAttribLocation ] ---
+    var binaryRetrievableHint: Boolean
+        get() = gl.getProgram(this, GetProgram.PROGRAM_BINARY_RETRIEVABLE_HINT)
+        set(value) = gl.programParameter(this, ProgramParameter.PROGRAM_BINARY_RETRIEVABLE_HINT, value)
 
-    fun bindAttribLocation(index: Int, name: String) {
-        val stack = stackGet()
-        val ptr = stack.pointer
-        GL20C.nglBindAttribLocation(this.name, index, stack.ASCII(name).adr)
-        stack.pointer = ptr
-    }
-
-    // --- [ glGetUniformBlockIndex ] ---
-    fun getUniformBlockIndex(uniformBlockName: CharSequence) = GL31C.glGetUniformBlockIndex(name, uniformBlockName)
+    var separable: Boolean
+        get() = gl.getProgram(this, GetProgram.PROGRAM_SEPARABLE)
+        set(value) = gl.programParameter(this, ProgramParameter.PROGRAM_SEPARABLE, value)
 
     // --- [ glUniformBlockBinding ] ---
-    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Int) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding)
+    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Int) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding) // TODO gl.
 
-    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Enum<*>) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding.ordinal)
+    fun uniformBlockBinding(uniformBlockIndex: Int, uniformBlockBinding: Enum<*>) = GL31C.glUniformBlockBinding(name, uniformBlockIndex, uniformBlockBinding.ordinal) // TODO gl.
 
-    // --- [ glBindFragDataLocation ] ---
+    // --- [ glGetUniformLocation ] ---
 
-    fun bindFragDataLocation(index: Int, name: String) {
-        val stack = stackGet()
-        val ptr = stack.pointer
-        GL20C.nglBindAttribLocation(this.name, index, stack.ASCII(name).adr)
-        stack.pointer = ptr
+    infix fun getUniformLocation(name: String): UniformLocation = gl.getUniformLocation(this, name)
+    operator fun get(name: String): UniformLocation = gl.getUniformLocation(this, name)
+
+    // --- [ glIsProgram ] ---
+
+    val isValid: Boolean
+        get() = GL20C.glIsProgram(name)
+
+    val isInvalid: Boolean
+        get() = !GL20C.glIsProgram(name)
+
+    // --- [ glLinkProgram ] ---
+
+    fun link() = GL20C.glLinkProgram(name)
+
+    // --- [ glShaderSource ] ---
+
+    fun source(source: String) = GL20C.glShaderSource(name, source)
+
+    // --- [ glGetUniformBlockIndex ] ---
+    fun getUniformBlockIndex(uniformBlockName: CharSequence) = GL31C.glGetUniformBlockIndex(name, uniformBlockName)  // TODO gl.
+
+    // --- [ glUseProgram ] ---
+
+    fun use() = gl.useProgram(this)
+
+    // JVM custom
+    fun unuse() = gl.useProgram()
+
+    inline fun used(block: ProgramUse.() -> Unit) {
+        ProgramUse.program = this
+        GL20C.glUseProgram(name)
+        ProgramUse.block()
+        GL20C.glUseProgram(0)
     }
 
-    // --- [ glGetActiveAttrib ] ---
+    inline fun use(block: ProgramUse.() -> Unit) {
+        ProgramUse.program = this
+        GL20C.glUseProgram(name)
+        ProgramUse.block()
+    }
 
-    fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl.getActiveAttrib(this, index)
+    // --- [ glValidateProgram ] ---
+
+    fun validate() = GL20C.glValidateProgram(name)
 
     companion object {
 
-        val NULL = GlProgram(-1)
+        val NULL = GlProgram(0)
 
         // --- [ glCreateProgram ] ---
         fun create() = GlProgram(GL20C.glCreateProgram())
