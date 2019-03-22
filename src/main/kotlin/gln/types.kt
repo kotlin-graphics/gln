@@ -80,6 +80,7 @@ inline class Subroutine(val p: Pair<Int, UniformLocation>) {
 
 typealias UniformLocation = Int
 typealias AttribLocation = Int
+typealias UniformBlockIndex = Int
 
 /** One or more of:
  *  - GL_MAP_READ_BIT
@@ -100,3 +101,4 @@ inline class ShaderPrecisionFormat(val p: Pair<IntRange, Int>) {
 typealias BinaryFormat = Int
 
 class ProgramBinary(val data: ByteBuffer, val format: BinaryFormat)
+

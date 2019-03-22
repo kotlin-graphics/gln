@@ -17,6 +17,9 @@ import gln.objects.GlBuffer
 import gln.objects.GlProgram
 import gln.objects.GlQuery
 import gln.objects.GlShader
+import kool.IntBuffer
+import kool.adr
+import kool.lib.toIntArray
 import kool.stak
 import org.lwjgl.opengl.*
 import unsigned.Uint
@@ -26,7 +29,7 @@ object gl :
         glGetSet,
         gl11i, gl12i, gl13i, gl14i, gl15i,
         gl20i, gl21i,
-        gl30i, /*gl31i,*/ gl32i, gl33i,
+        gl30i, gl31i, gl32i, gl33i,
         gl40i, gl41i {
 
     // --- [ glGet* ] ---
@@ -225,6 +228,34 @@ object gl :
             Long::class -> s.longAddress { GL32C.nglGetBufferParameteri64v(target.name, param.i, it) } as T
             Boolean::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.name, param.i, it) }.bool as T
             else -> throw Exception("[gln.gl.getBufferParam] invalid T")
+        }
+    }
+
+    // ========================= GL31C
+
+    // --- [ glGetActiveUniformBlockiv ] ---
+
+    /**
+     * Queries information about an active uniform block.
+     *
+     * @param program           the name of a program containing the uniform block
+     * @param uniformBlockIndex the index of the uniform block within {@code program}
+     * @param name             the name of the parameter to query. One of:<br><table><tr><td>{@link #GL_UNIFORM_BLOCK_BINDING UNIFORM_BLOCK_BINDING}</td><td>{@link #GL_UNIFORM_BLOCK_DATA_SIZE UNIFORM_BLOCK_DATA_SIZE}</td></tr><tr><td>{@link #GL_UNIFORM_BLOCK_NAME_LENGTH UNIFORM_BLOCK_NAME_LENGTH}</td><td>{@link #GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS UNIFORM_BLOCK_ACTIVE_UNIFORMS}</td></tr><tr><td>{@link #GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES}</td><td>{@link #GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER}</td></tr><tr><td>{@link #GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER}</td><td>{@link #GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER}</td></tr></table>
+     * @param params            the address of a variable to receive the result of the query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformBlock">Reference Page</a>
+     */
+    inline fun <reified T> getActiveUniformBlockiv(program: GlProgram, uniformBlockIndex: UniformBlockIndex, name: GetActiveUniformBlock): T = stak { s ->
+        when (T::class) {
+            Int::class -> s.intAddress { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) } as T
+            Boolean::class -> s.intAddress { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) }.bool as T
+            IntArray::class -> {
+                val size = s.intAddress { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, it) }
+                val ints = s.IntBuffer(size)
+                GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, ints.adr)
+                ints.toIntArray() as T
+            }
+            else -> throw Exception("[gln.gl.getActiveUniformBlockiv] invalid T")
         }
     }
 

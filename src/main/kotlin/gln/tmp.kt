@@ -11,12 +11,14 @@ import glm_.vec3.Vec3d
 import glm_.vec3.Vec3i
 import glm_.vec3.Vec3ui
 import glm_.vec4.*
-import kool.Adr
-import kool.Ptr
-import kool.adr
-import kool.stak
+import kool.*
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL30
+import org.lwjgl.opengl.GL41
+import org.lwjgl.opengl.NVGPUShader5
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil.*
+import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
@@ -92,3 +94,14 @@ inline fun stak.asciiAddress(givenSize: Int, block: (pLength: Ptr, address: Ptr)
     val length = memGetInt(pLength)
     memASCII(memByteBuffer(pString, length), length)
 }
+
+fun ByteBuffer.rem(type: IndexType): Int = rem shr when (type.i) {
+    GL11.GL_BYTE, GL11.GL_UNSIGNED_BYTE -> 1
+    GL11.GL_SHORT, GL11.GL_UNSIGNED_SHORT, GL11.GL_2_BYTES, GL30.GL_HALF_FLOAT -> 2
+    GL11.GL_3_BYTES -> 3
+    GL11.GL_INT, GL11.GL_UNSIGNED_INT, GL11.GL_FLOAT, GL11.GL_4_BYTES, GL41.GL_FIXED -> 4
+    GL11.GL_DOUBLE, NVGPUShader5.GL_INT64_NV, NVGPUShader5.GL_UNSIGNED_INT64_NV -> 8
+    else -> throw Exception("Unsupported OpenGL type: $type")
+}
+
+inline fun MemoryStack.intAddress(int: Int): Adr = nmalloc(4, Int.BYTES).also { memPutInt(it, int) }
