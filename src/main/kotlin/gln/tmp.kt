@@ -87,13 +87,36 @@ inline fun MemoryStack.vec2uiAddress(block: (Ptr) -> Unit): Vec2ui = Vec2ui.from
 inline fun MemoryStack.vec3uiAddress(block: (Ptr) -> Unit): Vec3ui = Vec3ui.fromPointer(nmalloc(4, Vec3ui.size).also(block))
 inline fun MemoryStack.vec4uiAddress(block: (Ptr) -> Unit): Vec4ui = Vec4ui.fromPointer(nmalloc(4, Vec4ui.size).also(block))
 
-inline fun stak.asciiAddress(givenSize: Int, block: (pLength: Ptr, address: Ptr) -> Unit): String = stak {
-    val pLength = it.nmalloc(4, Int.BYTES)
-    val pString = it.nmalloc(1, givenSize)
-    block(pLength, pString)
-    val length = memGetInt(pLength)
-    memASCII(memByteBuffer(pString, length), length)
-}
+inline fun stak.asciiAddress(givenSize: Int, block: (pLength: Ptr, address: Ptr) -> Unit): String =
+        stak {
+            val pLength = it.nmalloc(4, Int.BYTES)
+            val pString = it.nmalloc(1, givenSize)
+            block(pLength, pString)
+            val length = memGetInt(pLength)
+            memASCII(memByteBuffer(pString, length), length)
+        }
+
+inline fun stak.utf8Address(givenSize: Int, block: (pLength: Ptr, address: Ptr) -> Unit): String =
+        stak {
+            val pLength = it.nmalloc(4, Int.BYTES)
+            val pString = it.nmalloc(1, givenSize)
+            block(pLength, pString)
+            memUTF8(pString, memGetInt(pLength))
+        }
+
+inline fun stak.utf8Address(chars: CharSequence, block: (length: Int, address: Ptr) -> Unit) =
+        stak {
+            val length = it.nUTF8(chars, false)
+            val pChars = it.pointerAddress
+            block(length, pChars)
+        }
+
+inline fun <R> stak.utf8Address(chars: CharSequence, block: (address: Ptr) -> R): R =
+        stak {
+            it.nUTF8(chars, true)
+            val pChars = it.pointerAddress
+            block(pChars)
+        }
 
 fun ByteBuffer.rem(type: IndexType): Int = rem shr when (type.i) {
     GL11.GL_BYTE, GL11.GL_UNSIGNED_BYTE -> 1

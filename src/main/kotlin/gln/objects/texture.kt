@@ -225,6 +225,30 @@ inline class GlTexture(val name: Int = -1) {
 
     fun delete() = gl.deleteTextures(this)
 
+    // --- [ glInvalidateTexSubImage ] ---
+
+    /**
+     * Invalidates a region of a texture image.
+     *
+     * @param level   the level of detail of the texture object within which the region resides
+     * @param offset  the offset of the region to be invalidated
+     * @param size    the size of the region to be invalidated
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateTexSubImage">Reference Page</a>
+     */
+    fun invalidateSubImage(level: Int, offset: Vec3i, size: Vec3i) = gl.invalidateTexSubImage(this, level, offset, size)
+
+    // --- [ glInvalidateTexImage ] ---
+
+    /**
+     * Invalidates the entirety of a texture image.
+     *
+     * @param level   the level of detail of the texture object to invalidate
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateTexImage">Reference Page</a>
+     */
+    infix fun invalidateImage(level: Int) = gl.invalidateTexImage(this, level)
+
     companion object {
         fun gen(): GlTexture = gl.genTexture()
     }

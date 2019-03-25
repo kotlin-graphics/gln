@@ -95,3 +95,23 @@ glProgramUniform* becomes programUniform
 glProgramUniformMatrix* becomes programUniform
 
 glVertexAttribL* becomes vertexAttribL
+
+----------------- GL42
+
+glTexStorage*D has inferred target and glm size constructor
+
+-------------------- GL43
+
+pushDebugGroup incapsulate lamdas into glPushDebugGroup / glPopDebugGroup 
+
+
+getProgramResource has a version where only a single integer is returned
+
+ fun getProgramResource(program: GlProgram, programInterface: ProgramInterface, index: Int, props: Int): Int 
+ 
+and another one contemplating full arrays
+
+ fun getProgramResource(program: GlProgram, programInterface: ProgramInterface, index: Int, props: IntBuffer, length: IntBuffer?, params: IntBuffer)
+ 
+ 
+ given that in glTexBufferRange the target must be GL_TEXTURE_BUFFER, this is inferred

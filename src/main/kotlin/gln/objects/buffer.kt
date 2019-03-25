@@ -8,6 +8,7 @@ import gln.BufferTarget
 import gln.Usage
 import gln.buffer.GlBufferDsl
 import gln.buffer.GlBuffersDsl
+import gln.gl
 import kool.*
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
@@ -86,6 +87,27 @@ inline class GlBuffer(val name: Int = -1) {
     infix fun unmap(target: BufferTarget): Boolean = GL15C.glUnmapBuffer(target.i)
 
     fun mapped(target: BufferTarget, access: BufferAccess, block: (ByteBuffer?) -> Boolean): Boolean? = block(map(target, access)).also { unmap(target) }
+
+    // --- [ glInvalidateBufferSubData ] ---
+
+    /**
+     * Invalidates a region of a buffer object's data store.
+     *
+     * @param offset the offset within the buffer's data store of the start of the range to be invalidated
+     * @param length the length of the range within the buffer's data store to be invalidated
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateBufferSubData">Reference Page</a>
+     */
+    fun invalidateSubData(offset: Ptr, length: Ptr) = gl.invalidateBufferSubData(this, offset, length)
+
+    // --- [ glInvalidateBufferData ] ---
+
+    /**
+     * Invalidates the content of a buffer object's data store.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateBufferData">Reference Page</a>
+     */
+    fun invalidateData() = gl.invalidateBufferData(this)
 }
 
 inline class GlBuffers(val names: IntBuffer) {

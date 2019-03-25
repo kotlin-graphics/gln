@@ -81,6 +81,8 @@ inline class Subroutine(val p: Pair<Int, UniformLocation>) {
 typealias UniformLocation = Int
 typealias AttribLocation = Int
 typealias UniformBlockIndex = Int
+typealias StorageBlockIndex = Int
+typealias ImageUnit = Int
 
 /** One or more of:
  *  - GL_MAP_READ_BIT
