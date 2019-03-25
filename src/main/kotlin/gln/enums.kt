@@ -7072,3 +7072,32 @@ inline class GetProgramInterface(val i: Int) {
     }
 }
 
+inline class ClipOrigin(val i: Int) {
+    companion object {
+        val LOWER_LEFT = ClipOrigin(GL20C.GL_LOWER_LEFT)
+        val UPPER_LEFT = ClipOrigin(GL20C.GL_UPPER_LEFT)
+    }
+}
+
+inline class ClipDepthMode(val i: Int) {
+    companion object {
+        val NEGATIVE_ONE_TO_ONE  = ClipDepthMode(GL45C.GL_NEGATIVE_ONE_TO_ONE)
+        val ZERO_TO_ONE = ClipDepthMode(GL45C.GL_ZERO_TO_ONE)
+    }
+}
+
+inline class GetTransformFeedback(val i: Int) {
+    companion object {
+        val BUFFER_BINDING  = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
+        val PAUSED = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_PAUSED)
+        val ACTIVE = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_ACTIVE)
+    }
+}
+
+inline class GetTransformFeedbackIndexed(val i: Int) {
+    companion object {
+        val BUFFER_BINDING  = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
+        val BUFFER_START = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_START)
+        val BUFFER_SIZE = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_SIZE)
+    }
+}

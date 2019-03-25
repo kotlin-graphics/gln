@@ -243,7 +243,7 @@ interface gl15i {
     // --- [ glGetBufferParameteriv ] ---
     // inline reified
 
-    // --- [ glGetBufferPointerv ] ---
+    // --- [ glGetBufferPointerv ] --- TODO this could be merged into the above function if Ptr gets converted from typealias to inline class
 
     /**
      * Returns the pointer to a mapped buffer object's data store.

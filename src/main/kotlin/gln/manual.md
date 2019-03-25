@@ -115,3 +115,13 @@ and another one contemplating full arrays
  
  
  given that in glTexBufferRange the target must be GL_TEXTURE_BUFFER, this is inferred
+ 
+ ---------------------- GL45
+ 
+ glGetTransformFeedbacki_v and glGetTransformFeedbacki64_v get merged in one unique inlined reified getTransformFeedback
+ 
+ glClearNamedBufferData last parameter data: Buffer? defaults to null
+ 
+ glGetNamedBufferParameteriv and glGetNamedBufferParameteri64v get merged in one unique inlined reified getBufferParameteri
+ 
+ glNamedFramebufferRenderbuffer becomes framebufferRenderbuffer with GlFramebuffer as first parameter and since renderbuffertarget must be GL_RENDERBUFFER, this is inferred

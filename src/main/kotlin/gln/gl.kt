@@ -20,16 +20,14 @@ import gln.objects.GlBuffer
 import gln.objects.GlProgram
 import gln.objects.GlQuery
 import gln.objects.GlShader
+import gln.transformFeedback.GlTransformFeedback
 import kool.IntBuffer
 import kool.adr
 import kool.lib.toIntArray
-import kool.rem
 import kool.stak
 import org.lwjgl.opengl.*
-import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memGetInt
 import unsigned.Uint
-import java.nio.IntBuffer
 
 
 object gl :
@@ -37,7 +35,7 @@ object gl :
         gl11i, gl12i, gl13i, gl14i, gl15i,
         gl20i, gl21i,
         gl30i, gl31i, gl32i, gl33i,
-        gl40i, gl41i, gl42i, gl43i {
+        gl40i, gl41i, gl42i, gl43i, /*gl44i,*/ gl45i {
 
     // --- [ glGet* ] ---
 
@@ -227,7 +225,7 @@ object gl :
         GL30C.glEndTransformFeedback()
     }
 
-    // --- [ glGetBufferParameteri64v ] ---
+    // --- [ glGetBufferParameteriv / glGetBufferParameteri64v ] ---
 
     /**
      * Returns the value of a buffer object parameter.
@@ -238,13 +236,13 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
      */
-    inline fun <reified T> getBufferParameter(target: GlBuffer, param: BufferParameter): T =
+    inline fun <reified T> getBufferParameter(target: BufferTarget, param: BufferParameter): T =
             stak { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.name, param.i, it) } as T
-                    Long::class -> s.longAddress { GL32C.nglGetBufferParameteri64v(target.name, param.i, it) } as T
-                    Boolean::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.name, param.i, it) }.bool as T
-                    else -> throw Exception("[gln.gl.getBufferParam] invalid T")
+                    Int::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.i, param.i, it) } as T
+                    Long::class -> s.longAddress { GL32C.nglGetBufferParameteri64v(target.i, param.i, it) } as T
+                    Boolean::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.i, param.i, it) }.bool as T
+                    else -> throw Exception("[gln.gl.getBufferParameter(target, ..)] invalid T")
                 }
             }
 
@@ -458,6 +456,68 @@ object gl :
                     Int::class -> s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }.bool as T
                     else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
+                }
+            }
+
+    // ==================== GL45
+
+    // --- [ glGetTransformFeedbackiv ] ---
+
+    /**
+     * Returns information about a transform feedback object.
+     *
+     * @param xfb   zero or the name of an existing transform feedback object
+     * @param name the parameter to query. One of:<br><table><tr><td>{@link GL42#GL_TRANSFORM_FEEDBACK_PAUSED TRANSFORM_FEEDBACK_PAUSED}</td><td>{@link GL42#GL_TRANSFORM_FEEDBACK_ACTIVE TRANSFORM_FEEDBACK_ACTIVE}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedback">Reference Page</a>
+     */
+    inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedback): T =
+            stak { s ->
+                when (T::class) {
+                    Int::class -> s.intAddress { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) } as T
+                    Boolean::class -> s.intAddress { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) }.bool as T
+                    else -> throw Exception("[gln.gl.getTransformFeedback] invalid T")
+                }
+            }
+
+    // --- [ glGetTransformFeedbacki_v ] ---
+
+    /**
+     * Returns information about a transform feedback object.
+     *
+     * @param xfb   zero or the name of an existing transform feedback object
+     * @param name the parameter to query. Must be:<br><table><tr><td>{@link GL30#GL_TRANSFORM_FEEDBACK_BUFFER_BINDING TRANSFORM_FEEDBACK_BUFFER_BINDING}</td></tr></table>
+     * @param index the transform feedback stream index
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedbacki_v">Reference Page</a>
+     */
+    inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedbackIndexed, index: Int): T =
+            stak { s ->
+                when (T::class) {
+                    Int::class -> s.intAddress { GL45C.nglGetTransformFeedbacki_v(xfb.name, name.i, index, it) } as T
+                    Long::class -> s.longAddress { GL45C.nglGetTransformFeedbacki64_v(xfb.name, name.i, index, it) } as T
+                    else -> throw Exception("[gln.gl.getTransformFeedback] invalid T")
+                }
+            }
+
+    // --- [ glGetNamedBufferParameteriv / glGetNamedBufferParameteri64v ] ---
+
+    /**
+     * DSA version of {@link GL15C#glGetBufferParameteriv GetBufferParameteriv}.
+     *
+     * @param buffer the buffer object name
+     * @param pname  the symbolic name of a buffer object parameter. One of:<br><table><tr><td>{@link GL15#GL_BUFFER_SIZE BUFFER_SIZE}</td><td>{@link GL15#GL_BUFFER_USAGE BUFFER_USAGE}</td><td>{@link GL15#GL_BUFFER_ACCESS BUFFER_ACCESS}</td><td>{@link GL15#GL_BUFFER_MAPPED BUFFER_MAPPED}</td></tr><tr><td>{@link GL30#GL_BUFFER_ACCESS_FLAGS BUFFER_ACCESS_FLAGS}</td><td>{@link GL30#GL_BUFFER_MAP_LENGTH BUFFER_MAP_LENGTH}</td><td>{@link GL30#GL_BUFFER_MAP_OFFSET BUFFER_MAP_OFFSET}</td><td>{@link GL44#GL_BUFFER_IMMUTABLE_STORAGE BUFFER_IMMUTABLE_STORAGE}</td></tr><tr><td>{@link GL44#GL_BUFFER_STORAGE_FLAGS BUFFER_STORAGE_FLAGS}</td></tr></table>
+     * @param params the requested parameter
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
+     */
+    inline fun <reified T> getBufferParameter(buffer: GlBuffer, param: BufferParameter): T =
+            stak { s ->
+                when (T::class) {
+                    Int::class -> s.intAddress { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) } as T
+                    Long::class -> s.longAddress { GL45C.nglGetNamedBufferParameteri64v(buffer.name, param.i, it) } as T
+                    Boolean::class -> s.intAddress { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) }.bool as T
+                    else -> throw Exception("[gln.gl.getBufferParameter(buffer, ..)] invalid T")
                 }
             }
 }

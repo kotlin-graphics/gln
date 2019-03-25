@@ -4,8 +4,11 @@ package gln.framebuffer
 
 
 import glm_.vec2.Vec2i
+import gln.FramebufferParameter
 import gln.FramebufferTarget
 import gln.gl
+import gln.objects.GlTexture
+import gln.renderbuffer.GlRenderbuffer
 import kool.IntBuffer
 import kool.adr
 import kool.get
@@ -47,6 +50,15 @@ inline fun glCheckFramebufferStatus() = GL30.glCheckFramebufferStatus(GL_FRAMEBU
 inline class GlFramebuffers(val names: IntBuffer) {
     val rem get() = names.rem
     val adr get() = names.adr
+
+    // --- [ glCreateFramebuffers ] ---
+
+    /**
+     * Returns {@code n} previously unused framebuffer names in {@code framebuffers}, each representing a new framebuffer object.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateFramebuffers">Reference Page</a>
+     */
+    fun create() = gl.createFramebuffers(this)
 }
 
 fun GlFramebuffers(size: Int) = GlFramebuffers(IntBuffer(size))
@@ -89,6 +101,47 @@ inline class GlFramebuffer(val name: Int = -1) {
      */
     fun invalidate(target: FramebufferTarget, attachment: Int) = gl.invalidateFramebuffer(target, attachment)
 
+    // --- [ glInvalidateNamedFramebufferData ] ---
+
+    /**
+     * DSA version of {@link GL43C#glInvalidateFramebuffer InvalidateFramebuffer}.
+     *
+     * @param attachments the address of an array identifying the attachments to be invalidated
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferData">Reference Page</a>
+     */
+    fun invalidateData(attachments: IntBuffer) = gl.invalidateFramebufferData(this, attachments)
+
+    /**
+     * DSA version of {@link GL43C#glInvalidateFramebuffer InvalidateFramebuffer}.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferData">Reference Page</a>
+     */
+    infix fun invalidateData(attachment: Int) = gl.invalidateFramebufferData(this, attachment)
+
+    // --- [ glInvalidateNamedFramebufferSubData ] ---
+
+    /**
+     * DSA version of {@link GL43C#glInvalidateSubFramebuffer InvalidateSubFramebuffer}.
+     *
+     * @param attachments an array identifying the attachments to be invalidated
+     * @param offset      the offset of the region to be invalidated
+     * @param size        the size of the region to be invalidated
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
+     */
+    fun invalidateSubData(attachments: IntBuffer, offset: Vec2i, size: Vec2i) = gl.invalidateFramebufferSubData(this, attachments, offset, size)
+
+    /**
+     * DSA version of {@link GL43C#glInvalidateSubFramebuffer InvalidateSubFramebuffer}.
+     *
+     * @param offset      the offset of the region to be invalidated
+     * @param size        the size of the region to be invalidated
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
+     */
+    fun invalidateSubData(attachment: Int, offset: Vec2i, size: Vec2i) = gl.invalidateFramebufferSubData(this, attachment, offset, size)
+
     // --- [ glInvalidateSubFramebuffer ] ---
 
     /**
@@ -114,7 +167,109 @@ inline class GlFramebuffer(val name: Int = -1) {
      */
     fun invalidateSubFramebuffer(target: FramebufferTarget, offset: Vec2i, size: Vec2i, attachment: Int) = gl.invalidateSubFramebuffer(target, offset, size, attachment)
 
+    // --- [ glNamedFramebufferDrawBuffer ] ---
+
+    /**
+     * DSA version of {@link GL11C#glDrawBuffer DrawBuffer}.
+     *
+     * @param buf         the color buffer to draw to. One of:<br><table><tr><td>{@link GL11#GL_NONE NONE}</td><td>{@link GL11#GL_FRONT_LEFT FRONT_LEFT}</td><td>{@link GL11#GL_FRONT_RIGHT FRONT_RIGHT}</td><td>{@link GL11#GL_BACK_LEFT BACK_LEFT}</td><td>{@link GL11#GL_BACK_RIGHT BACK_RIGHT}</td><td>{@link GL11#GL_FRONT FRONT}</td><td>{@link GL11#GL_BACK BACK}</td><td>{@link GL11#GL_LEFT LEFT}</td></tr><tr><td>{@link GL11#GL_RIGHT RIGHT}</td><td>{@link GL11#GL_FRONT_AND_BACK FRONT_AND_BACK}</td><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td><td>GL30.GL_COLOR_ATTACHMENT[1-15]</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferDrawBuffer">Reference Page</a>
+     */
+    infix fun drawBuffer(buf: Int) = gl.framebufferDrawBuffer(this, buf)
+
+    // --- [ glNamedFramebufferDrawBuffers ] ---
+
+    /**
+     * DSA version of {@link GL20C#glDrawBuffers DrawBuffers}.
+     *
+     * @param bufs        an array of symbolic constants specifying the buffers into which fragment colors or data values will be written. One of:<br><table><tr><td>{@link GL11#GL_NONE NONE}</td><td>{@link GL11#GL_FRONT_LEFT FRONT_LEFT}</td><td>{@link GL11#GL_FRONT_RIGHT FRONT_RIGHT}</td><td>{@link GL11#GL_BACK_LEFT BACK_LEFT}</td><td>{@link GL11#GL_BACK_RIGHT BACK_RIGHT}</td><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td></tr><tr><td>GL30.GL_COLOR_ATTACHMENT[1-15]</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferDrawBuffers">Reference Page</a>
+     */
+    infix fun drawBuffers(bufs: IntBuffer) = gl.framebufferDrawBuffers(this, bufs)
+
+    /**
+     * DSA version of {@link GL20C#glDrawBuffers DrawBuffers}. TODO rename to framebufferDrawBuffer?
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferDrawBuffers">Reference Page</a>
+     */
+    infix fun drawBuffers(buf: Int) = gl.framebufferDrawBuffers(this, buf)
+
+    // --- [ glNamedFramebufferParameteri ] ---
+
+    /**
+     * DSA version of {@link GL43C#glFramebufferParameteri FramebufferParameteri}.
+     *
+     * @param name       a token indicating the parameter to be modified. One of:<br><table><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_WIDTH FRAMEBUFFER_DEFAULT_WIDTH}</td><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_HEIGHT FRAMEBUFFER_DEFAULT_HEIGHT}</td></tr><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_LAYERS FRAMEBUFFER_DEFAULT_LAYERS}</td><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_SAMPLES FRAMEBUFFER_DEFAULT_SAMPLES}</td></tr><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS}</td></tr></table>
+     * @param param       the new value for the parameter named {@code name}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferParameteri">Reference Page</a>
+     */
+    fun parameter(name: FramebufferParameter, param: Int) = gl.framebufferParameter(this, name, param)
+
+    // --- [ glNamedFramebufferReadBuffer ] ---
+
+    /**
+     * DSA version of {@link GL11C#glReadBuffer ReadBuffer}.
+     *
+     * @param src         the color buffer to read from. One of:<br><table><tr><td>{@link GL11#GL_NONE NONE}</td><td>{@link GL11#GL_FRONT_LEFT FRONT_LEFT}</td><td>{@link GL11#GL_FRONT_RIGHT FRONT_RIGHT}</td><td>{@link GL11#GL_BACK_LEFT BACK_LEFT}</td><td>{@link GL11#GL_BACK_RIGHT BACK_RIGHT}</td><td>{@link GL11#GL_FRONT FRONT}</td><td>{@link GL11#GL_BACK BACK}</td><td>{@link GL11#GL_LEFT LEFT}</td></tr><tr><td>{@link GL11#GL_RIGHT RIGHT}</td><td>{@link GL11#GL_FRONT_AND_BACK FRONT_AND_BACK}</td><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td><td>GL30.GL_COLOR_ATTACHMENT[1-15]</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferReadBuffer">Reference Page</a>
+     */
+    infix fun readBuffer(src: Int) = gl.framebufferReadBuffer(this, src)
+
+    // --- [ glNamedFramebufferRenderbuffer ] ---
+
+    /**
+     * DSA version of {@link GL30C#glFramebufferRenderbuffer FramebufferRenderbuffer}.
+     *
+     * @param attachment         the attachment point of the framebuffer. One of:<br><table><tr><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td><td>{@link GL30#GL_COLOR_ATTACHMENT1 COLOR_ATTACHMENT1}</td><td>{@link GL30#GL_COLOR_ATTACHMENT2 COLOR_ATTACHMENT2}</td><td>{@link GL30#GL_COLOR_ATTACHMENT3 COLOR_ATTACHMENT3}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT4 COLOR_ATTACHMENT4}</td><td>{@link GL30#GL_COLOR_ATTACHMENT5 COLOR_ATTACHMENT5}</td><td>{@link GL30#GL_COLOR_ATTACHMENT6 COLOR_ATTACHMENT6}</td><td>{@link GL30#GL_COLOR_ATTACHMENT7 COLOR_ATTACHMENT7}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT8 COLOR_ATTACHMENT8}</td><td>{@link GL30#GL_COLOR_ATTACHMENT9 COLOR_ATTACHMENT9}</td><td>{@link GL30#GL_COLOR_ATTACHMENT10 COLOR_ATTACHMENT10}</td><td>{@link GL30#GL_COLOR_ATTACHMENT11 COLOR_ATTACHMENT11}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT12 COLOR_ATTACHMENT12}</td><td>{@link GL30#GL_COLOR_ATTACHMENT13 COLOR_ATTACHMENT13}</td><td>{@link GL30#GL_COLOR_ATTACHMENT14 COLOR_ATTACHMENT14}</td><td>{@link GL30#GL_COLOR_ATTACHMENT15 COLOR_ATTACHMENT15}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT16 COLOR_ATTACHMENT16}</td><td>{@link GL30#GL_COLOR_ATTACHMENT17 COLOR_ATTACHMENT17}</td><td>{@link GL30#GL_COLOR_ATTACHMENT18 COLOR_ATTACHMENT18}</td><td>{@link GL30#GL_COLOR_ATTACHMENT19 COLOR_ATTACHMENT19}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT20 COLOR_ATTACHMENT20}</td><td>{@link GL30#GL_COLOR_ATTACHMENT21 COLOR_ATTACHMENT21}</td><td>{@link GL30#GL_COLOR_ATTACHMENT22 COLOR_ATTACHMENT22}</td><td>{@link GL30#GL_COLOR_ATTACHMENT23 COLOR_ATTACHMENT23}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT24 COLOR_ATTACHMENT24}</td><td>{@link GL30#GL_COLOR_ATTACHMENT25 COLOR_ATTACHMENT25}</td><td>{@link GL30#GL_COLOR_ATTACHMENT26 COLOR_ATTACHMENT26}</td><td>{@link GL30#GL_COLOR_ATTACHMENT27 COLOR_ATTACHMENT27}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT28 COLOR_ATTACHMENT28}</td><td>{@link GL30#GL_COLOR_ATTACHMENT29 COLOR_ATTACHMENT29}</td><td>{@link GL30#GL_COLOR_ATTACHMENT30 COLOR_ATTACHMENT30}</td><td>{@link GL30#GL_COLOR_ATTACHMENT31 COLOR_ATTACHMENT31}</td></tr><tr><td>{@link GL30#GL_DEPTH_ATTACHMENT DEPTH_ATTACHMENT}</td><td>{@link GL30#GL_STENCIL_ATTACHMENT STENCIL_ATTACHMENT}</td><td>{@link GL30#GL_DEPTH_STENCIL_ATTACHMENT DEPTH_STENCIL_ATTACHMENT}</td></tr></table>
+     * @param renderbuffertarget the renderbuffer target. Must be:<br><table><tr><td>{@link GL30#GL_RENDERBUFFER RENDERBUFFER}</td></tr></table>
+     * @param renderbuffer       the name of an existing renderbuffer object of type {@code renderbuffertarget} to attach
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
+     */
+    fun renderbuffer(attachment: Int, renderbuffer: GlRenderbuffer) = gl.framebufferRenderbuffer(this, attachment, renderbuffer)
+
+    // --- [ glNamedFramebufferTexture ] ---
+
+    /**
+     * DSA version of {@link GL32C#glFramebufferTexture FramebufferTexture}.
+     *
+     * @param attachment  the attachment point of the framebuffer
+     * @param texture     the texture object to attach to the framebuffer attachment point named by {@code attachment}
+     * @param level       the mipmap level of {@code texture} to attach
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture">Reference Page</a>
+     */
+    fun texture(attachment: Int, texture: GlTexture, level: Int) = gl.framebufferTexture(this, attachment, texture, level)
+
+    // --- [ glNamedFramebufferTextureLayer ] ---
+
+    /**
+     * DSA version of {@link GL30C#glFramebufferTextureLayer FramebufferTextureLayer}.
+     *
+     * @param attachment  the attachment point of the framebuffer. One of:<br><table><tr><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td><td>{@link GL30#GL_COLOR_ATTACHMENT1 COLOR_ATTACHMENT1}</td><td>{@link GL30#GL_COLOR_ATTACHMENT2 COLOR_ATTACHMENT2}</td><td>{@link GL30#GL_COLOR_ATTACHMENT3 COLOR_ATTACHMENT3}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT4 COLOR_ATTACHMENT4}</td><td>{@link GL30#GL_COLOR_ATTACHMENT5 COLOR_ATTACHMENT5}</td><td>{@link GL30#GL_COLOR_ATTACHMENT6 COLOR_ATTACHMENT6}</td><td>{@link GL30#GL_COLOR_ATTACHMENT7 COLOR_ATTACHMENT7}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT8 COLOR_ATTACHMENT8}</td><td>{@link GL30#GL_COLOR_ATTACHMENT9 COLOR_ATTACHMENT9}</td><td>{@link GL30#GL_COLOR_ATTACHMENT10 COLOR_ATTACHMENT10}</td><td>{@link GL30#GL_COLOR_ATTACHMENT11 COLOR_ATTACHMENT11}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT12 COLOR_ATTACHMENT12}</td><td>{@link GL30#GL_COLOR_ATTACHMENT13 COLOR_ATTACHMENT13}</td><td>{@link GL30#GL_COLOR_ATTACHMENT14 COLOR_ATTACHMENT14}</td><td>{@link GL30#GL_COLOR_ATTACHMENT15 COLOR_ATTACHMENT15}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT16 COLOR_ATTACHMENT16}</td><td>{@link GL30#GL_COLOR_ATTACHMENT17 COLOR_ATTACHMENT17}</td><td>{@link GL30#GL_COLOR_ATTACHMENT18 COLOR_ATTACHMENT18}</td><td>{@link GL30#GL_COLOR_ATTACHMENT19 COLOR_ATTACHMENT19}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT20 COLOR_ATTACHMENT20}</td><td>{@link GL30#GL_COLOR_ATTACHMENT21 COLOR_ATTACHMENT21}</td><td>{@link GL30#GL_COLOR_ATTACHMENT22 COLOR_ATTACHMENT22}</td><td>{@link GL30#GL_COLOR_ATTACHMENT23 COLOR_ATTACHMENT23}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT24 COLOR_ATTACHMENT24}</td><td>{@link GL30#GL_COLOR_ATTACHMENT25 COLOR_ATTACHMENT25}</td><td>{@link GL30#GL_COLOR_ATTACHMENT26 COLOR_ATTACHMENT26}</td><td>{@link GL30#GL_COLOR_ATTACHMENT27 COLOR_ATTACHMENT27}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT28 COLOR_ATTACHMENT28}</td><td>{@link GL30#GL_COLOR_ATTACHMENT29 COLOR_ATTACHMENT29}</td><td>{@link GL30#GL_COLOR_ATTACHMENT30 COLOR_ATTACHMENT30}</td><td>{@link GL30#GL_COLOR_ATTACHMENT31 COLOR_ATTACHMENT31}</td></tr><tr><td>{@link GL30#GL_DEPTH_ATTACHMENT DEPTH_ATTACHMENT}</td><td>{@link GL30#GL_STENCIL_ATTACHMENT STENCIL_ATTACHMENT}</td><td>{@link GL30#GL_DEPTH_STENCIL_ATTACHMENT DEPTH_STENCIL_ATTACHMENT}</td></tr></table>
+     * @param texture     the texture object to attach to the framebuffer attachment point named by {@code attachment}
+     * @param level       the mipmap level of {@code texture} to attach
+     * @param layer       the layer of {@code texture} to attach.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
+     */
+    fun textureLayer(attachment: Int, texture: GlTexture, level: Int, layer: Int) = gl.framebufferTextureLayer(this, attachment, texture, level, layer)
+
     companion object {
+
+        // --- [ glCreateFramebuffers ] ---
+
+        /**
+         * Returns {@code n} previously unused framebuffer names in {@code framebuffers}, each representing a new framebuffer object.
+         *
+         * @see <a target="_blank" href="http://docs.gl/gl4/glCreateFramebuffers">Reference Page</a>
+         */
+        fun create(): GlFramebuffer = gl.createFramebuffers()
+
         fun gen(): GlFramebuffer = GlFramebuffer(GL30C.glGenFramebuffers())
     }
 }
