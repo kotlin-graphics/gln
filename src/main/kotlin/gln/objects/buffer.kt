@@ -33,7 +33,7 @@ inline class GlBuffer(val name: Int = -1) {
      */
     fun clearBufferData(buffer: GlBuffer, internalFormat: InternalFormat, format: Int, type: Int, data: Buffer? = null) = gl.clearBufferData(this, internalFormat, format, type, data)
 
-    // --- [ glCopyNamedBufferSubData ] ---
+    // --- [ glCopyNamedBufferSubData ] --- TODO -> copySubDataTo?
 
     /**
      * DSA version of {@link GL31C#glCopyBufferSubData CopyBufferSubData}.

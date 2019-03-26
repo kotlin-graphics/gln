@@ -1370,7 +1370,7 @@ inline class BufferType(val i: Int) {
         val COLOR = BufferType(GL11.GL_COLOR)
         val DEPTH = BufferType(GL11C.GL_DEPTH)
         val STENCIL = BufferType(GL11.GL_STENCIL)
-        val DEPTH_STENCIL  = BufferType(GL30C.GL_DEPTH_STENCIL)
+        val DEPTH_STENCIL = BufferType(GL30C.GL_DEPTH_STENCIL)
     }
 }
 
@@ -6984,7 +6984,6 @@ inline class BufferStorageFlag(val i: Int) {
 }
 
 
-
 inline class TextureAccess(val i: Int) {
     companion object {
         val READ_ONLY = TextureAccess(GL42C.GL_READ_ONLY)
@@ -7141,14 +7140,14 @@ inline class ClipOrigin(val i: Int) {
 
 inline class ClipDepthMode(val i: Int) {
     companion object {
-        val NEGATIVE_ONE_TO_ONE  = ClipDepthMode(GL45C.GL_NEGATIVE_ONE_TO_ONE)
+        val NEGATIVE_ONE_TO_ONE = ClipDepthMode(GL45C.GL_NEGATIVE_ONE_TO_ONE)
         val ZERO_TO_ONE = ClipDepthMode(GL45C.GL_ZERO_TO_ONE)
     }
 }
 
 inline class GetTransformFeedback(val i: Int) {
     companion object {
-        val BUFFER_BINDING  = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
+        val BUFFER_BINDING = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
         val PAUSED = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_PAUSED)
         val ACTIVE = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_ACTIVE)
     }
@@ -7156,8 +7155,51 @@ inline class GetTransformFeedback(val i: Int) {
 
 inline class GetTransformFeedbackIndexed(val i: Int) {
     companion object {
-        val BUFFER_BINDING  = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
+        val BUFFER_BINDING = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
         val BUFFER_START = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_START)
         val BUFFER_SIZE = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_SIZE)
+    }
+}
+
+inline class FramebufferStatus(val i: Int) {
+    val isComplete: Boolean
+        get() = this == COMPLETE
+
+    companion object {
+        val COMPLETE = FramebufferStatus(GL30C.GL_FRAMEBUFFER_COMPLETE)
+        val UNDEFINED = FramebufferStatus(GL30C.GL_FRAMEBUFFER_UNDEFINED)
+        val INCOMPLETE_ATTACHMENT = FramebufferStatus(GL30C.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+        val INCOMPLETE_MISSING_ATTACHMENT = FramebufferStatus(GL30C.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+        val INCOMPLETE_DRAW_BUFFER = FramebufferStatus(GL30C.GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
+        val INCOMPLETE_READ_BUFFER = FramebufferStatus(GL30C.GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER)
+        val UNSUPPORTED = FramebufferStatus(GL30C.GL_FRAMEBUFFER_UNSUPPORTED)
+        val INCOMPLETE_MULTISAMPLE = FramebufferStatus(GL30C.GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE)
+        val INCOMPLETE_LAYER_TARGETS = FramebufferStatus(GL32C.GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS)
+    }
+}
+
+inline class FramebufferAttachmentObjectType(val i: Int) {
+    companion object {
+        val NONE = FramebufferAttachmentObjectType(GL11C.GL_NONE)
+        val FRAMEBUFFER_DEFAULT = FramebufferAttachmentObjectType(GL30C.GL_FRAMEBUFFER_DEFAULT)
+        val TEXTURE = FramebufferAttachmentObjectType(GL11.GL_TEXTURE)
+        val RENDERBUFFER = FramebufferAttachmentObjectType(GL30C.GL_RENDERBUFFER)
+    }
+}
+
+inline class FramebufferAttachmentComponentType(val i: Int) {
+    companion object {
+        val FLOAT = FramebufferAttachmentComponentType(GL11C.GL_FLOAT)
+        val INT = FramebufferAttachmentComponentType(GL30C.GL_INT)
+        val UNSIGNED_INT = FramebufferAttachmentComponentType(GL11.GL_UNSIGNED_INT)
+        val SIGNED_NORMALIZED = FramebufferAttachmentComponentType(GL31C.GL_SIGNED_NORMALIZED)
+        val UNSIGNED_NORMALIZED = FramebufferAttachmentComponentType(GL30C.GL_UNSIGNED_NORMALIZED)
+    }
+}
+
+inline class FramebufferAttachmentColorEncoding(val i: Int) {
+    companion object {
+        val LINEAR = FramebufferAttachmentComponentType(GL11C.GL_LINEAR)
+        val SRGB = FramebufferAttachmentComponentType(GL21C.GL_SRGB)
     }
 }

@@ -2,12 +2,15 @@ package gln
 
 import glm_.L
 import glm_.vec2.Vec2i
+import glm_.vec3.Vec3i
+import glm_.vec4.Vec4i
 import gln.framebuffer.GlFramebuffer
 import gln.framebuffer.GlFramebuffers
 import gln.objects.GlBuffer
 import gln.objects.GlBuffers
 import gln.objects.GlTexture
 import gln.renderbuffer.GlRenderbuffer
+import gln.renderbuffer.GlRenderbuffers
 import gln.transformFeedback.GlTransformFeedback
 import gln.transformFeedback.GlTransformFeedbacks
 import kool.Ptr
@@ -16,6 +19,7 @@ import kool.rem
 import kool.stak
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL30C
+import org.lwjgl.opengl.GL45
 import org.lwjgl.opengl.GL45C
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memByteBufferSafe
@@ -790,7 +794,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
      */
     fun invalidateFramebufferSubData(framebuffer: GlFramebuffer, attachments: IntBuffer, offset: Vec2i, size: Vec2i) =
-        GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, attachments.rem, attachments.adr, offset.x, offset.y, size.x, size.y)
+            GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, attachments.rem, attachments.adr, offset.x, offset.y, size.x, size.y)
 
     /**
      * DSA version of {@link GL43C#glInvalidateSubFramebuffer InvalidateSubFramebuffer}.
@@ -802,7 +806,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
      */
     fun invalidateFramebufferSubData(framebuffer: GlFramebuffer, attachment: Int, offset: Vec2i, size: Vec2i) =
-            stak.intAddress(attachment){GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, it, offset.x, offset.y, size.x, size.y) }
+            stak.intAddress(attachment) { GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, it, offset.x, offset.y, size.x, size.y) }
 
     // --- [ glClearNamedFramebufferiv ] ---
 
@@ -865,358 +869,217 @@ interface gl45i {
     fun clearFramebufferDepthStencil(framebuffer: GlFramebuffer, depth: Float, stencil: Int) =
             GL45C.glClearNamedFramebufferfi(framebuffer.name, GL30C.GL_DEPTH_STENCIL, 0, depth, stencil)
 
-//    // --- [ glBlitNamedFramebuffer ] ---
-//
-//    /**
-//     * DSA version of {@link GL30C#glBlitFramebuffer BlitFramebuffer}.
-//     *
-//     * @param readFramebuffer the source framebuffer name
-//     * @param drawFramebuffer the destination framebuffer name
-//     * @param srcX0           the lower-left coordinate of the source rectangle within the read buffer
-//     * @param srcY0           the upper-left coordinate of the source rectangle within the read buffer
-//     * @param srcX1           the lower-right coordinate of the source rectangle within the read buffer
-//     * @param srcY1           the upper-right coordinate of the source rectangle within the read buffer
-//     * @param dstX0           the lower-left coordinate of the destination rectangle within the write buffer
-//     * @param dstY0           the upper-left coordinate of the destination rectangle within the write buffer
-//     * @param dstX1           the lower-right coordinate of the destination rectangle within the write buffer
-//     * @param dstY1           the upper-right coordinate of the destination rectangle within the write buffer
-//     * @param mask            the bitwise OR of the flags indicating which buffers are to be copied. One of:<br><table><tr><td>{@link GL11#GL_COLOR_BUFFER_BIT COLOR_BUFFER_BIT}</td><td>{@link GL11#GL_DEPTH_BUFFER_BIT DEPTH_BUFFER_BIT}</td><td>{@link GL11#GL_STENCIL_BUFFER_BIT STENCIL_BUFFER_BIT}</td></tr></table>
-//     * @param filter          the interpolation to be applied if the image is stretched. One of:<br><table><tr><td>{@link GL11#GL_NEAREST NEAREST}</td><td>{@link GL11#GL_LINEAR LINEAR}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
-//     */
-//    public static native void glBlitNamedFramebuffer(@NativeType("GLuint") int readFramebuffer, @NativeType("GLuint") int drawFramebuffer, @NativeType("GLint") int srcX0, @NativeType("GLint") int srcY0, @NativeType("GLint") int srcX1, @NativeType("GLint") int srcY1, @NativeType("GLint") int dstX0, @NativeType("GLint") int dstY0, @NativeType("GLint") int dstX1, @NativeType("GLint") int dstY1, @NativeType("GLbitfield") int mask, @NativeType("GLenum") int filter);
-//
-//    // --- [ glCheckNamedFramebufferStatus ] ---
-//
-//    /**
-//     * DSA version of {@link GL30C#glCheckFramebufferStatus CheckFramebufferStatus}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param target      the target of the framebuffer completeness check. One of:<br><table><tr><td>{@link GL30#GL_FRAMEBUFFER FRAMEBUFFER}</td><td>{@link GL30#GL_READ_FRAMEBUFFER READ_FRAMEBUFFER}</td><td>{@link GL30#GL_DRAW_FRAMEBUFFER DRAW_FRAMEBUFFER}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glCheckFramebufferStatus">Reference Page</a>
-//     */
-//    @NativeType("GLenum")
-//    public static native int glCheckNamedFramebufferStatus(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int target);
-//
-//    // --- [ glGetNamedFramebufferParameteriv ] ---
-//
-//    /** Unsafe version of: {@link #glGetNamedFramebufferParameteriv GetNamedFramebufferParameteriv} */
-//    public static native void nglGetNamedFramebufferParameteriv(int framebuffer, int pname, long params);
-//
-//    /**
-//     * DSA version of {@link GL43C#glGetFramebufferParameteriv GetFramebufferParameteriv}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param pname       a token indicating the parameter to be retrieved. One of:<br><table><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_WIDTH FRAMEBUFFER_DEFAULT_WIDTH}</td><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_HEIGHT FRAMEBUFFER_DEFAULT_HEIGHT}</td></tr><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_LAYERS FRAMEBUFFER_DEFAULT_LAYERS}</td><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_SAMPLES FRAMEBUFFER_DEFAULT_SAMPLES}</td></tr><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS}</td></tr></table>
-//     * @param params      a variable to receive the value of the parameter named {@code pname}
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferParameter">Reference Page</a>
-//     */
-//    public static void glGetNamedFramebufferParameteriv(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetNamedFramebufferParameteriv(framebuffer, pname, memAddress(params));
-//    }
-//
-//    /**
-//     * DSA version of {@link GL43C#glGetFramebufferParameteriv GetFramebufferParameteriv}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param pname       a token indicating the parameter to be retrieved. One of:<br><table><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_WIDTH FRAMEBUFFER_DEFAULT_WIDTH}</td><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_HEIGHT FRAMEBUFFER_DEFAULT_HEIGHT}</td></tr><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_LAYERS FRAMEBUFFER_DEFAULT_LAYERS}</td><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_SAMPLES FRAMEBUFFER_DEFAULT_SAMPLES}</td></tr><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferParameter">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetNamedFramebufferParameteri(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.callocInt(1);
-//            nglGetNamedFramebufferParameteriv(framebuffer, pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glGetNamedFramebufferAttachmentParameteriv ] ---
-//
-//    /** Unsafe version of: {@link #glGetNamedFramebufferAttachmentParameteriv GetNamedFramebufferAttachmentParameteriv} */
-//    public static native void nglGetNamedFramebufferAttachmentParameteriv(int framebuffer, int attachment, int pname, long params);
-//
-//    /**
-//     * DSA version of {@link GL30C#glGetFramebufferAttachmentParameteriv GetFramebufferAttachmentParameteriv}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param attachment  the attachment within {@code target}. One of:<br><table><tr><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td><td>{@link GL30#GL_COLOR_ATTACHMENT1 COLOR_ATTACHMENT1}</td><td>{@link GL30#GL_COLOR_ATTACHMENT2 COLOR_ATTACHMENT2}</td><td>{@link GL30#GL_COLOR_ATTACHMENT3 COLOR_ATTACHMENT3}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT4 COLOR_ATTACHMENT4}</td><td>{@link GL30#GL_COLOR_ATTACHMENT5 COLOR_ATTACHMENT5}</td><td>{@link GL30#GL_COLOR_ATTACHMENT6 COLOR_ATTACHMENT6}</td><td>{@link GL30#GL_COLOR_ATTACHMENT7 COLOR_ATTACHMENT7}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT8 COLOR_ATTACHMENT8}</td><td>{@link GL30#GL_COLOR_ATTACHMENT9 COLOR_ATTACHMENT9}</td><td>{@link GL30#GL_COLOR_ATTACHMENT10 COLOR_ATTACHMENT10}</td><td>{@link GL30#GL_COLOR_ATTACHMENT11 COLOR_ATTACHMENT11}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT12 COLOR_ATTACHMENT12}</td><td>{@link GL30#GL_COLOR_ATTACHMENT13 COLOR_ATTACHMENT13}</td><td>{@link GL30#GL_COLOR_ATTACHMENT14 COLOR_ATTACHMENT14}</td><td>{@link GL30#GL_COLOR_ATTACHMENT15 COLOR_ATTACHMENT15}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT16 COLOR_ATTACHMENT16}</td><td>{@link GL30#GL_COLOR_ATTACHMENT17 COLOR_ATTACHMENT17}</td><td>{@link GL30#GL_COLOR_ATTACHMENT18 COLOR_ATTACHMENT18}</td><td>{@link GL30#GL_COLOR_ATTACHMENT19 COLOR_ATTACHMENT19}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT20 COLOR_ATTACHMENT20}</td><td>{@link GL30#GL_COLOR_ATTACHMENT21 COLOR_ATTACHMENT21}</td><td>{@link GL30#GL_COLOR_ATTACHMENT22 COLOR_ATTACHMENT22}</td><td>{@link GL30#GL_COLOR_ATTACHMENT23 COLOR_ATTACHMENT23}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT24 COLOR_ATTACHMENT24}</td><td>{@link GL30#GL_COLOR_ATTACHMENT25 COLOR_ATTACHMENT25}</td><td>{@link GL30#GL_COLOR_ATTACHMENT26 COLOR_ATTACHMENT26}</td><td>{@link GL30#GL_COLOR_ATTACHMENT27 COLOR_ATTACHMENT27}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT28 COLOR_ATTACHMENT28}</td><td>{@link GL30#GL_COLOR_ATTACHMENT29 COLOR_ATTACHMENT29}</td><td>{@link GL30#GL_COLOR_ATTACHMENT30 COLOR_ATTACHMENT30}</td><td>{@link GL30#GL_COLOR_ATTACHMENT31 COLOR_ATTACHMENT31}</td></tr><tr><td>{@link GL30#GL_DEPTH_ATTACHMENT DEPTH_ATTACHMENT}</td><td>{@link GL30#GL_STENCIL_ATTACHMENT STENCIL_ATTACHMENT}</td><td>{@link GL30#GL_DEPTH_STENCIL_ATTACHMENT DEPTH_STENCIL_ATTACHMENT}</td></tr></table>
-//     * @param pname       the parameter of {@code attachment} to query. One of:<br><table><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME FRAMEBUFFER_ATTACHMENT_OBJECT_NAME}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE FRAMEBUFFER_ATTACHMENT_RED_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE FRAMEBUFFER_ATTACHMENT_GREEN_SIZE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE FRAMEBUFFER_ATTACHMENT_BLUE_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE}</td></tr></table>
-//     * @param params      an array to receive the value of the queried parameter
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
-//     */
-//    public static void glGetNamedFramebufferAttachmentParameteriv(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int attachment, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetNamedFramebufferAttachmentParameteriv(framebuffer, attachment, pname, memAddress(params));
-//    }
-//
-//    /**
-//     * DSA version of {@link GL30C#glGetFramebufferAttachmentParameteriv GetFramebufferAttachmentParameteriv}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param attachment  the attachment within {@code target}. One of:<br><table><tr><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td><td>{@link GL30#GL_COLOR_ATTACHMENT1 COLOR_ATTACHMENT1}</td><td>{@link GL30#GL_COLOR_ATTACHMENT2 COLOR_ATTACHMENT2}</td><td>{@link GL30#GL_COLOR_ATTACHMENT3 COLOR_ATTACHMENT3}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT4 COLOR_ATTACHMENT4}</td><td>{@link GL30#GL_COLOR_ATTACHMENT5 COLOR_ATTACHMENT5}</td><td>{@link GL30#GL_COLOR_ATTACHMENT6 COLOR_ATTACHMENT6}</td><td>{@link GL30#GL_COLOR_ATTACHMENT7 COLOR_ATTACHMENT7}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT8 COLOR_ATTACHMENT8}</td><td>{@link GL30#GL_COLOR_ATTACHMENT9 COLOR_ATTACHMENT9}</td><td>{@link GL30#GL_COLOR_ATTACHMENT10 COLOR_ATTACHMENT10}</td><td>{@link GL30#GL_COLOR_ATTACHMENT11 COLOR_ATTACHMENT11}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT12 COLOR_ATTACHMENT12}</td><td>{@link GL30#GL_COLOR_ATTACHMENT13 COLOR_ATTACHMENT13}</td><td>{@link GL30#GL_COLOR_ATTACHMENT14 COLOR_ATTACHMENT14}</td><td>{@link GL30#GL_COLOR_ATTACHMENT15 COLOR_ATTACHMENT15}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT16 COLOR_ATTACHMENT16}</td><td>{@link GL30#GL_COLOR_ATTACHMENT17 COLOR_ATTACHMENT17}</td><td>{@link GL30#GL_COLOR_ATTACHMENT18 COLOR_ATTACHMENT18}</td><td>{@link GL30#GL_COLOR_ATTACHMENT19 COLOR_ATTACHMENT19}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT20 COLOR_ATTACHMENT20}</td><td>{@link GL30#GL_COLOR_ATTACHMENT21 COLOR_ATTACHMENT21}</td><td>{@link GL30#GL_COLOR_ATTACHMENT22 COLOR_ATTACHMENT22}</td><td>{@link GL30#GL_COLOR_ATTACHMENT23 COLOR_ATTACHMENT23}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT24 COLOR_ATTACHMENT24}</td><td>{@link GL30#GL_COLOR_ATTACHMENT25 COLOR_ATTACHMENT25}</td><td>{@link GL30#GL_COLOR_ATTACHMENT26 COLOR_ATTACHMENT26}</td><td>{@link GL30#GL_COLOR_ATTACHMENT27 COLOR_ATTACHMENT27}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT28 COLOR_ATTACHMENT28}</td><td>{@link GL30#GL_COLOR_ATTACHMENT29 COLOR_ATTACHMENT29}</td><td>{@link GL30#GL_COLOR_ATTACHMENT30 COLOR_ATTACHMENT30}</td><td>{@link GL30#GL_COLOR_ATTACHMENT31 COLOR_ATTACHMENT31}</td></tr><tr><td>{@link GL30#GL_DEPTH_ATTACHMENT DEPTH_ATTACHMENT}</td><td>{@link GL30#GL_STENCIL_ATTACHMENT STENCIL_ATTACHMENT}</td><td>{@link GL30#GL_DEPTH_STENCIL_ATTACHMENT DEPTH_STENCIL_ATTACHMENT}</td></tr></table>
-//     * @param pname       the parameter of {@code attachment} to query. One of:<br><table><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME FRAMEBUFFER_ATTACHMENT_OBJECT_NAME}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE FRAMEBUFFER_ATTACHMENT_RED_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE FRAMEBUFFER_ATTACHMENT_GREEN_SIZE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE FRAMEBUFFER_ATTACHMENT_BLUE_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetNamedFramebufferAttachmentParameteri(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int attachment, @NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.callocInt(1);
-//            nglGetNamedFramebufferAttachmentParameteriv(framebuffer, attachment, pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glCreateRenderbuffers ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glCreateRenderbuffers CreateRenderbuffers}
-//     *
-//     * @param n the number of renderbuffer names to create
-//     */
-//    public static native void nglCreateRenderbuffers(int n, long renderbuffers);
-//
-//    /**
-//     * Returns {@code n} previously unused renderbuffer names in {@code renderbuffers}, each representing a new renderbuffer object.
-//     *
-//     * @param renderbuffers the buffer in which to store the created renderbuffer names
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateRenderbuffers">Reference Page</a>
-//     */
-//    public static void glCreateRenderbuffers(@NativeType("GLuint *") IntBuffer renderbuffers) {
-//        nglCreateRenderbuffers(renderbuffers.remaining(), memAddress(renderbuffers));
-//    }
-//
-//    /**
-//     * Returns {@code n} previously unused renderbuffer names in {@code renderbuffers}, each representing a new renderbuffer object.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateRenderbuffers">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glCreateRenderbuffers() {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer renderbuffers = stack.callocInt(1);
-//            nglCreateRenderbuffers(1, memAddress(renderbuffers));
-//            return renderbuffers.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glNamedRenderbufferStorage ] ---
-//
-//    /**
-//     * DSA version of {@link GL30C#glRenderbufferStorage RenderbufferStorage}.
-//     *
-//     * @param internalformat the internal format to use for the renderbuffer object's image. Must be a color-renderable, depth-renderable, or stencil-renderable format.
-//     * @param width          the width of the renderbuffer, in pixels
-//     * @param height         the height of the renderbuffer, in pixels
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glRenderbufferStorage">Reference Page</a>
-//     */
-//    public static native void glNamedRenderbufferStorage(@NativeType("GLuint") int renderbuffer, @NativeType("GLenum") int internalformat, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height);
-//
-//    // --- [ glNamedRenderbufferStorageMultisample ] ---
-//
-//    /**
-//     * DSA version of {@link GL30C#glRenderbufferStorageMultisample RenderbufferStorageMultisample}.
-//     *
-//     * @param samples        the number of samples to be used for the renderbuffer object's storage
-//     * @param internalformat the internal format to use for the renderbuffer object's image. Must be a color-renderable, depth-renderable, or stencil-renderable format.
-//     * @param width          the width of the renderbuffer, in pixels
-//     * @param height         the height of the renderbuffer, in pixels
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glRenderbufferStorageMultisample">Reference Page</a>
-//     */
-//    public static native void glNamedRenderbufferStorageMultisample(@NativeType("GLuint") int renderbuffer, @NativeType("GLsizei") int samples, @NativeType("GLenum") int internalformat, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height);
-//
-//    // --- [ glGetNamedRenderbufferParameteriv ] ---
-//
-//    /** Unsafe version of: {@link #glGetNamedRenderbufferParameteriv GetNamedRenderbufferParameteriv} */
-//    public static native void nglGetNamedRenderbufferParameteriv(int renderbuffer, int pname, long params);
-//
-//    /**
-//     * DSA version of {@link GL30C#glGetRenderbufferParameteriv GetRenderbufferParameteriv}.
-//     *
-//     * @param pname  the parameter whose value to retrieve from the renderbuffer bound to {@code target}. One of:<br><table><tr><td>{@link GL30#GL_RENDERBUFFER_WIDTH RENDERBUFFER_WIDTH}</td><td>{@link GL30#GL_RENDERBUFFER_HEIGHT RENDERBUFFER_HEIGHT}</td><td>{@link GL30#GL_RENDERBUFFER_INTERNAL_FORMAT RENDERBUFFER_INTERNAL_FORMAT}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_RED_SIZE RENDERBUFFER_RED_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_GREEN_SIZE RENDERBUFFER_GREEN_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_BLUE_SIZE RENDERBUFFER_BLUE_SIZE}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_ALPHA_SIZE RENDERBUFFER_ALPHA_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_DEPTH_SIZE RENDERBUFFER_DEPTH_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_STENCIL_SIZE RENDERBUFFER_STENCIL_SIZE}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_SAMPLES RENDERBUFFER_SAMPLES}</td></tr></table>
-//     * @param params an array to receive the value of the queried parameter
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetRenderbufferParameter">Reference Page</a>
-//     */
-//    public static void glGetNamedRenderbufferParameteriv(@NativeType("GLuint") int renderbuffer, @NativeType("GLenum") int pname, @NativeType("GLint *") IntBuffer params) {
-//        if (CHECKS) {
-//            check(params, 1);
-//        }
-//        nglGetNamedRenderbufferParameteriv(renderbuffer, pname, memAddress(params));
-//    }
-//
-//    /**
-//     * DSA version of {@link GL30C#glGetRenderbufferParameteriv GetRenderbufferParameteriv}.
-//     *
-//     * @param pname the parameter whose value to retrieve from the renderbuffer bound to {@code target}. One of:<br><table><tr><td>{@link GL30#GL_RENDERBUFFER_WIDTH RENDERBUFFER_WIDTH}</td><td>{@link GL30#GL_RENDERBUFFER_HEIGHT RENDERBUFFER_HEIGHT}</td><td>{@link GL30#GL_RENDERBUFFER_INTERNAL_FORMAT RENDERBUFFER_INTERNAL_FORMAT}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_RED_SIZE RENDERBUFFER_RED_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_GREEN_SIZE RENDERBUFFER_GREEN_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_BLUE_SIZE RENDERBUFFER_BLUE_SIZE}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_ALPHA_SIZE RENDERBUFFER_ALPHA_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_DEPTH_SIZE RENDERBUFFER_DEPTH_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_STENCIL_SIZE RENDERBUFFER_STENCIL_SIZE}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_SAMPLES RENDERBUFFER_SAMPLES}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glGetRenderbufferParameter">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glGetNamedRenderbufferParameteri(@NativeType("GLuint") int renderbuffer, @NativeType("GLenum") int pname) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.callocInt(1);
-//            nglGetNamedRenderbufferParameteriv(renderbuffer, pname, memAddress(params));
-//            return params.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glCreateTextures ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glCreateTextures CreateTextures}
-//     *
-//     * @param n the number of texture names to create
-//     */
-//    public static native void nglCreateTextures(int target, int n, long textures);
-//
-//    /**
-//     * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
-//     *
-//     * @param target   the texture target. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link GL11#GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
-//     * @param textures the buffer in which to store the created texture names
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
-//     */
-//    public static void glCreateTextures(@NativeType("GLenum") int target, @NativeType("GLuint *") IntBuffer textures) {
-//        nglCreateTextures(target, textures.remaining(), memAddress(textures));
-//    }
-//
-//    /**
-//     * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
-//     *
-//     * @param target the texture target. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link GL11#GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
-//     */
-//    @NativeType("void")
-//    public static int glCreateTextures(@NativeType("GLenum") int target) {
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer textures = stack.callocInt(1);
-//            nglCreateTextures(target, 1, memAddress(textures));
-//            return textures.get(0);
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
-//    // --- [ glTextureBuffer ] ---
-//
-//    /**
-//     * DSA version of {@link GL31C#glTexBuffer TexBuffer}.
-//     *
-//     * @param texture        the texture name
-//     * @param internalformat the sized internal format of the data in the store belonging to {@code buffer}
-//     * @param buffer         the name of the buffer object whose storage to attach to the active buffer texture
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureBuffer">Reference Page</a>
-//     */
-//    public static native void glTextureBuffer(@NativeType("GLuint") int texture, @NativeType("GLenum") int internalformat, @NativeType("GLuint") int buffer);
-//
-//    // --- [ glTextureBufferRange ] ---
-//
-//    /**
-//     * DSA version of {@link GL43C#glTexBufferRange TexBufferRange}.
-//     *
-//     * @param texture        the texture name
-//     * @param internalformat the internal format of the data in the store belonging to {@code buffer}
-//     * @param buffer         the name of the buffer object whose storage to attach to the active buffer texture
-//     * @param offset         the offset of the start of the range of the buffer's data store to attach
-//     * @param size           the size of the range of the buffer's data store to attach
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureBufferRange">Reference Page</a>
-//     */
-//    public static native void glTextureBufferRange(@NativeType("GLuint") int texture, @NativeType("GLenum") int internalformat, @NativeType("GLuint") int buffer, @NativeType("GLintptr") long offset, @NativeType("GLsizeiptr") long size);
-//
-//    // --- [ glTextureStorage1D ] ---
-//
-//    /**
-//     * DSA version of {@link GL42C#glTexStorage1D TexStorage1D}.
-//     *
-//     * @param texture        the texture name
-//     * @param levels         the number of texture levels
-//     * @param internalformat the sized internal format to be used to store texture image data
-//     * @param width          the width of the texture, in texels
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage1D">Reference Page</a>
-//     */
-//    public static native void glTextureStorage1D(@NativeType("GLuint") int texture, @NativeType("GLsizei") int levels, @NativeType("GLenum") int internalformat, @NativeType("GLsizei") int width);
-//
-//    // --- [ glTextureStorage2D ] ---
-//
-//    /**
-//     * DSA version of {@link GL42C#glTexStorage2D TexStorage2D}.
-//     *
-//     * @param texture        the texture name
-//     * @param levels         the number of texture levels
-//     * @param internalformat the sized internal format to be used to store texture image data
-//     * @param width          the width of the texture, in texels
-//     * @param height         the height of the texture, in texels
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage2D">Reference Page</a>
-//     */
-//    public static native void glTextureStorage2D(@NativeType("GLuint") int texture, @NativeType("GLsizei") int levels, @NativeType("GLenum") int internalformat, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height);
-//
-//    // --- [ glTextureStorage3D ] ---
-//
-//    /**
-//     * DSA version of {@link GL42C#glTexStorage3D TexStorage3D}.
-//     *
-//     * @param texture        the texture name
-//     * @param levels         the number of texture levels
-//     * @param internalformat the sized internal format to be used to store texture image data
-//     * @param width          the width of the texture, in texels
-//     * @param height         the height of the texture, in texels
-//     * @param depth          the depth of the texture, in texels
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage3D">Reference Page</a>
-//     */
-//    public static native void glTextureStorage3D(@NativeType("GLuint") int texture, @NativeType("GLsizei") int levels, @NativeType("GLenum") int internalformat, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height, @NativeType("GLsizei") int depth);
-//
-//    // --- [ glTextureStorage2DMultisample ] ---
-//
-//    /**
-//     * DSA version of {@link GL43C#glTexStorage2DMultisample TexStorage2DMultisample}.
-//     *
-//     * @param texture              the texture name
-//     * @param samples              the number of samples in the texture
-//     * @param internalformat       the sized internal format to be used to store texture image data
-//     * @param width                the width of the texture, in texels
-//     * @param height               the height of the texture, in texels
-//     * @param fixedsamplelocations whether the image will use identical sample locations and the same number of samples for all texels in the image, and the sample locations will not
-//     *                             depend on the internal format or size of the image
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage2DMultisample">Reference Page</a>
-//     */
-//    public static native void glTextureStorage2DMultisample(@NativeType("GLuint") int texture, @NativeType("GLsizei") int samples, @NativeType("GLenum") int internalformat, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height, @NativeType("GLboolean") boolean fixedsamplelocations);
-//
+    // --- [ glBlitNamedFramebuffer ] ---
+
+    /**
+     * DSA version of {@link GL30C#glBlitFramebuffer BlitFramebuffer}.
+     *
+     * @param readFramebuffer the source framebuffer name
+     * @param drawFramebuffer the destination framebuffer name
+     * @param src             the coordinate of the source rectangle within the read buffer [lower-left, upper-left, lower-right, upper-right]
+     * @param dst             the coordinate of the destination rectangle within the write buffer [lower-left, upper-left, lower-right, upper-right]
+     * @param mask            the bitwise OR of the flags indicating which buffers are to be copied. One of:<br><table><tr><td>{@link GL11#GL_COLOR_BUFFER_BIT COLOR_BUFFER_BIT}</td><td>{@link GL11#GL_DEPTH_BUFFER_BIT DEPTH_BUFFER_BIT}</td><td>{@link GL11#GL_STENCIL_BUFFER_BIT STENCIL_BUFFER_BIT}</td></tr></table>
+     * @param filter          the interpolation to be applied if the image is stretched. One of:<br><table><tr><td>{@link GL11#GL_NEAREST NEAREST}</td><td>{@link GL11#GL_LINEAR LINEAR}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
+     */
+    fun blitFramebuffer(readFramebuffer: GlFramebuffer, drawFramebuffer: GlFramebuffer, src: Vec4i, dst: Vec4i, mask: AttribMask, filter: MagFilter) =
+            GL45C.glBlitNamedFramebuffer(readFramebuffer.name, drawFramebuffer.name, src.x, src.y, src.z, src.w, dst.x, dst.y, dst.z, dst.w, mask.i, filter.i)
+
+    // --- [ glCheckNamedFramebufferStatus ] ---
+
+    /**
+     * DSA version of {@link GL30C#glCheckFramebufferStatus CheckFramebufferStatus}.
+     *
+     * @param framebuffer the framebuffer name
+     * @param target      the target of the framebuffer completeness check. One of:<br><table><tr><td>{@link GL30#GL_FRAMEBUFFER FRAMEBUFFER}</td><td>{@link GL30#GL_READ_FRAMEBUFFER READ_FRAMEBUFFER}</td><td>{@link GL30#GL_DRAW_FRAMEBUFFER DRAW_FRAMEBUFFER}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glCheckFramebufferStatus">Reference Page</a>
+     */
+    fun checkFramebufferStatus(framebuffer: GlFramebuffer, target: FramebufferTarget): FramebufferStatus =
+            FramebufferStatus(GL45C.glCheckNamedFramebufferStatus(framebuffer.name, target.i))
+
+    // --- [ glGetNamedFramebufferParameteriv ] ---
+    // inline reified
+
+    // --- [ glGetNamedFramebufferAttachmentParameteriv ] ---
+    // inline reified
+
+    // --- [ glCreateRenderbuffers ] ---
+
+    /**
+     * Returns {@code n} previously unused renderbuffer names in {@code renderbuffers}, each representing a new renderbuffer object.
+     *
+     * @param renderbuffers the buffer in which to store the created renderbuffer names
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateRenderbuffers">Reference Page</a>
+     */
+    fun createRenderbuffers(renderbuffers: GlRenderbuffers) =
+            GL45C.nglCreateRenderbuffers(renderbuffers.rem, renderbuffers.adr)
+
+    /**
+     * Returns {@code n} previously unused renderbuffer names in {@code renderbuffers}, each representing a new renderbuffer object.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateRenderbuffers">Reference Page</a>
+     */
+    fun createRenderbuffers(): GlRenderbuffer =
+            GlRenderbuffer(stak.intAddress { GL45C.nglCreateRenderbuffers(1, it) })
+
+    // --- [ glNamedRenderbufferStorage ] ---
+
+    /**
+     * DSA version of {@link GL30C#glRenderbufferStorage RenderbufferStorage}.
+     *
+     * @param internalFormat the internal format to use for the renderbuffer object's image. Must be a color-renderable, depth-renderable, or stencil-renderable format.
+     * @param size           the size of the renderbuffer, in pixels
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glRenderbufferStorage">Reference Page</a>
+     */
+    fun renderbufferStorage(renderbuffer: GlRenderbuffer, internalFormat: Int, size: Vec2i) =
+            GL45C.glNamedRenderbufferStorage(renderbuffer.name, internalFormat, size.x, size.y)
+
+    // --- [ glNamedRenderbufferStorageMultisample ] ---
+
+    /**
+     * DSA version of {@link GL30C#glRenderbufferStorageMultisample RenderbufferStorageMultisample}.
+     *
+     * @param samples        the number of samples to be used for the renderbuffer object's storage
+     * @param internalFormat the internal format to use for the renderbuffer object's image. Must be a color-renderable, depth-renderable, or stencil-renderable format.
+     * @param width          the width of the renderbuffer, in pixels
+     * @param height         the height of the renderbuffer, in pixels
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glRenderbufferStorageMultisample">Reference Page</a>
+     */
+    fun renderbufferStorageMS(renderbuffer: GlRenderbuffer, samples: Int, internalFormat: Int, size: Vec2i) =
+            GL45C.glNamedRenderbufferStorageMultisample(renderbuffer.name, samples, internalFormat, size.x, size.y)
+
+    // --- [ glGetNamedRenderbufferParameteriv ] ---
+
+    /**
+     * DSA version of {@link GL30C#glGetRenderbufferParameteriv GetRenderbufferParameteriv}.
+     *
+     * @param name the parameter whose value to retrieve from the renderbuffer bound to {@code target}. One of:<br><table><tr><td>{@link GL30#GL_RENDERBUFFER_WIDTH RENDERBUFFER_WIDTH}</td><td>{@link GL30#GL_RENDERBUFFER_HEIGHT RENDERBUFFER_HEIGHT}</td><td>{@link GL30#GL_RENDERBUFFER_INTERNAL_FORMAT RENDERBUFFER_INTERNAL_FORMAT}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_RED_SIZE RENDERBUFFER_RED_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_GREEN_SIZE RENDERBUFFER_GREEN_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_BLUE_SIZE RENDERBUFFER_BLUE_SIZE}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_ALPHA_SIZE RENDERBUFFER_ALPHA_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_DEPTH_SIZE RENDERBUFFER_DEPTH_SIZE}</td><td>{@link GL30#GL_RENDERBUFFER_STENCIL_SIZE RENDERBUFFER_STENCIL_SIZE}</td></tr><tr><td>{@link GL30#GL_RENDERBUFFER_SAMPLES RENDERBUFFER_SAMPLES}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetRenderbufferParameter">Reference Page</a>
+     */
+    fun getRenderbufferParameter(renderbuffer: GlRenderbuffer, name: GetRenderbuffer): Int =
+            stak.intAddress { GL45C.nglGetNamedRenderbufferParameteriv(renderbuffer.name, name.i, it) }
+
+    // --- [ glCreateTextures ] ---
+
+    /**
+     * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
+     *
+     * @param target   the texture target. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link GL11#GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
+     * @param textures the buffer in which to store the created texture names
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
+     */
+    fun createTextures(target: TextureTarget, textures: GlTextures) =
+            GL45C.nglCreateTextures(target.i, textures.rem, textures.adr)
+
+    /**
+     * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
+     *
+     * @param target the texture target. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link GL11#GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
+     */
+    fun createTextures(target: TextureTarget): GlTexture =
+            GlTexture(stak.intAddress { GL45C.nglCreateTextures(target.i, 1, it) } )
+
+    // --- [ glTextureBuffer ] ---
+
+    /**
+     * DSA version of {@link GL31C#glTexBuffer TexBuffer}.
+     *
+     * @param texture        the texture name
+     * @param internalFormat the sized internal format of the data in the store belonging to {@code buffer}
+     * @param buffer         the name of the buffer object whose storage to attach to the active buffer texture
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureBuffer">Reference Page</a>
+     */
+    fun texBuffer(texture: GlTexture, internalFormat: InternalFormat, buffer: GlBuffer) =
+            GL45C.glTextureBuffer(texture.name, internalFormat.i, buffer.name)
+
+    // --- [ glTextureBufferRange ] ---
+
+    /**
+     * DSA version of {@link GL43C#glTexBufferRange TexBufferRange}.
+     *
+     * @param texture        the texture name
+     * @param internalFormat the internal format of the data in the store belonging to {@code buffer}
+     * @param buffer         the name of the buffer object whose storage to attach to the active buffer texture
+     * @param offset         the offset of the start of the range of the buffer's data store to attach
+     * @param size           the size of the range of the buffer's data store to attach
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureBufferRange">Reference Page</a>
+     */
+    fun texBufferRange(texture: GlTexture, internalFormat: InternalFormat, buffer: GlBuffer, offset: Int, size: Int) =
+            GL45C.glTextureBufferRange(texture.name, internalFormat.i, buffer.name, offset.L, size.L)
+
+    // --- [ glTextureStorage1D ] ---
+
+    /**
+     * DSA version of {@link GL42C#glTexStorage1D TexStorage1D}.
+     *
+     * @param texture        the texture name
+     * @param levels         the number of texture levels
+     * @param internalFormat the sized internal format to be used to store texture image data
+     * @param width          the width of the texture, in texels
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage1D">Reference Page</a>
+     */
+    fun texStorage1D(texture: GlTexture, levels: Int, internalFormat: gli_.gl.InternalFormat, width: Int) =
+            GL45C.glTextureStorage1D(texture.name, levels, internalFormat.i, width)
+
+    // --- [ glTextureStorage2D ] ---
+
+    /**
+     * DSA version of {@link GL42C#glTexStorage2D TexStorage2D}.
+     *
+     * @param texture        the texture name
+     * @param levels         the number of texture levels
+     * @param internalFormat the sized internal format to be used to store texture image data
+     * @param size           the size of the texture, in texels
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage2D">Reference Page</a>
+     */
+    fun texStorage2D(texture: GlTexture, levels: Int, internalFormat: gli_.gl.InternalFormat, size: Vec2i) =
+            GL45C.glTextureStorage2D(texture.name, levels, internalFormat.i, size.x, size.y)
+
+    // --- [ glTextureStorage3D ] ---
+
+    /**
+     * DSA version of {@link GL42C#glTexStorage3D TexStorage3D}.
+     *
+     * @param texture        the texture name
+     * @param levels         the number of texture levels
+     * @param internalFormat the sized internal format to be used to store texture image data
+     * @param size           the size of the texture, in texels
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage3D">Reference Page</a>
+     */
+    fun texStorage3D(texture: GlTexture, levels: Int, internalFormat: gli_.gl.InternalFormat, size: Vec3i) =
+            GL45C.glTextureStorage3D(texture.name, levels, internalFormat.i, size.x, size.y, size.z)
+
+    // --- [ glTextureStorage2DMultisample ] ---
+
+    /**
+     * DSA version of {@link GL43C#glTexStorage2DMultisample TexStorage2DMultisample}.
+     *
+     * @param texture              the texture name
+     * @param samples              the number of samples in the texture
+     * @param internalformat       the sized internal format to be used to store texture image data
+     * @param width                the width of the texture, in texels
+     * @param height               the height of the texture, in texels
+     * @param fixedsamplelocations whether the image will use identical sample locations and the same number of samples for all texels in the image, and the sample locations will not
+     *                             depend on the internal format or size of the image
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage2DMultisample">Reference Page</a>
+     */
+//    fun texStorage2dMS(@NativeType("GLuint") int texture, @NativeType("GLsizei") int samples, @NativeType("GLenum") int internalformat, @NativeType("GLsizei") int width, @NativeType("GLsizei") int height, @NativeType("GLboolean") boolean fixedsamplelocations);
+
 //    // --- [ glTextureStorage3DMultisample ] ---
 //
 //    /**

@@ -1,7 +1,6 @@
 package gln.objects
 
 
-import gli_.gl.InternalFormat
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import glm_.vec4.Vec4
@@ -76,7 +75,7 @@ inline class GlTexture(val name: Int = -1) {
     /** JVM custom */
     fun getSize(target: TextureTarget, level: Int = 0): Vec3i = Vec3i(getWidth(target, level), getHeight(target, level), getDepth(target, level))
 
-    fun getInternalFormat(target: TextureTarget, level: Int = 0): InternalFormat = InternalFormat of gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT))
+    fun getInternalFormat(target: TextureTarget, level: Int = 0): gli_.gl.InternalFormat = gli_.gl.InternalFormat of gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT))
     fun getRedSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_RED_SIZE))
     fun getGreenSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_GREEN_SIZE))
     fun getBlueSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_BLUE_SIZE))
@@ -258,7 +257,84 @@ inline class GlTexture(val name: Int = -1) {
      */
     infix fun invalidateImage(level: Int) = gl.invalidateTexImage(this, level)
 
+    // --- [ glTextureBuffer ] ---
+
+    /**
+     * DSA version of {@link GL31C#glTexBuffer TexBuffer}.
+     *
+     * @param internalFormat the sized internal format of the data in the store belonging to {@code buffer}
+     * @param buffer         the name of the buffer object whose storage to attach to the active buffer texture
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureBuffer">Reference Page</a>
+     */
+    fun buffer(internalFormat: InternalFormat, buffer: GlBuffer) = gl.texBuffer(this, internalFormat, buffer)
+
+    // --- [ glTextureBufferRange ] ---
+
+    /**
+     * DSA version of {@link GL43C#glTexBufferRange TexBufferRange}.
+     *
+     * @param internalFormat the internal format of the data in the store belonging to {@code buffer}
+     * @param buffer         the name of the buffer object whose storage to attach to the active buffer texture
+     * @param offset         the offset of the start of the range of the buffer's data store to attach
+     * @param size           the size of the range of the buffer's data store to attach
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureBufferRange">Reference Page</a>
+     */
+    fun bufferRange(internalFormat: InternalFormat, buffer: GlBuffer, offset: Int, size: Int) = gl.texBufferRange(this, internalFormat, buffer, offset, size)
+
+    // --- [ glTextureStorage1D ] ---
+
+    /**
+     * DSA version of {@link GL42C#glTexStorage1D TexStorage1D}.
+     *
+     * @param levels         the number of texture levels
+     * @param internalFormat the sized internal format to be used to store texture image data
+     * @param width          the width of the texture, in texels
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage1D">Reference Page</a>
+     */
+    fun storage1D(levels: Int, internalFormat: gli_.gl.InternalFormat, width: Int) = gl.texStorage1D(this, levels, internalFormat, width)
+
+    // --- [ glTextureStorage2D ] ---
+
+    /**
+     * DSA version of {@link GL42C#glTexStorage2D TexStorage2D}.
+     *
+     * @param levels         the number of texture levels
+     * @param internalFormat the sized internal format to be used to store texture image data
+     * @param size           the size of the texture, in texels
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage2D">Reference Page</a>
+     */
+    fun storage2D(levels: Int, internalFormat: gli_.gl.InternalFormat, size: Vec2i) = gl.texStorage2D(this, levels, internalFormat, size)
+
+    // --- [ glTextureStorage3D ] ---
+
+    /**
+     * DSA version of {@link GL42C#glTexStorage3D TexStorage3D}.
+     *
+     * @param levels         the number of texture levels
+     * @param internalFormat the sized internal format to be used to store texture image data
+     * @param size           the size of the texture, in texels
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glTextureStorage3D">Reference Page</a>
+     */
+    fun storage3D(levels: Int, internalFormat: gli_.gl.InternalFormat, size: Vec3i) = gl.texStorage3D(this, levels, internalFormat, size)
+
     companion object {
+
+        // --- [ glCreateTextures ] ---
+
+        /**
+         * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
+         *
+         * @param target the texture target. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link GL11#GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
+         *
+         * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
+         */
+        infix fun createTextures(target: TextureTarget): GlTexture = gl.createTextures(target)
+
         fun gen(): GlTexture = gl.genTexture()
     }
 }

@@ -40,10 +40,19 @@ inline class GlTextures(val names: IntBuffer) {
 //        GlTexturesDsl.block()
 //    }
 //
-    fun create() = GL45C.glCreateBuffers(names)
+    // --- [ glCreateTextures ] ---
 
-    inline fun create(block: GlTexturesDsl.() -> Unit) {
-        create()
+    /**
+     * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
+     *
+     * @param textures the buffer in which to store the created texture names
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
+     */
+    infix fun create(target: TextureTarget) = gl.createTextures(target, this)
+
+    inline fun create(target: TextureTarget, block: GlTexturesDsl.() -> Unit) {
+        create(target)
         GlTexturesDsl.names = names
         GlTexturesDsl.block()
     }

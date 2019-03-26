@@ -15,6 +15,7 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
+import gln.framebuffer.GlFramebuffer
 import gln.misc.GlDebugSource
 import gln.objects.GlBuffer
 import gln.objects.GlProgram
@@ -293,8 +294,7 @@ object gl :
                     Float::class -> s.floatAddress { GL33C.nglGetSamplerParameterfv(target.name, param.i, it) } as T
                     Vec4i::class -> s.vec4iAddress { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) } as T
                     Vec4ui::class -> s.vec4uiAddress { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) } as T
-                    Long::class -> s.longAddress { GL32C.nglGetBufferParameteri64v(target.name, param.i, it) } as T
-                    Boolean::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.name, param.i, it) }.bool as T
+                    Boolean::class -> s.intAddress { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) }.bool as T
                     else -> throw Exception("[gln.gl.getBufferParam] invalid T")
                 }
             }
@@ -455,6 +455,9 @@ object gl :
                 when (T::class) {
                     Int::class -> s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }.bool as T
+                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
+                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
+                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
                     else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
                 }
             }
@@ -518,6 +521,49 @@ object gl :
                     Long::class -> s.longAddress { GL45C.nglGetNamedBufferParameteri64v(buffer.name, param.i, it) } as T
                     Boolean::class -> s.intAddress { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) }.bool as T
                     else -> throw Exception("[gln.gl.getBufferParameter(buffer, ..)] invalid T")
+                }
+            }
+
+    // --- [ glGetNamedFramebufferParameteriv ] ---
+
+    /**
+     * DSA version of {@link GL43C#glGetFramebufferParameteriv GetFramebufferParameteriv}.
+     *
+     * @param framebuffer the framebuffer name
+     * @param name       a token indicating the parameter to be retrieved. One of:<br><table><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_WIDTH FRAMEBUFFER_DEFAULT_WIDTH}</td><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_HEIGHT FRAMEBUFFER_DEFAULT_HEIGHT}</td></tr><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_LAYERS FRAMEBUFFER_DEFAULT_LAYERS}</td><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_SAMPLES FRAMEBUFFER_DEFAULT_SAMPLES}</td></tr><tr><td>{@link GL43#GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS}</td></tr></table>
+     * @param params      a variable to receive the value of the parameter named {@code name}
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferParameter">Reference Page</a>
+     */
+    inline fun <reified T> getFramebufferParameter(framebuffer: GlFramebuffer, name: FramebufferParameter): T =
+            stak { s ->
+                when (T::class) {
+                    Int::class -> s.intAddress { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) } as T
+                    Boolean::class -> s.intAddress { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) }.bool as T
+                    else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
+                }
+            }
+
+    // --- [ glGetNamedFramebufferAttachmentParameteriv ] ---
+
+    /**
+     * DSA version of {@link GL30C#glGetFramebufferAttachmentParameteriv GetFramebufferAttachmentParameteriv}.
+     *
+     * @param framebuffer the framebuffer name
+     * @param attachment  the attachment within {@code target}. One of:<br><table><tr><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td><td>{@link GL30#GL_COLOR_ATTACHMENT1 COLOR_ATTACHMENT1}</td><td>{@link GL30#GL_COLOR_ATTACHMENT2 COLOR_ATTACHMENT2}</td><td>{@link GL30#GL_COLOR_ATTACHMENT3 COLOR_ATTACHMENT3}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT4 COLOR_ATTACHMENT4}</td><td>{@link GL30#GL_COLOR_ATTACHMENT5 COLOR_ATTACHMENT5}</td><td>{@link GL30#GL_COLOR_ATTACHMENT6 COLOR_ATTACHMENT6}</td><td>{@link GL30#GL_COLOR_ATTACHMENT7 COLOR_ATTACHMENT7}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT8 COLOR_ATTACHMENT8}</td><td>{@link GL30#GL_COLOR_ATTACHMENT9 COLOR_ATTACHMENT9}</td><td>{@link GL30#GL_COLOR_ATTACHMENT10 COLOR_ATTACHMENT10}</td><td>{@link GL30#GL_COLOR_ATTACHMENT11 COLOR_ATTACHMENT11}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT12 COLOR_ATTACHMENT12}</td><td>{@link GL30#GL_COLOR_ATTACHMENT13 COLOR_ATTACHMENT13}</td><td>{@link GL30#GL_COLOR_ATTACHMENT14 COLOR_ATTACHMENT14}</td><td>{@link GL30#GL_COLOR_ATTACHMENT15 COLOR_ATTACHMENT15}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT16 COLOR_ATTACHMENT16}</td><td>{@link GL30#GL_COLOR_ATTACHMENT17 COLOR_ATTACHMENT17}</td><td>{@link GL30#GL_COLOR_ATTACHMENT18 COLOR_ATTACHMENT18}</td><td>{@link GL30#GL_COLOR_ATTACHMENT19 COLOR_ATTACHMENT19}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT20 COLOR_ATTACHMENT20}</td><td>{@link GL30#GL_COLOR_ATTACHMENT21 COLOR_ATTACHMENT21}</td><td>{@link GL30#GL_COLOR_ATTACHMENT22 COLOR_ATTACHMENT22}</td><td>{@link GL30#GL_COLOR_ATTACHMENT23 COLOR_ATTACHMENT23}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT24 COLOR_ATTACHMENT24}</td><td>{@link GL30#GL_COLOR_ATTACHMENT25 COLOR_ATTACHMENT25}</td><td>{@link GL30#GL_COLOR_ATTACHMENT26 COLOR_ATTACHMENT26}</td><td>{@link GL30#GL_COLOR_ATTACHMENT27 COLOR_ATTACHMENT27}</td></tr><tr><td>{@link GL30#GL_COLOR_ATTACHMENT28 COLOR_ATTACHMENT28}</td><td>{@link GL30#GL_COLOR_ATTACHMENT29 COLOR_ATTACHMENT29}</td><td>{@link GL30#GL_COLOR_ATTACHMENT30 COLOR_ATTACHMENT30}</td><td>{@link GL30#GL_COLOR_ATTACHMENT31 COLOR_ATTACHMENT31}</td></tr><tr><td>{@link GL30#GL_DEPTH_ATTACHMENT DEPTH_ATTACHMENT}</td><td>{@link GL30#GL_STENCIL_ATTACHMENT STENCIL_ATTACHMENT}</td><td>{@link GL30#GL_DEPTH_STENCIL_ATTACHMENT DEPTH_STENCIL_ATTACHMENT}</td></tr></table>
+     * @param name       the parameter of {@code attachment} to query. One of:<br><table><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME FRAMEBUFFER_ATTACHMENT_OBJECT_NAME}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE FRAMEBUFFER_ATTACHMENT_RED_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE FRAMEBUFFER_ATTACHMENT_GREEN_SIZE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE FRAMEBUFFER_ATTACHMENT_BLUE_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE}</td><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE}</td></tr><tr><td>{@link GL30#GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
+     */
+    inline fun <reified T> getFramebufferAttachmentParameter(framebuffer: GlFramebuffer, attachment: Int, name: GetFramebufferAttachment): T =
+            stak { s ->
+                when (T::class) {
+                    Int::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) } as T
+                    Boolean::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }.bool as T
+                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }) as T
+                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }) as T
+                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }) as T
+                    else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
                 }
             }
 }

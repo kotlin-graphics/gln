@@ -1197,7 +1197,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCheckFramebufferStatus">Reference Page</a>
      */
-    fun checkFramebufferStatus(target: FramebufferTarget = FramebufferTarget.DRAW) = GL30C.glCheckFramebufferStatus(target.i)
+    fun checkFramebufferStatus(target: FramebufferTarget = FramebufferTarget.DRAW): FramebufferStatus =
+            FramebufferStatus(GL30C.glCheckFramebufferStatus(target.i))
 
     // --- [ glFramebufferTexture1D ] ---
 
@@ -1355,7 +1356,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
-    fun getFramebufferAttachmentParameter(target: FramebufferTarget, attachment: Int, name: GetFramebufferAttachment) =
+    fun getFramebufferAttachmentParameter(target: FramebufferTarget, attachment: Int, name: GetFramebufferAttachment): Int =
             GL30C.glGetFramebufferAttachmentParameteri(target.i, attachment, name.i)
 
     /**
@@ -1366,7 +1367,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
-    fun getFramebufferAttachmentParameter(attachment: Int, name: GetFramebufferAttachment) =
+    fun getFramebufferAttachmentParameter(attachment: Int, name: GetFramebufferAttachment): Int =
             GL30C.glGetFramebufferAttachmentParameteri(GL30C.GL_FRAMEBUFFER, attachment, name.i)
 
     // --- [ glBlitFramebuffer ] ---
