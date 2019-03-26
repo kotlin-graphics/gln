@@ -578,7 +578,7 @@ inline class GlProgram(val name: Int) {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformBlockName">Reference Page</a>
      */
     fun getActiveUniformBlockName(uniformBlockIndex: UniformBlockIndex,
-                                  bufSize: Int = getActiveUniformBlockiv(uniformBlockIndex, GetActiveUniformBlock.GL_UNIFORM_BLOCK_NAME_LENGTH)): String =
+                                  bufSize: Int = getActiveUniformBlockiv(uniformBlockIndex, GetActiveUniformBlock.NAME_LENGTH)): String =
             gl.getActiveUniformBlockName(this, uniformBlockIndex, bufSize)
 
     // --- [ glGetProgramInterfaceiv ] ---

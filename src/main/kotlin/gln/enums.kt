@@ -6622,12 +6622,12 @@ inline class AttributeType(val i: Int) {
         val DOUBLE_MAT2 = AttributeType(GL40.GL_DOUBLE_MAT2)
         val DOUBLE_MAT3 = AttributeType(GL40.GL_DOUBLE_MAT3)
         val DOUBLE_MAT4 = AttributeType(GL40.GL_DOUBLE_MAT4)
-        val GL_DOUBLE_MAT2x3 = AttributeType(GL40.GL_DOUBLE_MAT2x3)
-        val GL_DOUBLE_MAT2x4 = AttributeType(GL40.GL_DOUBLE_MAT2x4)
-        val GL_DOUBLE_MAT3x2 = AttributeType(GL40.GL_DOUBLE_MAT3x2)
-        val GL_DOUBLE_MAT3x4 = AttributeType(GL40.GL_DOUBLE_MAT3x4)
-        val GL_DOUBLE_MAT4x2 = AttributeType(GL40.GL_DOUBLE_MAT4x2)
-        val GL_DOUBLE_MAT4x3 = AttributeType(GL40.GL_DOUBLE_MAT4x3)
+        val DOUBLE_MAT2x3 = AttributeType(GL40.GL_DOUBLE_MAT2x3)
+        val DOUBLE_MAT2x4 = AttributeType(GL40.GL_DOUBLE_MAT2x4)
+        val DOUBLE_MAT3x2 = AttributeType(GL40.GL_DOUBLE_MAT3x2)
+        val DOUBLE_MAT3x4 = AttributeType(GL40.GL_DOUBLE_MAT3x4)
+        val DOUBLE_MAT4x2 = AttributeType(GL40.GL_DOUBLE_MAT4x2)
+        val DOUBLE_MAT4x3 = AttributeType(GL40.GL_DOUBLE_MAT4x3)
     }
 }
 
@@ -6649,16 +6649,16 @@ inline class GetVertexAttrib(val i: Int) {
 
 //###############################################################################
 
-inline class ConditionalMode(val i: Int) {
+inline class ConditionalMode(val i: Int) { // TODO get rid of QUERY_?
     companion object {
-        val GL_QUERY_WAIT = ConditionalMode(GL30C.GL_QUERY_WAIT)
-        val GL_QUERY_NO_WAIT = ConditionalMode(GL30C.GL_QUERY_NO_WAIT)
-        val GL_QUERY_BY_REGION_WAIT = ConditionalMode(GL30C.GL_QUERY_BY_REGION_WAIT)
-        val GL_QUERY_BY_REGION_NO_WAIT = ConditionalMode(GL30C.GL_QUERY_BY_REGION_NO_WAIT)
-        val GL_QUERY_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_WAIT_INVERTED)
-        val GL_QUERY_NO_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_NO_WAIT_INVERTED)
-        val GL_QUERY_BY_REGION_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_BY_REGION_WAIT_INVERTED)
-        val GL_QUERY_BY_REGION_NO_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_BY_REGION_NO_WAIT_INVERTED)
+        val QUERY_WAIT = ConditionalMode(GL30C.GL_QUERY_WAIT)
+        val QUERY_NO_WAIT = ConditionalMode(GL30C.GL_QUERY_NO_WAIT)
+        val QUERY_BY_REGION_WAIT = ConditionalMode(GL30C.GL_QUERY_BY_REGION_WAIT)
+        val QUERY_BY_REGION_NO_WAIT = ConditionalMode(GL30C.GL_QUERY_BY_REGION_NO_WAIT)
+        val QUERY_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_WAIT_INVERTED)
+        val QUERY_NO_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_NO_WAIT_INVERTED)
+        val QUERY_BY_REGION_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_BY_REGION_WAIT_INVERTED)
+        val QUERY_BY_REGION_NO_WAIT_INVERTED = ConditionalMode(GL45C.GL_QUERY_BY_REGION_NO_WAIT_INVERTED)
     }
 }
 
@@ -6814,6 +6814,50 @@ inline class InternalFormat(val i: Int) {
     }
 }
 
+inline class TextureFormat(val i: Int) {
+    companion object {
+        val RED = TextureFormat(GL44C.GL_RED)
+        val RG = TextureFormat(GL44C.GL_RG)
+        val RGB = TextureFormat(GL44C.GL_RGB)
+        val BGR = TextureFormat(GL44C.GL_BGR)
+        val RGBA = TextureFormat(GL44C.GL_RGBA)
+        val BGRA = TextureFormat(GL44C.GL_BGRA)
+        val RED_INTEGER = TextureFormat(GL44C.GL_RED_INTEGER)
+        val RG_INTEGER = TextureFormat(GL44C.GL_RG_INTEGER)
+        val RGB_INTEGER = TextureFormat(GL44C.GL_RGB_INTEGER)
+        val BGR_INTEGER = TextureFormat(GL44C.GL_BGR_INTEGER)
+        val RGBA_INTEGER = TextureFormat(GL44C.GL_RGBA_INTEGER)
+        val BGRA_INTEGER = TextureFormat(GL44C.GL_BGRA_INTEGER)
+        val STENCIL_INDEX = TextureFormat(GL44C.GL_STENCIL_INDEX)
+        val DEPTH_COMPONENT = TextureFormat(GL44C.GL_DEPTH_COMPONENT)
+        val DEPTH_STENCIL = TextureFormat(GL44C.GL_DEPTH_STENCIL)
+    }
+}
+
+inline class TextureType(val i: Int) {
+    companion object {
+        val GL_UNSIGNED_BYTE = TextureType(GL44C.GL_UNSIGNED_BYTE)
+        val GL_BYTE = TextureType(GL44C.GL_BYTE)
+        val GL_UNSIGNED_SHORT = TextureType(GL44C.GL_UNSIGNED_SHORT)
+        val GL_SHORT = TextureType(GL44C.GL_SHORT)
+        val GL_UNSIGNED_INT = TextureType(GL44C.GL_UNSIGNED_INT)
+        val GL_INT = TextureType(GL44C.GL_INT)
+        val GL_FLOAT = TextureType(GL44C.GL_FLOAT)
+        val GL_UNSIGNED_BYTE_3_3_2 = TextureType(GL44C.GL_UNSIGNED_BYTE_3_3_2)
+        val GL_UNSIGNED_BYTE_2_3_3_REV = TextureType(GL44C.GL_UNSIGNED_BYTE_2_3_3_REV)
+        val GL_UNSIGNED_SHORT_5_6_5 = TextureType(GL44C.GL_UNSIGNED_SHORT_5_6_5)
+        val GL_UNSIGNED_SHORT_5_6_5_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_5_6_5_REV)
+        val GL_UNSIGNED_SHORT_4_4_4_4 = TextureType(GL44C.GL_UNSIGNED_SHORT_4_4_4_4)
+        val GL_UNSIGNED_SHORT_4_4_4_4_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_4_4_4_4_REV)
+        val GL_UNSIGNED_SHORT_5_5_5_1 = TextureType(GL44C.GL_UNSIGNED_SHORT_5_5_5_1)
+        val GL_UNSIGNED_SHORT_1_5_5_5_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_1_5_5_5_REV)
+        val GL_UNSIGNED_INT_8_8_8_8 = TextureType(GL44C.GL_UNSIGNED_INT_8_8_8_8)
+        val GL_UNSIGNED_INT_8_8_8_8_REV = TextureType(GL44C.GL_UNSIGNED_INT_8_8_8_8_REV)
+        val GL_UNSIGNED_INT_10_10_10_2 = TextureType(GL44C.GL_UNSIGNED_INT_10_10_10_2)
+        val GL_UNSIGNED_INT_2_10_10_10_REV = TextureType(GL44C.GL_UNSIGNED_INT_2_10_10_10_REV)
+    }
+}
+
 inline class GetActiveUniform(val i: Int) {
     companion object {
         val UNIFORM_TYPE = GetActiveUniform(GL31C.GL_UNIFORM_TYPE)
@@ -6830,16 +6874,16 @@ inline class GetActiveUniform(val i: Int) {
 
 inline class GetActiveUniformBlock(val i: Int) {
     companion object {
-        val GL_UNIFORM_BLOCK_BINDING = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_BINDING)
-        val GL_UNIFORM_BLOCK_DATA_SIZE = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_DATA_SIZE)
-        val GL_UNIFORM_BLOCK_NAME_LENGTH = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_NAME_LENGTH)
-        val GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS)
-        val GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER)
-        val GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER = GetActiveUniformBlock(GL40C.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER)
-        val GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_EVALUATION_SHADER = GetActiveUniformBlock(GL40C.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_EVALUATION_SHADER)
-        val GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER)
-        val GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER)
-        val GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER = GetActiveUniformBlock(GL43C.GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER)
+        val BINDING = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_BINDING)
+        val DATA_SIZE = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_DATA_SIZE)
+        val NAME_LENGTH = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_NAME_LENGTH)
+        val ACTIVE_UNIFORMS = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS)
+        val REFERENCED_BY_VERTEX_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER)
+        val REFERENCED_BY_TESS_CONTROL_SHADER = GetActiveUniformBlock(GL40C.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER)
+        val REFERENCED_BY_TESS_EVALUATION_SHADER = GetActiveUniformBlock(GL40C.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_EVALUATION_SHADER)
+        val REFERENCED_BY_GEOMETRY_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER)
+        val REFERENCED_BY_FRAGMENT_SHADER = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER)
+        val REFERENCED_BY_COMPUTE_SHADER = GetActiveUniformBlock(GL43C.GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER)
     }
 }
 
@@ -6925,6 +6969,21 @@ inline class GetProgramPipeline(val i: Int) {
         val INFO_LOG_LENGTH = GetProgramPipeline(GL41C.GL_INFO_LOG_LENGTH)
     }
 }
+
+typealias BufferStorageFlags = Int
+
+inline class BufferStorageFlag(val i: Int) {
+    companion object {
+        val DYNAMIC_STORAGE_BIT = BufferStorageFlag(GL44C.GL_DYNAMIC_STORAGE_BIT)
+        val MAP_READ_BIT = BufferStorageFlag(GL44C.GL_MAP_READ_BIT)
+        val MAP_WRITE_BIT = BufferStorageFlag(GL44C.GL_MAP_WRITE_BIT)
+        val MAP_PERSISTENT_BIT = BufferStorageFlag(GL44C.GL_MAP_PERSISTENT_BIT)
+        val MAP_COHERENT_BIT = BufferStorageFlag(GL44C.GL_MAP_COHERENT_BIT)
+        val CLIENT_STORAGE_BIT = BufferStorageFlag(GL44C.GL_CLIENT_STORAGE_BIT)
+    }
+}
+
+
 
 inline class TextureAccess(val i: Int) {
     companion object {

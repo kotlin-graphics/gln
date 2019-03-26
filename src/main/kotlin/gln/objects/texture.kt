@@ -10,6 +10,7 @@ import gln.*
 import gln.texture.GlTextureDsl
 import kool.stak
 import org.lwjgl.opengl.*
+import java.nio.Buffer
 
 
 //inline class GlTexture1d(override val i: Int) : GlTexture {
@@ -53,6 +54,14 @@ import org.lwjgl.opengl.*
 //}
 
 inline class GlTexture(val name: Int = -1) {
+
+    // --- [ glClearTexImage ] ---
+
+    fun clearImage(level: Int, format: TextureFormat, type: TextureType, data: Buffer? = null) = gl.clearTexImage(this, level, format, type, data)
+
+    // --- [ glClearTexSubImage ] ---
+
+    fun clearSubImage(level: Int, offset: Vec3i, size: Vec3i, format: TextureFormat, type: TextureType, data: Buffer? = null) = gl.clearTexSubImage(this, level, offset, size, format, type, data)
 
     // --- [ glIsTexture ] ---
 

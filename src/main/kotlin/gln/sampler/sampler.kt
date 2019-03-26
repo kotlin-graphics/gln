@@ -18,6 +18,10 @@ inline class GlSamplers(val names: IntBuffer) {
     inline val adr: Adr
         get() = names.adr
 
+    // --- [ glBindSamplers ] ---
+
+    fun bind(first: Int = 0) = gl.bindSamplers(first, this)
+
     // --- [ glDeleteSamplers ] ---
 
     /**

@@ -120,6 +120,12 @@ and another one contemplating full arrays
  
  given that in glTexBufferRange the target must be GL_TEXTURE_BUFFER, this is inferred
  
+ -------------- GL44
+ 
+ glClearTexSubImage will default data to null
+ 
+ bindBuffersBase, bindBuffersRange, bindTextures, bindSamplers will default identifier to null
+ 
  ---------------------- GL45
  
  glGetTransformFeedbacki_v and glGetTransformFeedbacki64_v get merged in one unique inlined reified getTransformFeedback
@@ -131,3 +137,4 @@ and another one contemplating full arrays
  glNamedFramebufferRenderbuffer becomes framebufferRenderbuffer with GlFramebuffer as first parameter and since renderbuffertarget must be GL_RENDERBUFFER, this is inferred
  
  since in glClearNamedFramebufferfi buffer must be GL_DEPTH_STENCIL and drawbuffer 0, these are inferred and the function name becomes clearBufferDepthStencil
+

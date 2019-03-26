@@ -35,7 +35,7 @@ object gl :
         gl11i, gl12i, gl13i, gl14i, gl15i,
         gl20i, gl21i,
         gl30i, gl31i, gl32i, gl33i,
-        gl40i, gl41i, gl42i, gl43i, /*gl44i,*/ gl45i {
+        gl40i, gl41i, gl42i, gl43i, gl44i, gl45i {
 
     // --- [ glGet* ] ---
 

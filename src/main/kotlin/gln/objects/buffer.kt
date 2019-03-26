@@ -220,10 +220,6 @@ inline class GlBuffer(val name: Int = -1) {
 
     fun delete() = GL15C.glDeleteBuffers(name)
 
-    companion object {
-        fun gen(): GlBuffer = GlBuffer(GL15C.glGenBuffers())
-    }
-
     // glGetBufferParameter*
 
     fun getAccess(target: BufferTarget): BufferAccess = BufferAccess(GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_ACCESS))
@@ -250,6 +246,9 @@ inline class GlBuffer(val name: Int = -1) {
     fun data(target: BufferTarget, size: Int, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
     fun data(target: BufferTarget, data: Buffer, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
+
+    // --- [ glBufferStorage ] ---
+    fun storage(target: BufferTarget, data: Buffer, flags: BufferStorageFlags) = gl.bufferStorage(target, data, flags)
 
     fun subData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
     fun subData(target: BufferTarget, data: Buffer) = GL15C.nglBufferSubData(target.i, 0, data.remSize.L, data.adr)
@@ -303,6 +302,8 @@ inline class GlBuffer(val name: Int = -1) {
          * @see <a target="_blank" href="http://docs.gl/gl4/glCreateBuffers">Reference Page</a>
          */
         fun create(): GlBuffer = gl.createBuffers()
+
+        fun gen(): GlBuffer = GlBuffer(GL15C.glGenBuffers())
     }
 }
 
@@ -312,6 +313,14 @@ inline class GlBuffers(val names: IntBuffer) {
         get() = names.rem
     inline val adr: Adr
         get() = names.adr
+
+    // --- [ glBindBuffersBase ] ---
+
+    fun bindBase(target: BufferTarget, first: Int = 0) = gl.bindBuffersBase(target, first, this)
+
+    // --- [ glBindBuffersRange ] ---
+
+    fun bindRange(target: BufferTarget, first: Int, offsets: IntBuffer, sizes: IntBuffer) = gl.bindBuffersRange(target, first, this, offsets, sizes)
 
     // --- [ glCreateBuffers ] ---
 

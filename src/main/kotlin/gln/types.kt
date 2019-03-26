@@ -25,9 +25,9 @@ inline class GlTextures(val names: IntBuffer) {
     inline val adr: Long
         get() = names.adr
 
-    companion object {
-        fun gen(count: Int): GlTextures = gl.genTextures(count)
-    }
+    // --- [ glBindTextures ] ---
+
+    fun bind(first: Int = 0) = gl.bindTextures(first, this)
 
     fun delete() = gl.deleteTextures(this)
 
@@ -42,6 +42,10 @@ inline class GlTextures(val names: IntBuffer) {
         create()
         GlTexturesDsl.names = names
         GlTexturesDsl.block()
+    }
+
+    companion object {
+        fun gen(count: Int): GlTextures = gl.genTextures(count)
     }
 }
 

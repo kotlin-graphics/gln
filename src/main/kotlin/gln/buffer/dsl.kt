@@ -8,12 +8,11 @@ import glm_.vec4.Vec4
 import gln.*
 import gln.Usage.Companion.STATIC_DRAW
 import gln.objects.GlBuffer
+import gln.objects.GlBuffers
 import kool.adr
 import kool.pos
-import org.lwjgl.opengl.GL15C
-import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL30C
-import org.lwjgl.opengl.GL45C
+import kool.rem
+import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.*
 
@@ -22,6 +21,10 @@ object GlBufferDsl {
 
     var target: BufferTarget = BufferTarget.ARRAY
     var buffer = GlBuffer()
+
+    // --- [ glBufferStorage ] ---
+
+    fun storage(data: Buffer, flags: BufferStorageFlags) = gl.bufferStorage(target, data, flags)
 
     fun data(data: ShortArray, usage: Usage = STATIC_DRAW) = GL15C.glBufferData(target.i, data, usage.i)
     fun data(data: IntArray, usage: Usage = STATIC_DRAW) = GL15C.glBufferData(target.i, data, usage.i)
@@ -104,6 +107,14 @@ object GlBuffersDsl {
 
     lateinit var names: IntBuffer
 //    var target = BufferTarget.ARRAY
+
+    // --- [ glBindBuffersBase ] ---
+
+    fun bindBuffersBase(target: BufferTarget, first: Int = 0) = gl.bindBuffersBase(target, first, GlBuffers(names))
+
+    // --- [ glBindBuffersRange ] ---
+
+    fun bindBuffersRange(target: BufferTarget, first: Int, offsets: IntBuffer, sizes: IntBuffer) = gl.bindBuffersRange(target, first, GlBuffers(names), offsets, sizes)
 
     fun <E> E.bind(target: BufferTarget) where E : Enum<E>, E : GlBufferEnum = GL15C.glBindBuffer(target.i, names[ordinal])
     fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)

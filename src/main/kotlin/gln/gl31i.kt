@@ -280,7 +280,7 @@ interface gl31i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformBlockName">Reference Page</a>
      */
     fun getActiveUniformBlockName(program: GlProgram, uniformBlockIndex: UniformBlockIndex,
-                                  bufSize: Int = gl.getActiveUniformBlockiv(program, uniformBlockIndex, GetActiveUniformBlock.GL_UNIFORM_BLOCK_NAME_LENGTH)): String =
+                                  bufSize: Int = gl.getActiveUniformBlockiv(program, uniformBlockIndex, GetActiveUniformBlock.NAME_LENGTH)): String =
             stak {s ->
                 val pLength = s.nmalloc(4, Int.BYTES)
                 val uniformBlockName = s. Buffer(bufSize)
