@@ -104,3 +104,11 @@ typealias BinaryFormat = Int
 
 class ProgramBinary(val data: ByteBuffer, val format: BinaryFormat)
 
+inline class UintBuffer(val data: IntBuffer) {
+
+    inline val rem: Int
+        get() = data.rem
+
+    inline val adr: Long
+        get() = data.adr
+}

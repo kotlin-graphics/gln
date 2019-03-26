@@ -8,6 +8,10 @@ is simply
 
 void glClampColor(bool clamp);
 
+-------------- GL30
+
+since in glClearBufferfi buffer must be GL_DEPTH_STENCIL and drawbuffer 0, these are inferred and the function name becomes clearBufferDepthStencil
+
 glBindRenderbuffer has no target since it's fixed
 glRenderbufferStorage has no target since it's fixed
 renderbufferStorageMultisample has no target since it's fixed
@@ -125,3 +129,5 @@ and another one contemplating full arrays
  glGetNamedBufferParameteriv and glGetNamedBufferParameteri64v get merged in one unique inlined reified getBufferParameteri
  
  glNamedFramebufferRenderbuffer becomes framebufferRenderbuffer with GlFramebuffer as first parameter and since renderbuffertarget must be GL_RENDERBUFFER, this is inferred
+ 
+ since in glClearNamedFramebufferfi buffer must be GL_DEPTH_STENCIL and drawbuffer 0, these are inferred and the function name becomes clearBufferDepthStencil

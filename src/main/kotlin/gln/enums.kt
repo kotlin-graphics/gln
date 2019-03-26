@@ -1365,11 +1365,12 @@ internal var _logicOpEnabled = false
 //
 //###############################################################################
 
-inline class PixelCopyType(val i: Int) {
+inline class BufferType(val i: Int) {
     companion object {
-        val COLOR = PixelCopyType(GL11.GL_COLOR)
-        val DEPTH = PixelCopyType(GL11C.GL_DEPTH)
-        val STENCIL = PixelCopyType(GL11.GL_STENCIL)
+        val COLOR = BufferType(GL11.GL_COLOR)
+        val DEPTH = BufferType(GL11C.GL_DEPTH)
+        val STENCIL = BufferType(GL11.GL_STENCIL)
+        val DEPTH_STENCIL  = BufferType(GL30C.GL_DEPTH_STENCIL)
     }
 }
 

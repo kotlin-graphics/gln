@@ -4,9 +4,7 @@ package gln.framebuffer
 
 
 import glm_.vec2.Vec2i
-import gln.FramebufferParameter
-import gln.FramebufferTarget
-import gln.gl
+import gln.*
 import gln.objects.GlTexture
 import gln.renderbuffer.GlRenderbuffer
 import kool.IntBuffer
@@ -18,6 +16,7 @@ import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER
 import org.lwjgl.opengl.GL30.GL_RENDERBUFFER
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL32
+import java.nio.FloatBuffer
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
 
@@ -77,6 +76,59 @@ inline class GlFramebuffer(val name: Int = -1) {
         GL30C.glBindFramebuffer(GL30C.GL_FRAMEBUFFER, 0)
         return this
     }
+
+    // --- [ glClearNamedFramebufferiv ] ---
+
+    /**
+     * DSA version of {@link GL30C#glClearBufferiv ClearBufferiv}.
+     *
+     * @param buffer      the buffer to clear. One of:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td><td>{@link GL11#GL_STENCIL STENCIL}</td></tr></table>
+     * @param drawBuffer  the draw buffer to clear
+     * @param value       for color buffers, a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to. For stencil buffers, a pointer to a
+     *                    single stencil value to clear the buffer to.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
+     */
+    fun clear(buffer: BufferType, drawBuffer: Int, value: IntBuffer) = gl.clearFramebuffer(this, buffer, drawBuffer, value)
+
+    // --- [ glClearNamedFramebufferuiv ] ---
+
+    /**
+     * DSA version of {@link GL30C#glClearBufferuiv ClearBufferuiv}.
+     *
+     * @param buffer      the buffer to clear. Must be:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td></tr></table>
+     * @param drawBuffer  the draw buffer to clear
+     * @param value       a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
+     */
+    fun clear(buffer: BufferType, drawBuffer: Int, value: UintBuffer) = gl.clearFramebuffer(this, buffer, drawBuffer, value)
+
+    // --- [ glClearNamedFramebufferfv ] ---
+
+    /**
+     * DSA version of {@link GL30C#glClearBufferfv ClearBufferfv}.
+     *
+     * @param buffer      the buffer to clear. One of:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td><td>{@link GL11#GL_DEPTH DEPTH}</td></tr></table>
+     * @param drawbuffer  the draw buffer to clear
+     * @param value       for color buffers, a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to. For depth buffers, a pointer to a
+     *                    single depth value to clear the buffer to.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
+     */
+    fun clear(buffer: BufferType, drawbuffer: Int, value: FloatBuffer) = gl.clearFramebuffer(this, buffer, drawbuffer, value)
+
+    // --- [ glClearNamedFramebufferfi ] ---
+
+    /**
+     * DSA version of {@link GL30C#glClearBufferfi ClearBufferfi}.
+     *
+     * @param depth       the depth value to clear the buffer to
+     * @param stencil     the stencil value to clear the buffer to
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebufferfi">Reference Page</a>
+     */
+    fun clearDepthStencil(depth: Float, stencil: Int) = gl.clearBufferDepthStencil(depth, stencil)
 
     fun delete() = GL30C.glDeleteFramebuffers(name)
 

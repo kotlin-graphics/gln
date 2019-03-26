@@ -76,7 +76,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, value: Vec4i) = stak { GL30C.nglClearBufferiv(buffer.i, drawbuffer, value.toIntBuffer(it).adr) }
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4i) = stak { GL30C.nglClearBufferiv(buffer.i, drawbuffer, value.toIntBuffer(it).adr) }
 
     // --- [ glClearBufferuiv ] ---
 
@@ -89,7 +89,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, value: Vec4ui) = stak { GL30C.nglClearBufferuiv(buffer.i, drawbuffer, value.toIntBuffer(it).adr) }
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4ui) = stak { GL30C.nglClearBufferuiv(buffer.i, drawbuffer, value.toIntBuffer(it).adr) }
 
     // --- [ glClearBufferfv ] ---
 
@@ -103,22 +103,20 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, value: FloatBuffer) = GL30C.nglClearBufferfv(buffer.i, drawbuffer, value.adr)
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: FloatBuffer) = GL30C.nglClearBufferfv(buffer.i, drawbuffer, value.adr)
 
     // --- [ glClearBufferfi ] ---
 
     /**
      * Clears an individual buffer of the currently bound framebuffer object to the {@link #GL_DRAW_FRAMEBUFFER DRAW_FRAMEBUFFER} binding.
      *
-     * @param buffer     the buffer to clear. Must be:<br><table><tr><td>{@link #GL_DEPTH_STENCIL DEPTH_STENCIL}</td></tr></table>
-     * @param drawbuffer the draw buffer to clear
      * @param depth      the depth value to clear the buffer to
      * @param stencil    the stencil value to clear the buffer to
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferfi">Reference Page</a>
      */
-    fun clearBuffer(buffer: PixelCopyType, drawbuffer: Int, depth: Float, stencil: Int) =
-            GL30C.glClearBufferfi(buffer.i, drawbuffer, depth, stencil)
+    fun clearBufferDepthStencil(depth: Float, stencil: Int) =
+            GL30C.glClearBufferfi(GL30C.GL_DEPTH_STENCIL, 0, depth, stencil)
 
     // --- [ glVertexAttribI1i ] ---
 

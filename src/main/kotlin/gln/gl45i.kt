@@ -21,6 +21,7 @@ import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memByteBufferSafe
 import java.nio.Buffer
 import java.nio.ByteBuffer
+import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
 /**
@@ -803,89 +804,67 @@ interface gl45i {
     fun invalidateFramebufferSubData(framebuffer: GlFramebuffer, attachment: Int, offset: Vec2i, size: Vec2i) =
             stak.intAddress(attachment){GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, it, offset.x, offset.y, size.x, size.y) }
 
-//    // --- [ glClearNamedFramebufferiv ] ---
-//
-//    /** Unsafe version of: {@link #glClearNamedFramebufferiv ClearNamedFramebufferiv} */
-//    public static native void nglClearNamedFramebufferiv(int framebuffer, int buffer, int drawbuffer, long value);
-//
-//    /**
-//     * DSA version of {@link GL30C#glClearBufferiv ClearBufferiv}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param buffer      the buffer to clear. One of:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td><td>{@link GL11#GL_STENCIL STENCIL}</td></tr></table>
-//     * @param drawbuffer  the draw buffer to clear
-//     * @param value       for color buffers, a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to. For stencil buffers, a pointer to a
-//     *                    single stencil value to clear the buffer to.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
-//     */
-//    public static void glClearNamedFramebufferiv(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int buffer, @NativeType("GLint") int drawbuffer, @NativeType("GLint *") IntBuffer value) {
-//        if (CHECKS) {
-//            check(value, 1);
-//        }
-//        nglClearNamedFramebufferiv(framebuffer, buffer, drawbuffer, memAddress(value));
-//    }
-//
-//    // --- [ glClearNamedFramebufferuiv ] ---
-//
-//    /** Unsafe version of: {@link #glClearNamedFramebufferuiv ClearNamedFramebufferuiv} */
-//    public static native void nglClearNamedFramebufferuiv(int framebuffer, int buffer, int drawbuffer, long value);
-//
-//    /**
-//     * DSA version of {@link GL30C#glClearBufferuiv ClearBufferuiv}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param buffer      the buffer to clear. Must be:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td></tr></table>
-//     * @param drawbuffer  the draw buffer to clear
-//     * @param value       a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
-//     */
-//    public static void glClearNamedFramebufferuiv(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int buffer, @NativeType("GLint") int drawbuffer, @NativeType("GLint *") IntBuffer value) {
-//        if (CHECKS) {
-//            check(value, 4);
-//        }
-//        nglClearNamedFramebufferuiv(framebuffer, buffer, drawbuffer, memAddress(value));
-//    }
-//
-//    // --- [ glClearNamedFramebufferfv ] ---
-//
-//    /** Unsafe version of: {@link #glClearNamedFramebufferfv ClearNamedFramebufferfv} */
-//    public static native void nglClearNamedFramebufferfv(int framebuffer, int buffer, int drawbuffer, long value);
-//
-//    /**
-//     * DSA version of {@link GL30C#glClearBufferfv ClearBufferfv}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param buffer      the buffer to clear. One of:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td><td>{@link GL11#GL_DEPTH DEPTH}</td></tr></table>
-//     * @param drawbuffer  the draw buffer to clear
-//     * @param value       for color buffers, a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to. For depth buffers, a pointer to a
-//     *                    single depth value to clear the buffer to.
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
-//     */
-//    public static void glClearNamedFramebufferfv(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int buffer, @NativeType("GLint") int drawbuffer, @NativeType("GLfloat *") FloatBuffer value) {
-//        if (CHECKS) {
-//            check(value, 1);
-//        }
-//        nglClearNamedFramebufferfv(framebuffer, buffer, drawbuffer, memAddress(value));
-//    }
-//
-//    // --- [ glClearNamedFramebufferfi ] ---
-//
-//    /**
-//     * DSA version of {@link GL30C#glClearBufferfi ClearBufferfi}.
-//     *
-//     * @param framebuffer the framebuffer name
-//     * @param buffer      the buffer to clear. Must be:<br><table><tr><td>{@link GL30#GL_DEPTH_STENCIL DEPTH_STENCIL}</td></tr></table>
-//     * @param drawbuffer  the draw buffer to clear
-//     * @param depth       the depth value to clear the buffer to
-//     * @param stencil     the stencil value to clear the buffer to
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebufferfi">Reference Page</a>
-//     */
-//    public static native void glClearNamedFramebufferfi(@NativeType("GLuint") int framebuffer, @NativeType("GLenum") int buffer, @NativeType("GLint") int drawbuffer, @NativeType("GLfloat") float depth, @NativeType("GLint") int stencil);
-//
+    // --- [ glClearNamedFramebufferiv ] ---
+
+    /**
+     * DSA version of {@link GL30C#glClearBufferiv ClearBufferiv}.
+     *
+     * @param framebuffer the framebuffer name
+     * @param buffer      the buffer to clear. One of:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td><td>{@link GL11#GL_STENCIL STENCIL}</td></tr></table>
+     * @param drawBuffer  the draw buffer to clear
+     * @param value       for color buffers, a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to. For stencil buffers, a pointer to a
+     *                    single stencil value to clear the buffer to.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
+     */
+    fun clearFramebuffer(framebuffer: GlFramebuffer, buffer: BufferType, drawBuffer: Int, value: IntBuffer) =
+            GL45C.nglClearNamedFramebufferiv(framebuffer.name, buffer.i, drawBuffer, value.adr)
+
+    // --- [ glClearNamedFramebufferuiv ] ---
+
+    /**
+     * DSA version of {@link GL30C#glClearBufferuiv ClearBufferuiv}.
+     *
+     * @param framebuffer the framebuffer name
+     * @param buffer      the buffer to clear. Must be:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td></tr></table>
+     * @param drawBuffer  the draw buffer to clear
+     * @param value       a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
+     */
+    fun clearFramebuffer(framebuffer: GlFramebuffer, buffer: BufferType, drawBuffer: Int, value: UintBuffer) =
+            GL45C.nglClearNamedFramebufferuiv(framebuffer.name, buffer.i, drawBuffer, value.adr)
+
+    // --- [ glClearNamedFramebufferfv ] ---
+
+    /**
+     * DSA version of {@link GL30C#glClearBufferfv ClearBufferfv}.
+     *
+     * @param framebuffer the framebuffer name
+     * @param buffer      the buffer to clear. One of:<br><table><tr><td>{@link GL11#GL_COLOR COLOR}</td><td>{@link GL11#GL_DEPTH DEPTH}</td></tr></table>
+     * @param drawbuffer  the draw buffer to clear
+     * @param value       for color buffers, a pointer to a four-element vector specifying R, G, B and A values to clear the buffer to. For depth buffers, a pointer to a
+     *                    single depth value to clear the buffer to.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
+     */
+    fun clearFramebuffer(framebuffer: GlFramebuffer, buffer: BufferType, drawbuffer: Int, value: FloatBuffer) =
+            GL45C.nglClearNamedFramebufferfv(framebuffer.name, buffer.i, drawbuffer, value.adr)
+
+    // --- [ glClearNamedFramebufferfi ] ---
+
+    /**
+     * DSA version of {@link GL30C#glClearBufferfi ClearBufferfi}.
+     *
+     * @param framebuffer the framebuffer name
+     * @param depth       the depth value to clear the buffer to
+     * @param stencil     the stencil value to clear the buffer to
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebufferfi">Reference Page</a>
+     */
+    fun clearFramebufferDepthStencil(framebuffer: GlFramebuffer, depth: Float, stencil: Int) =
+            GL45C.glClearNamedFramebufferfi(framebuffer.name, GL30C.GL_DEPTH_STENCIL, 0, depth, stencil)
+
 //    // --- [ glBlitNamedFramebuffer ] ---
 //
 //    /**
