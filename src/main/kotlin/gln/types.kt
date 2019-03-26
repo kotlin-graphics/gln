@@ -25,6 +25,10 @@ inline class GlTextures(val names: IntBuffer) {
     inline val adr: Long
         get() = names.adr
 
+    // --- [ glBindImageTextures ] ---
+
+    fun bindImages(first: Int = 0) = gl.bindImageTextures(first, this)
+
     // --- [ glBindTextures ] ---
 
     fun bind(first: Int = 0) = gl.bindTextures(first, this)

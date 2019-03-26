@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL44C
 import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.Buffer
 import java.nio.IntBuffer
+import java.nio.LongBuffer
 
 /**
  * The OpenGL functionality up to version 4.4. Includes only Core Profile symbols.
@@ -279,103 +280,81 @@ interface gl44i {
     fun bindSamplers(first: Int, samplers: GlSamplers? = null) =
             GL44C.nglBindSamplers(first, samplers?.rem ?: 0, samplers?.adr ?: NULL)
 
-//    // --- [ glBindImageTextures ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glBindImageTextures BindImageTextures}
-//     *
-//     * @param count the number of image units
-//     */
-//    public static native void nglBindImageTextures(int first, int count, long textures);
-//
-//    /**
-//     * Binds {@code count} existing texture objects to image units numbered {@code first} through {@code first+count-1}. If {@code textures} is not {@code NULL}, it
-//     * specifies an array of {@code count} values, each of which must be zero or the name of an existing texture object. If {@code textures} is {@code NULL}, each
-//     * affected image unit from {@code first} through {@code first+count-1} will be reset to have no bound texture object.
-//     *
-//     * <p>When binding a non-zero texture object to an image unit, the image unit {@code level}, {@code layered}, {@code layer}, and {@code access} parameters are
-//     * set to zero, {@link GL11#GL_TRUE TRUE}, zero, and {@link GL15#GL_READ_WRITE READ_WRITE}, respectively. The image unit {@code format} parameter is taken from the internal
-//     * format of the texture image at level zero of the texture object identified by {@code textures}. For cube map textures, the internal format of the
-//     * {@link GL13#GL_TEXTURE_CUBE_MAP_POSITIVE_X TEXTURE_CUBE_MAP_POSITIVE_X} image of level zero is used. For multisample, multisample array, buffer, and rectangle textures, the internal
-//     * format of the single texture level is used.</p>
-//     *
-//     * <p>When unbinding a texture object from an image unit, the image unit parameters {@code level}, {@code layered}, {@code layer}, and {@code format} will be
-//     * reset to their default values of zero, {@link GL11#GL_FALSE FALSE}, 0, and {@link GL30#GL_R8 R8}, respectively.</p>
-//     *
-//     * <p>{@code BindImageTextures} is equivalent to:</p>
-//     *
-//     * <pre><code>
-//     * for ( i = 0; i &lt; count; i++ ) {
-//     *     if ( textures == NULL || textures[i] = 0 ) {
-//     *         glBindImageTexture(first + i, 0, 0, FALSE, 0, READ_ONLY, R8);
-//     *     } else {
-//     *         glBindImageTexture(first + i, textures[i], 0, TRUE, 0, READ_WRITE, lookupInternalFormat(textures[i]));
-//     *     }
-//     * }</code></pre>
-//     *
-//     * <p>where {@code lookupInternalFormat} returns the internal format of the specified texture object.</p>
-//     *
-//     * <p>The values specified in {@code textures} will be checked separately for each image unit. When a value for a specific image unit is invalid, the state
-//     * for that image unit will be unchanged and an error will be generated. However, state for other image units will still be changed if their corresponding
-//     * values are valid.</p>
-//     *
-//     * @param first    the first image unit
-//     * @param textures an array of zeros or names of existing texture objects
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBindImageTextures">Reference Page</a>
-//     */
-//    public static void glBindImageTextures(@NativeType("GLuint") int first, @Nullable @NativeType("GLuint const *") IntBuffer textures)
-//    {
-//        nglBindImageTextures(first, remainingSafe(textures), memAddressSafe(textures));
-//    }
-//
-//    // --- [ glBindVertexBuffers ] ---
-//
-//    /**
-//     * Unsafe version of: {@link #glBindVertexBuffers BindVertexBuffers}
-//     *
-//     * @param count the number of vertex buffer binding points
-//     */
-//    public static native void nglBindVertexBuffers(int first, int count, long buffers, long offsets, long strides);
-//
-//    /**
-//     * Binds {@code count} existing buffer objects to vertex buffer binding points numbered {@code first} through {@code first+count-1}. If {@code buffers} is
-//     * not {@code NULL}, it specifies an array of {@code count} values, each of which must be zero or the name of an existing buffer object. {@code offsets} and
-//     * {@code strides} specify arrays of {@code count} values indicating the offset of the first element and stride between elements in each buffer,
-//     * respectively. If {@code buffers} is {@code NULL}, each affected vertex buffer binding point from {@code first} through {@code first+count-1} will be reset to
-//     * have no bound buffer object. In this case, the offsets and strides associated with the binding points are set to default values, ignoring
-//     * {@code offsets} and {@code strides}.
-//     *
-//     * <p>{@code BindVertexBuffers} is equivalent to:</p>
-//     *
-//     * <pre><code>
-//     * for ( i = 0; i &lt; count; i++ ) {
-//     *     if ( buffers == NULL ) {
-//     *         glBindVertexBuffer(first + i, 0, 0, 16);
-//     *     } else {
-//     *         glBindVertexBuffer(first + i, buffers[i], offsets[i], strides[i]);
-//     *     }
-//     * }</code></pre>
-//     *
-//     * <p>except that buffers will not be created if they do not exist.</p>
-//     *
-//     * <p>The values specified in {@code buffers}, {@code offsets}, and {@code strides} will be checked separately for each vertex buffer binding point. When a
-//     * value for a specific binding point is invalid, the state for that binding point will be unchanged and an error will be generated. However, state for
-//     * other binding points will still be changed if their corresponding values are valid.</p>
-//     *
-//     * @param first   the first vertex buffer binding point
-//     * @param buffers an array of zeros or names of existing buffers objects
-//     * @param offsets an array of offses
-//     * @param strides an array of stride values
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glBindVertexBuffers">Reference Page</a>
-//     */
-//    public static void glBindVertexBuffers(@NativeType("GLuint") int first, @Nullable @NativeType("GLuint const *") IntBuffer buffers, @Nullable @NativeType("GLintptr const *") PointerBuffer offsets, @Nullable @NativeType("GLsizei const *") IntBuffer strides)
-//    {
-//        if (CHECKS) {
-//            checkSafe(offsets, remainingSafe(buffers));
-//            checkSafe(strides, remainingSafe(buffers));
-//        }
-//        nglBindVertexBuffers(first, remainingSafe(buffers), memAddressSafe(buffers), memAddressSafe(offsets), memAddressSafe(strides));
-//    }
+    // --- [ glBindImageTextures ] ---
+
+    /**
+     * Binds {@code count} existing texture objects to image units numbered {@code first} through {@code first+count-1}. If {@code textures} is not {@code NULL}, it
+     * specifies an array of {@code count} values, each of which must be zero or the name of an existing texture object. If {@code textures} is {@code NULL}, each
+     * affected image unit from {@code first} through {@code first+count-1} will be reset to have no bound texture object.
+     *
+     * <p>When binding a non-zero texture object to an image unit, the image unit {@code level}, {@code layered}, {@code layer}, and {@code access} parameters are
+     * set to zero, {@link GL11#GL_TRUE TRUE}, zero, and {@link GL15#GL_READ_WRITE READ_WRITE}, respectively. The image unit {@code format} parameter is taken from the internal
+     * format of the texture image at level zero of the texture object identified by {@code textures}. For cube map textures, the internal format of the
+     * {@link GL13#GL_TEXTURE_CUBE_MAP_POSITIVE_X TEXTURE_CUBE_MAP_POSITIVE_X} image of level zero is used. For multisample, multisample array, buffer, and rectangle textures, the internal
+     * format of the single texture level is used.</p>
+     *
+     * <p>When unbinding a texture object from an image unit, the image unit parameters {@code level}, {@code layered}, {@code layer}, and {@code format} will be
+     * reset to their default values of zero, {@link GL11#GL_FALSE FALSE}, 0, and {@link GL30#GL_R8 R8}, respectively.</p>
+     *
+     * <p>{@code BindImageTextures} is equivalent to:</p>
+     *
+     * <pre><code>
+     * for ( i = 0; i &lt; count; i++ ) {
+     *     if ( textures == NULL || textures[i] = 0 ) {
+     *         glBindImageTexture(first + i, 0, 0, FALSE, 0, READ_ONLY, R8);
+     *     } else {
+     *         glBindImageTexture(first + i, textures[i], 0, TRUE, 0, READ_WRITE, lookupInternalFormat(textures[i]));
+     *     }
+     * }</code></pre>
+     *
+     * <p>where {@code lookupInternalFormat} returns the internal format of the specified texture object.</p>
+     *
+     * <p>The values specified in {@code textures} will be checked separately for each image unit. When a value for a specific image unit is invalid, the state
+     * for that image unit will be unchanged and an error will be generated. However, state for other image units will still be changed if their corresponding
+     * values are valid.</p>
+     *
+     * @param first    the first image unit
+     * @param textures an array of zeros or names of existing texture objects
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBindImageTextures">Reference Page</a>
+     */
+    fun bindImageTextures(first: Int, textures: GlTextures? = null) =
+            GL44C.nglBindImageTextures(first, textures?.rem ?: 0, textures?.adr ?: NULL)
+
+    // --- [ glBindVertexBuffers ] ---
+
+    /**
+     * Binds {@code count} existing buffer objects to vertex buffer binding points numbered {@code first} through {@code first+count-1}. If {@code buffers} is
+     * not {@code NULL}, it specifies an array of {@code count} values, each of which must be zero or the name of an existing buffer object. {@code offsets} and
+     * {@code strides} specify arrays of {@code count} values indicating the offset of the first element and stride between elements in each buffer,
+     * respectively. If {@code buffers} is {@code NULL}, each affected vertex buffer binding point from {@code first} through {@code first+count-1} will be reset to
+     * have no bound buffer object. In this case, the offsets and strides associated with the binding points are set to default values, ignoring
+     * {@code offsets} and {@code strides}.
+     *
+     * <p>{@code BindVertexBuffers} is equivalent to:</p>
+     *
+     * <pre><code>
+     * for ( i = 0; i &lt; count; i++ ) {
+     *     if ( buffers == NULL ) {
+     *         glBindVertexBuffer(first + i, 0, 0, 16);
+     *     } else {
+     *         glBindVertexBuffer(first + i, buffers[i], offsets[i], strides[i]);
+     *     }
+     * }</code></pre>
+     *
+     * <p>except that buffers will not be created if they do not exist.</p>
+     *
+     * <p>The values specified in {@code buffers}, {@code offsets}, and {@code strides} will be checked separately for each vertex buffer binding point. When a
+     * value for a specific binding point is invalid, the state for that binding point will be unchanged and an error will be generated. However, state for
+     * other binding points will still be changed if their corresponding values are valid.</p>
+     *
+     * @param first   the first vertex buffer binding point
+     * @param buffers an array of zeros or names of existing buffers objects
+     * @param offsets an array of offses
+     * @param strides an array of stride values
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glBindVertexBuffers">Reference Page</a>
+     */
+    fun bindVertexBuffers(first: Int, buffers: GlBuffers? = null, offsets: LongBuffer? = null, strides: IntBuffer? = null) =
+            GL44C.nglBindVertexBuffers(first, buffers?.rem ?: 0, buffers?.adr ?: NULL, offsets?.adr ?: NULL, strides?.adr ?: NULL)
 }

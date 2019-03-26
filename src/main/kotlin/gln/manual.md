@@ -126,6 +126,8 @@ and another one contemplating full arrays
  
  bindBuffersBase, bindBuffersRange, bindTextures, bindSamplers will default identifier to null
  
+ glBindImageTextures becomes bindImages on GlTextures
+ 
  ---------------------- GL45
  
  glGetTransformFeedbacki_v and glGetTransformFeedbacki64_v get merged in one unique inlined reified getTransformFeedback
