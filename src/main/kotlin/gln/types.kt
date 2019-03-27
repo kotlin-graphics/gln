@@ -99,7 +99,10 @@ typealias UniformLocation = Int
 typealias AttribLocation = Int
 typealias UniformBlockIndex = Int
 typealias StorageBlockIndex = Int
-typealias ImageUnit = Int
+typealias TexUnit = Int
+typealias VertexAttrIndex = Int // TODO -> VertexAttribIndex?
+typealias VertexAttrSize = Int  // TODO -> VertexAttribSize?
+// TODO bindingIndex?
 
 /** One or more of:
  *  - GL_MAP_READ_BIT

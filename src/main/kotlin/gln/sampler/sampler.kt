@@ -22,6 +22,10 @@ inline class GlSamplers(val names: IntBuffer) {
 
     fun bind(first: Int = 0) = gl.bindSamplers(first, this)
 
+    // --- [ glCreateSamplers ] ---
+
+    fun create() = gl.createSamplers(this)
+
     // --- [ glDeleteSamplers ] ---
 
     /**
@@ -32,6 +36,12 @@ inline class GlSamplers(val names: IntBuffer) {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
     fun delete() = GL33C.nglDeleteSamplers(rem, adr)
+
+    companion object {
+        // --- [ glCreateSamplers ] ---
+
+        infix fun create(size: Int): GlSamplers = gl.createSamplers(size)
+    }
 }
 
 inline class GlSampler(val name: Int = -1) {
@@ -158,6 +168,11 @@ inline class GlSampler(val name: Int = -1) {
 
 
     companion object {
+
+        // --- [ glCreateSamplers ] ---
+
+        fun create(): GlSampler = gl.createSamplers()
+
         // --- [ glGenSamplers ] ---
 
         /**
@@ -185,7 +200,7 @@ inline class GlSampler(val name: Int = -1) {
          */
         fun gen() = GlSamplers(stak.intAddress { GL33C.nglGenSamplers(1, it) })
 
-        fun create(): GlSampler = GlSampler(GL45C.glCreateSamplers())
+
         inline fun create(block: GlSampler.() -> Unit): GlSampler = create().also(block)
     }
 }

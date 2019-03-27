@@ -29,6 +29,16 @@ inline class GlPipelines(val names: IntBuffer) {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteProgramPipelines">Reference Page</a>
      */
     fun delete() = GL41C.nglDeleteProgramPipelines(rem, adr)
+
+    // --- [ glCreateProgramPipelines ] ---
+
+    fun create() = gl.createProgramPipelines(this)
+
+    companion object {
+        // --- [ glCreateProgramPipelines ] ---
+
+        infix fun create(size: Int): GlPipelines = gl.createProgramPipelines(size)
+    }
 }
 
 inline class GlPipeline(val name: Int = 0) {
@@ -107,6 +117,11 @@ inline class GlPipeline(val name: Int = 0) {
 
 
     companion object {
+
+        // --- [ glCreateProgramPipelines ] ---
+
+        fun create(): GlPipeline = gl.createProgramPipelines()
+
         fun gen(): GlPipeline = GlPipeline(GL41C.glGenProgramPipelines())
     }
 }

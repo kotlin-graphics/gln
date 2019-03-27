@@ -17,11 +17,9 @@ import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.framebuffer.GlFramebuffer
 import gln.misc.GlDebugSource
-import gln.objects.GlBuffer
-import gln.objects.GlProgram
-import gln.objects.GlQuery
-import gln.objects.GlShader
+import gln.objects.*
 import gln.transformFeedback.GlTransformFeedback
+import gln.vertexArray.GlVertexArray
 import kool.IntBuffer
 import kool.adr
 import kool.lib.toIntArray
@@ -61,7 +59,7 @@ object gl :
                 }
             }
 
-    // --- [ glGetTexLevelParameter ] ---
+    // --- [ glGetTexLevelParameter ] --- // TODO get rid of *Level* ?
 
     /**
      * Places integer information about texture image parameter {@code name} for level-of-detail {@code level} of the specified {@code target} into {@code params}.
@@ -72,7 +70,7 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
-    inline fun <reified T> getTexParameter(target: TextureTarget, level: Int, name: GetTexLevelParameter): T =
+    inline fun <reified T> getTexLevelParameter(target: TextureTarget, level: Int, name: TexLevelParameter): T =
             stak { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) } as T
@@ -566,4 +564,68 @@ object gl :
                     else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
                 }
             }
+
+    // --- [ glGetTextureLevelParameterfv / glGetTextureLevelParameteriv ] ---
+    /**
+     * DSA version of {@link GL11C#glGetTexLevelParameteriv GetTexLevelParameteriv}.
+     *
+     * @param texture the texture name
+     * @param level   the level-of-detail number
+     * @param name   the parameter to query. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_WIDTH TEXTURE_WIDTH}</td><td>{@link GL11#GL_TEXTURE_HEIGHT TEXTURE_HEIGHT}</td><td>{@link GL12#GL_TEXTURE_DEPTH TEXTURE_DEPTH}</td><td>{@link GL32#GL_TEXTURE_SAMPLES TEXTURE_SAMPLES}</td></tr><tr><td>{@link GL32#GL_TEXTURE_FIXED_SAMPLE_LOCATIONS TEXTURE_FIXED_SAMPLE_LOCATIONS}</td><td>{@link GL11#GL_TEXTURE_INTERNAL_FORMAT TEXTURE_INTERNAL_FORMAT}</td><td>{@link GL11#GL_TEXTURE_RED_SIZE TEXTURE_RED_SIZE}</td><td>{@link GL11#GL_TEXTURE_GREEN_SIZE TEXTURE_GREEN_SIZE}</td></tr><tr><td>{@link GL11#GL_TEXTURE_BLUE_SIZE TEXTURE_BLUE_SIZE}</td><td>{@link GL11#GL_TEXTURE_ALPHA_SIZE TEXTURE_ALPHA_SIZE}</td><td>{@link GL14#GL_TEXTURE_DEPTH_SIZE TEXTURE_DEPTH_SIZE}</td><td>{@link GL30#GL_TEXTURE_STENCIL_SIZE TEXTURE_STENCIL_SIZE}</td></tr><tr><td>{@link GL30#GL_TEXTURE_SHARED_SIZE TEXTURE_SHARED_SIZE}</td><td>{@link GL30#GL_TEXTURE_ALPHA_TYPE TEXTURE_ALPHA_TYPE}</td><td>{@link GL30#GL_TEXTURE_DEPTH_TYPE TEXTURE_DEPTH_TYPE}</td><td>{@link GL13#GL_TEXTURE_COMPRESSED TEXTURE_COMPRESSED}</td></tr><tr><td>{@link GL13#GL_TEXTURE_COMPRESSED_IMAGE_SIZE TEXTURE_COMPRESSED_IMAGE_SIZE}</td><td>{@link GL31#GL_TEXTURE_BUFFER_DATA_STORE_BINDING TEXTURE_BUFFER_DATA_STORE_BINDING}</td><td>{@link GL43#GL_TEXTURE_BUFFER_OFFSET TEXTURE_BUFFER_OFFSET}</td><td>{@link GL43#GL_TEXTURE_BUFFER_SIZE TEXTURE_BUFFER_SIZE}</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureLevelParameter">Reference Page</a>
+     */
+    inline fun <reified T> getTexLevelParameter(texture: GlTexture, level: Int, name: TexLevelParameter): T =
+            stak { s ->
+                when (T::class) {
+                    Int::class -> s.intAddress { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) } as T
+                    Boolean::class -> s.intAddress { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) }.bool as T
+                    Float::class -> s.intAddress { GL45C.nglGetTextureLevelParameterfv(texture.name, level, name.i, it) } as T
+                    else -> throw Exception("[gln.gl.getTexLevelParameter] invalid T")
+                }
+            }
+
+    // --- [ glGetTextureParameterfv / glGetTextureParameteriv / glGetTextureParameterIiv / glGetTextureParameterIuiv ] ---
+
+    /**
+     * DSA version of {@link GL11C#glGetTexParameterfv GetTexParameterfv}.
+     *
+     * @param texture the texture name
+     * @param name   the parameter to query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureParameter">Reference Page</a>
+     */
+    inline fun <reified T> getTexParameter(texture: GlTexture, name: TexParameter): T =
+            stak { s ->
+                when (T::class) {
+                    Int::class -> s.intAddress { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) } as T
+                    Boolean::class -> s.intAddress { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) }.bool as T
+                    Float::class -> s.intAddress { GL45C.nglGetTextureParameterfv(texture.name, name.i, it) }.bool as T
+                    Vec4i::class -> s.vec4iAddress { GL45C.nglGetTextureParameterIiv(texture.name, name.i, it) } as T
+                    Vec4ui::class -> s.vec4uiAddress { GL45C.nglGetTextureParameterIuiv(texture.name, name.i, it) } as T
+                    else -> throw Exception("[gln.gl.getTexParameter DSA] invalid T")
+                }
+            }
+
+    // --- [ glGetVertexArrayIndexediv / glGetVertexArrayIndexed64iv ] ---
+
+    /**
+     * Queries parameters of an attribute of a vertex array object.
+     *
+     * @param vaobj the vertex array object name
+     * @param index the attribute to query
+     * @param name the parameter to query. One of:<br><table><tr><td>{@link GL20#GL_VERTEX_ATTRIB_ARRAY_ENABLED VERTEX_ATTRIB_ARRAY_ENABLED}</td><td>{@link GL20#GL_VERTEX_ATTRIB_ARRAY_SIZE VERTEX_ATTRIB_ARRAY_SIZE},</td></tr><tr><td>{@link GL20#GL_VERTEX_ATTRIB_ARRAY_STRIDE VERTEX_ATTRIB_ARRAY_STRIDE}</td><td>{@link GL20#GL_VERTEX_ATTRIB_ARRAY_TYPE VERTEX_ATTRIB_ARRAY_TYPE}</td></tr><tr><td>{@link GL20#GL_VERTEX_ATTRIB_ARRAY_NORMALIZED VERTEX_ATTRIB_ARRAY_NORMALIZED}</td><td>{@link GL30#GL_VERTEX_ATTRIB_ARRAY_INTEGER VERTEX_ATTRIB_ARRAY_INTEGER}</td></tr><tr><td>{@link GL33#GL_VERTEX_ATTRIB_ARRAY_DIVISOR VERTEX_ATTRIB_ARRAY_DIVISOR}</td><td>{@link GL43#GL_VERTEX_ATTRIB_ARRAY_LONG VERTEX_ATTRIB_ARRAY_LONG}</td></tr><tr><td>{@link GL43#GL_VERTEX_ATTRIB_RELATIVE_OFFSET VERTEX_ATTRIB_RELATIVE_OFFSET}</td></tr></table>
+     * @param param the buffer in which to return the parameter values
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArrayIndexed">Reference Page</a>
+     */
+    inline fun <reified T> getVertexArrayIndexed(vaobj: GlVertexArray, index: VertexAttrIndex, name: VertexAttrib): T =
+            stak{ s ->
+                when(T::class) {
+                    Int::class -> s.intAddress { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
+                    Boolean::class -> s.intAddress { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
+                    Long::class -> s.longAddress { GL45C.nglGetVertexArrayIndexed64iv(vaobj.name, index, name.i, it) } as T
+                    else -> throw Exception("[gln.gl.getVertexArrayIndexed DSA] invalid T")
+                }
+    }
 }

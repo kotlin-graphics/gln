@@ -944,8 +944,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribFormat">Reference Page</a>
      */
-    fun vertexAttribFormat(attribIndex: Int, size: VertexAttribSize, type: VertexAttribType, normalized: Boolean, relativeOffset: Int) =
-            GL43C.glVertexAttribFormat(attribIndex, size.i, type.i, normalized, relativeOffset)
+    fun vertexAttribFormat(attribIndex: Int, size: VertexAttrSize, type: VertexAttrType, normalized: Boolean, relativeOffset: Int) =
+            GL43C.glVertexAttribFormat(attribIndex, size, type.i, normalized, relativeOffset)
 
     // --- [ glVertexAttribIFormat ] ---
 
@@ -959,8 +959,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIFormat">Reference Page</a>
      */
-    fun vertexAttribIFormat(attribIndex: Int, size: VertexAttribSize, type: VertexAttribType, relativeOffset: Int) =
-            GL43C.glVertexAttribIFormat(attribIndex, size.i, type.i, relativeOffset)
+    fun vertexAttribIFormat(attribIndex: Int, size: VertexAttrSize, type: VertexAttrType, relativeOffset: Int) =
+            GL43C.glVertexAttribIFormat(attribIndex, size, type.i, relativeOffset)
 
     // --- [ glVertexAttribLFormat ] ---
 
@@ -974,8 +974,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribLFormat">Reference Page</a>
      */
-    fun vertexAttribLFormat(attribIndex: Int, size: VertexAttribSize, type: VertexAttribType, relativeOffset: Int) =
-            GL43C.glVertexAttribLFormat(attribIndex, size.i, type.i, relativeOffset)
+    fun vertexAttribLFormat(attribIndex: Int, size: VertexAttrSize, type: VertexAttrType, relativeOffset: Int) =
+            GL43C.glVertexAttribLFormat(attribIndex, size, type.i, relativeOffset)
 
     // --- [ glVertexAttribBinding ] --- TODO attribIndex and bindingIndex inline?
 

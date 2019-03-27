@@ -2,6 +2,7 @@ package gln.objects
 
 import gln.QueryTarget
 import kool.Adr
+import kool.IntBuffer
 import kool.adr
 import kool.rem
 import org.lwjgl.opengl.GL15C
@@ -18,7 +19,6 @@ inline class GlQuery(val name: Int) {
 
     infix fun end(target: QueryTarget) = GL15C.glEndQuery(target.i)
 
-
     fun <R> use(target: QueryTarget, block: (GlQuery) -> R): R {
         GL15C.glBeginQuery(target.i, name)
         return block(this).also { GL15C.glEndQuery(target.i) }
@@ -28,7 +28,16 @@ inline class GlQuery(val name: Int) {
 
     val valid: Boolean
         get() = GL20C.glIsQuery(name)
+
+    companion object {
+
+        // --- [ glCreateQueries ] ---
+
+        infix fun create(target: QueryTarget): GlQuery = gl.createQueries(target)
+    }
 }
+
+infix fun GlQueries(val size: Int): GlQueries = GlQueries(IntBuffer(size))
 
 inline class GlQueries(val i: IntBuffer) {
 
@@ -37,4 +46,15 @@ inline class GlQueries(val i: IntBuffer) {
 
     inline val adr: Adr
         get() = i.adr
+
+    // --- [ glCreateQueries ] ---
+
+    infix fun create(target: QueryTarget) = gl.createQueries(target, this)
+
+    companion object {
+
+        // --- [ glCreateQueries ] ---
+
+        fun create(target: QueryTarget, size: Int): GlQueries = gl.createQueries(target, size)
+    }
 }

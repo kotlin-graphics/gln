@@ -1041,27 +1041,27 @@ inline class FrontFaceDirection(val i: Int) {
 //
 //###############################################################################
 
-inline class GetTexLevelParameter(val i: Int) {
+inline class TexLevelParameter(val i: Int) {
     companion object {
-        val WIDTH = GetTexLevelParameter(GL11.GL_TEXTURE_WIDTH)
-        val HEIGHT = GetTexLevelParameter(GL11.GL_TEXTURE_HEIGHT)
-        val DEPTH = GetTexLevelParameter(GL12.GL_TEXTURE_DEPTH)
-        val INTERNAL_FORMAT = GetTexLevelParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT)
-        val COMPONENTS = GetTexLevelParameter(GL11.GL_TEXTURE_COMPONENTS)
-        val RED_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_RED_TYPE)
-        val GREEN_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_GREEN_TYPE)
-        val BLUE_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_BLUE_TYPE)
-        val ALPHA_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_ALPHA_TYPE)
-        val DEPTH_TYPE = GetTexLevelParameter(GL30.GL_TEXTURE_DEPTH_TYPE)
-        val RED_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_RED_SIZE)
-        val GREEN_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_GREEN_SIZE)
-        val BLUE_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_BLUE_SIZE)
-        val ALPHA_SIZE = GetTexLevelParameter(GL11.GL_TEXTURE_ALPHA_SIZE)
-        val DEPTH_SIZE = GetTexLevelParameter(GL30.GL_TEXTURE_DEPTH_SIZE)
-        val COMPRESSED = GetTexLevelParameter(GL30.GL_TEXTURE_COMPRESSED)
-        val COMPRESSED_IMAGE_SIZE = GetTexLevelParameter(GL13.GL_TEXTURE_COMPRESSED_IMAGE_SIZE)
-        val BUFFER_OFFSET = GetTexLevelParameter(GL43.GL_TEXTURE_BUFFER_OFFSET)
-        val BUFFER_SIZE = GetTexLevelParameter(GL43.GL_TEXTURE_BUFFER_SIZE)
+        val WIDTH = TexLevelParameter(GL11.GL_TEXTURE_WIDTH)
+        val HEIGHT = TexLevelParameter(GL11.GL_TEXTURE_HEIGHT)
+        val DEPTH = TexLevelParameter(GL12.GL_TEXTURE_DEPTH)
+        val INTERNAL_FORMAT = TexLevelParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT)
+        val COMPONENTS = TexLevelParameter(GL11.GL_TEXTURE_COMPONENTS)
+        val RED_TYPE = TexLevelParameter(GL30.GL_TEXTURE_RED_TYPE)
+        val GREEN_TYPE = TexLevelParameter(GL30.GL_TEXTURE_GREEN_TYPE)
+        val BLUE_TYPE = TexLevelParameter(GL30.GL_TEXTURE_BLUE_TYPE)
+        val ALPHA_TYPE = TexLevelParameter(GL30.GL_TEXTURE_ALPHA_TYPE)
+        val DEPTH_TYPE = TexLevelParameter(GL30.GL_TEXTURE_DEPTH_TYPE)
+        val RED_SIZE = TexLevelParameter(GL11.GL_TEXTURE_RED_SIZE)
+        val GREEN_SIZE = TexLevelParameter(GL11.GL_TEXTURE_GREEN_SIZE)
+        val BLUE_SIZE = TexLevelParameter(GL11.GL_TEXTURE_BLUE_SIZE)
+        val ALPHA_SIZE = TexLevelParameter(GL11.GL_TEXTURE_ALPHA_SIZE)
+        val DEPTH_SIZE = TexLevelParameter(GL30.GL_TEXTURE_DEPTH_SIZE)
+        val COMPRESSED = TexLevelParameter(GL30.GL_TEXTURE_COMPRESSED)
+        val COMPRESSED_IMAGE_SIZE = TexLevelParameter(GL13.GL_TEXTURE_COMPRESSED_IMAGE_SIZE)
+        val BUFFER_OFFSET = TexLevelParameter(GL43.GL_TEXTURE_BUFFER_OFFSET)
+        val BUFFER_SIZE = TexLevelParameter(GL43.GL_TEXTURE_BUFFER_SIZE)
     }
 }
 
@@ -6564,32 +6564,32 @@ inline class UniformType(val i: Int) {
 
 //###############################################################################
 
-inline class VertexAttribType(val i: Int) {
+inline class VertexAttrType(val i: Int) { // TODO -> VertexAttribType?
     companion object {
-        val BYTE = VertexAttribType(GL11.GL_BYTE)
-        val UNSIGNED_BYTE = VertexAttribType(GL20.GL_UNSIGNED_BYTE)
-        val SHORT = VertexAttribType(GL20.GL_SHORT)
-        val UNSIGNED_SHORT = VertexAttribType(GL20.GL_UNSIGNED_SHORT)
-        val INT = VertexAttribType(GL11.GL_INT)
-        val UNSIGNED_INT = VertexAttribType(GL40.GL_UNSIGNED_INT)
-        val HALF_FLOAT = VertexAttribType(GL40.GL_HALF_FLOAT)
-        val FLOAT = VertexAttribType(GL40.GL_FLOAT)
-        val DOUBLE = VertexAttribType(GL11.GL_DOUBLE)
-        val FIXED = VertexAttribType(GL41.GL_FIXED)
-        val INT_2_10_10_10_REV = VertexAttribType(GL33.GL_INT_2_10_10_10_REV)
-        val UNSIGNED_INT_2_10_10_10_REV = VertexAttribType(GL12.GL_UNSIGNED_INT_2_10_10_10_REV)
-        val UNSIGNED_INT_10F_11F_11F_REV = VertexAttribType(GL30.GL_UNSIGNED_INT_10F_11F_11F_REV)
+        val BYTE = VertexAttrType(GL11.GL_BYTE)
+        val UNSIGNED_BYTE = VertexAttrType(GL20.GL_UNSIGNED_BYTE)
+        val SHORT = VertexAttrType(GL20.GL_SHORT)
+        val UNSIGNED_SHORT = VertexAttrType(GL20.GL_UNSIGNED_SHORT)
+        val INT = VertexAttrType(GL11.GL_INT)
+        val UNSIGNED_INT = VertexAttrType(GL40.GL_UNSIGNED_INT)
+        val HALF_FLOAT = VertexAttrType(GL40.GL_HALF_FLOAT)
+        val FLOAT = VertexAttrType(GL40.GL_FLOAT)
+        val DOUBLE = VertexAttrType(GL11.GL_DOUBLE)
+        val FIXED = VertexAttrType(GL41.GL_FIXED)
+        val INT_2_10_10_10_REV = VertexAttrType(GL33.GL_INT_2_10_10_10_REV)
+        val UNSIGNED_INT_2_10_10_10_REV = VertexAttrType(GL12.GL_UNSIGNED_INT_2_10_10_10_REV)
+        val UNSIGNED_INT_10F_11F_11F_REV = VertexAttrType(GL30.GL_UNSIGNED_INT_10F_11F_11F_REV)
     }
 }
 
-inline class VertexAttribSize(val i: Int) {
-    companion object {
-        val _1 = VertexAttribType(1)
-        val _2 = VertexAttribType(2)
-        val _3 = VertexAttribType(3)
-        val _4 = VertexAttribType(4)
-    }
-}
+//inline class VertexAttribSize(val i: Int) { TODO?
+//    companion object {
+//        val _1 = VertexAttrType(1)
+//        val _2 = VertexAttrType(2)
+//        val _3 = VertexAttrType(3)
+//        val _4 = VertexAttrType(4)
+//    }
+//}
 
 //###############################################################################
 
@@ -6633,17 +6633,17 @@ inline class AttributeType(val i: Int) {
 
 //###############################################################################
 
-inline class GetVertexAttrib(val i: Int) {
+inline class VertexAttrib(val i: Int) {
     companion object {
-        val BUFFER_BINDING = GetVertexAttrib(GL15.GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)
-        val ENABLED = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED)
-        val SIZE = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_SIZE)
-        val STRIDE = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_STRIDE)
-        val TYPE = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_TYPE)
-        val NORMALIZED = GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED)
-        val INTEGER = GetVertexAttrib(GL30.GL_VERTEX_ATTRIB_ARRAY_INTEGER)
-        val DIVISOR = GetVertexAttrib(GL33.GL_VERTEX_ATTRIB_ARRAY_DIVISOR)
-        val CURRENT = GetVertexAttrib(GL20.GL_CURRENT_VERTEX_ATTRIB)
+        val BUFFER_BINDING = VertexAttrib(GL15.GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)
+        val ENABLED = VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED)
+        val SIZE = VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_SIZE)
+        val STRIDE = VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_STRIDE)
+        val TYPE = VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_TYPE)
+        val NORMALIZED = VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED)
+        val INTEGER = VertexAttrib(GL30.GL_VERTEX_ATTRIB_ARRAY_INTEGER)
+        val DIVISOR = VertexAttrib(GL33.GL_VERTEX_ATTRIB_ARRAY_DIVISOR)
+        val CURRENT = VertexAttrib(GL20.GL_CURRENT_VERTEX_ATTRIB)
     }
 }
 
@@ -6834,27 +6834,95 @@ inline class TextureFormat(val i: Int) {
     }
 }
 
+// TextureFormat + Green and Blue
+inline class TextureFormat2(val i: Int) {
+    companion object {
+        val RED = TextureFormat2(GL44C.GL_RED)
+        val GREEN = TextureFormat2(GL44C.GL_GREEN)
+        val BLUE = TextureFormat2(GL44C.GL_BLUE)
+        val RG = TextureFormat2(GL44C.GL_RG)
+        val RGB = TextureFormat2(GL44C.GL_RGB)
+        val BGR = TextureFormat2(GL44C.GL_BGR)
+        val RGBA = TextureFormat2(GL44C.GL_RGBA)
+        val BGRA = TextureFormat2(GL44C.GL_BGRA)
+        val RED_INTEGER = TextureFormat2(GL44C.GL_RED_INTEGER)
+        val GREEN_INTEGER = TextureFormat2(GL44C.GL_GREEN_INTEGER)
+        val BLUE_INTEGER = TextureFormat2(GL44C.GL_BLUE_INTEGER)
+        val RG_INTEGER = TextureFormat2(GL44C.GL_RG_INTEGER)
+        val RGB_INTEGER = TextureFormat2(GL44C.GL_RGB_INTEGER)
+        val BGR_INTEGER = TextureFormat2(GL44C.GL_BGR_INTEGER)
+        val RGBA_INTEGER = TextureFormat2(GL44C.GL_RGBA_INTEGER)
+        val BGRA_INTEGER = TextureFormat2(GL44C.GL_BGRA_INTEGER)
+        val STENCIL_INDEX = TextureFormat2(GL44C.GL_STENCIL_INDEX)
+        val DEPTH_COMPONENT = TextureFormat2(GL44C.GL_DEPTH_COMPONENT)
+        val DEPTH_STENCIL = TextureFormat2(GL44C.GL_DEPTH_STENCIL)
+    }
+}
+
+// for glGetTextureSubImage and glReadnPixel
+inline class TextureFormat3(val i: Int) {
+    companion object {
+        val RED = TextureFormat2(GL44C.GL_RED)
+        val RG = TextureFormat2(GL44C.GL_RG)
+        val RGB = TextureFormat2(GL44C.GL_RGB)
+        val BGR = TextureFormat2(GL44C.GL_BGR)
+        val RGBA = TextureFormat2(GL44C.GL_RGBA)
+        val BGRA = TextureFormat2(GL44C.GL_BGRA)
+        val STENCIL_INDEX = TextureFormat2(GL44C.GL_STENCIL_INDEX)
+        val DEPTH_COMPONENT = TextureFormat2(GL44C.GL_DEPTH_COMPONENT)
+    }
+}
+
 inline class TextureType(val i: Int) {
     companion object {
-        val GL_UNSIGNED_BYTE = TextureType(GL44C.GL_UNSIGNED_BYTE)
-        val GL_BYTE = TextureType(GL44C.GL_BYTE)
-        val GL_UNSIGNED_SHORT = TextureType(GL44C.GL_UNSIGNED_SHORT)
-        val GL_SHORT = TextureType(GL44C.GL_SHORT)
-        val GL_UNSIGNED_INT = TextureType(GL44C.GL_UNSIGNED_INT)
-        val GL_INT = TextureType(GL44C.GL_INT)
-        val GL_FLOAT = TextureType(GL44C.GL_FLOAT)
-        val GL_UNSIGNED_BYTE_3_3_2 = TextureType(GL44C.GL_UNSIGNED_BYTE_3_3_2)
-        val GL_UNSIGNED_BYTE_2_3_3_REV = TextureType(GL44C.GL_UNSIGNED_BYTE_2_3_3_REV)
-        val GL_UNSIGNED_SHORT_5_6_5 = TextureType(GL44C.GL_UNSIGNED_SHORT_5_6_5)
-        val GL_UNSIGNED_SHORT_5_6_5_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_5_6_5_REV)
-        val GL_UNSIGNED_SHORT_4_4_4_4 = TextureType(GL44C.GL_UNSIGNED_SHORT_4_4_4_4)
-        val GL_UNSIGNED_SHORT_4_4_4_4_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_4_4_4_4_REV)
-        val GL_UNSIGNED_SHORT_5_5_5_1 = TextureType(GL44C.GL_UNSIGNED_SHORT_5_5_5_1)
-        val GL_UNSIGNED_SHORT_1_5_5_5_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_1_5_5_5_REV)
-        val GL_UNSIGNED_INT_8_8_8_8 = TextureType(GL44C.GL_UNSIGNED_INT_8_8_8_8)
-        val GL_UNSIGNED_INT_8_8_8_8_REV = TextureType(GL44C.GL_UNSIGNED_INT_8_8_8_8_REV)
-        val GL_UNSIGNED_INT_10_10_10_2 = TextureType(GL44C.GL_UNSIGNED_INT_10_10_10_2)
-        val GL_UNSIGNED_INT_2_10_10_10_REV = TextureType(GL44C.GL_UNSIGNED_INT_2_10_10_10_REV)
+        val UNSIGNED_BYTE = TextureType(GL44C.GL_UNSIGNED_BYTE)
+        val BYTE = TextureType(GL44C.GL_BYTE)
+        val UNSIGNED_SHORT = TextureType(GL44C.GL_UNSIGNED_SHORT)
+        val SHORT = TextureType(GL44C.GL_SHORT)
+        val UNSIGNED_INT = TextureType(GL44C.GL_UNSIGNED_INT)
+        val INT = TextureType(GL44C.GL_INT)
+        val FLOAT = TextureType(GL44C.GL_FLOAT)
+        val UNSIGNED_BYTE_3_3_2 = TextureType(GL44C.GL_UNSIGNED_BYTE_3_3_2)
+        val UNSIGNED_BYTE_2_3_3_REV = TextureType(GL44C.GL_UNSIGNED_BYTE_2_3_3_REV)
+        val UNSIGNED_SHORT_5_6_5 = TextureType(GL44C.GL_UNSIGNED_SHORT_5_6_5)
+        val UNSIGNED_SHORT_5_6_5_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_5_6_5_REV)
+        val UNSIGNED_SHORT_4_4_4_4 = TextureType(GL44C.GL_UNSIGNED_SHORT_4_4_4_4)
+        val UNSIGNED_SHORT_4_4_4_4_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_4_4_4_4_REV)
+        val UNSIGNED_SHORT_5_5_5_1 = TextureType(GL44C.GL_UNSIGNED_SHORT_5_5_5_1)
+        val UNSIGNED_SHORT_1_5_5_5_REV = TextureType(GL44C.GL_UNSIGNED_SHORT_1_5_5_5_REV)
+        val UNSIGNED_INT_8_8_8_8 = TextureType(GL44C.GL_UNSIGNED_INT_8_8_8_8)
+        val UNSIGNED_INT_8_8_8_8_REV = TextureType(GL44C.GL_UNSIGNED_INT_8_8_8_8_REV)
+        val UNSIGNED_INT_10_10_10_2 = TextureType(GL44C.GL_UNSIGNED_INT_10_10_10_2)
+        val UNSIGNED_INT_2_10_10_10_REV = TextureType(GL44C.GL_UNSIGNED_INT_2_10_10_10_REV)
+    }
+}
+
+inline class TextureType2(val i: Int) {
+    companion object {
+        val UNSIGNED_BYTE = TextureType2(GL44C.GL_UNSIGNED_BYTE)
+        val BYTE = TextureType2(GL44C.GL_BYTE)
+        val UNSIGNED_SHORT = TextureType2(GL44C.GL_UNSIGNED_SHORT)
+        val SHORT = TextureType2(GL44C.GL_SHORT)
+        val UNSIGNED_INT = TextureType2(GL44C.GL_UNSIGNED_INT)
+        val INT = TextureType2(GL44C.GL_INT)
+        val FLOAT = TextureType2(GL44C.GL_FLOAT)
+        val UNSIGNED_BYTE_3_3_2 = TextureType2(GL44C.GL_UNSIGNED_BYTE_3_3_2)
+        val UNSIGNED_BYTE_2_3_3_REV = TextureType2(GL44C.GL_UNSIGNED_BYTE_2_3_3_REV)
+        val UNSIGNED_SHORT_5_6_5 = TextureType2(GL44C.GL_UNSIGNED_SHORT_5_6_5)
+        val UNSIGNED_SHORT_5_6_5_REV = TextureType2(GL44C.GL_UNSIGNED_SHORT_5_6_5_REV)
+        val UNSIGNED_SHORT_4_4_4_4 = TextureType2(GL44C.GL_UNSIGNED_SHORT_4_4_4_4)
+        val UNSIGNED_SHORT_4_4_4_4_REV = TextureType2(GL44C.GL_UNSIGNED_SHORT_4_4_4_4_REV)
+        val UNSIGNED_SHORT_5_5_5_1 = TextureType2(GL44C.GL_UNSIGNED_SHORT_5_5_5_1)
+        val UNSIGNED_SHORT_1_5_5_5_REV = TextureType2(GL44C.GL_UNSIGNED_SHORT_1_5_5_5_REV)
+        val UNSIGNED_INT_8_8_8_8 = TextureType2(GL44C.GL_UNSIGNED_INT_8_8_8_8)
+        val UNSIGNED_INT_8_8_8_8_REV = TextureType2(GL44C.GL_UNSIGNED_INT_8_8_8_8_REV)
+        val UNSIGNED_INT_10_10_10_2 = TextureType2(GL44C.GL_UNSIGNED_INT_10_10_10_2)
+        val UNSIGNED_INT_2_10_10_10_REV = TextureType2(GL44C.GL_UNSIGNED_INT_2_10_10_10_REV)
+        // news
+        val UNSIGNED_INT_24_8 = TextureType2(GL44C.GL_UNSIGNED_INT_24_8)
+        val UNSIGNED_INT_10F_11F_11F_REV = TextureType2(GL44C.GL_UNSIGNED_INT_10F_11F_11F_REV)
+        val UNSIGNED_INT_5_9_9_9_REV = TextureType2(GL44C.GL_UNSIGNED_INT_5_9_9_9_REV)
+        val FLOAT_32_UNSIGNED_INT_24_8_REV = TextureType2(GL44C.GL_FLOAT_32_UNSIGNED_INT_24_8_REV)
     }
 }
 
@@ -6889,16 +6957,16 @@ inline class GetActiveUniformBlock(val i: Int) {
 
 inline class GetActiveAtomicCounterBuffer(val i: Int) {
     companion object {
-        val GL_ATOMIC_COUNTER_BUFFER_BINDING = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_BINDING)
-        val GL_ATOMIC_COUNTER_BUFFER_DATA_SIZE = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_DATA_SIZE)
-        val GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTERS = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTERS)
-        val GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTER_INDICES = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTER_INDICES)
-        val GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_VERTEX_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_VERTEX_SHADER)
-        val GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_CONTROL_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_CONTROL_SHADER)
-        val GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_EVALUATION_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_EVALUATION_SHADER)
-        val GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_GEOMETRY_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_GEOMETRY_SHADER)
-        val GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_FRAGMENT_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_FRAGMENT_SHADER)
-        val GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_COMPUTE_SHADER = GetActiveAtomicCounterBuffer(GL43C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_COMPUTE_SHADER)
+        val BINDING = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_BINDING)
+        val DATA_SIZE = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_DATA_SIZE)
+        val ACTIVE_ATOMIC_COUNTERS = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTERS)
+        val ACTIVE_ATOMIC_COUNTER_INDICES = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTER_INDICES)
+        val REFERENCED_BY_VERTEX_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_VERTEX_SHADER)
+        val REFERENCED_BY_TESS_CONTROL_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_CONTROL_SHADER)
+        val REFERENCED_BY_TESS_EVALUATION_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_EVALUATION_SHADER)
+        val REFERENCED_BY_GEOMETRY_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_GEOMETRY_SHADER)
+        val REFERENCED_BY_FRAGMENT_SHADER = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_FRAGMENT_SHADER)
+        val REFERENCED_BY_COMPUTE_SHADER = GetActiveAtomicCounterBuffer(GL43C.GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_COMPUTE_SHADER)
     }
 }
 
@@ -7199,7 +7267,16 @@ inline class FramebufferAttachmentComponentType(val i: Int) {
 
 inline class FramebufferAttachmentColorEncoding(val i: Int) {
     companion object {
-        val LINEAR = FramebufferAttachmentComponentType(GL11C.GL_LINEAR)
-        val SRGB = FramebufferAttachmentComponentType(GL21C.GL_SRGB)
+        val LINEAR = FramebufferAttachmentColorEncoding(GL11C.GL_LINEAR)
+        val SRGB = FramebufferAttachmentColorEncoding(GL21C.GL_SRGB)
+    }
+}
+
+inline class GraphicsResetStatus(val i: Int) { // TODO -> GraphicContextReset and remove _CONTEXT_RESET?
+    companion object {
+        val NO_ERROR = GraphicsResetStatus(GL11C.GL_NO_ERROR)
+        val GUILTY_CONTEXT_RESET = GraphicsResetStatus(GL45C.GL_GUILTY_CONTEXT_RESET)
+        val INNOCENT_CONTEXT_RESET = GraphicsResetStatus(GL45C.GL_INNOCENT_CONTEXT_RESET)
+        val UNKNOWN_CONTEXT_RESET = GraphicsResetStatus(GL45C.GL_UNKNOWN_CONTEXT_RESET)
     }
 }

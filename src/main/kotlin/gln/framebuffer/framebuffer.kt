@@ -58,6 +58,12 @@ inline class GlFramebuffers(val names: IntBuffer) {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateFramebuffers">Reference Page</a>
      */
     fun create() = gl.createFramebuffers(this)
+
+    companion object {
+        // --- [ glCreateFramebuffers ] ---
+
+        infix fun createFramebuffers(size: Int): GlFramebuffers = gl.createFramebuffers(size)
+    }
 }
 
 fun GlFramebuffers(size: Int) = GlFramebuffers(IntBuffer(size))

@@ -10,6 +10,7 @@ import gln.texture.GlTextureDsl
 import kool.stak
 import org.lwjgl.opengl.*
 import java.nio.Buffer
+import java.nio.ByteBuffer
 
 
 //inline class GlTexture1d(override val i: Int) : GlTexture {
@@ -54,6 +55,10 @@ import java.nio.Buffer
 
 inline class GlTexture(val name: Int = -1) {
 
+    // --- [ glBindTextureUnit ] --- TODO bindToUnit?
+
+    infix fun bindUnit(unit: TexUnit) = gl.bindTextureUnit(unit, this)
+
     // --- [ glClearTexImage ] ---
 
     fun clearImage(level: Int, format: TextureFormat, type: TextureType, data: Buffer? = null) = gl.clearTexImage(this, level, format, type, data)
@@ -67,41 +72,53 @@ inline class GlTexture(val name: Int = -1) {
     val isValid: Boolean
         get() = GL20C.glIsTexture(name)
 
+    // --- [ glGetCompressedTextureImage ] ---
+
+    fun getCompressedImage(level: Int, pixels: ByteBuffer) = gl.getCompressedTexImage(this, level, pixels)
+
+    // --- [ glGetTextureLevelParameterfv / glGetTextureLevelParameteriv ] ---
+
+    inline fun <reified T> getLevelParameter(level: Int, name: TexLevelParameter): T = gl.getTexLevelParameter(this, level, name)
+
+    // --- [ glGetTextureParameterfv / glGetTextureParameteriv / glGetTextureParameterIiv / glGetTextureParameterIuiv ] ---
+
+    inline fun <reified T> getParameter(name: TexParameter): T = gl.getTexParameter(this, name)
+
     // glGetTexLevelParameter
 
-    fun getWidth(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_WIDTH))
-    fun getHeight(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_HEIGHT))
-    fun getDepth(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL12.GL_TEXTURE_DEPTH))
+    fun getWidth(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL11.GL_TEXTURE_WIDTH))
+    fun getHeight(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL11.GL_TEXTURE_HEIGHT))
+    fun getDepth(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL12.GL_TEXTURE_DEPTH))
     /** JVM custom */
     fun getSize(target: TextureTarget, level: Int = 0): Vec3i = Vec3i(getWidth(target, level), getHeight(target, level), getDepth(target, level))
 
-    fun getInternalFormat(target: TextureTarget, level: Int = 0): gli_.gl.InternalFormat = gli_.gl.InternalFormat of gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT))
-    fun getRedSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_RED_SIZE))
-    fun getGreenSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_GREEN_SIZE))
-    fun getBlueSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_BLUE_SIZE))
-    fun getAlphaSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL11.GL_TEXTURE_ALPHA_SIZE))
+    fun getInternalFormat(target: TextureTarget, level: Int = 0): gli_.gl.InternalFormat = gli_.gl.InternalFormat of gl.getTexLevelParameter(target, level, TexLevelParameter(GL11.GL_TEXTURE_INTERNAL_FORMAT))
+    fun getRedSize(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL11.GL_TEXTURE_RED_SIZE))
+    fun getGreenSize(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL11.GL_TEXTURE_GREEN_SIZE))
+    fun getBlueSize(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL11.GL_TEXTURE_BLUE_SIZE))
+    fun getAlphaSize(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL11.GL_TEXTURE_ALPHA_SIZE))
     /** JVM custom */
     fun getRgbSize(target: TextureTarget, level: Int = 0): Vec3i = Vec3i(getRedSize(target, level), getGreenSize(target, level), getBlueSize(target, level))
 
     /** JVM custom */
     fun getRgbaSize(target: TextureTarget, level: Int = 0): Vec4i = Vec4i(getRedSize(target, level), getGreenSize(target, level), getBlueSize(target, level), getAlphaSize(target, level))
 
-    fun getDepthSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL30.GL_TEXTURE_DEPTH_SIZE))
-    fun getRedType(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL30.GL_TEXTURE_RED_TYPE))
-    fun getGreenType(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL30.GL_TEXTURE_GREEN_TYPE))
-    fun getBlueType(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL30.GL_TEXTURE_BLUE_TYPE))
-    fun getAlphaType(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL30.GL_TEXTURE_ALPHA_TYPE))
+    fun getDepthSize(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL30.GL_TEXTURE_DEPTH_SIZE))
+    fun getRedType(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL30.GL_TEXTURE_RED_TYPE))
+    fun getGreenType(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL30.GL_TEXTURE_GREEN_TYPE))
+    fun getBlueType(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL30.GL_TEXTURE_BLUE_TYPE))
+    fun getAlphaType(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL30.GL_TEXTURE_ALPHA_TYPE))
     /** JVM custom */
     fun getRgbType(target: TextureTarget, level: Int = 0): Vec3i = Vec3i(getRedType(target, level), getGreenType(target, level), getBlueType(target, level))
 
     /** JVM custom */
     fun getRgbaType(target: TextureTarget, level: Int = 0): Vec4i = Vec4i(getRedType(target, level), getGreenType(target, level), getBlueType(target, level), getAlphaType(target, level))
 
-    fun getDepthType(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL30.GL_TEXTURE_DEPTH_TYPE))
-    fun getCompressed(target: TextureTarget, level: Int = 0): Boolean = gl.getTexParameter(target, level, GetTexLevelParameter(GL30.GL_TEXTURE_COMPRESSED))
-    fun getCompressedImageSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL13.GL_TEXTURE_COMPRESSED_IMAGE_SIZE))
-    fun getBufferOffset(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL43.GL_TEXTURE_BUFFER_OFFSET))
-    fun getBufferSize(target: TextureTarget, level: Int = 0): Int = gl.getTexParameter(target, level, GetTexLevelParameter(GL43.GL_TEXTURE_BUFFER_SIZE))
+    fun getDepthType(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL30.GL_TEXTURE_DEPTH_TYPE))
+    fun getCompressed(target: TextureTarget, level: Int = 0): Boolean = gl.getTexLevelParameter(target, level, TexLevelParameter(GL30.GL_TEXTURE_COMPRESSED))
+    fun getCompressedImageSize(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL13.GL_TEXTURE_COMPRESSED_IMAGE_SIZE))
+    fun getBufferOffset(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL43.GL_TEXTURE_BUFFER_OFFSET))
+    fun getBufferSize(target: TextureTarget, level: Int = 0): Int = gl.getTexLevelParameter(target, level, TexLevelParameter(GL43.GL_TEXTURE_BUFFER_SIZE))
 
     // glGetTexParameter / glTexParameter (setter)
 
@@ -232,6 +249,23 @@ inline class GlTexture(val name: Int = -1) {
     }
 
     fun delete() = gl.deleteTextures(this)
+
+    // --- [ glGetTextureImage ] ---
+
+    fun getImage(level: Int, format: TextureFormat2, type: TextureType2, pixels: ByteBuffer) = gl.getTexImage(this, level, format, type, pixels)
+
+    // --- [ glGetnTexImage ] ---
+
+    fun getnImage(level: Int, format: TextureFormat2, type: TextureType2, img: ByteBuffer) = gl.getnTexImage(this, level, format, type, img)
+
+    // --- [ glGetTextureSubImage ] ---
+
+    fun getTextureSubImage(level: Int, offset: Vec3i, size: Vec3i, format: TextureFormat3, type: TextureType2, pixels: ByteBuffer) = gl.getTextureSubImage(this, level, offset, size, format, type, pixels)
+
+    // --- [ glGetCompressedTextureSubImage ] ---
+
+    fun getCompressedTextureSubImage(level: Int, offset: Vec3i, size: Vec3i, pixels: ByteBuffer) = gl.getCompressedTextureSubImage(this, level, offset, size, pixels)
+
 
     // --- [ glInvalidateTexSubImage ] ---
 

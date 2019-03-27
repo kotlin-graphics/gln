@@ -1356,7 +1356,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribPointer">Reference Page</a>
      */
-    fun vertexAttribPointer(index: Int, size: Int, type: VertexAttribType, normalized: Boolean, stride: Int, pointer: Int) {
+    fun vertexAttribPointer(index: Int, size: Int, type: VertexAttrType, normalized: Boolean, stride: Int, pointer: Int) {
         GL20C.nglVertexAttribPointer(index, size, type.i, normalized, stride, pointer.L)
     }
 
@@ -1472,27 +1472,27 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
-    fun getVertexAttribI(index: Int, pName: GetVertexAttrib): Int =
+    fun getVertexAttribI(index: Int, pName: VertexAttrib): Int = // TODO this is smelly, check I
             stak.intAddress { GL20C.nglGetVertexAttribiv(index, pName.i, it) }
 
     /**
-     * Returns a full Vertex Attribute class
+     * Returns a full Vertex Attribute class TODO move to gl?
      *
      * @param index the generic vertex attribute parameter to be queried
      */
     fun getVertexAttrib(index: Int): VertexAttribute {
         return VertexAttribute(
                 index,
-                size = getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_SIZE)),
-                type = VertexAttribType(getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_TYPE))),
-                normalized = getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED)).bool,
-                interleavedStride = getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_STRIDE)),
+                size = getVertexAttribI(index, VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_SIZE)),
+                type = VertexAttrType(getVertexAttribI(index, VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_TYPE))),
+                normalized = getVertexAttribI(index, VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED)).bool,
+                interleavedStride = getVertexAttribI(index, VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_STRIDE)),
                 pointer = getVertexAttribPointer(index).L).apply {
 
-            bufferBinding = getVertexAttribI(index, GetVertexAttrib(GL15.GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING))
-            enabled = getVertexAttribI(index, GetVertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED)).bool
-            integer = getVertexAttribI(index, GetVertexAttrib(GL30.GL_VERTEX_ATTRIB_ARRAY_INTEGER)).bool
-            divisor = getVertexAttribI(index, GetVertexAttrib(GL33.GL_VERTEX_ATTRIB_ARRAY_DIVISOR))
+            bufferBinding = getVertexAttribI(index, VertexAttrib(GL15.GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING))
+            enabled = getVertexAttribI(index, VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED)).bool
+            integer = getVertexAttribI(index, VertexAttrib(GL30.GL_VERTEX_ATTRIB_ARRAY_INTEGER)).bool
+            divisor = getVertexAttribI(index, VertexAttrib(GL33.GL_VERTEX_ATTRIB_ARRAY_DIVISOR))
             current = stak.vec4Buffer { getCurrentVertexAttrib(index, it) }
         }
     }

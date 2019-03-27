@@ -288,7 +288,7 @@ interface gl42i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindImageTexture">Reference Page</a>
      */
-    fun bindImageTexture(unit: ImageUnit, texture: GlTexture, level: Int, layered: Boolean, layer: Int, access: TextureAccess, format: InternalFormat) =
+    fun bindImageTexture(unit: TexUnit, texture: GlTexture, level: Int, layered: Boolean, layer: Int, access: TextureAccess, format: InternalFormat) =
             GL42C.glBindImageTexture(unit, texture.name, level, layered, layer, access.i, format.i)
 
     // --- [ glMemoryBarrier ] --- TODO enum?

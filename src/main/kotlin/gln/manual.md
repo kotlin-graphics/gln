@@ -140,3 +140,14 @@ and another one contemplating full arrays
  
  since in glClearNamedFramebufferfi buffer must be GL_DEPTH_STENCIL and drawbuffer 0, these are inferred and the function name becomes clearBufferDepthStencil
 
+
+vertexArrayVertexBuffers, buffers, offset and strides default to null
+
+since glGetVertexArrayiv can query only GL_ELEMENT_ARRAY_BUFFER_BINDING, this is inferred and the name becomes getVertexArrayElementBuffer
+
+
+
+
+
+TODO infix what needed
+create*s to create* for single objects?
