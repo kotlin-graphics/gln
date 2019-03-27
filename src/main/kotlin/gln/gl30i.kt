@@ -1440,26 +1440,26 @@ interface gl30i {
 
     // --- [ glTexParameterIiv ] ---
 
-    /**
-     * Sets the integer value of a texture parameter.
-     *
-     * @param target the texture target
-     * @param name  the symbolic name of a single-valued texture parameter
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
-     */
-    fun texParameter(target: TextureTarget, name: Int, param: Int) =
-            stak.intAddress(param) { GL30C.nglTexParameterIiv(target.i, name, it) }
+//    /**
+//     * Sets the integer value of a texture parameter.
+//     *
+//     * @param target the texture target
+//     * @param name  the symbolic name of a single-valued texture parameter
+//     *
+//     * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
+//     */
+//    fun texParameterI(target: TextureTarget, name: Int, param: Int) =
+//            stak.intAddress(param) { GL30C.nglTexParameterIiv(target.i, name, it) }
 
     /**
-     * Sets the integer value of a texture parameter. Only BORDER_COLOR and BORDER_COLOR
+     * Sets the integer value of a texture parameter. Only BORDER_COLOR and SWIZZLE_RGBA
      *
      * @param target the texture target
      * @param name  the symbolic name of a single-valued texture parameter
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
      */
-    fun texParameter(target: TextureTarget, name: TexParameter, param: Vec4i) =
+    fun texParameterI(target: TextureTarget, name: TexParameter, param: Vec4i) =
             stak.vec4iAddress(param) { GL30C.nglTexParameterIiv(target.i, name.i, it) }
 
     // --- [ glTexParameterIuiv ] ---
@@ -1472,16 +1472,9 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
      */
-//    fun texParameterBorderColor(target: TextureTarget, param: Vec4ui) { TODO?
-//        MemoryStack stack = stackGet(); int stackPointer = stack.getPointer();
-//        try {
-//            IntBuffer params = stack.ints(param);
-//            nglTexParameterIuiv(target, pname, memAddress(params));
-//        } finally {
-//            stack.setPointer(stackPointer);
-//        }
-//    }
-//
+    fun texParameter(target: TextureTarget, name: TexParameter, param: Vec4ui) =
+            stak.vec4uiAddress(param) { GL30C.nglTexParameterIuiv(target.i, name.i, it) }
+
 //    // --- [ glGetTexParameterIiv ] ---
 //
 //    /** Unsafe version of: {@link #glGetTexParameterIiv GetTexParameterIiv} */

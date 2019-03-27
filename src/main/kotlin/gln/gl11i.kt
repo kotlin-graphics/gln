@@ -1221,7 +1221,7 @@ interface gl11i {
      */
     fun copyTexSubImage2D(offset: Vec2i, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexSubImage2D(GL11C.GL_TEXTURE_2D, 0, offset.x, offset.y, pos.x, pos.y, size.x, size.y)
 
-    // --- [ glTexParameter ] ---
+    // --- [ glTexParameteri ] ---
 
     /**
      * Sets the integer value of a texture parameter, which controls how the texel array is treated when specified or changed, and when applied to a fragment.
@@ -1234,7 +1234,7 @@ interface gl11i {
      */
     fun texParameter(target: TextureTarget, pName: TexParameter, param: Int) = GL11C.glTexParameteri(target.i, pName.i, param)
 
-    // --- [ glTexParameter ] ---
+    // --- [ glTexParameterf ] ---
 
     /**
      * Float version of {@link #glTexParameteri TexParameteri}.
