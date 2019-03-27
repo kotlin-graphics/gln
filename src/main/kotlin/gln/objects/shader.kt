@@ -57,7 +57,9 @@ inline class GlShader(val name: Int) {
     val shaderSource: String
         get() = gl.getShaderSource(this)
 
+    // --- [ glSpecializeShader ] ---
 
+    fun specialize(entryPoint: CharSequence, pConstantIndex: IntBuffer, pConstantValue: IntBuffer) = gl.specializeShader(this, entryPoint, pConstantIndex, pConstantValue)
 
     companion object {
         // --- [ glCreateShader ] ---
