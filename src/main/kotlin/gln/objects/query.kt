@@ -1,6 +1,7 @@
 package gln.objects
 
 import gln.QueryTarget
+import gln.gl
 import kool.Adr
 import kool.IntBuffer
 import kool.adr
@@ -37,7 +38,7 @@ inline class GlQuery(val name: Int) {
     }
 }
 
-infix fun GlQueries(val size: Int): GlQueries = GlQueries(IntBuffer(size))
+fun GlQueries(size: Int): GlQueries = GlQueries(IntBuffer(size))
 
 inline class GlQueries(val i: IntBuffer) {
 

@@ -5,25 +5,8 @@ import org.lwjgl.opengl.*
 
 interface glEnable {
 
-    var blend: Boolean
-        get() = GL11C.glIsEnabled(GL11C.GL_BLEND)
-        set(value) = when {
-            value -> GL11C.glEnable(GL11C.GL_BLEND)
-            else -> GL11C.glDisable(GL11C.GL_BLEND)
-        }
-
-
-    fun blended(sFactor: BlendFactor, dFactor: BlendFactor, block: () -> Unit) {
-
-        GL11C.glEnable(GL11C.GL_BLEND)
-        GL11C.glBlendFunc(sFactor.i, dFactor.i)
-        block()
-        GL11C.glDisable(GL11C.GL_BLEND)
-    }
-
-
-    fun getClipDistance(index: Int): Boolean = GL30C.glIsEnabled(GL30C.GL_CLIP_DISTANCE0 + index)
-    fun setClipDistance(index: Int, enabled: Boolean) = when {
+    fun clipDistance(index: Int): Boolean = GL30C.glIsEnabled(GL30C.GL_CLIP_DISTANCE0 + index)
+    fun clipDistance(index: Int, enabled: Boolean) = when {
         enabled -> GL30C.glEnable(GL30C.GL_CLIP_DISTANCE0 + index)
         else -> GL30C.glDisable(GL30C.GL_CLIP_DISTANCE0 + index)
     }
