@@ -148,6 +148,8 @@ since glGetVertexArrayiv can query only GL_ELEMENT_ARRAY_BUFFER_BINDING, this is
 
 
 
-
-TODO infix what needed
-create*s to create* for single objects?
+TODOs:
+- infix what needed
+TOCHECK:
+- create*s to create* for single objects?
+- given the strictly relation between texture name and target, consider switching GlTexture to a class for holding the target?

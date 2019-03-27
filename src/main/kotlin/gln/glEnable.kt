@@ -13,7 +13,7 @@ interface glEnable {
         }
 
 
-    fun useBlend(sFactor: BlendFactor, dFactor: BlendFactor, block: () -> Unit) {
+    fun blended(sFactor: BlendFactor, dFactor: BlendFactor, block: () -> Unit) {
 
         GL11C.glEnable(GL11C.GL_BLEND)
         GL11C.glBlendFunc(sFactor.i, dFactor.i)

@@ -30,7 +30,7 @@ import unsigned.Uint
 
 
 object gl :
-        glGetSet,
+        glGetSet, glEnable,
         gl11i, gl12i, gl13i, gl14i, gl15i,
         gl20i, gl21i,
         gl30i, gl31i, gl32i, gl33i,
