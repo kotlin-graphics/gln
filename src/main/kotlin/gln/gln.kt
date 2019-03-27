@@ -78,7 +78,7 @@ fun checkError(location: String = "", throws: Boolean = true): Boolean {
             if (throws)
                 throw Exception("OpenGL Error ($message) at $location")
             else
-                System.err.println(message)
+                System.err.println("OpenGL Error ($message) at $location")
             false
         }
     }
