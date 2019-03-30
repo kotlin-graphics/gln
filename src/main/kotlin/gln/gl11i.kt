@@ -44,6 +44,28 @@ import kotlin.reflect.KMutableProperty0
  */
 interface gl11i {
 
+    // --- [ glEnable ] ---
+
+    /**
+     * Enables the specified OpenGL state.
+     *
+     * @param target the OpenGL state to enable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glEnable">Reference Page</a>
+     */
+    fun enable(target: State) = GL11C.glEnable(target.i)
+
+    // --- [ glDisable ] ---
+
+    /**
+     * Disables the specified OpenGL state.
+     *
+     * @param target the OpenGL state to disable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDisable">Reference Page</a>
+     */
+    fun disable(target: State) = GL11C.glDisable(target.i)
+
     // --- [ glBindTexture ] ---
 
     /**
@@ -235,14 +257,14 @@ interface gl11i {
      */
     var cullFace: CullFaceMode
         get() = when {
-            _cullFaceEnabled -> CullFaceMode(GL11C.glGetInteger(GL11C.GL_CULL_FACE_MODE))
+            gln.gl.state.cullFaceEnabled -> CullFaceMode(GL11C.glGetInteger(GL11C.GL_CULL_FACE_MODE))
             else -> CullFaceMode(GL11.GL_FALSE)
         }
         set(value) = when {
-            _cullFaceEnabled -> when (value) {
+            gln.gl.state.cullFaceEnabled -> when (value) {
                 CullFaceMode(GL11.GL_FALSE) -> {
                     GL11C.glDisable(GL11C.GL_CULL_FACE)
-                    _cullFaceEnabled = false
+                    gln.gl.state.cullFaceEnabled = false
                 }
                 else -> GL11C.glCullFace(value.i)
             }
@@ -251,7 +273,7 @@ interface gl11i {
                 else -> {
                     GL11C.glEnable(GL11C.GL_CULL_FACE)
                     GL11C.glCullFace(value.i)
-                    _cullFaceEnabled = true
+                    gln.gl.state.cullFaceEnabled = true
                 }
             }
         }
@@ -644,14 +666,14 @@ interface gl11i {
      */
     var logicOp: LogicOp
         get() = when {
-            _logicOpEnabled -> LogicOp(GL11C.glGetInteger(GL11C.GL_LOGIC_OP_MODE))
+            gln.gl.state.logicOpEnabled -> LogicOp(GL11C.glGetInteger(GL11C.GL_LOGIC_OP_MODE))
             else -> LogicOp(GL11.GL_FALSE)
         }
         set(value) = when {
-            _logicOpEnabled -> when (value) {
+            gln.gl.state.logicOpEnabled -> when (value) {
                 LogicOp(GL11.GL_FALSE) -> {
                     GL11C.glDisable(GL11C.GL_COLOR_LOGIC_OP)
-                    _logicOpEnabled = false
+                    gln.gl.state.logicOpEnabled = false
                 }
                 else -> GL11C.glLogicOp(value.i)
             }
@@ -660,7 +682,7 @@ interface gl11i {
                 else -> {
                     GL11C.glEnable(GL11C.GL_COLOR_LOGIC_OP)
                     GL11C.glLogicOp(value.i)
-                    _logicOpEnabled = true
+                    gln.gl.state.logicOpEnabled = true
                 }
             }
         }

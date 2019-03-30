@@ -1612,7 +1612,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glEnablei">Reference Page</a>
      */
-    fun enable(cap: IndexedCap, index: Int) = GL30C.glEnablei(cap.i, index)
+    fun enable(cap: IndexedState, index: Int) = GL30C.glEnablei(cap.i, index)
 
     // --- [ glDisablei ] ---
 
@@ -1624,7 +1624,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDisablei">Reference Page</a>
      */
-    fun disable(cap: IndexedCap, index: Int) = GL30C.glDisablei(cap.i, index)
+    fun disable(cap: IndexedState, index: Int) = GL30C.glDisablei(cap.i, index)
 
     // --- [ glIsEnabledi ] ---
 
@@ -1636,7 +1636,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsEnabledi">Reference Page</a>
      */
-    fun isEnabled(cap: IndexedCap, index: Int) = GL30C.glIsEnabledi(cap.i, index)
+    fun isEnabled(cap: IndexedState, index: Int) = GL30C.glIsEnabledi(cap.i, index)
 
     // --- [ glBindBufferRange ] ---
 

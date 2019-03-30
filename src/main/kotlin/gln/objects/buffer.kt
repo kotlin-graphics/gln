@@ -167,10 +167,7 @@ inline class GlBuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
      */
-    fun bufferData(size: Int, usage: Usage) = when {
-        DSA -> gl.bufferData(this, size, usage)
-        else -> TODO()
-    }
+    fun bufferData(size: Int, usage: Usage) = gl.bufferData(this, size, usage)
 
     /**
      * DSA version of {@link GL15C#glBufferData BufferData}.
@@ -180,10 +177,7 @@ inline class GlBuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
      */
-    fun bufferData(data: Buffer, usage: Usage) = when {
-        DSA -> gl.bufferData(this, data, usage)
-        else -> TODO()
-    }
+    fun bufferData(data: Buffer, usage: Usage) = gl.bufferData(this, data, usage)
 
     // --- [ glNamedBufferSubData ] ---
 
@@ -195,10 +189,7 @@ inline class GlBuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
      */
-    fun bufferSubData(offset: Int, data: Buffer) = when {
-        DSA -> GL45C.nglNamedBufferSubData(name, offset.L, data.rem.L, data.adr)
-        else -> TODO()
-    }
+    fun bufferSubData(offset: Int, data: Buffer) = gl.bufferSubData(this, offset, data)
 
     fun bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, name)
     fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)

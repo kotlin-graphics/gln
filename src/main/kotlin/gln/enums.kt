@@ -237,8 +237,6 @@ inline class CullFaceMode(val i: Int) {
     }
 }
 
-internal var _cullFaceEnabled = false
-
 //###############################################################################
 
 /** Depth, Stencil and textureCompareMode func */
@@ -1283,8 +1281,6 @@ inline class LogicOp(val i: Int) {
         val SET = LogicOp(GL11.GL_SET)
     }
 }
-
-internal var _logicOpEnabled = false
 
 //###############################################################################
 //
@@ -6739,10 +6735,42 @@ inline class GeometryOutputType(val i: Int) {
     }
 }
 
-inline class IndexedCap(val i: Int) {
+inline class State(val i: Int) {
     companion object {
-        val BLEND = IndexedCap(GL11C.GL_BLEND)
-        val SCISSOR_TEST = IndexedCap(GL11C.GL_SCISSOR_TEST)
+        val BLEND = State(GL11C.GL_BLEND)
+        val CLIP_DISTANCE = State(GL30C.GL_CLIP_DISTANCE0)
+        val CULL_FACE = State(GL11C.GL_CULL_FACE)
+        val DEBUG_OUTPUT = State(GL43C.GL_DEBUG_OUTPUT)
+        val DEBUG_OUTPUT_SYNCHRONOUS = State(GL43C.GL_DEBUG_OUTPUT_SYNCHRONOUS)
+        val DEPTH_CLAMP = State(GL32C.GL_DEPTH_CLAMP)
+        val DEPTH_TEST = State(GL11C.GL_DEPTH_TEST)
+        val DITHER = State(GL11C.GL_DITHER)
+        val FRAMEBUFFER_SRGB = State(GL30C.GL_FRAMEBUFFER_SRGB)
+        val LINE_SMOOTH = State(GL11C.GL_LINE_SMOOTH)
+        val MULTISAMPLE = State(GL13C.GL_MULTISAMPLE)
+        val POLYGON_OFFSET_FILL = State(GL11C.GL_POLYGON_OFFSET_FILL)
+        val POLYGON_OFFSET_LINE = State(GL11C.GL_POLYGON_OFFSET_LINE)
+        val POLYGON_OFFSET_POINT = State(GL11C.GL_POLYGON_OFFSET_POINT)
+        val POLYGON_SMOOTH = State(GL11C.GL_POLYGON_SMOOTH)
+        val PRIMITIVE_RESTART = State(GL31C.GL_PRIMITIVE_RESTART)
+        val PRIMITIVE_RESTART_FIXED_INDEX = State(GL43C.GL_PRIMITIVE_RESTART_FIXED_INDEX)
+        val RASTERIZER_DISCARD = State(GL30C.GL_RASTERIZER_DISCARD)
+        val SAMPLE_ALPHA_TO_COVERAGE = State(GL13C.GL_SAMPLE_ALPHA_TO_COVERAGE)
+        val SAMPLE_ALPHA_TO_ONE = State(GL13C.GL_SAMPLE_ALPHA_TO_ONE)
+        val SAMPLE_COVERAGE = State(GL13C.GL_SAMPLE_COVERAGE)
+        val SAMPLE_SHADING = State(GL40C.GL_SAMPLE_SHADING)
+        val SAMPLE_MASK = State(GL32C.GL_SAMPLE_MASK)
+        val SCISSOR_TEST = State(GL11C.GL_SCISSOR_TEST)
+        val STENCIL_TEST = State(GL11C.GL_STENCIL_TEST)
+        val TEXTURE_CUBE_MAP_SEAMLESS = State(GL32C.GL_TEXTURE_CUBE_MAP_SEAMLESS)
+        val PROGRAM_POINT_SIZE = State(GL32C.GL_PROGRAM_POINT_SIZE)
+    }
+}
+
+inline class IndexedState(val i: Int) {
+    companion object {
+        val BLEND = IndexedState(GL11C.GL_BLEND)
+        val SCISSOR_TEST = IndexedState(GL11C.GL_SCISSOR_TEST)
     }
 }
 

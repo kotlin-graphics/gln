@@ -28,7 +28,6 @@ import kool.stak
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.memGetInt
 import unsigned.Uint
-import java.lang.NumberFormatException
 
 
 object gl :
@@ -37,6 +36,8 @@ object gl :
         gl20i, gl21i,
         gl30i, gl31i, gl32i, gl33i,
         gl40i, gl41i, gl42i, gl43i, gl44i, gl45i, gl46i {
+
+    val state = OpenGlState
 
     // --- [ glGet* ] ---
 
@@ -622,14 +623,14 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArrayIndexed">Reference Page</a>
      */
     inline fun <reified T> getVertexArrayIndexed(vaobj: GlVertexArray, index: VertexAttrIndex, name: VertexAttrib): T =
-            stak{ s ->
-                when(T::class) {
+            stak { s ->
+                when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
                     Long::class -> s.longAddress { GL45C.nglGetVertexArrayIndexed64iv(vaobj.name, index, name.i, it) } as T
                     else -> throw Exception("[gln.gl.getVertexArrayIndexed DSA] invalid T")
                 }
-    }
+            }
 
     // gl Enable/Disable
 
@@ -646,10 +647,9 @@ object gl :
         GL11C.glDisable(GL11C.GL_BLEND)
     }
 
-    inline fun blended(sFactor: BlendFactor, dFactor: BlendFactor, block: BlendDsl.() -> Unit) {
-        GL11C.glEnable(GL11C.GL_BLEND)
-        GL11C.glBlendFunc(sFactor.i, dFactor.i)
-        BlendDsl.block()
-        GL11C.glDisable(GL11C.GL_BLEND)
-    }
+    inline fun blended(sFactor: BlendFactor, dFactor: BlendFactor, block: BlendDsl.() -> Unit) =
+            blended {
+                GL11C.glBlendFunc(sFactor.i, dFactor.i)
+                BlendDsl.block()
+            }
 }
