@@ -64,11 +64,7 @@ interface glGetSet {
     val depthFunc: CompareFunction
         get() = CompareFunction(int(GL20.GL_DEPTH_FUNC))
 
-    val depthRange: Vec2
-        get() = vec2(GL11.GL_DEPTH_RANGE)
-
-
-    fun drawBuffer(i: Int): BufferMode = BufferMode(int(GL20.GL_DRAW_BUFFER0 + i))
+    fun drawBuffer(i: Int): BufferMode = int(GL20.GL_DRAW_BUFFER0 + i)
 
     val drawFramebufferBinding: GLframebuffer
         get() = GLframebuffer(int(GL30.GL_DRAW_FRAMEBUFFER_BINDING))

@@ -28,6 +28,8 @@ inline fun stak.vec2Address(block: (Ptr) -> Unit): Vec2 = stak { Vec2.fromPointe
 
 inline fun stak.vec2iAddress(block: (Ptr) -> Unit): Vec2i = stak { Vec2i.fromPointer(it.nmalloc(4, Vec2i.size).also(block)) }
 
+inline fun stak.vec2dAddress(block: (Ptr) -> Unit): Vec2d = stak { Vec2d.fromPointer(it.nmalloc(8, Vec2d.size).also(block)) }
+
 inline fun stak.vec3Address(block: (Ptr) -> Unit): Vec3 = stak { Vec3.fromPointer(it.nmalloc(4, Vec3.size).also(block)) }
 
 inline fun stak.vec3iAddress(block: (Ptr) -> Unit): Vec3i = stak { Vec3i.fromPointer(it.nmalloc(4, Vec3i.size).also(block)) }

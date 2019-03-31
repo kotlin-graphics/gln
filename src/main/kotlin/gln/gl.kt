@@ -652,4 +652,17 @@ object gl :
                 GL11C.glBlendFunc(sFactor.i, dFactor.i)
                 BlendDsl.block()
             }
+
+    inline fun cullFaced(mode: FaceMode, block: () -> Unit) {
+        GL11C.glEnable(GL11C.GL_CULL_FACE)
+        GL11C.glCullFace(mode.i)
+        block()
+        GL11C.glDisable(GL11C.GL_CULL_FACE)
+    }
+
+    // --- [ glDepthRange ] ---
+
+    inline var depthRange: Vec2d
+        get() = stak.vec2dAddress { GL11C.nglGetDoublev(GL11C.GL_DEPTH_RANGE, it) }
+        set(value) = GL11C.glDepthRange(value.x, value.y)
 }

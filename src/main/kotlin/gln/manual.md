@@ -1,3 +1,66 @@
+---- glClear*
+
+To set the clearColor, other than the classic 
+
+`fun clearColor(red: Float, green: Float, blue: Float, alpha: Float)`
+
+there are also the following overloads:
+
+`infix fun clearColor(rgba: Float)`
+
+`infix fun clearColor(color: Color)`
+
+`var clearColor: Vec4`
+
+Depth and Stencil are also variables
+
+`gl.clearDepth = 0f`
+
+`gl.clearStencil = 1`
+
+
+colorMask has the following overload
+
+`fun colorMask(rgba: Boolean)`
+
+-------- cullFace and logicOp
+
+For both this parameters, OpenGL differentiates between enable/disable and the mode.
+
+gln unifies both, so instead of 
+
+```
+glEnable(GL_CULL_FACE)
+glCullFace(GL_BACK)
+..
+glDisable(GL_CULL_FACE)
+```
+
+you can directly
+
+```
+gl.cullFace = FRONT
+..
+gl.cullFace = DISABLED
+```
+
+or 
+
+```
+gl.cullFaced {
+   ..
+}
+```
+
+
+All the draw calls also has an overload with the mode parameter set to `GL_TRIANGLES`
+
+
+To set the `drawBuffer` use the following variable
+
+`var drawBuffer: BufferMode /*Int*/` 
+
+
 glVertexAttribI1i to vertexAttrib
 
 vertexAttrib also offered for the glm types: vertexAttrib(Vec1i)
@@ -153,3 +216,4 @@ TODOs:
 TOCHECK:
 - create*s to create* for single objects?
 - given the strictly relation between texture name and target, consider switching GlTexture to a class for holding the target?
+- we have `var clearDepth: Double`, `var clearDepthF: Float`?

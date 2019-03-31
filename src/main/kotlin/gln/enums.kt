@@ -257,25 +257,22 @@ inline class CompareFunction(val i: Int) {
 //###############################################################################
 
 /** Draw and Read */
-inline class BufferMode(val i: Int) {
-
-    companion object {
-        val NONE = BufferMode(GL11.GL_NONE)
-        val FRONT_LEFT = BufferMode(GL11.GL_FRONT_LEFT)
-        val FRONT_RIGHT = BufferMode(GL11.GL_FRONT_RIGHT)
-        val BACK_LEFT = BufferMode(GL11.GL_BACK_LEFT)
-        val BACK_RIGHT = BufferMode(GL11.GL_BACK_RIGHT)
-        val FRONT = BufferMode(GL11.GL_FRONT)
-        val BACK = BufferMode(GL11.GL_BACK)
-        val LEFT = BufferMode(GL11.GL_LEFT)
-        val RIGHT = BufferMode(GL11.GL_RIGHT)
-        val FRONT_AND_BACK = BufferMode(GL11.GL_FRONT_AND_BACK)
-        val AUX0 = BufferMode(GL11.GL_AUX0)
-        val AUX1 = BufferMode(GL11.GL_AUX1)
-        val AUX2 = BufferMode(GL11.GL_AUX2)
-        val AUX3 = BufferMode(GL11.GL_AUX3)
-    }
-}
+typealias BufferMode = Int
+//inline class BufferMode(val i: Int) {
+//
+//    companion object {
+//        val NONE = BufferMode(GL11.GL_NONE)
+//        val FRONT_LEFT = BufferMode(GL11.GL_FRONT_LEFT)
+//        val FRONT_RIGHT = BufferMode(GL11.GL_FRONT_RIGHT)
+//        val BACK_LEFT = BufferMode(GL11.GL_BACK_LEFT)
+//        val BACK_RIGHT = BufferMode(GL11.GL_BACK_RIGHT)
+//        val FRONT = BufferMode(GL11.GL_FRONT)
+//        val BACK = BufferMode(GL11.GL_BACK)
+//        val LEFT = BufferMode(GL11.GL_LEFT)
+//        val RIGHT = BufferMode(GL11.GL_RIGHT)
+//        val FRONT_AND_BACK = BufferMode(GL11.GL_FRONT_AND_BACK)
+//    }
+//}
 
 //###############################################################################
 

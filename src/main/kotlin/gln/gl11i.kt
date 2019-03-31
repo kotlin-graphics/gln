@@ -82,20 +82,6 @@ interface gl11i {
      */
     fun bindTexture(target: TextureTarget, texture: GlTexture) = GL11C.glBindTexture(target.i, texture.name)
 
-    /**
-     * Binds the a texture to a texture target.
-     *
-     * <p>While a texture object is bound, GL operations on the target to which it is bound affect the bound object, and queries of the target to which it is
-     * bound return state from the bound object. If texture mapping of the dimensionality of the target to which a texture object is bound is enabled, the
-     * state of the bound texture object directs the texturing operation.</p>
-     *
-     * @param target  the texture target. One of:<br><table><tr><td>{@link #GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link #GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
-     * @param texture the texture object to bind
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBindTexture">Reference Page</a>
-     */
-    fun bind(target: TextureTarget, texture: GlTexture) = GL11C.glBindTexture(target.i, texture.name)
-
     // --- [ glBlendFunc ] ---
 
     /**
@@ -107,23 +93,6 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFunc">Reference Page</a>
      */
     fun blendFunc(sFactor: BlendFactor, dFactor: BlendFactor) = GL11C.glBlendFunc(sFactor.i, dFactor.i)
-
-    /**
-     * Specifies the weighting factors used by the blend equation, for both RGB and alpha functions and for all draw buffers.
-     *
-     * @param sFactor the source weighting factor. One of:<br><table><tr><td>{@link #GL_ZERO ZERO}</td><td>{@link #GL_ONE ONE}</td><td>{@link #GL_SRC_COLOR SRC_COLOR}</td><td>{@link #GL_ONE_MINUS_SRC_COLOR ONE_MINUS_SRC_COLOR}</td><td>{@link #GL_DST_COLOR DST_COLOR}</td></tr><tr><td>{@link #GL_ONE_MINUS_DST_COLOR ONE_MINUS_DST_COLOR}</td><td>{@link #GL_SRC_ALPHA SRC_ALPHA}</td><td>{@link #GL_ONE_MINUS_SRC_ALPHA ONE_MINUS_SRC_ALPHA}</td><td>{@link #GL_DST_ALPHA DST_ALPHA}</td><td>{@link #GL_ONE_MINUS_DST_ALPHA ONE_MINUS_DST_ALPHA}</td></tr><tr><td>{@link GL14#GL_CONSTANT_COLOR CONSTANT_COLOR}</td><td>{@link GL14#GL_ONE_MINUS_CONSTANT_COLOR ONE_MINUS_CONSTANT_COLOR}</td><td>{@link GL14#GL_CONSTANT_ALPHA CONSTANT_ALPHA}</td><td>{@link GL14#GL_ONE_MINUS_CONSTANT_ALPHA ONE_MINUS_CONSTANT_ALPHA}</td><td>{@link #GL_SRC_ALPHA_SATURATE SRC_ALPHA_SATURATE}</td></tr><tr><td>{@link GL33#GL_SRC1_COLOR SRC1_COLOR}</td><td>{@link GL33#GL_ONE_MINUS_SRC1_COLOR ONE_MINUS_SRC1_COLOR}</td><td>{@link GL15#GL_SRC1_ALPHA SRC1_ALPHA}</td><td>{@link GL33#GL_ONE_MINUS_SRC1_ALPHA ONE_MINUS_SRC1_ALPHA}</td></tr></table>
-     * @param dFactor the destination weighting factor
-     * @param block the lambda to be executed under blending
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFunc">Reference Page</a>
-     */
-    fun <R> blendFunc(sFactor: BlendFactor, dFactor: BlendFactor, block: () -> R): R {
-        GL11C.glEnable(GL11C.GL_BLEND)
-        GL11C.glBlendFunc(sFactor.i, dFactor.i)
-        return block().also {
-            GL11C.glDisable(GL11C.GL_BLEND)
-        }
-    }
 
     // --- [ glClear ] ---
 
@@ -161,7 +130,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearColor">Reference Page</a>
      */
-    infix fun clearColor(float: Float) = GL11C.glClearColor(float, float, float, float)
+    infix fun clearColor(rgba: Float) = GL11C.glClearColor(rgba, rgba, rgba, rgba)
 
     /**
      * Sets the clear value for fixed-point and floating-point color buffers in RGBA mode. The specified components are stored as floating-point values.
@@ -240,6 +209,18 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glColorMask">Reference Page</a>
      */
+    fun colorMask(rgba: Boolean) = GL11C.glColorMask(rgba, rgba, rgba, rgba)
+
+    /**
+     * Masks the writing of R, G, B and A values to all draw buffers. In the initial state, all color values are enabled for writing for all draw buffers.
+     *
+     * @param red   whether R values are written or not
+     * @param green whether G values are written or not
+     * @param blue  whether B values are written or not
+     * @param alpha whether A values are written or not
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glColorMask">Reference Page</a>
+     */
     var colorMask: Vec4bool
         get() = glGetVec4bool(GL11C.GL_COLOR_WRITEMASK)
         set(value) = GL11C.glColorMask(value.x, value.y, value.z, value.w)
@@ -278,13 +259,6 @@ interface gl11i {
             }
         }
 
-    fun cullFace(mode: FaceMode, block: () -> Unit) {
-        GL11C.glEnable(GL11C.GL_CULL_FACE)
-        GL11C.glCullFace(mode.i)
-        block()
-        GL11C.glDisable(GL11C.GL_CULL_FACE)
-    }
-
     // --- [ glDepthFunc ] ---
 
     /**
@@ -319,16 +293,6 @@ interface gl11i {
      */
     fun depthRange(zNear: Double, zFar: Double) = GL11C.glDepthRange(zNear, zFar)
 
-    /**
-     * Sets the depth range for all viewports to the same values.
-     *
-     * @param zNear the near depth range
-     * @param zFar  the far depth range
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDepthRange">Reference Page</a>
-     */
-    infix fun depthRange(z: Vec2d) = GL11C.glDepthRange(z.x, z.y)
-
     // --- [ glDrawArrays ] ---
 
     /**
@@ -345,20 +309,6 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
      */
     fun drawArrays(mode: DrawMode, first: Int, count: Int) = GL11C.glDrawArrays(mode.i, first, count)
-
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices. Elements {@code first} through
-     * <code>first + count &ndash; 1</code> of each enabled non-instanced array are transferred to the GL.
-     *
-     * <p>If an array corresponding to an attribute required by a vertex shader is not enabled, then the corresponding element is taken from the current attribute
-     * state. If an array is enabled, the corresponding current vertex attribute value is unaffected by the execution of this function.</p>
-     *
-     * @param mode  the kind of primitives being constructed
-     * @param count the number of vertices after {@code first} to transfer to the GL
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
-     */
-    fun drawArrays(mode: DrawMode, count: Int) = GL11C.glDrawArrays(mode.i, 0, count)
 
     // --- [ glDrawArrays - Default Mode ] ---
 
@@ -377,20 +327,6 @@ interface gl11i {
      */
     fun drawArrays(first: Int, count: Int) = GL11C.glDrawArrays(GL11.GL_TRIANGLES, first, count)
 
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices. Elements {@code first} through
-     * <code>first + count &ndash; 1</code> of each enabled non-instanced array are transferred to the GL.
-     *
-     * <p>If an array corresponding to an attribute required by a vertex shader is not enabled, then the corresponding element is taken from the current attribute
-     * state. If an array is enabled, the corresponding current vertex attribute value is unaffected by the execution of this function.</p>
-     *
-     * @param mode  the kind of primitives being constructed
-     * @param count the number of vertices after {@code first} to transfer to the GL
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArrays">Reference Page</a>
-     */
-    fun drawArrays(count: Int) = GL11C.glDrawArrays(GL11.GL_TRIANGLES, 0, count)
-
     // --- [ glDrawBuffer ] ---
 
     /**
@@ -404,7 +340,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawBuffer">Reference Page</a>
      */
     var drawBuffer: BufferMode
-        get() = BufferMode(GL11C.glGetInteger(GL11C.GL_DRAW_BUFFER))
+        get() = GL11C.glGetInteger(GL11C.GL_DRAW_BUFFER)
         set(value) = GL11C.glDrawBuffer(value.i)
 
     // --- [ glDrawElements ] ---
@@ -423,31 +359,6 @@ interface gl11i {
      */
     fun drawElements(mode: DrawMode, count: Int, type: IndexType = IndexType.UNSIGNED_INT, indices: Long = 0) = GL11C.nglDrawElements(mode.i, count, type.i, indices)
 
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
-     * The i<sup>th</sup> element transferred by {@code DrawElements} will be taken from element {@code indices[i]} (if no element array buffer is bound), or
-     * from the element whose index is stored in the currently bound element array buffer at offset {@code indices + i}.
-     *
-     * @param mode    the kind of primitives being constructed. One of:<br><table><tr><td>{@link #GL_POINTS POINTS}</td><td>{@link #GL_LINE_STRIP LINE_STRIP}</td><td>{@link #GL_LINE_LOOP LINE_LOOP}</td><td>{@link #GL_LINES LINES}</td><td>{@link #GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link #GL_TRIANGLE_FAN TRIANGLE_FAN}</td></tr><tr><td>{@link #GL_TRIANGLES TRIANGLES}</td><td>{@link GL32#GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link GL32#GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td></tr></table>
-     * @param type    indicates the type of index values in {@code indices}. One of:<br><table><tr><td>{@link #GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link #GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link #GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
-     * @param indices the index values
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
-     */
-    fun drawElements(mode: DrawMode, type: IndexType, indices: Buffer) = GL11C.nglDrawElements(mode.i, indices.rem * type.size, type.i, indices.adr)
-
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
-     * The i<sup>th</sup> element transferred by {@code DrawElements} will be taken from element {@code indices[i]} (if no element array buffer is bound), or
-     * from the element whose index is stored in the currently bound element array buffer at offset {@code indices + i}.
-     *
-     * @param mode    the kind of primitives being constructed. One of:<br><table><tr><td>{@link #GL_POINTS POINTS}</td><td>{@link #GL_LINE_STRIP LINE_STRIP}</td><td>{@link #GL_LINE_LOOP LINE_LOOP}</td><td>{@link #GL_LINES LINES}</td><td>{@link #GL_TRIANGLE_STRIP TRIANGLE_STRIP}</td><td>{@link #GL_TRIANGLE_FAN TRIANGLE_FAN}</td></tr><tr><td>{@link #GL_TRIANGLES TRIANGLES}</td><td>{@link GL32#GL_LINES_ADJACENCY LINES_ADJACENCY}</td><td>{@link GL32#GL_LINE_STRIP_ADJACENCY LINE_STRIP_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLES_ADJACENCY TRIANGLES_ADJACENCY}</td><td>{@link GL32#GL_TRIANGLE_STRIP_ADJACENCY TRIANGLE_STRIP_ADJACENCY}</td><td>{@link GL40#GL_PATCHES PATCHES}</td></tr></table>
-     * @param indices the index values
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
-     */
-    fun drawElements(mode: DrawMode, indices: IntBuffer) = GL11C.nglDrawElements(mode.i, indices.rem, GL11C.GL_UNSIGNED_INT, indices.adr)
-
     // --- [ glDrawElements ] --- default mode
 
     /**
@@ -462,29 +373,6 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
     fun drawElements(count: Int, type: IndexType = IndexType.UNSIGNED_INT, indices: Ptr = 0L) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices)
-
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
-     * The i<sup>th</sup> element transferred by {@code DrawElements} will be taken from element {@code indices[i]} (if no element array buffer is bound), or
-     * from the element whose index is stored in the currently bound element array buffer at offset {@code indices + i}.
-     *
-     * @param type    indicates the type of index values in {@code indices}. One of:<br><table><tr><td>{@link #GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link #GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link #GL_UNSIGNED_INT UNSIGNED_INT}</td></tr></table>
-     * @param indices the index values
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
-     */
-    fun drawElements(type: IndexType, indices: Buffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.rem * type.size, type.i, indices.adr)
-
-    /**
-     * Constructs a sequence of geometric primitives by successively transferring elements for {@code count} vertices to the GL.
-     * The i<sup>th</sup> element transferred by {@code DrawElements} will be taken from element {@code indices[i]} (if no element array buffer is bound), or
-     * from the element whose index is stored in the currently bound element array buffer at offset {@code indices + i}.
-     *
-     * @param indices the index values
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
-     */
-    infix fun drawElements(indices: Buffer) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, indices.remSize, indices.glType, indices.adr)
 
     // --- [ glFinish ] ---
 
@@ -818,7 +706,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glReadBuffer">Reference Page</a>
      */
     var readBuffer: BufferMode
-        get() = BufferMode(GL11C.glGetInteger(GL11C.GL_READ_BUFFER))
+        get() = GL11C.glGetInteger(GL11C.GL_READ_BUFFER)
         set(value) = GL11C.glReadBuffer(value.i)
 
     // --- [ glReadPixels ] ---
