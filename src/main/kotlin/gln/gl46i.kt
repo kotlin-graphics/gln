@@ -1,6 +1,6 @@
 package gln
 
-import gln.objects.GlShader
+import gln.identifiers.GlShader
 import kool.Ptr
 import kool.adr
 import kool.rem

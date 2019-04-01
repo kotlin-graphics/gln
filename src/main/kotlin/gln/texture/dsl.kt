@@ -6,6 +6,7 @@ import gli_.gl
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import gln.*
+import gln.identifiers.GlTextures
 import kool.adr
 import kool.pos
 import kool.rem

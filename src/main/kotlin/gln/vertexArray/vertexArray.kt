@@ -9,8 +9,8 @@ import gln.VertexAttrType
 import gln.gl
 import gln.glf.VertexAttribute
 import gln.glf.VertexLayout
-import gln.objects.GlBuffer
-import gln.objects.GlBuffers
+import gln.identifiers.GlBuffer
+import gln.identifiers.GlBuffers
 import kool.IntBuffer
 import kool.adr
 import kool.get

@@ -3,7 +3,7 @@ package gln.transformFeedback
 import gln.DrawMode
 import gln.GetTransformFeedback
 import gln.gl
-import gln.objects.GlBuffer
+import gln.identifiers.GlBuffer
 import kool.IntBuffer
 import kool.adr
 import kool.rem

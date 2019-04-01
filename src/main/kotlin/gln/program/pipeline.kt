@@ -2,12 +2,11 @@ package gln.program
 
 import gln.GetProgramPipeline
 import gln.gl
-import gln.objects.GlProgram
+import gln.identifiers.GlProgram
 import kool.Adr
 import kool.IntBuffer
 import kool.adr
 import kool.rem
-import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL41C
 import java.nio.IntBuffer
 

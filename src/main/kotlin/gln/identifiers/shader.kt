@@ -1,4 +1,4 @@
-package gln.objects
+package gln.identifiers
 
 import glm_.bool
 import gln.ShaderType

@@ -17,52 +17,7 @@ import java.nio.IntBuffer
 inline class GLframebuffer(val i: Int)
 inline class GLprogramPipeline(val i: Int)
 
-inline class GlTextures(val names: IntBuffer) {
 
-    inline val rem: Int
-        get() = names.rem
-
-    inline val adr: Long
-        get() = names.adr
-
-    // --- [ glBindImageTextures ] ---
-
-    fun bindImages(first: Int = 0) = gl.bindImageTextures(first, this)
-
-    // --- [ glBindTextures ] ---
-
-    fun bind(first: Int = 0) = gl.bindTextures(first, this)
-
-    fun delete() = gl.deleteTextures(this)
-
-    //    inline operator fun invoke(block: GlTexturesDsl.() -> Unit) {
-//        GlTexturesDsl.names = i
-//        GlTexturesDsl.block()
-//    }
-//
-    // --- [ glCreateTextures ] ---
-
-    /**
-     * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
-     *
-     * @param textures the buffer in which to store the created texture names
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
-     */
-    infix fun create(target: TextureTarget) = gl.createTextures(target, this)
-
-    inline fun create(target: TextureTarget, block: GlTexturesDsl.() -> Unit) {
-        create(target)
-        GlTexturesDsl.names = names
-        GlTexturesDsl.block()
-    }
-
-    companion object {
-        fun gen(count: Int): GlTextures = gl.genTextures(count)
-    }
-}
-
-fun GlTextures(size: Int) = GlTextures(IntBuffer(size))
 
 inline class GlSync(val L: Long) {
 

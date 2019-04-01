@@ -18,10 +18,10 @@ import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.framebuffer.GlFramebuffers
-import gln.objects.GlBuffer
-import gln.objects.GlProgram
-import gln.objects.GlQuery
-import gln.objects.GlTexture
+import gln.identifiers.GlBuffer
+import gln.identifiers.GlProgram
+import gln.identifiers.GlQuery
+import gln.identifiers.GlTexture
 import gln.renderbuffer.GlRenderbuffer
 import gln.renderbuffer.GlRenderbuffers
 import gln.vertexArray.GlVertexArray

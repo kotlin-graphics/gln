@@ -1,7 +1,5 @@
-package gln.objects
+package gln.identifiers
 
-import glm_.BYTES
-import glm_.bool
 import glm_.mat2x2.Mat2
 import glm_.mat2x2.Mat2d
 import glm_.mat3x3.Mat3
@@ -32,10 +30,7 @@ import kool.adr
 import kool.rem
 import kool.stak
 import org.lwjgl.opengl.*
-import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL20C
-import org.lwjgl.opengl.GL31C
-import org.lwjgl.system.MemoryStack.stackGet
 import org.lwjgl.system.MemoryUtil
 import unsigned.Uint
 import java.lang.Exception

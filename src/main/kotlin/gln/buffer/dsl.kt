@@ -7,11 +7,10 @@ import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import gln.*
 import gln.Usage.Companion.STATIC_DRAW
-import gln.objects.GlBuffer
-import gln.objects.GlBuffers
+import gln.identifiers.GlBuffer
+import gln.identifiers.GlBuffers
 import kool.adr
 import kool.pos
-import kool.rem
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.*

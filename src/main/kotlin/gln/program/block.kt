@@ -10,11 +10,9 @@ import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import gln.buf
 import gln.bufAd
-import gln.objects.GlProgram
-import gln.objects.GlShader
+import gln.identifiers.GlProgram
+import gln.identifiers.GlShader
 import org.lwjgl.opengl.GL20
-import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL31
 
 
 //inline fun initProgram(program: Enum<*>, block: ProgramBase.() -> Unit) = programName.set(program.ordinal, initProgram(block))

@@ -6,7 +6,7 @@ package gln.framebuffer
 import glm_.vec2.Vec2i
 import glm_.vec4.Vec4i
 import gln.*
-import gln.objects.GlTexture
+import gln.identifiers.GlTexture
 import gln.renderbuffer.GlRenderbuffer
 import kool.IntBuffer
 import kool.adr

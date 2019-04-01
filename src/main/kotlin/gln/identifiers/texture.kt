@@ -1,4 +1,4 @@
-package gln.objects
+package gln.identifiers
 
 
 import glm_.vec2.Vec2i
@@ -8,10 +8,15 @@ import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.*
 import gln.texture.GlTextureDsl
+import gln.texture.GlTexturesDsl
+import kool.IntBuffer
+import kool.adr
+import kool.rem
 import kool.stak
 import org.lwjgl.opengl.*
 import java.nio.Buffer
 import java.nio.ByteBuffer
+import java.nio.IntBuffer
 
 
 //inline class GlTexture1d(override val i: Int) : GlTexture {
@@ -587,15 +592,55 @@ inline class GlTexture(val name: Int = -1) {
 
         // --- [ glCreateTextures ] ---
 
-        /**
-         * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
-         *
-         * @param target the texture target. One of:<br><table><tr><td>{@link GL11#GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link GL11#GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr><tr><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td><td>{@link GL31#GL_TEXTURE_BUFFER TEXTURE_BUFFER}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
-         *
-         * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
-         */
-        infix fun createTextures(target: TextureTarget): GlTexture = gl.createTextures(target)
+        infix fun create(target: TextureTarget): GlTexture = gl.createTextures(target)
 
         fun gen(): GlTexture = gl.genTexture()
+    }
+}
+
+fun GlTextures(size: Int) = GlTextures(IntBuffer(size))
+
+inline class GlTextures(val names: IntBuffer) {
+
+    inline val rem: Int
+        get() = names.rem
+
+    inline val adr: Long
+        get() = names.adr
+
+    // --- [ glBindImageTextures ] ---
+
+    fun bindImages(first: Int = 0) = gl.bindImageTextures(first, this)
+
+    // --- [ glBindTextures ] ---
+
+    fun bind(first: Int = 0) = gl.bindTextures(first, this)
+
+    fun delete() = gl.deleteTextures(this)
+
+    //    inline operator fun invoke(block: GlTexturesDsl.() -> Unit) {
+//        GlTexturesDsl.names = i
+//        GlTexturesDsl.block()
+//    }
+
+    // --- [ glGenTextures ] ---
+
+    fun gen() = gl.genTextures(this)
+
+    // --- [ glCreateTextures ] ---
+
+    infix fun create(target: TextureTarget) = gl.createTextures(target, this)
+
+    inline fun create(target: TextureTarget, block: GlTexturesDsl.() -> Unit) {
+        create(target)
+        GlTexturesDsl.names = names
+        GlTexturesDsl.block()
+    }
+
+    companion object {
+
+        // --- [ glGenTextures ] ---
+
+        fun gen(size: Int): GlTextures = gl.genTextures(size)
     }
 }

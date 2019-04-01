@@ -2,8 +2,9 @@ package gln
 
 import glm_.L
 import glm_.vec3.Vec3i
-import gln.objects.GlBuffers
-import gln.objects.GlTexture
+import gln.identifiers.GlBuffers
+import gln.identifiers.GlTexture
+import gln.identifiers.GlTextures
 import gln.sampler.GlSamplers
 import kool.adr
 import kool.rem

@@ -7,8 +7,8 @@ package gln
 
 import glm_.BYTES
 import glm_.L
-import gln.objects.GlBuffer
-import gln.objects.GlProgram
+import gln.identifiers.GlBuffer
+import gln.identifiers.GlProgram
 import kool.*
 import org.lwjgl.opengl.GL31C
 import org.lwjgl.system.MemoryUtil.memASCII

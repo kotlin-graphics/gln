@@ -4,7 +4,7 @@ import gli_.gl
 import glm_.bool
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
-import gln.objects.GlTexture
+import gln.identifiers.GlTexture
 import kool.Ptr
 import kool.adr
 import kool.rem

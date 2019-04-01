@@ -3,7 +3,7 @@ package gln
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
-import gln.objects.GlProgram
+import gln.identifiers.GlProgram
 import gln.sampler.GlSampler
 import gln.sampler.GlSamplers
 import kool.stak

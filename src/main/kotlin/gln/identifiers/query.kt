@@ -1,4 +1,4 @@
-package gln.objects
+package gln.identifiers
 
 import gln.QueryTarget
 import gln.gl

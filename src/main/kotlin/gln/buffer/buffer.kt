@@ -8,7 +8,7 @@ import gln.BufferTarget
 import gln.Usage
 import gln.buf
 import gln.bufAd
-import gln.objects.GlBuffers
+import gln.identifiers.GlBuffers
 import kool.IntBuffer
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL20C

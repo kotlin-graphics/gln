@@ -4,8 +4,8 @@ import glm_.BYTES
 import glm_.mat2x2.Mat2d
 import glm_.mat3x3.Mat3d
 import glm_.mat4x4.Mat4d
-import gln.objects.GlProgram
-import gln.objects.GlQuery
+import gln.identifiers.GlProgram
+import gln.identifiers.GlQuery
 import gln.transformFeedback.GlTransformFeedback
 import gln.transformFeedback.GlTransformFeedbacks
 import kool.adr

@@ -4,8 +4,8 @@ package gln.program
 
 import glm_.bool
 import gln.ShaderType
-import gln.objects.GlProgram
-import gln.objects.GlShader
+import gln.identifiers.GlProgram
+import gln.identifiers.GlShader
 import kool.get
 import org.lwjgl.opengl.GL20
 import java.io.FileNotFoundException

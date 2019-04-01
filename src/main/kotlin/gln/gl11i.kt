@@ -9,12 +9,12 @@ package gln
 import gli_.gl
 import glm_.bool
 import glm_.i
-import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
-import gln.objects.GlTexture
+import gln.identifiers.GlTexture
+import gln.identifiers.GlTextures
 import kool.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11C
@@ -23,7 +23,6 @@ import org.lwjgl.system.MemoryUtil.NULL
 import java.awt.Color
 import java.nio.Buffer
 import java.nio.ByteBuffer
-import java.nio.IntBuffer
 import kotlin.reflect.KMutableProperty0
 
 
@@ -424,11 +423,11 @@ interface gl11i {
      * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
      * state and a dimensionality only when they are first bound, just as if they were unused.
      *
-     * @param count a scalar representing the wished texture names to be allocated
+     * @param size a scalar representing the wished texture names to be allocated
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    infix fun genTextures(count: Int): GlTextures = GlTextures(count).also(::genTextures)
+    infix fun genTextures(size: Int): GlTextures = GlTextures(size).also(::genTextures)
 
     /**
      * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture

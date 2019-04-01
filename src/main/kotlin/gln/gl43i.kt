@@ -7,9 +7,9 @@ import glm_.vec3.Vec3i
 import gln.misc.GlDebugSeverity
 import gln.misc.GlDebugSource
 import gln.misc.GlDebugType
-import gln.objects.GlBuffer
-import gln.objects.GlProgram
-import gln.objects.GlTexture
+import gln.identifiers.GlBuffer
+import gln.identifiers.GlProgram
+import gln.identifiers.GlTexture
 import kool.Ptr
 import kool.adr
 import kool.rem

@@ -24,7 +24,7 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
-import gln.objects.GlProgram
+import gln.identifiers.GlProgram
 import gln.program.GlPipeline
 import gln.program.GlPipelines
 import kool.*

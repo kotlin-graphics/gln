@@ -3,7 +3,7 @@ package gln
 import gli_.gl
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
-import gln.objects.GlTexture
+import gln.identifiers.GlTexture
 import gln.transformFeedback.GlTransformFeedback
 import kool.Ptr
 import org.lwjgl.opengl.GL11C

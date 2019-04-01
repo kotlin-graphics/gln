@@ -18,7 +18,7 @@ import glm_.vec4.Vec4ui
 import gln.framebuffer.GlFramebuffer
 import gln.misc.BlendDsl
 import gln.misc.GlDebugSource
-import gln.objects.*
+import gln.identifiers.*
 import gln.transformFeedback.GlTransformFeedback
 import gln.vertexArray.GlVertexArray
 import kool.IntBuffer

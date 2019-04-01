@@ -1,14 +1,13 @@
 package gln
 
 import glm_.L
-import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.framebuffer.GlFramebuffer
 import gln.framebuffer.GlFramebuffers
-import gln.objects.*
+import gln.identifiers.*
 import gln.program.GlPipeline
 import gln.program.GlPipelines
 import gln.renderbuffer.GlRenderbuffer
