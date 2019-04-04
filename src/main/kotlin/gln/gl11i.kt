@@ -1281,4 +1281,27 @@ interface gl11i {
     var viewport: Vec4i
         get() = glGetVec4i(GL11C.GL_VIEWPORT)
         set(value) = GL11C.glViewport(value.x, value.y, value.z, value.w)
+
+    /**
+     * Specifies the viewport transformation parameters for all viewports.
+     *
+     * <p>The location of the viewport's bottom-left corner, given by {@code (x, y)}, are clamped to be within the implementation-dependent viewport bounds range.
+     * The viewport bounds range {@code [min, max]} tuple may be determined by calling {@link #glGetFloatv GetFloatv} with the symbolic
+     * constant {@link GL41#GL_VIEWPORT_BOUNDS_RANGE VIEWPORT_BOUNDS_RANGE}. Viewport width and height are clamped to implementation-dependent maximums when specified. The maximum
+     * width and height may be found by calling {@link #glGetFloatv GetFloatv} with the symbolic constant {@link #GL_MAX_VIEWPORT_DIMS MAX_VIEWPORT_DIMS}. The
+     * maximum viewport dimensions must be greater than or equal to the larger of the visible dimensions of the display being rendered to (if a display
+     * exists), and the largest renderbuffer image which can be successfully created and attached to a framebuffer object.</p>
+     *
+     * <p>In the initial state, {@code w} and {@code h} for each viewport are set to the width and height, respectively, of the window into which the GL is to do
+     * its rendering. If the default framebuffer is bound but no default framebuffer is associated with the GL context, then {@code w} and {@code h} are
+     * initially set to zero.</p>
+     *
+     * @param x the left viewport coordinate
+     * @param y the bottom viewport coordinate
+     * @param w the viewport width
+     * @param h the viewport height
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glViewport">Reference Page</a>
+     */
+    fun viewport(size: Vec2i) = GL11C.glViewport(0, 0, size.x, size.y)
 }
