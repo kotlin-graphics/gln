@@ -81,9 +81,9 @@ inline class GlSampler(val name: Int = -1) {
     }
 
     var borderColor: Vec4
-        get() = stak.vec4Address { GL33C.nglSamplerParameterfv(name, GL12C.GL_TEXTURE_BORDER_COLOR, it) }
+        get() = Stack.vec4Address { GL33C.nglSamplerParameterfv(name, GL12C.GL_TEXTURE_BORDER_COLOR, it) }
         set(value) {
-            stak.vec4Address(value) { GL33C.nglSamplerParameterfv(name, GL12C.GL_TEXTURE_BORDER_COLOR, it) }
+            Stack.vec4Address(value) { GL33C.nglSamplerParameterfv(name, GL12C.GL_TEXTURE_BORDER_COLOR, it) }
         }
     var minLod: Float
         get() = GL33C.glGetSamplerParameterf(name, GL12C.GL_TEXTURE_MIN_LOD)
@@ -146,7 +146,7 @@ inline class GlSampler(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
-    fun delete() = stak.intAddress(name) { GL33C.nglDeleteSamplers(1, it) }
+    fun delete() = Stack.intAddress(name) { GL33C.nglDeleteSamplers(1, it) }
 
     // --- [ glIsSampler ] ---
 
@@ -198,7 +198,7 @@ inline class GlSampler(val name: Int = -1) {
          *
          * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
          */
-        fun gen() = GlSamplers(stak.intAddress { GL33C.nglGenSamplers(1, it) })
+        fun gen() = GlSamplers(Stack.intAddress { GL33C.nglGenSamplers(1, it) })
 
 
         inline fun create(block: GlSampler.() -> Unit): GlSampler = create().also(block)

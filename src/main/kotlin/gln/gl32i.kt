@@ -8,7 +8,7 @@ import gln.identifiers.GlTexture
 import kool.Ptr
 import kool.adr
 import kool.rem
-import kool.stak
+import kool.Stack
 import org.lwjgl.PointerBuffer
 import org.lwjgl.opengl.GL32C
 import org.lwjgl.system.MemoryUtil.NULL
@@ -400,7 +400,7 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetMultisample">Reference Page</a>
      */
-    fun getMultisample(index: Int): Float = stak.floatAddress { GL32C.nglGetMultisamplefv(GL32C.GL_SAMPLE_POSITION, index, it) }
+    fun getMultisample(index: Int): Float = Stack.floatAddress { GL32C.nglGetMultisamplefv(GL32C.GL_SAMPLE_POSITION, index, it) }
 
     // --- [ glSampleMaski ] ---
 
@@ -563,7 +563,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSync">Reference Page</a>
      */
     fun isSyncSignaled(sync: GlSync): Boolean =
-            stak.intAddress {
+            Stack.intAddress {
                 GL32C.nglGetSynciv(sync.L, GL32C.GL_SYNC_STATUS, 1, NULL, it)
             }.bool
 }

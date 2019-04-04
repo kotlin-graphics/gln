@@ -24,7 +24,7 @@ import gln.vertexArray.GlVertexArray
 import kool.IntBuffer
 import kool.adr
 import kool.lib.toIntArray
-import kool.stak
+import kool.Stack
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.memGetInt
 import unsigned.Uint
@@ -53,7 +53,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetIntegerv">Reference Page</a>
      */
     inline fun <reified T : Number> get(name: Int): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL11C.nglGetIntegerv(name, it) } as T
                     Long::class -> s.longAddress { GL32C.nglGetInteger64v(name, it) } as T
@@ -74,7 +74,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
     inline fun <reified T> getTexLevelParameter(target: TextureTarget, level: Int, name: TexLevelParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) } as T
                     Float::class -> s.floatAddress { GL11C.nglGetTexLevelParameterfv(target.i, level, name.i, it) } as T
@@ -94,7 +94,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
     inline fun <reified T> getTexParameter(target: TextureTarget, name: TexParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL11C.nglGetTexParameteriv(target.i, name.i, it) } as T
                     Float::class -> s.floatAddress { GL11C.nglGetTexParameterfv(target.i, name.i, it) } as T
@@ -128,7 +128,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
     inline fun <reified T> getUniform(program: GlProgram, location: UniformLocation): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Float::class -> s.floatAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
                     Vec2::class -> s.vec2Address { GL20C.nglGetUniformfv(program.name, location, it) } as T
@@ -161,7 +161,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShader">Reference Page</a>
      */
     inline fun <reified T> getShader(shader: GlShader, name: GetShader): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL20C.nglGetShaderiv(shader.name, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL20C.nglGetShaderiv(shader.name, name.i, it) }.bool as T
@@ -183,7 +183,7 @@ object gl :
      * Everything except  GL_COMPUTE_WORK_GROUP_SIZE
      */
     inline fun <reified T> getProgram(program: GlProgram, name: GetProgram): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL20C.nglGetProgramiv(program.name, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL20C.nglGetProgramiv(program.name, name.i, it) }.bool as T
@@ -239,7 +239,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
      */
     inline fun <reified T> getBufferParameter(target: BufferTarget, param: BufferParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.i, param.i, it) } as T
                     Long::class -> s.longAddress { GL32C.nglGetBufferParameteri64v(target.i, param.i, it) } as T
@@ -263,7 +263,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformBlock">Reference Page</a>
      */
     inline fun <reified T> getActiveUniformBlockiv(program: GlProgram, uniformBlockIndex: UniformBlockIndex, name: GetActiveUniformBlock): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) }.bool as T
@@ -289,7 +289,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSamplerParameter">Reference Page</a>
      */
     inline fun <reified T> getSamplerParameter(target: GlBuffer, param: SamplerParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) } as T
                     Float::class -> s.floatAddress { GL33C.nglGetSamplerParameterfv(target.name, param.i, it) } as T
@@ -328,7 +328,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryIndexed">Reference Page</a>
      */
     inline fun <reified T> getQueryIndexed(target: QueryIndexedTarget, index: Int): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     GlQuery::class -> GlQuery(s.intAddress { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_CURRENT_QUERY, it) }) as T
                     Int::class -> s.intAddress { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_QUERY_COUNTER_BITS, it) } as T
@@ -348,7 +348,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFloati_v">Reference Page</a>
      */
     inline fun <reified T> get(target: Int, index: Int): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     // --- [ glGetFloati_v ] ---
                     Float::class -> s.floatAddress { GL41C.nglGetFloati_v(target, index, it) } as T
@@ -373,7 +373,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveAtomicCounterBuffer">Reference Page</a>
      */
     inline fun <reified T> getActiveAtomicCounterBufferiv(program: GlProgram, bufferIndex: Int, name: GetActiveAtomicCounterBuffer): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) }.bool as T
@@ -399,7 +399,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetInternalformat">Reference Page</a>
      */
     inline fun <reified T> getInternalformat(target: TextureTarget, internalformat: gl.InternalFormat, name: GetInternalFormat, bufSize: Int = 1): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) } as T
                     Long::class -> s.longAddress { GL43C.nglGetInternalformati64v(target.i, internalformat.i, name.i, 1, it) } as T
@@ -452,7 +452,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferParameter">Reference Page</a>
      */
     inline fun <reified T> getFramebufferParameter(target: FramebufferTarget, name: FramebufferParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }.bool as T
@@ -476,7 +476,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedback">Reference Page</a>
      */
     inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedback): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) }.bool as T
@@ -496,7 +496,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedbacki_v">Reference Page</a>
      */
     inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedbackIndexed, index: Int): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetTransformFeedbacki_v(xfb.name, name.i, index, it) } as T
                     Long::class -> s.longAddress { GL45C.nglGetTransformFeedbacki64_v(xfb.name, name.i, index, it) } as T
@@ -516,7 +516,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
      */
     inline fun <reified T> getBufferParameter(buffer: GlBuffer, param: BufferParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) } as T
                     Long::class -> s.longAddress { GL45C.nglGetNamedBufferParameteri64v(buffer.name, param.i, it) } as T
@@ -537,7 +537,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferParameter">Reference Page</a>
      */
     inline fun <reified T> getFramebufferParameter(framebuffer: GlFramebuffer, name: FramebufferParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) }.bool as T
@@ -557,7 +557,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
     inline fun <reified T> getFramebufferAttachmentParameter(framebuffer: GlFramebuffer, attachment: Int, name: GetFramebufferAttachment): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }.bool as T
@@ -579,7 +579,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureLevelParameter">Reference Page</a>
      */
     inline fun <reified T> getTexLevelParameter(texture: GlTexture, level: Int, name: TexLevelParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) }.bool as T
@@ -599,7 +599,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureParameter">Reference Page</a>
      */
     inline fun <reified T> getTexParameter(texture: GlTexture, name: TexParameter): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) }.bool as T
@@ -623,7 +623,7 @@ object gl :
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArrayIndexed">Reference Page</a>
      */
     inline fun <reified T> getVertexArrayIndexed(vaobj: GlVertexArray, index: VertexAttrIndex, name: VertexAttrib): T =
-            stak { s ->
+            Stack { s ->
                 when (T::class) {
                     Int::class -> s.intAddress { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
                     Boolean::class -> s.intAddress { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
@@ -663,6 +663,6 @@ object gl :
     // --- [ glDepthRange ] ---
 
     inline var depthRange: Vec2d
-        get() = stak.vec2dAddress { GL11C.nglGetDoublev(GL11C.GL_DEPTH_RANGE, it) }
+        get() = Stack.vec2dAddress { GL11C.nglGetDoublev(GL11C.GL_DEPTH_RANGE, it) }
         set(value) = GL11C.glDepthRange(value.x, value.y)
 }

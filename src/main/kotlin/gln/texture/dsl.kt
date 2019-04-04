@@ -164,7 +164,7 @@ object GlTextureDsl {
     }
 
     //    var swizzles: gl.Swizzles TODO
-//        get() = stak {
+//        get() = Stack {
 //            val buf = it.callocInt(4)
 //            GL11C.glGetTexParameteriv(target.i, GL33.GL_TEXTURE_SWIZZLE_RGBA, buf)
 //            gl.Swizzles()

@@ -195,7 +195,7 @@ interface gl31i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformIndices">Reference Page</a>
      */
-    fun getUniformIndices(program: GlProgram, uniformNames: Array<CharSequence>): IntArray = stak { s ->
+    fun getUniformIndices(program: GlProgram, uniformNames: Array<CharSequence>): IntArray = Stack { s ->
         val pUniformNames = s.PointerBuffer(uniformNames.size)
         for (i in uniformNames.indices) pUniformNames[i] = memASCII(uniformNames[i])
         val pUniformIndices = s.nmalloc(4, Int.BYTES * uniformNames.size)
@@ -226,7 +226,7 @@ interface gl31i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniforms">Reference Page</a>
      */
-    fun getActiveUniformsi(program: GlProgram, uniformIndex: Int, name: GetActiveUniform): Int = stak { s ->
+    fun getActiveUniformsi(program: GlProgram, uniformIndex: Int, name: GetActiveUniform): Int = Stack { s ->
         val pUniformIndex = s.intAddress(uniformIndex)
         s.intAddress { pParam ->
             GL31C.nglGetActiveUniformsiv(program.name, 1, pUniformIndex, name.i, pParam)
@@ -245,7 +245,7 @@ interface gl31i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformName">Reference Page</a>
      */
     fun getActiveUniformName(program: GlProgram, uniformIndex: Int, bufSize: Int = getActiveUniformsi(program, uniformIndex, GetActiveUniform.UNIFORM_NAME_LENGTH)): String =
-            stak { s ->
+            Stack { s ->
                 val pLength = s.nmalloc(4, Int.BYTES)
                 val uniformName = s.Buffer(bufSize)
                 GL31C.nglGetActiveUniformName(program.name, uniformIndex, bufSize, pLength, uniformName.adr)
@@ -263,7 +263,7 @@ interface gl31i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformBlockIndex">Reference Page</a>
      */
     fun getUniformBlockIndex(program: GlProgram, uniformBlockName: CharSequence): UniformBlockIndex =
-            stak.asciiAddress(uniformBlockName) { GL31C.nglGetUniformBlockIndex(program.name, it) }
+            Stack.asciiAddress(uniformBlockName) { GL31C.nglGetUniformBlockIndex(program.name, it) }
 
     // --- [ glGetActiveUniformBlockiv ] ---
     // inline reified
@@ -281,7 +281,7 @@ interface gl31i {
      */
     fun getActiveUniformBlockName(program: GlProgram, uniformBlockIndex: UniformBlockIndex,
                                   bufSize: Int = gl.getActiveUniformBlockiv(program, uniformBlockIndex, GetActiveUniformBlock.NAME_LENGTH)): String =
-            stak {s ->
+            Stack {s ->
                 val pLength = s.nmalloc(4, Int.BYTES)
                 val uniformBlockName = s. Buffer(bufSize)
                 GL31C.nglGetActiveUniformBlockName(program.name, uniformBlockIndex, bufSize, pLength, uniformBlockName.adr)

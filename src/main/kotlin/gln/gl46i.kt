@@ -4,7 +4,7 @@ import gln.identifiers.GlShader
 import kool.Ptr
 import kool.adr
 import kool.rem
-import kool.stak
+import kool.Stack
 import org.lwjgl.opengl.GL46C
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
@@ -166,7 +166,7 @@ interface gl46i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glSpecializeShader">Reference Page</a>
      */
     fun specializeShader(shader: GlShader, entryPoint: CharSequence, pConstantIndex: IntBuffer, pConstantValue: IntBuffer) =
-            stak.utf8Address(entryPoint) { pEntryPoint ->
+            Stack.utf8Address(entryPoint) { pEntryPoint ->
                 GL46C.nglSpecializeShader(shader.name, pEntryPoint, pConstantIndex.rem, pConstantIndex.adr, pConstantValue.adr)
             }
 }

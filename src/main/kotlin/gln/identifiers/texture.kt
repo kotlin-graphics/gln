@@ -12,7 +12,7 @@ import gln.texture.GlTexturesDsl
 import kool.IntBuffer
 import kool.adr
 import kool.rem
-import kool.stak
+import kool.Stack
 import org.lwjgl.opengl.*
 import java.nio.Buffer
 import java.nio.ByteBuffer
@@ -299,8 +299,8 @@ inline class GlTexture(val name: Int = -1) {
             setWrapR(target, wrap)
         }
 
-    fun getBorderColor(target: TextureTarget): Vec4 = stak.vec4Address { GL11C.nglGetTexParameterfv(target.i, GL11.GL_TEXTURE_BORDER_COLOR, it) }
-    fun setBorderColor(target: TextureTarget, color: Vec4) = stak.vec4Address(color) { GL11C.nglTexParameterfv(target.i, GL11.GL_TEXTURE_BORDER_COLOR, it) }
+    fun getBorderColor(target: TextureTarget): Vec4 = Stack.vec4Address { GL11C.nglGetTexParameterfv(target.i, GL11.GL_TEXTURE_BORDER_COLOR, it) }
+    fun setBorderColor(target: TextureTarget, color: Vec4) = Stack.vec4Address(color) { GL11C.nglTexParameterfv(target.i, GL11.GL_TEXTURE_BORDER_COLOR, it) }
 
     fun getCompareMode(target: TextureTarget): TextureCompareMode = TextureCompareMode(gl.getTexParameter(target, TexParameter(GL14.GL_TEXTURE_COMPARE_MODE)))
     fun setCompareMode(target: TextureTarget, mode: TextureCompareMode) = gl.texParameter(target, TexParameter(GL14.GL_TEXTURE_COMPARE_MODE), mode.i)

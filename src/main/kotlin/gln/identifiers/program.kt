@@ -28,7 +28,7 @@ import gln.program.ProgramUse
 import kool.ByteBuffer
 import kool.adr
 import kool.rem
-import kool.stak
+import kool.Stack
 import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL20C
 import org.lwjgl.system.MemoryUtil
@@ -58,7 +58,7 @@ inline class GlProgram(val name: Int) {
          */
         get() {
             val data = ByteBuffer(binaryLength)
-            val format = stak.intAddress { GL41C.nglGetProgramBinary(name, data.rem, MemoryUtil.NULL, it, data.adr) }
+            val format = Stack.intAddress { GL41C.nglGetProgramBinary(name, data.rem, MemoryUtil.NULL, it, data.adr) }
             return ProgramBinary(data, format)
         }
     // --- [ glProgramBinary ] ---

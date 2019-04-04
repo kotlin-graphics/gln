@@ -92,7 +92,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShaderPrecisionFormat">Reference Page</a>
      */
     fun getShaderPrecisionFormat(shaderType: ShaderType, precisionType: PrecisionType): ShaderPrecisionFormat =
-            stak {
+            Stack {
                 val adr = it.nmalloc(4, Int.BYTES * 3)
                 GL41C.nglGetShaderPrecisionFormat(shaderType.i, precisionType.i, adr, adr + Int.BYTES * 2)
                 ShaderPrecisionFormat(memGetInt(adr)..memGetInt(adr + Int.BYTES) to memGetInt(adr + Int.BYTES * 2))
@@ -135,7 +135,7 @@ interface gl41i {
      */
     fun getProgramBinary(program: GlProgram): ProgramBinary {
         val data = ByteBuffer(program.binaryLength)
-        val format = stak.intAddress { GL41C.nglGetProgramBinary(program.name, data.rem, NULL, it, data.adr) }
+        val format = Stack.intAddress { GL41C.nglGetProgramBinary(program.name, data.rem, NULL, it, data.adr) }
         return ProgramBinary(data, format)
     }
 
@@ -230,7 +230,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateShaderProgramv">Reference Page</a>
      */
-    fun createShaderProgram(type: ShaderType, vararg strings: CharSequence): GlProgram = stak {
+    fun createShaderProgram(type: ShaderType, vararg strings: CharSequence): GlProgram = Stack {
         val pStrings = it.PointerBuffer(strings.size)
         for (i in strings.indices) pStrings[i] = it.UTF8(strings[i])
         GlProgram(GL41C.nglCreateShaderProgramv(type.i, 1, pStrings.adr))
@@ -263,7 +263,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteProgramPipelines">Reference Page</a>
      */
-    fun deleteProgramPipelines(pipeline: GlPipeline) = stak.intAddress(pipeline.name) { GL41C.nglDeleteProgramPipelines(1, it) }
+    fun deleteProgramPipelines(pipeline: GlPipeline) = Stack.intAddress(pipeline.name) { GL41C.nglDeleteProgramPipelines(1, it) }
 
     // --- [ glGenProgramPipelines ] ---
 
@@ -290,7 +290,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenProgramPipelines">Reference Page</a>
      */
-    fun genProgramPipelines(): GlPipeline = GlPipeline(stak.intAddress { GL41C.nglGenProgramPipelines(1, it) })
+    fun genProgramPipelines(): GlPipeline = GlPipeline(Stack.intAddress { GL41C.nglGenProgramPipelines(1, it) })
 
     /**
      * Reserves program pipeline object names.
@@ -321,7 +321,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipeline">Reference Page</a>
      */
     fun getProgramPipeline(pipeline: GlPipeline, name: GetProgramPipeline) =
-            stak.intAddress { GL41C.nglGetProgramPipelineiv(pipeline.name, name.i, it) }
+            Stack.intAddress { GL41C.nglGetProgramPipelineiv(pipeline.name, name.i, it) }
 
     // --- [ glProgramUniform1i ] ---
 
@@ -1114,7 +1114,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat2) =
-            stak { GL41C.nglProgramUniformMatrix2fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+            Stack { GL41C.nglProgramUniformMatrix2fv(program.name, location, 1, false, value.toBuffer(it).adr) }
 
     // --- [ glProgramUniformMatrix3fv ] ---
 
@@ -1129,7 +1129,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat3) =
-            stak { GL41C.nglProgramUniformMatrix3fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+            Stack { GL41C.nglProgramUniformMatrix3fv(program.name, location, 1, false, value.toBuffer(it).adr) }
 
     // --- [ glProgramUniformMatrix4fv ] ---
 
@@ -1144,7 +1144,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat4) =
-            stak { GL41C.nglProgramUniformMatrix4fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+            Stack { GL41C.nglProgramUniformMatrix4fv(program.name, location, 1, false, value.toBuffer(it).adr) }
 
     // --- [ glProgramUniformMatrix2dv ] ---
 
@@ -1159,7 +1159,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat2d) =
-            stak { GL41C.nglProgramUniformMatrix2dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+            Stack { GL41C.nglProgramUniformMatrix2dv(program.name, location, 1, false, value.toBuffer(it).adr) }
 
     // --- [ glProgramUniformMatrix3dv ] ---
 
@@ -1174,7 +1174,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat3d) =
-            stak { GL41C.nglProgramUniformMatrix3dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+            Stack { GL41C.nglProgramUniformMatrix3dv(program.name, location, 1, false, value.toBuffer(it).adr) }
 
     // --- [ glProgramUniformMatrix4dv ] ---
 
@@ -1189,7 +1189,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat4d) =
-            stak { GL41C.nglProgramUniformMatrix4dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+            Stack { GL41C.nglProgramUniformMatrix4dv(program.name, location, 1, false, value.toBuffer(it).adr) }
 
 //    // --- [ glProgramUniformMatrix2x3fv ] --- TODO
 //
@@ -1481,7 +1481,7 @@ interface gl41i {
      */
     fun getProgramPipelineInfoLog(pipeline: GlPipeline,
                                   bufSize: Int = getProgramPipeline(pipeline, GetProgramPipeline.INFO_LOG_LENGTH)): String =
-            stak.asciiAddress(bufSize) { pLength, pString ->
+            Stack.asciiAddress(bufSize) { pLength, pString ->
                 GL41C.nglGetProgramPipelineInfoLog(pipeline.name, bufSize, pLength, pString)
             }
 

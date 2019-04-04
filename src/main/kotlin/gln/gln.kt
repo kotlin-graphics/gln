@@ -10,7 +10,7 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import kool.adr
-import kool.stak
+import kool.Stack
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil
 import java.awt.Color
@@ -47,15 +47,15 @@ inline fun glClearColor(vec: Vec4) = GL11.glClearColor(vec.x, vec.y, vec.z, vec.
 inline fun glClearDepthf() = GL41.glClearDepthf(1f)
 
 
-inline fun glGetVec2(pname: Int): Vec2 = stak.vec2Address { GL30C.nglGetFloatv(pname, it) }
-inline fun glGetVec3(pname: Int): Vec3 = stak.vec3Address { GL30C.nglGetFloatv(pname, it) }
-inline fun glGetVec4(pname: Int): Vec4 = stak.vec4Address { GL30C.nglGetFloatv(pname, it) }
+inline fun glGetVec2(pname: Int): Vec2 = Stack.vec2Address { GL30C.nglGetFloatv(pname, it) }
+inline fun glGetVec3(pname: Int): Vec3 = Stack.vec3Address { GL30C.nglGetFloatv(pname, it) }
+inline fun glGetVec4(pname: Int): Vec4 = Stack.vec4Address { GL30C.nglGetFloatv(pname, it) }
 
-inline fun glGetVec2i(pname: Int): Vec2i = stak.vec2iAddress { GL30C.nglGetIntegerv(pname, it) }
-inline fun glGetVec3i(pname: Int): Vec3i = stak.vec3iAddress { GL30C.nglGetFloatv(pname, it) }
-inline fun glGetVec4i(pname: Int): Vec4i = stak.vec4iAddress { GL30C.nglGetIntegerv(pname, it) }
+inline fun glGetVec2i(pname: Int): Vec2i = Stack.vec2iAddress { GL30C.nglGetIntegerv(pname, it) }
+inline fun glGetVec3i(pname: Int): Vec3i = Stack.vec3iAddress { GL30C.nglGetFloatv(pname, it) }
+inline fun glGetVec4i(pname: Int): Vec4i = Stack.vec4iAddress { GL30C.nglGetIntegerv(pname, it) }
 
-inline fun glGetVec4bool(pname: Int): Vec4bool = stak.vec4boolAddress { GL30C.nglGetIntegerv(pname, it) }
+inline fun glGetVec4bool(pname: Int): Vec4bool = Stack.vec4boolAddress { GL30C.nglGetIntegerv(pname, it) }
 
 
 @JvmOverloads

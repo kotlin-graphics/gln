@@ -6,7 +6,7 @@ import glm_.vec4.Vec4ui
 import gln.identifiers.GlProgram
 import gln.sampler.GlSampler
 import gln.sampler.GlSamplers
-import kool.stak
+import kool.Stack
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL33C
 
@@ -45,7 +45,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocationIndexed">Reference Page</a>
      */
     fun bindFragDataLocationIndexed(program: GlProgram, colorNumber: Int, index: Int, name: CharSequence) =
-            stak.asciiAddress(name) { GL33C.nglBindFragDataLocationIndexed(program.name, colorNumber, index, it) }
+            Stack.asciiAddress(name) { GL33C.nglBindFragDataLocationIndexed(program.name, colorNumber, index, it) }
 
     // --- [ glGetFragDataIndex ] ---
 
@@ -58,7 +58,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataIndex">Reference Page</a>
      */
     fun getFragDataIndex(program: GlProgram, name: CharSequence) =
-            stak.asciiAddress(name) { GL33C.nglGetFragDataIndex(program.name, it) }
+            Stack.asciiAddress(name) { GL33C.nglGetFragDataIndex(program.name, it) }
 
     // --- [ glGenSamplers ] ---
 
@@ -85,7 +85,7 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
      */
-    fun genSamplers() = GlSamplers(stak.intAddress { GL33C.nglGenSamplers(1, it) })
+    fun genSamplers() = GlSamplers(Stack.intAddress { GL33C.nglGenSamplers(1, it) })
 
     // --- [ glDeleteSamplers ] ---
 
@@ -103,7 +103,7 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
-    fun deleteSamplers(sampler: GlSampler) = stak.intAddress(sampler.name) { GL33C.nglDeleteSamplers(1, it) }
+    fun deleteSamplers(sampler: GlSampler) = Stack.intAddress(sampler.name) { GL33C.nglDeleteSamplers(1, it) }
 
     // --- [ glIsSampler ] ---
 
@@ -168,7 +168,7 @@ interface gl33i {
 //     * @see <a target="_blank" href="http://docs.gl/gl4/glSamplerParameter">Reference Page</a>
 //     */
 //    fun samplerBorderColor(sampler: GlSampler, color: Vec4) =
-//            stak.vec4Address(color)    {GL33C.nglSamplerParameteriv(sampler, pname, memAddress(params));
+//            Stack.vec4Address(color)    {GL33C.nglSamplerParameteriv(sampler, pname, memAddress(params));
 //    }
 
     // --- [ glSamplerParameterfv ] ---
@@ -182,7 +182,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glSamplerParameter">Reference Page</a>
      */
     fun samplerBorderColor(sampler: GlSampler, color: Vec4) =
-            stak.vec4Address(color) { GL33C.nglSamplerParameterfv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+            Stack.vec4Address(color) { GL33C.nglSamplerParameterfv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
 
     // --- [ glSamplerParameterIiv ] ---
 
@@ -195,7 +195,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glSamplerParameter">Reference Page</a>
      */
     fun samplerBorderColor(sampler: GlSampler, color: Vec4i) =
-            stak.vec4iAddress(color) { GL33C.nglSamplerParameterIiv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+            Stack.vec4iAddress(color) { GL33C.nglSamplerParameterIiv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
 
     // --- [ glSamplerParameterIuiv ] ---
 
@@ -208,7 +208,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glSamplerParameter">Reference Page</a>
      */
     fun samplerBorderColor(sampler: GlSampler, color: Vec4ui) =
-            stak.vec4uiAddress(color) { GL33C.nglSamplerParameterfv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+            Stack.vec4uiAddress(color) { GL33C.nglSamplerParameterfv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
 
     // --- [ glGetSamplerParameteriv ] ---
     // inline reified

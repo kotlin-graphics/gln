@@ -21,7 +21,7 @@ import gln.vertexArray.GlVertexArrays
 import kool.Ptr
 import kool.adr
 import kool.rem
-import kool.stak
+import kool.Stack
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL45C
@@ -87,7 +87,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTransformFeedbacks">Reference Page</a>
      */
     fun createTransformFeedbacks(): GlTransformFeedback =
-            GlTransformFeedback(stak.intAddress { GL45C.nglCreateTransformFeedbacks(1, it) })
+            GlTransformFeedback(Stack.intAddress { GL45C.nglCreateTransformFeedbacks(1, it) })
 
     // --- [ glTransformFeedbackBufferBase ] ---
 
@@ -146,7 +146,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateBuffers">Reference Page</a>
      */
-    fun createBuffers(): GlBuffer = GlBuffer(stak.intAddress { GL45C.nglCreateBuffers(1, it) })
+    fun createBuffers(): GlBuffer = GlBuffer(Stack.intAddress { GL45C.nglCreateBuffers(1, it) })
 //
 //    // --- [ glNamedBufferStorage ] --- TODO
 //
@@ -614,7 +614,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferPointerv">Reference Page</a>
      */
     infix fun getBufferPointer(buffer: GlBuffer): Ptr =
-            stak.pointerAddress { GL45C.nglGetNamedBufferPointerv(buffer.name, GL15C.GL_BUFFER_MAP_POINTER, it) }
+            Stack.pointerAddress { GL45C.nglGetNamedBufferPointerv(buffer.name, GL15C.GL_BUFFER_MAP_POINTER, it) }
 
     // --- [ glGetNamedBufferSubData ] ---
 
@@ -657,7 +657,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateFramebuffers">Reference Page</a>
      */
     fun createFramebuffers(): GlFramebuffer =
-            GlFramebuffer(stak.intAddress { GL45C.nglCreateFramebuffers(1, it) })
+            GlFramebuffer(Stack.intAddress { GL45C.nglCreateFramebuffers(1, it) })
 
     // --- [ glNamedFramebufferRenderbuffer ] ---
 
@@ -753,7 +753,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferDrawBuffers">Reference Page</a>
      */
     fun framebufferDrawBuffers(framebuffer: GlFramebuffer, buf: Int) =
-            stak.intAddress(buf) { GL45C.nglNamedFramebufferDrawBuffers(framebuffer.name, 1, it) }
+            Stack.intAddress(buf) { GL45C.nglNamedFramebufferDrawBuffers(framebuffer.name, 1, it) }
 
     // --- [ glNamedFramebufferReadBuffer ] ---
 
@@ -789,7 +789,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferData">Reference Page</a>
      */
     fun invalidateFramebufferData(framebuffer: GlFramebuffer, attachment: Int) =
-            stak.intAddress(attachment) { GL45C.nglInvalidateNamedFramebufferData(framebuffer.name, 1, it) }
+            Stack.intAddress(attachment) { GL45C.nglInvalidateNamedFramebufferData(framebuffer.name, 1, it) }
 
     // --- [ glInvalidateNamedFramebufferSubData ] ---
 
@@ -816,7 +816,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
      */
     fun invalidateFramebufferSubData(framebuffer: GlFramebuffer, attachment: Int, offset: Vec2i, size: Vec2i) =
-            stak.intAddress(attachment) { GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, it, offset.x, offset.y, size.x, size.y) }
+            Stack.intAddress(attachment) { GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, it, offset.x, offset.y, size.x, size.y) }
 
     // --- [ glClearNamedFramebufferiv ] ---
 
@@ -933,7 +933,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateRenderbuffers">Reference Page</a>
      */
     fun createRenderbuffers(): GlRenderbuffer =
-            GlRenderbuffer(stak.intAddress { GL45C.nglCreateRenderbuffers(1, it) })
+            GlRenderbuffer(Stack.intAddress { GL45C.nglCreateRenderbuffers(1, it) })
 
     // --- [ glNamedRenderbufferStorage ] ---
 
@@ -973,7 +973,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetRenderbufferParameter">Reference Page</a>
      */
     fun getRenderbufferParameter(renderbuffer: GlRenderbuffer, name: GetRenderbuffer): Int =
-            stak.intAddress { GL45C.nglGetNamedRenderbufferParameteriv(renderbuffer.name, name.i, it) }
+            Stack.intAddress { GL45C.nglGetNamedRenderbufferParameteriv(renderbuffer.name, name.i, it) }
 
     // --- [ glCreateTextures ] ---
 
@@ -996,7 +996,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
      */
     fun createTextures(target: TextureTarget): GlTexture =
-            GlTexture(stak.intAddress { GL45C.nglCreateTextures(target.i, 1, it) })
+            GlTexture(Stack.intAddress { GL45C.nglCreateTextures(target.i, 1, it) })
 
     // --- [ glTextureBuffer ] ---
 
@@ -1325,7 +1325,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTextureParameter">Reference Page</a>
      */
     fun texParameterI(texture: GlTexture, name: TexParameter, param: Vec4i) =
-            stak.vec4iAddress(param) { GL45C.nglTextureParameterIiv(texture.name, name.i, it) }
+            Stack.vec4iAddress(param) { GL45C.nglTextureParameterIiv(texture.name, name.i, it) }
 
     // --- [ glTextureParameterIuiv ] ---
 
@@ -1339,7 +1339,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTextureParameter">Reference Page</a>
      */
     fun texParameterI(texture: GlTexture, name: TexParameter, param: Vec4ui) =
-            stak.vec4uiAddress(param) { GL45C.nglTextureParameterIuiv(texture.name, name.i, it) }
+            Stack.vec4uiAddress(param) { GL45C.nglTextureParameterIuiv(texture.name, name.i, it) }
 
 //    // --- [ glTextureParameteriv ] ---
 //
@@ -1524,7 +1524,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateVertexArrays">Reference Page</a>
      */
     fun createVertexArrays(): GlVertexArray =
-            GlVertexArray(stak.intAddress { GL45C.nglCreateVertexArrays(1, it) })
+            GlVertexArray(Stack.intAddress { GL45C.nglCreateVertexArrays(1, it) })
 
     // TODO vertexArray* -> vertex*?
 
@@ -1690,7 +1690,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArray">Reference Page</a>
      */
     fun getVertexArrayElementBuffer(vaobj: GlVertexArray): GlBuffer =
-            GlBuffer(stak.intAddress { GL45C.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
+            GlBuffer(Stack.intAddress { GL45C.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
 
     // --- [ glGetVertexArrayIndexediv ] ---
     // inline reified
@@ -1724,7 +1724,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateSamplers">Reference Page</a>
      */
     fun createSamplers(): GlSampler =
-            GlSampler(stak.intAddress { GL45C.nglCreateSamplers(1, it) })
+            GlSampler(Stack.intAddress { GL45C.nglCreateSamplers(1, it) })
 
     // --- [ glCreateProgramPipelines ] ---
 
@@ -1753,7 +1753,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgramPipelines">Reference Page</a>
      */
     fun createProgramPipelines(): GlPipeline =
-            GlPipeline(stak.intAddress { GL45C.nglCreateProgramPipelines(1, it) })
+            GlPipeline(Stack.intAddress { GL45C.nglCreateProgramPipelines(1, it) })
 
     // --- [ glCreateQueries ] ---
 
@@ -1786,7 +1786,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateQueries">Reference Page</a>
      */
     infix fun createQueries(target: QueryTarget): GlQuery =
-            GlQuery(stak.intAddress { GL45C.nglCreateQueries(target.i, 1, it) })
+            GlQuery(Stack.intAddress { GL45C.nglCreateQueries(target.i, 1, it) })
 
 //    // --- [ glGetQueryBufferObjectiv ] --- TODO
 //

@@ -231,7 +231,7 @@ inline class GlBuffer(val name: Int = -1) {
 
     fun getUsage(target: BufferTarget): Usage = Usage(GL15C.glGetBufferParameteri(target.i, GL15.GL_BUFFER_USAGE))
 
-    fun getPointer(target: BufferTarget): Ptr = stak.pointerAddress { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) }
+    fun getPointer(target: BufferTarget): Ptr = Stack.pointerAddress { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) }
 
 
     fun data(target: BufferTarget, size: Int, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)

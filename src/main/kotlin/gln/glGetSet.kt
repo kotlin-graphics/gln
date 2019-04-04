@@ -8,7 +8,7 @@ import gln.renderbuffer.GlRenderbuffer
 import gln.sampler.GlSampler
 import gln.vertexArray.GlVertexArray
 import kool.Ptr
-import kool.stak
+import kool.Stack
 import org.lwjgl.opengl.*
 
 interface glGetSet {
@@ -18,14 +18,14 @@ interface glGetSet {
     fun bool(pName: Int) = GL30C.glGetInteger(pName).bool
     fun long(pName: Int) = GL32C.glGetInteger64(pName)
     fun long(pName: Int, index: Int) = GL32C.glGetInteger64i(pName, index)
-    fun pointer(pName: Int): Ptr = stak.pointerAddress { GL11C.nglGetPointerv(pName, it) }
+    fun pointer(pName: Int): Ptr = Stack.pointerAddress { GL11C.nglGetPointerv(pName, it) }
 
     fun float(pName: Int) = GL11C.glGetFloat(pName)
 
 
-    fun vec2(pName: Int): Vec2 = stak.vec2Address { GL11C.nglGetFloatv(pName, it) }
+    fun vec2(pName: Int): Vec2 = Stack.vec2Address { GL11C.nglGetFloatv(pName, it) }
 
-    fun vec4(pName: Int): Vec4 = stak.vec4Address { GL11C.nglGetFloatv(pName, it) }
+    fun vec4(pName: Int): Vec4 = Stack.vec4Address { GL11C.nglGetFloatv(pName, it) }
 
 
     val arrayBufferBinding: Int
@@ -147,7 +147,7 @@ interface glGetSet {
         get() = bool(GL13.GL_SAMPLE_COVERAGE_INVERT)
 
     fun sampleMaskValue(index: Int): Int =
-            stak.intAddress { GL30.nglGetIntegeri_v(GL32.GL_SAMPLE_MASK_VALUE, index, it) }
+            Stack.intAddress { GL30.nglGetIntegeri_v(GL32.GL_SAMPLE_MASK_VALUE, index, it) }
 
     val samplerBinding: GlSampler
         get() = GlSampler(int(GL33.GL_SAMPLER_BINDING))

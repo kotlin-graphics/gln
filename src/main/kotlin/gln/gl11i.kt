@@ -445,7 +445,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    fun genTexture(): GlTexture = GlTexture(stak.intAddress { GL11C.nglGenTextures(1, it) })
+    fun genTexture(): GlTexture = GlTexture(Stack.intAddress { GL11C.nglGenTextures(1, it) })
 
     // --- [ glDeleteTextures ] ---
 
@@ -475,7 +475,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTextures(texture: GlTexture) = stak.intAddress(texture.name) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTextures(texture: GlTexture) = Stack.intAddress(texture.name) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetError ] ---
 

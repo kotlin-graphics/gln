@@ -24,36 +24,36 @@ import java.nio.IntBuffer
 
 interface GlBufferEnum
 
-inline fun stak.vec2Address(block: (Ptr) -> Unit): Vec2 = stak { Vec2.fromPointer(it.nmalloc(4, Vec2.size).also(block)) }
+inline fun Stack.vec2Address(block: (Ptr) -> Unit): Vec2 = Stack { Vec2.fromPointer(it.nmalloc(4, Vec2.size).also(block)) }
 
-inline fun stak.vec2iAddress(block: (Ptr) -> Unit): Vec2i = stak { Vec2i.fromPointer(it.nmalloc(4, Vec2i.size).also(block)) }
+inline fun Stack.vec2iAddress(block: (Ptr) -> Unit): Vec2i = Stack { Vec2i.fromPointer(it.nmalloc(4, Vec2i.size).also(block)) }
 
-inline fun stak.vec2dAddress(block: (Ptr) -> Unit): Vec2d = stak { Vec2d.fromPointer(it.nmalloc(8, Vec2d.size).also(block)) }
+inline fun Stack.vec2dAddress(block: (Ptr) -> Unit): Vec2d = Stack { Vec2d.fromPointer(it.nmalloc(8, Vec2d.size).also(block)) }
 
-inline fun stak.vec3Address(block: (Ptr) -> Unit): Vec3 = stak { Vec3.fromPointer(it.nmalloc(4, Vec3.size).also(block)) }
+inline fun Stack.vec3Address(block: (Ptr) -> Unit): Vec3 = Stack { Vec3.fromPointer(it.nmalloc(4, Vec3.size).also(block)) }
 
-inline fun stak.vec3iAddress(block: (Ptr) -> Unit): Vec3i = stak { Vec3i.fromPointer(it.nmalloc(4, Vec3i.size).also(block)) }
+inline fun Stack.vec3iAddress(block: (Ptr) -> Unit): Vec3i = Stack { Vec3i.fromPointer(it.nmalloc(4, Vec3i.size).also(block)) }
 
-inline fun stak.vec4Address(block: (Ptr) -> Unit): Vec4 = stak { Vec4.fromPointer(it.nmalloc(4, Vec4.size).also(block)) }
+inline fun Stack.vec4Address(block: (Ptr) -> Unit): Vec4 = Stack { Vec4.fromPointer(it.nmalloc(4, Vec4.size).also(block)) }
 
-inline fun stak.vec4Address(vec: Vec4, block: (Ptr) -> Unit) = stak { block(vec.toBuffer(it).adr) }
+inline fun Stack.vec4Address(vec: Vec4, block: (Ptr) -> Unit) = Stack { block(vec.toBuffer(it).adr) }
 
-inline fun stak.vec4Buffer(block: (FloatBuffer) -> Unit): Vec4 = stak { Vec4(it.mallocFloat(Vec4.length).also(block)) }
+inline fun Stack.vec4Buffer(block: (FloatBuffer) -> Unit): Vec4 = Stack { Vec4(it.mallocFloat(Vec4.length).also(block)) }
 
-inline fun stak.vec4iAddress(block: (Ptr) -> Unit): Vec4i = stak { Vec4i.fromPointer(it.nmalloc(4, Vec4i.size).also(block)) }
+inline fun Stack.vec4iAddress(block: (Ptr) -> Unit): Vec4i = Stack { Vec4i.fromPointer(it.nmalloc(4, Vec4i.size).also(block)) }
 
-inline fun stak.vec4uiAddress(block: (Ptr) -> Unit): Vec4ui = stak { Vec4ui.fromPointer(it.nmalloc(4, Vec4ui.size).also(block)) }
+inline fun Stack.vec4uiAddress(block: (Ptr) -> Unit): Vec4ui = Stack { Vec4ui.fromPointer(it.nmalloc(4, Vec4ui.size).also(block)) }
 
-inline fun stak.vec4boolAddress(block: (Ptr) -> Unit): Vec4bool =
-        stak {
+inline fun Stack.vec4boolAddress(block: (Ptr) -> Unit): Vec4bool =
+        Stack {
             val adr = it.malloc(4 * Int.BYTES).adr // TODO
             block(adr)
             Vec4bool(memGetInt(adr).bool, memGetInt(adr + Int.BYTES).bool, memGetInt(adr + Int.BYTES * 2).bool, memGetInt(adr + Int.BYTES * 3).bool)
         }
 
-inline fun stak.vec4iAddress(vec4i: Vec4i, block: (Ptr) -> Unit) = stak { block(vec4i.toIntBuffer(it).adr) }
+inline fun Stack.vec4iAddress(vec4i: Vec4i, block: (Ptr) -> Unit) = Stack { block(vec4i.toIntBuffer(it).adr) }
 
-inline fun stak.vec4uiAddress(vec4ui: Vec4ui, block: (Ptr) -> Unit) = stak { block(vec4ui.toIntBuffer(it).adr) }
+inline fun Stack.vec4uiAddress(vec4ui: Vec4ui, block: (Ptr) -> Unit) = Stack { block(vec4ui.toIntBuffer(it).adr) }
 
 inline fun MemoryStack.intAddress(block: (Adr) -> Unit): Int = memGetInt(nmalloc(4, Int.BYTES).also(block))
 
@@ -89,8 +89,8 @@ inline fun MemoryStack.vec2uiAddress(block: (Ptr) -> Unit): Vec2ui = Vec2ui.from
 inline fun MemoryStack.vec3uiAddress(block: (Ptr) -> Unit): Vec3ui = Vec3ui.fromPointer(nmalloc(4, Vec3ui.size).also(block))
 inline fun MemoryStack.vec4uiAddress(block: (Ptr) -> Unit): Vec4ui = Vec4ui.fromPointer(nmalloc(4, Vec4ui.size).also(block))
 
-inline fun stak.asciiAddress(givenSize: Int, block: (pLength: Ptr, address: Ptr) -> Unit): String =
-        stak {
+inline fun Stack.asciiAddress(givenSize: Int, block: (pLength: Ptr, address: Ptr) -> Unit): String =
+        Stack {
             val pLength = it.nmalloc(4, Int.BYTES)
             val pString = it.nmalloc(1, givenSize)
             block(pLength, pString)
@@ -98,23 +98,23 @@ inline fun stak.asciiAddress(givenSize: Int, block: (pLength: Ptr, address: Ptr)
             memASCII(memByteBuffer(pString, length), length)
         }
 
-inline fun stak.utf8Address(givenSize: Int, block: (pLength: Ptr, address: Ptr) -> Unit): String =
-        stak {
+inline fun Stack.utf8Address(givenSize: Int, block: (pLength: Ptr, address: Ptr) -> Unit): String =
+        Stack {
             val pLength = it.nmalloc(4, Int.BYTES)
             val pString = it.nmalloc(1, givenSize)
             block(pLength, pString)
             memUTF8(pString, memGetInt(pLength))
         }
 
-inline fun stak.utf8Address(chars: CharSequence, block: (length: Int, address: Ptr) -> Unit) =
-        stak {
+inline fun Stack.utf8Address(chars: CharSequence, block: (length: Int, address: Ptr) -> Unit) =
+        Stack {
             val length = it.nUTF8(chars, false)
             val pChars = it.pointerAddress
             block(length, pChars)
         }
 
-inline fun <R> stak.utf8Address(chars: CharSequence, block: (address: Ptr) -> R): R =
-        stak {
+inline fun <R> Stack.utf8Address(chars: CharSequence, block: (address: Ptr) -> R): R =
+        Stack {
             it.nUTF8(chars, true)
             val pChars = it.pointerAddress
             block(pChars)

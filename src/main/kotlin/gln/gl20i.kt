@@ -420,7 +420,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: UniformLocation, value: Mat2) = stak { GL20C.nglUniformMatrix2fv(location, 1, false, value.toFloatBuffer(it).adr) }
+    fun uniform(location: UniformLocation, value: Mat2) = Stack { GL20C.nglUniformMatrix2fv(location, 1, false, value.toFloatBuffer(it).adr) }
 
     // --- [ glUniformMatrix3fv ] ---
 
@@ -429,7 +429,7 @@ interface gl20i {
      *
      * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
      */
-    fun uniform(location: UniformLocation, value: Mat3) = stak { GL20C.nglUniformMatrix3fv(location, 1, false, value.toFloatBuffer(it).adr) }
+    fun uniform(location: UniformLocation, value: Mat3) = Stack { GL20C.nglUniformMatrix3fv(location, 1, false, value.toFloatBuffer(it).adr) }
 
     // --- [ glUniformMatrix4fv ] ---
 
@@ -438,7 +438,7 @@ interface gl20i {
      *
      * @param count the number of matrices that are to be modified. This should be 1 if the targeted uniform variable is not an array of matrices, and 1 or more if it is an array of matrices.
      */
-    fun uniform(location: UniformLocation, value: Mat4) = stak { GL20C.nglUniformMatrix4fv(location, 1, false, value.toFloatBuffer(it).adr) }
+    fun uniform(location: UniformLocation, value: Mat4) = Stack { GL20C.nglUniformMatrix4fv(location, 1, false, value.toFloatBuffer(it).adr) }
 
     // --- [ glGetShaderiv ] ---
 
@@ -459,7 +459,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShaderInfoLog">Reference Page</a>
      */
     infix fun getShaderInfoLog(shader: GlShader): String =
-            stak {
+            Stack {
                 val maxLength = shader.infoLogLength
                 val infoLog = it.calloc(maxLength)
                 GL20C.nglGetShaderInfoLog(shader.name, maxLength, NULL, infoLog.adr)
@@ -477,7 +477,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramInfoLog">Reference Page</a>
      */
     infix fun getProgramInfoLog(program: GlProgram): String =
-            stak {
+            Stack {
                 val maxLength = program.infoLogLength
                 val infoLog = it.calloc(maxLength)
                 GL20C.nglGetProgramInfoLog(program.name, maxLength, NULL, infoLog.adr)
@@ -496,7 +496,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetAttachedShaders">Reference Page</a>
      */
     infix fun getAttachedShaders(program: GlProgram): GLshaders =
-            stak {
+            Stack {
                 val maxCount = program.attachedShadersCount
                 val shaders = IntBuffer(maxCount)
                 GL20C.nglGetAttachedShaders(program.name, maxCount, NULL, shaders.adr)
@@ -514,7 +514,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformLocation">Reference Page</a>
      */
     fun getUniformLocation(program: GlProgram, name: String): UniformLocation =
-            stak {
+            Stack {
                 val nameEncoded = it.ASCII(name)
                 GL20C.nglGetUniformLocation(program.name, nameEncoded.adr)
             }
@@ -532,7 +532,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniform">Reference Page</a>
      */
     fun getActiveUniform(program: GlProgram, index: Int): Triple<String, Int, UniformType> =
-            stak {
+            Stack {
                 val maxLength = program.activeUniformMaxLength
                 val name = it.calloc(maxLength).adr
                 val length = it.malloc(3 * Int.BYTES).adr
@@ -553,7 +553,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShaderSource">Reference Page</a>
      */
     infix fun getShaderSource(shader: GlShader): String =
-            stak {
+            Stack {
                 val maxLength = shader.sourceLength
                 val source = it.malloc(maxLength).adr
                 GL20C.nglGetShaderSource(shader.name, maxLength, NULL, source)
@@ -1421,7 +1421,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindAttribLocation">Reference Page</a>
      */
     fun bindAttribLocation(program: GlProgram, index: Int, name: CharSequence) =
-            stak.asciiAddress(name) { GL20C.nglBindAttribLocation(program.name, index, it) }
+            Stack.asciiAddress(name) { GL20C.nglBindAttribLocation(program.name, index, it) }
 
     // --- [ glGetActiveAttrib ] ---
 
@@ -1436,7 +1436,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveAttrib">Reference Page</a>
      */
     fun getActiveAttrib(program: GlProgram, index: Int): Triple<String, Int, AttributeType> =
-            stak {
+            Stack {
                 val maxLength = program.activeAttributeMaxLength
                 val length = it.malloc(3 * Int.BYTES).adr
                 val size = length + Int.BYTES
@@ -1457,7 +1457,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetAttribLocation">Reference Page</a>
      */
     fun getAttribLocation(program: GlProgram, name: String): Int =
-            stak {
+            Stack {
                 val nameEncoded = it.ASCII(name)
                 GL20C.nglGetAttribLocation(program.name, nameEncoded.adr)
             }
@@ -1473,7 +1473,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
     fun getVertexAttribI(index: Int, pName: VertexAttrib): Int = // TODO this is smelly, check I
-            stak.intAddress { GL20C.nglGetVertexAttribiv(index, pName.i, it) }
+            Stack.intAddress { GL20C.nglGetVertexAttribiv(index, pName.i, it) }
 
     /**
      * Returns a full Vertex Attribute class TODO move to gl?
@@ -1493,7 +1493,7 @@ interface gl20i {
             enabled = getVertexAttribI(index, VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED)).bool
             integer = getVertexAttribI(index, VertexAttrib(GL30.GL_VERTEX_ATTRIB_ARRAY_INTEGER)).bool
             divisor = getVertexAttribI(index, VertexAttrib(GL33.GL_VERTEX_ATTRIB_ARRAY_DIVISOR))
-            current = stak.vec4Buffer { getCurrentVertexAttrib(index, it) }
+            current = Stack.vec4Buffer { getCurrentVertexAttrib(index, it) }
         }
     }
 
@@ -1529,7 +1529,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttribPointerv">Reference Page</a>
      */
-    infix fun getVertexAttribPointer(index: Int): Ptr = stak.pointerAddress { GL20C.nglGetVertexAttribPointerv(index, GL20C.GL_VERTEX_ATTRIB_ARRAY_POINTER, it) }
+    infix fun getVertexAttribPointer(index: Int): Ptr = Stack.pointerAddress { GL20C.nglGetVertexAttribPointerv(index, GL20C.GL_VERTEX_ATTRIB_ARRAY_POINTER, it) }
 
     // --- [ glDrawBuffers ] ---
 
