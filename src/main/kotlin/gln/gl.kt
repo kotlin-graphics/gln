@@ -15,6 +15,7 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
+import gln.dsa.dsai
 import gln.framebuffer.GlFramebuffer
 import gln.misc.BlendDsl
 import gln.misc.GlDebugSource
@@ -29,13 +30,13 @@ import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.memGetInt
 import unsigned.Uint
 
-
 object gl :
         glGetSet, glEnable,
         gl11i, gl12i, gl13i, gl14i, gl15i,
         gl20i, gl21i,
         gl30i, gl31i, gl32i, gl33i,
-        gl40i, gl41i, gl42i, gl43i, gl44i, gl45i, gl46i {
+        gl40i, gl41i, gl42i, gl43i, gl44i, gl45i, gl46i,
+        dsai {
 
     val state = OpenGlState
 
