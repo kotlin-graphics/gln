@@ -7076,6 +7076,21 @@ inline class BufferStorageFlag(val i: Int) {
     }
 }
 
+typealias MapBufferFlags = Int
+
+inline class MapBufferFlag(val i: Int) {
+    companion object {
+        val READ_BIT = MapBufferFlag(GL44C.GL_MAP_READ_BIT)
+        val WRITE_BIT = MapBufferFlag(GL44C.GL_MAP_WRITE_BIT)
+        val PERSISTENT_BIT = MapBufferFlag(GL44C.GL_MAP_PERSISTENT_BIT)
+        val COHERENT_BIT = MapBufferFlag(GL44C.GL_MAP_COHERENT_BIT)
+        val INVALIDATE_RANGE_BIT = MapBufferFlag(GL44C.GL_MAP_INVALIDATE_RANGE_BIT)
+        val INVALIDATE_BUFFER_BIT = MapBufferFlag(GL44C.GL_MAP_INVALIDATE_BUFFER_BIT)
+        val FLUSH_EXPLICIT_BIT = MapBufferFlag(GL44C.GL_MAP_FLUSH_EXPLICIT_BIT)
+        val UNSYNCHRONIZED_BIT = MapBufferFlag(GL44C.GL_MAP_UNSYNCHRONIZED_BIT)
+    }
+}
+
 
 inline class TextureAccess(val i: Int) {
     companion object {

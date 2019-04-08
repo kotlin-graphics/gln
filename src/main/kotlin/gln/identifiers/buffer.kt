@@ -2,12 +2,13 @@ package gln.identifiers
 
 
 import glm_.L
-import glm_.bool
 import gln.*
 import gln.buffer.GlBufferDsl
 import gln.buffer.GlBuffersDsl
 import kool.*
-import org.lwjgl.opengl.*
+import org.lwjgl.opengl.GL15C
+import org.lwjgl.opengl.GL20C
+import org.lwjgl.opengl.GL45C
 import org.lwjgl.system.MemoryUtil.*
 import java.nio.Buffer
 import java.nio.ByteBuffer
@@ -31,7 +32,7 @@ inline class GlBuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferData">Reference Page</a>
      */
-    fun clearBufferData(buffer: GlBuffer, internalFormat: InternalFormat, format: Int, type: Int, data: Buffer? = null) = gl.clearBufferData(this, internalFormat, format, type, data)
+    fun clearData(buffer: GlBuffer, internalFormat: InternalFormat, format: Int, type: Int, data: Buffer? = null) = gl.clearBufferData(this, internalFormat, format, type, data)
 
     // --- [ glCopyNamedBufferSubData ] --- TODO -> copySubDataTo?
 
@@ -167,7 +168,7 @@ inline class GlBuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
      */
-    fun bufferData(size: Int, usage: Usage) = gl.bufferData(this, size, usage)
+    fun data(size: Int, usage: Usage = Usage.STATIC_DRAW) = gl.bufferData(this, size, usage)
 
     /**
      * DSA version of {@link GL15C#glBufferData BufferData}.
@@ -177,7 +178,7 @@ inline class GlBuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
      */
-    fun bufferData(data: Buffer, usage: Usage) = gl.bufferData(this, data, usage)
+    fun data(data: Buffer, usage: Usage = Usage.STATIC_DRAW) = gl.bufferData(this, data, usage)
 
     // --- [ glNamedBufferSubData ] ---
 
@@ -189,50 +190,24 @@ inline class GlBuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
      */
-    fun bufferSubData(offset: Int, data: Buffer) = gl.bufferSubData(this, offset, data)
+    fun subData(offset: Int, data: Buffer) = gl.bufferSubData(this, offset, data)
 
     fun bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, name)
     fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)
-    inline fun bind(target: BufferTarget, block: GlBufferDsl.() -> Unit) {
+    inline fun <R> bind(target: BufferTarget, block: GlBufferDsl.() -> R): R {
         bind(target)
         GlBufferDsl.target = target
-        GlBufferDsl.buffer = this
-        GlBufferDsl.block()
+        GlBufferDsl.name = name
+        return GlBufferDsl.block()
     }
 
-    inline fun bound(target: BufferTarget, block: GlBufferDsl.() -> Unit): GlBuffer {
-        bind(target, block)
-        GL15C.glBindBuffer(target.i, 0)
-        return this
-    }
+    inline fun <R> bound(target: BufferTarget, block: GlBufferDsl.() -> R): R =
+            bind(target, block).also { GL15C.glBindBuffer(target.i, 0) }
 
     fun storage(data: ByteBuffer, flags: Int = 0) = GL45C.glNamedBufferStorage(name, data, flags)
     fun storage(data: ShortBuffer, flags: Int = 0) = GL45C.glNamedBufferStorage(name, data, flags)
 
     fun delete() = GL15C.glDeleteBuffers(name)
-
-    // glGetBufferParameter*
-
-    fun getAccess(target: BufferTarget): BufferAccess = BufferAccess(GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_ACCESS))
-
-    fun getAccessFlag(target: BufferTarget): Int = GL15C.glGetBufferParameteri(target.i, GL30.GL_BUFFER_ACCESS_FLAGS)
-
-    fun getImmutableStorage(target: BufferTarget): Boolean = GL15C.glGetBufferParameteri(target.i, GL44.GL_BUFFER_IMMUTABLE_STORAGE).bool
-
-    fun isMapped(target: BufferTarget): Boolean = GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_MAPPED).bool
-
-    fun getMapLength(target: BufferTarget): Long = GL32C.glGetBufferParameteri64(target.i, GL30.GL_BUFFER_MAP_LENGTH)
-
-    fun getMapOffset(target: BufferTarget): Long = GL32C.glGetBufferParameteri64(target.i, GL30.GL_BUFFER_MAP_OFFSET)
-
-    fun getSize(target: BufferTarget): Int = GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE)
-
-    fun getStorageFlags(target: BufferTarget): Int = GL15C.glGetBufferParameteri(target.i, GL44.GL_BUFFER_STORAGE_FLAGS)
-
-    fun getUsage(target: BufferTarget): Usage = Usage(GL15C.glGetBufferParameteri(target.i, GL15.GL_BUFFER_USAGE))
-
-    fun getPointer(target: BufferTarget): Ptr = Stack.pointerAddress { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) }
-
 
     fun data(target: BufferTarget, size: Int, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
@@ -282,6 +257,11 @@ inline class GlBuffer(val name: Int = -1) {
      * @see <a target="_blank" href="http://docs.gl/gl4/glUnmapBuffer">Reference Page</a>
      */
     fun unmap(): Boolean = gl.unmapBuffer(this)
+
+    inline operator fun invoke(block: GlBufferDsl.() -> Unit) {
+        GlBufferDsl.name = name
+        GlBufferDsl.block()
+    }
 
     companion object {
         // --- [ glCreateBuffers ] ---
@@ -340,6 +320,8 @@ inline class GlBuffers(val names: IntBuffer) {
         GlBuffersDsl.names = names
         GlBuffersDsl.block()
     }
+
+    fun delete() = GL15C.nglDeleteBuffers(names.rem, names.adr)
 
     operator fun get(index: Int): GlBuffer = GlBuffer(names[index])
     operator fun get(enum: Enum<*>): GlBuffer = GlBuffer(names[enum.ordinal])

@@ -14,9 +14,11 @@ import glm_.vec2.Vec2i
 import glm_.vec2.Vec2ui
 import glm_.vec3.Vec3i
 import glm_.vec3.Vec3ui
+import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
+import gln.framebuffer.GlFramebuffer
 import gln.framebuffer.GlFramebuffers
 import gln.identifiers.GlBuffer
 import gln.identifiers.GlProgram
@@ -76,7 +78,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4i) = Stack { GL30C.nglClearBufferiv(buffer.i, drawbuffer, value.toIntBuffer(it).adr) }
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4i) = Stack.vec4iAddress { GL30C.nglClearBufferiv(buffer.i, drawbuffer, it) }
 
     // --- [ glClearBufferuiv ] ---
 
@@ -89,7 +91,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4ui) = Stack { GL30C.nglClearBufferuiv(buffer.i, drawbuffer, value.toIntBuffer(it).adr) }
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4ui) = Stack.vec4uiAddress { GL30C.nglClearBufferuiv(buffer.i, drawbuffer, it) }
 
     // --- [ glClearBufferfv ] ---
 
@@ -103,7 +105,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: FloatBuffer) = GL30C.nglClearBufferfv(buffer.i, drawbuffer, value.adr)
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4) = Stack.vec4Address { GL30C.nglClearBufferfv(buffer.i, drawbuffer, it) }
 
     // --- [ glClearBufferfi ] ---
 
@@ -1120,7 +1122,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsFramebuffer">Reference Page</a>
      */
-    fun isFramebuffer(framebuffer: GLframebuffer) = GL30C.glIsFramebuffer(framebuffer.i)
+    fun isFramebuffer(framebuffer: GlFramebuffer) = GL30C.glIsFramebuffer(framebuffer.name)
 
     // --- [ glBindFramebuffer ] ---
 
@@ -1132,7 +1134,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFramebuffer">Reference Page</a>
      */
-    fun bindFramebuffer(target: FramebufferBindTarget, framebuffer: GLframebuffer) = GL30C.glBindFramebuffer(target.i, framebuffer.i)
+    fun bindFramebuffer(target: FramebufferBindTarget, framebuffer: GlFramebuffer) = GL30C.glBindFramebuffer(target.i, framebuffer.name)
 
     /**
      * Binds a framebuffer to a framebuffer target.
@@ -1141,7 +1143,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFramebuffer">Reference Page</a>
      */
-    fun bindFramebuffer(framebuffer: GLframebuffer) = GL30C.glBindFramebuffer(FramebufferBindTarget.BOTH.i, framebuffer.i)
+    fun bindFramebuffer(framebuffer: GlFramebuffer) = GL30C.glBindFramebuffer(FramebufferBindTarget.BOTH.i, framebuffer.name)
 
     // --- [ glDeleteFramebuffers ] ---
 
@@ -1159,7 +1161,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteFramebuffers">Reference Page</a>
      */
-    fun deleteFramebuffer(framebuffer: GLframebuffer) = GL30C.glDeleteFramebuffers(framebuffer.i)
+    fun deleteFramebuffer(framebuffer: GlFramebuffer) = GL30C.glDeleteFramebuffers(framebuffer.name)
 
     // --- [ glGenFramebuffers ] ---
 
@@ -1186,7 +1188,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenFramebuffers">Reference Page</a>
      */
-    fun genFramebuffer(): GLframebuffer = GLframebuffer(GL30C.glGenFramebuffers())
+    fun genFramebuffer(): GlFramebuffer = GlFramebuffer(GL30C.glGenFramebuffers())
 
     // --- [ glCheckFramebufferStatus ] ---
 

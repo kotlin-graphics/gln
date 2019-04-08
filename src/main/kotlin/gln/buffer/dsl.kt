@@ -2,13 +2,15 @@ package gln.buffer
 
 import glm_.BYTES
 import glm_.L
+import glm_.bool
+import glm_.i
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import gln.*
 import gln.Usage.Companion.STATIC_DRAW
-import gln.identifiers.GlBuffer
 import gln.identifiers.GlBuffers
+import kool.Ptr
 import kool.adr
 import kool.pos
 import org.lwjgl.opengl.*
@@ -19,7 +21,7 @@ import java.nio.*
 object GlBufferDsl {
 
     var target: BufferTarget = BufferTarget.ARRAY
-    var buffer = GlBuffer()
+    var name = 0
 
     // --- [ glBufferStorage ] ---
 
@@ -77,7 +79,73 @@ object GlBufferDsl {
         GL15C.nglBufferSubData(target.i, 0L, Mat4.size.L, bufAd)
     }
 
-    fun bindRange(index: Int, offset: Int, size: Int) = GL30C.glBindBufferRange(target.i, index, buffer.name, offset.L, size.L)
+    // --- [ glGetBufferParameteriv / glGetBufferParameteri64v ] ---
+    // --- [ glGetNamedBufferParameteriv / glGetNamedBufferParameteri64v ] ---
+
+    val access: BufferAccess
+        get() = BufferAccess(when {
+            DSA -> GL45C.glGetNamedBufferParameteri(name, GL15C.GL_BUFFER_ACCESS)
+            else -> GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_ACCESS)
+        })
+
+    val accessFlag: MapBufferFlags
+        get() = when {
+            DSA -> GL45C.glGetNamedBufferParameteri(name, GL30C.GL_BUFFER_ACCESS_FLAGS)
+            else -> GL15C.glGetBufferParameteri(target.i, GL30C.GL_BUFFER_ACCESS_FLAGS)
+        }
+
+    val immutableStorage: Boolean
+        get() = when {
+            DSA -> GL45C.glGetNamedBufferParameteri(name, GL44C.GL_BUFFER_IMMUTABLE_STORAGE)
+            else -> GL15C.glGetBufferParameteri(target.i, GL44C.GL_BUFFER_IMMUTABLE_STORAGE)
+        }.bool
+
+    val mapped: Boolean
+        get() = when {
+            DSA -> GL45C.glGetNamedBufferParameteri(name, GL15C.GL_BUFFER_MAPPED)
+            else -> GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_MAPPED)
+        }.bool
+
+    val mapLength: Int
+        get() = when {
+            DSA -> GL45C.glGetNamedBufferParameteri64(name, GL30C.GL_BUFFER_MAP_LENGTH)
+            else -> GL32C.glGetBufferParameteri64(target.i, GL30C.GL_BUFFER_MAP_LENGTH)
+        }.i
+
+    val mapOffset: Int
+        get() = when {
+            DSA -> GL45C.glGetNamedBufferParameteri64(name, GL30C.GL_BUFFER_MAP_OFFSET)
+            else -> GL32C.glGetBufferParameteri64(target.i, GL30C.GL_BUFFER_MAP_OFFSET)
+        }.i
+
+    val size: Int
+        get() = when {
+            DSA -> GL45C.glGetNamedBufferParameteri(name, GL15C.GL_BUFFER_SIZE)
+            else -> GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE)
+        }
+
+    val storageFlags: BufferStorageFlags
+        get() = when {
+            DSA -> GL45C.glGetNamedBufferParameteri(name, GL44C.GL_BUFFER_STORAGE_FLAGS)
+            else -> GL15C.glGetBufferParameteri(target.i, GL44C.GL_BUFFER_STORAGE_FLAGS)
+        }
+
+    val usage: Usage
+        get() = Usage(when {
+            DSA -> GL45C.glGetNamedBufferParameteri(name, GL15C.GL_BUFFER_USAGE)
+            else -> GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_USAGE)
+        })
+
+    // --- [ glGetBufferPointerv, glGetNamedBufferPointerv ] ---
+
+    val pointer: Ptr
+        get() = when {
+            DSA -> GL45C.glGetNamedBufferPointer(name, GL15C.GL_BUFFER_MAP_POINTER)
+            else -> GL15C.glGetBufferPointer(target.i, GL15C.GL_BUFFER_MAP_POINTER)
+        }
+
+
+    fun bindRange(index: Int, offset: Int, size: Int) = GL30C.glBindBufferRange(target.i, index, name, offset.L, size.L)
 
     fun bindBase(index: Int) = GL30.glBindBufferBase(target.i, index, 0)
 
@@ -120,9 +188,10 @@ object GlBuffersDsl {
     inline fun <E> E.bind(target: BufferTarget, block: GlBufferDsl.() -> Unit) where E : Enum<E>, E : GlBufferEnum {
         bind(target)
         GlBufferDsl.target = target
-        GlBufferDsl.buffer = GlBuffer(names[ordinal])
+        GlBufferDsl.name = names[ordinal]
         GlBufferDsl.block()
     }
+
     inline fun <E> E.bound(target: BufferTarget, block: GlBufferDsl.() -> Unit) where E : Enum<E>, E : GlBufferEnum {
         bind(target, block)
         GL15C.glBindBuffer(target.i, 0)

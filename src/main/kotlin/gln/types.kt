@@ -1,6 +1,7 @@
 package gln
 
 import glm_.bool
+import gln.framebuffer.GlFramebuffer
 import gln.texture.GlTexturesDsl
 import kool.IntBuffer
 import kool.adr
@@ -14,8 +15,7 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
 
-inline class GLframebuffer(val i: Int)
-inline class GLprogramPipeline(val i: Int)
+inline class GlProgramPipeline(val i: Int)
 
 
 

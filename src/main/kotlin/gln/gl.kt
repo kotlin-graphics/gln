@@ -40,6 +40,8 @@ object gl :
 
     val state = OpenGlState
 
+    inline operator fun invoke(block: gln.gl.() -> Unit) = block()
+
     // --- [ glGet* ] ---
 
     /**

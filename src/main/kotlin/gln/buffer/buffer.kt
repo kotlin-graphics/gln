@@ -20,8 +20,6 @@ import org.lwjgl.opengl.GL20C
 
 fun glGenBuffers(size: Int) = GlBuffers(size).also { GL15C.glGenBuffers(it.names) }
 
-inline fun <reified E : Enum<E>> GlBuffers(): GlBuffers = GlBuffers(IntBuffer<E>())
-
 
 // ----- Mat4 ----- TODO others
 

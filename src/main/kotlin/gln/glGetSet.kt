@@ -3,6 +3,7 @@ package gln
 import glm_.bool
 import glm_.vec2.Vec2
 import glm_.vec4.Vec4
+import gln.framebuffer.GlFramebuffer
 import gln.identifiers.*
 import gln.renderbuffer.GlRenderbuffer
 import gln.sampler.GlSampler
@@ -66,11 +67,11 @@ interface glGetSet {
 
     fun drawBuffer(i: Int): BufferMode = int(GL20.GL_DRAW_BUFFER0 + i)
 
-    val drawFramebufferBinding: GLframebuffer
-        get() = GLframebuffer(int(GL30.GL_DRAW_FRAMEBUFFER_BINDING))
+    val drawFramebufferBinding: GlFramebuffer
+        get() = GlFramebuffer(int(GL30.GL_DRAW_FRAMEBUFFER_BINDING))
 
-    val readFramebufferBinding: GLframebuffer
-        get() = GLframebuffer(int(GL30.GL_READ_FRAMEBUFFER_BINDING))
+    val readFramebufferBinding: GlFramebuffer
+        get() = GlFramebuffer(int(GL30.GL_READ_FRAMEBUFFER_BINDING))
 
 //    val elementArrayBufferBinding: GlBuffer
 //        get() = GlBuffer(int(GL30.GL_ELEMENT_ARRAY_BUFFER_BINDING))

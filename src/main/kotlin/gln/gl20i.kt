@@ -26,13 +26,15 @@ import glm_.vec3.Vec3s
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4d
 import glm_.vec4.Vec4s
+import gln.glf.VertexAttribute
+import gln.glf.VertexLayout
 import gln.identifiers.GLshaders
 import gln.identifiers.GlProgram
 import gln.identifiers.GlShader
-import gln.glf.VertexAttribute
 import kool.*
 import org.lwjgl.opengl.*
-import org.lwjgl.system.MemoryUtil.*
+import org.lwjgl.system.MemoryUtil.NULL
+import org.lwjgl.system.MemoryUtil.memGetInt
 import unsigned.Ubyte
 import java.nio.DoubleBuffer
 import java.nio.FloatBuffer
@@ -1367,7 +1369,21 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribPointer">Reference Page</a>
      */
-    fun vertexAttribPointer(attribute: VertexAttribute) = with(attribute) { GL20C.nglVertexAttribPointer(index, size, type.i, normalized, interleavedStride, pointer) }
+    fun vertexAttribPointer(attribute: VertexAttribute) = with(attribute) {
+        GL20C.nglVertexAttribPointer(index, size, type.i, normalized, interleavedStride, pointer)
+    }
+
+    /**
+     * Specifies the location and organization of a vertex attribute array.
+     *
+     * @param vertexLayout     the vertex layout containing the attribute(s) to apply
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribPointer">Reference Page</a>
+     */
+    fun vertexAttribPointer(vertexLayout: VertexLayout) =
+            vertexLayout.attributes.forEach {
+                GL20C.nglVertexAttribPointer(it.index, it.size, it.type.i, it.normalized, it.interleavedStride, it.pointer)
+            }
 
     // --- [ glEnableVertexAttribArray ] ---
 
@@ -1388,6 +1404,16 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glEnableVertexAttribArray">Reference Page</a>
      */
     fun enableVertexAttribArray(attribute: VertexAttribute) = GL20C.glEnableVertexAttribArray(attribute.index)
+
+    /**
+     * Enables a generic vertex attribute array.
+     *
+     * @param vertexLayout the vertex layout containing the attribute(s) to enable
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glEnableVertexAttribArray">Reference Page</a>
+     */
+    fun enableVertexAttribArray(vertexLayout: VertexLayout) =
+            vertexLayout.attributes.forEach { GL20C.glEnableVertexAttribArray(it.index) }
 
     // --- [ glDisableVertexAttribArray ] ---
 

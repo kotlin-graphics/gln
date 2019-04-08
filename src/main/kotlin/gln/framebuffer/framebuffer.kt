@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL32
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 import kotlin.properties.Delegates
+import kotlin.reflect.KMutableProperty0
 
 /**
  * Created by elect on 18/04/17.
@@ -71,6 +72,12 @@ fun GlFramebuffers(size: Int) = GlFramebuffers(IntBuffer(size))
 inline class GlFramebuffer(val name: Int = -1) {
 
     fun bind() = GL30C.glBindFramebuffer(GL30C.GL_FRAMEBUFFER, name)
+
+    inline fun bind(block: GlFramebufferDsl.() -> Unit) {
+        bind()
+        GlFramebufferDsl.name = name
+        GlFramebufferDsl.block()
+    }
 
     fun bindRead() = GL30C.glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, name)
     fun bindDraw() = GL30C.glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, name)
@@ -372,15 +379,19 @@ inline class GlFramebuffer(val name: Int = -1) {
 
     companion object {
 
+        val NULL = GlFramebuffer(-1)
+        val DEFAULT = GlFramebuffer(0)
+
         // --- [ glCreateFramebuffers ] ---
 
-        /**
-         * Returns {@code n} previously unused framebuffer names in {@code framebuffers}, each representing a new framebuffer object.
-         *
-         * @see <a target="_blank" href="http://docs.gl/gl4/glCreateFramebuffers">Reference Page</a>
-         */
         fun create(): GlFramebuffer = gl.createFramebuffers()
 
         fun gen(): GlFramebuffer = GlFramebuffer(GL30C.glGenFramebuffers())
+
+        fun gen(pFramebuffer: KMutableProperty0<GlFramebuffer>): GlFramebuffer {
+            var framebuffer by pFramebuffer
+            framebuffer = gen()
+            return framebuffer
+        }
     }
 }

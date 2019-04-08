@@ -11,6 +11,7 @@ import glm_.vec3.Vec3d
 import glm_.vec3.Vec3i
 import glm_.vec3.Vec3ui
 import glm_.vec4.*
+import gln.identifiers.GlBuffer
 import kool.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
@@ -21,6 +22,8 @@ import org.lwjgl.system.MemoryUtil.*
 import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
+import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KProperty
 
 interface GlBufferEnum
 
@@ -130,3 +133,10 @@ fun ByteBuffer.rem(type: IndexType): Int = rem shr when (type.i) {
 }
 
 inline fun MemoryStack.intAddress(int: Int): Adr = nmalloc(4, Int.BYTES).also { memPutInt(it, int) }
+
+operator fun <R> KMutableProperty0<R>.setValue(host: Any?, property: KProperty<*>, value: R) = set(value)
+operator fun <R> KMutableProperty0<R>.getValue(host: Any?, property: KProperty<*>): R = get()
+
+fun a(b: GlBuffer) = b.bound(BufferTarget.ARRAY) {
+    access
+}
