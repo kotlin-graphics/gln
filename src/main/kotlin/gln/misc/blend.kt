@@ -21,6 +21,8 @@ object BlendDsl {
     fun func(srcFactor: BlendFactor, destFactor: BlendFactor) = GL11C.glBlendFunc(srcFactor.i, destFactor.i)
     fun func(index: Int, srcFactor: BlendFactor, destFactor: BlendFactor) = GL40C.glBlendFunci(index, srcFactor.i, destFactor.i)
 
-    fun funcSeparate(srcRgbFactor: BlendFactor, srcAlphaFactor: BlendFactor, destRgbFactor: BlendFactor, destAlphaFactor: BlendFactor) = GL14.glBlendFuncSeparate(srcRgbFactor.i, srcAlphaFactor.i, destRgbFactor.i, destAlphaFactor.i)
-    fun funcSeparate(index: Int, srcRgbFactor: BlendFactor, srcAlphaFactor: BlendFactor, destRgbFactor: BlendFactor, destAlphaFactor: BlendFactor) = GL40C.glBlendFuncSeparatei(index, srcRgbFactor.i, srcAlphaFactor.i, destRgbFactor.i, destAlphaFactor.i)
+    fun funcSeparate(srcRgbFactor: BlendFactor, srcAlphaFactor: BlendFactor, destRgbFactor: BlendFactor, destAlphaFactor: BlendFactor)
+            = GL14.glBlendFuncSeparate(srcRgbFactor.i, destRgbFactor.i, srcAlphaFactor.i, destAlphaFactor.i)
+    fun funcSeparate(index: Int, srcRgbFactor: BlendFactor, srcAlphaFactor: BlendFactor, destRgbFactor: BlendFactor, destAlphaFactor: BlendFactor)
+            = GL40C.glBlendFuncSeparatei(index, srcRgbFactor.i, destRgbFactor.i, srcAlphaFactor.i, destAlphaFactor.i)
 }
