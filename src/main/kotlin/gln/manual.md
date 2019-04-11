@@ -1,4 +1,25 @@
----- glClear*
+#### glEnable
+
+As vanilla:
+ 
+`gl.enable(BLEND)` 
+
+or
+
+`gl.blend = true`
+
+The only exception is `GL_CLIP_DISTANCEi`, which shall be written as
+
+`gl.enable(CLIP_DISTANCE0 + i)`
+
+Same logic applies to `gl.disable(*)` and `gl.isEnabled(*)`, that is
+
+`gl.blend = false`
+
+`if (gl.blend) { .. }`
+
+#### glClear*
+
 
 To set the clearColor, other than the classic 
 
@@ -18,12 +39,13 @@ Depth and Stencil are also variables
 
 `gl.clearStencil = 1`
 
+#### ColorMask
 
 colorMask has the following overload
 
 `fun colorMask(rgba: Boolean)`
 
--------- cullFace and logicOp
+#### cullFace, logicOp
 
 For both this parameters, OpenGL differentiates between enable/disable and the mode.
 
@@ -52,14 +74,89 @@ gl.cullFaced {
 }
 ```
 
+#### Draw calls
 
 All the draw calls also has an overload with the mode parameter set to `GL_TRIANGLES`
 
+#### drawBuffer(s)
 
 To set the `drawBuffer` use the following variable
 
 `var drawBuffer: BufferMode /*Int*/` 
 
+`drawBuffers` accepts either and `IntArray`:
+
+`fun drawBuffers(bufs: IntBuffer)`
+
+that an `vararg`:
+
+`fun drawBuffers(vararg bufs: Int)`
+
+#### glGetError
+
+`gl.error: ErrorCode`
+
+#### glGetBooleanv, glGetFloatv, ..
+
+`gl.get(): T`
+
+`T` will be inferred by the result
+
+For example:
+
+`val activeTexture: Int = gl.get(ACTIVE_TEXTURE)`
+
+#### glGet*
+
+[`glGet`](http://docs.gl/gl4/glGet) mixes a lot of different types of queries.
+
+`gln` order them in different categories and subcategories:
+
+- caps (ported from g-truc)
+ 
+   - version (MINOR_VERSION, ..)
+   
+   - extensions (ARB_multitexture, ..)
+   
+   - debug (CONTEXT_FLAGS, ..)
+   
+   - limits (MAX_COMPUTE_SHADER_STORAGE_BLOCKS, ..)
+   
+   - values (SUBPIXEL_BITS, ..)
+   
+   - formats (COMPRESSED_RGB_S3TC_DXT1_EXT, ..)
+
+- state values (GL_ACTIVE_TEXTURE, ..)
+
+
+Note that state values are also offered for convenience directly under the `gl` object, ie:
+
+`val activeTexture = gl.activeTexture`
+
+#### glViewport, glScissor
+
+they are offered either via `var`s that via a method accepting `size: Vec2i` (`x` and `y` are always 0 in that case).
+
+```
+gl {
+   scissorBox: Vec4i
+   scissorBox(Vec2i)
+   viewport: Vec4i
+   viewport(Vec2i)
+}
+```
+
+### glTexImage1D
+
+Given the target can be only `GL_TEXTURE_1D` or `GL_PROXY_TEXTURE_1D`, it's currently always inferred as the first one.
+
+Same applies to `glCopyTexImage1D` as well.
+
+#### glGetTexLevelParameteriv, glGetTexLevelParameterfv, glGetTexParameteriv, glGetTexParameterfv
+
+They are inline reified, T is inferred. `Int`, `Float` and `Boolean` accepted.   
+
+------- 
 
 glVertexAttribI1i to vertexAttrib
 
@@ -89,7 +186,7 @@ glColorMaski is glColorMask with index: Int
 
 colorMask has also rgba: Boolean and Vec4bool overload
 
-glEnablei/glDisablei/glIsEnabledi are found as enable/disable/isEnabled with cap
+glEnablei/glDisablei/glIsEnabledi are found as enable/disable/isEnabled with index
 
 glTexBuffer has a mandatory target, so it's inferred 
 

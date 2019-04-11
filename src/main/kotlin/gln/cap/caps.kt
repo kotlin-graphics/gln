@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL43.*
 import org.lwjgl.opengl.GL44.GL_PRIMITIVE_RESTART_FOR_PATCHES_SUPPORTED
 import org.lwjgl.opengl.GL45.GL_MAX_COMBINED_CLIP_AND_CULL_DISTANCES
 import org.lwjgl.opengl.GL45.GL_MAX_CULL_DISTANCES
+import org.lwjgl.opengl.GLCapabilities
 import org.lwjgl.opengl.KHRTextureCompressionASTCLDR.*
 import org.lwjgl.opengl.NVDeepTexture3D.GL_MAX_DEEP_3D_TEXTURE_DEPTH_NV
 import org.lwjgl.opengl.NVDeepTexture3D.GL_MAX_DEEP_3D_TEXTURE_WIDTH_HEIGHT_NV
@@ -35,7 +36,8 @@ import kotlin.reflect.full.memberProperties
  */
 class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean = true) {
 
-    val caps = GL.createCapabilities(forwardCompatible)
+    // TODO rename?
+    val caps: GLCapabilities = GL.createCapabilities(forwardCompatible)
 
     fun set() = GL.setCapabilities(caps)
     fun unset() = GL.setCapabilities(null)

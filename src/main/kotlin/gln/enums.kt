@@ -6326,8 +6326,8 @@ inline class TextureCompareMode(val i: Int) {
 
 inline class ImageFormatCompatibilityType(val i: Int) {
     companion object {
-        val IMAGE_FORMAT_COMPATIBILITY_BY_SIZE = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_SIZE)
-        val IMAGE_FORMAT_COMPATIBILITY_BY_CLASS = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_CLASS)
+        val BY_SIZE = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_SIZE)
+        val BY_CLASS = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_CLASS)
         val NONE = ImageFormatCompatibilityType(GL11.GL_NONE)
     }
 }
@@ -6735,7 +6735,8 @@ inline class GeometryOutputType(val i: Int) {
 inline class State(val i: Int) {
     companion object {
         val BLEND = State(GL11C.GL_BLEND)
-        val CLIP_DISTANCE = State(GL30C.GL_CLIP_DISTANCE0)
+        val CLIP_DISTANCE0 = State(GL30C.GL_CLIP_DISTANCE0)
+        val COLOR_LOGIC_OP = State(GL11C.GL_COLOR_LOGIC_OP)
         val CULL_FACE = State(GL11C.GL_CULL_FACE)
         val DEBUG_OUTPUT = State(GL43C.GL_DEBUG_OUTPUT)
         val DEBUG_OUTPUT_SYNCHRONOUS = State(GL43C.GL_DEBUG_OUTPUT_SYNCHRONOUS)
@@ -6762,6 +6763,7 @@ inline class State(val i: Int) {
         val TEXTURE_CUBE_MAP_SEAMLESS = State(GL32C.GL_TEXTURE_CUBE_MAP_SEAMLESS)
         val PROGRAM_POINT_SIZE = State(GL32C.GL_PROGRAM_POINT_SIZE)
     }
+    operator fun plus(i: Int) = State(this.i + i)
 }
 
 inline class IndexedState(val i: Int) {
@@ -7302,6 +7304,18 @@ inline class FramebufferAttachmentComponentType(val i: Int) {
         val UNSIGNED_INT = FramebufferAttachmentComponentType(GL11.GL_UNSIGNED_INT)
         val SIGNED_NORMALIZED = FramebufferAttachmentComponentType(GL31C.GL_SIGNED_NORMALIZED)
         val UNSIGNED_NORMALIZED = FramebufferAttachmentComponentType(GL30C.GL_UNSIGNED_NORMALIZED)
+    }
+}
+
+// same as FramebufferAttachmentComponentType + None
+inline class TextureComponentType(val i: Int) {
+    companion object {
+        val NONE = TextureComponentType(GL11C.GL_NONE)
+        val FLOAT = TextureComponentType(GL11C.GL_FLOAT)
+        val INT = TextureComponentType(GL30C.GL_INT)
+        val UNSIGNED_INT = TextureComponentType(GL11.GL_UNSIGNED_INT)
+        val SIGNED_NORMALIZED = TextureComponentType(GL31C.GL_SIGNED_NORMALIZED)
+        val UNSIGNED_NORMALIZED = TextureComponentType(GL30C.GL_UNSIGNED_NORMALIZED)
     }
 }
 

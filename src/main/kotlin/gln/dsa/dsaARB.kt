@@ -349,8 +349,8 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetCompressedTextureSubImage">Reference Page</a>
      */
-    override fun getCompressedTextureSubImage(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i, pixels: ByteBuffer) =
-            ARBDirectStateAccess.nglCompressedTextureSubImage3D(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, texture.getImageFormatCompatibilityType(TextureTarget._3D).i, pixels.rem, pixels.adr)
+    override fun getCompressedTextureSubImage(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i, pixels: ByteBuffer): Nothing = TODO()
+    //ARBDirectStateAccess.nglCompressedTextureSubImage3D(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, texture.getImageFormatCompatibilityType(TextureTarget._3D).i, pixels.rem, pixels.adr)
 
     /**
      * Robust version of {@link GL11C#glGetTexImage GetTexImage}

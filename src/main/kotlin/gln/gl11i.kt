@@ -437,7 +437,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    infix fun genTexture(texture: KMutableProperty0<GlTexture>) = texture.set(genTexture())
+    infix fun genTextures(texture: KMutableProperty0<GlTexture>) = texture.set(genTextures())
 
     /**
      * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture
@@ -445,7 +445,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    fun genTexture(): GlTexture = GlTexture(Stack.intAddress { GL11C.nglGenTextures(1, it) })
+    fun genTextures(): GlTexture = GlTexture(Stack.intAddress { GL11C.nglGenTextures(1, it) })
 
     // --- [ glDeleteTextures ] ---
 
@@ -475,7 +475,10 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTextures(texture: GlTexture) = Stack.intAddress(texture.name) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTexture(texture: GlTexture) = Stack.intAddress(texture.name) { GL11C.nglDeleteTextures(1, it) }
+
+    // --- [ glGetBooleanv / glGetFloatv / glGetIntegerv / glGetDoublev ] ---
+    // inline reified
 
     // --- [ glGetError ] ---
 
@@ -505,6 +508,23 @@ interface gl11i {
      */
     fun getTexImage(tex: TextureTarget, level: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) = GL11C.nglGetTexImage(tex.i, level, format.i, type.i, pixels.adr)
 
+    // --- [ glGetTexLevelParameteriv, glGetTexLevelParameterfv ] ---
+    // inline reified
+
+    // --- [ glGetLevelParameteriv, glGetTexParameterfv ] ---
+    // inline reified
+
+    // --- [ glIsEnabled ] ---
+
+    /**
+     * Determines if {@code cap} is currently enabled (as with {@link #glEnable Enable}) or disabled.
+     *
+     * @param cap the enable state to query
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glIsEnabled">Reference Page</a>
+     */
+    fun isEnabled(cap: State): Boolean = GL11C.glIsEnabled(cap.i)
+
     // --- [ glHint ] ---
 
     /**
@@ -519,19 +539,9 @@ interface gl11i {
     fun hint(target: HintTarget, hint: HintMode) = GL11C.glHint(target.i, hint.i)
 
     // --- [ glLineWidth ] ---
+    // inlined
 
-    /**
-     * Sets the width of rasterized line segments. The default width is 1.0.
-     *
-     * @param width the line width
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glLineWidth">Reference Page</a>
-     */
-    var lineWidth: Float
-        get() = GL11C.glGetFloat(GL11C.GL_LINE_WIDTH)
-        set(value) = GL11C.glLineWidth(value)
-
-    // --- [ glIsTexture ] --- TODO remove in favor of .isValid? Or rename?
+    // --- [ glIsTexture ] ---
 
     /**
      * Returns true if {@code texture} is the name of a texture object.
@@ -540,7 +550,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glIsTexture">Reference Page</a>
      */
-    fun isTexture(texture: GlTexture): Boolean = GL11C.glIsTexture(texture.name)
+    infix fun isTexture(texture: GlTexture): Boolean = GL11C.glIsTexture(texture.name)
 
     // --- [ glLogicOp ] ---
 
@@ -574,91 +584,11 @@ interface gl11i {
             }
         }
 
-    fun logicOp(opCode: LogicOp, block: () -> Unit) {
-        GL11C.glEnable(GL11C.GL_COLOR_LOGIC_OP)
-        GL11C.glLogicOp(opCode.i)
-        block()
-        GL11C.glDisable(GL11C.GL_COLOR_LOGIC_OP)
-    }
-
     // --- [ glPixelStorei ] ---
-
-    var packAlignment: Int
-        get() = GL11C.glGetInteger(GL11C.GL_PACK_ALIGNMENT)
-        set(value) = GL11C.glPixelStorei(GL11C.GL_PACK_ALIGNMENT, value)
-
-    var packImageHeight: Int
-        get() = GL11C.glGetInteger(GL12.GL_PACK_IMAGE_HEIGHT)
-        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_IMAGE_HEIGHT, value)
-
-    var packLsbFirst: Boolean
-        get() = GL11C.glGetInteger(GL12.GL_PACK_LSB_FIRST).bool
-        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_LSB_FIRST, value.i)
-
-    var packRowLength: Int
-        get() = GL11C.glGetInteger(GL12.GL_PACK_ROW_LENGTH)
-        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_ROW_LENGTH, value)
-
-    var packSkipImages: Int
-        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_IMAGES)
-        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_IMAGES, value)
-
-    var packSkipPixels: Int
-        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_PIXELS)
-        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_PIXELS, value)
-
-    var packSkipRows: Int
-        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_ROWS)
-        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_ROWS, value)
-
-    var packSwapBytes: Boolean
-        get() = GL11C.glGetInteger(GL12.GL_PACK_SWAP_BYTES).bool
-        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SWAP_BYTES, value.i)
-
-    var unpackAlignment: Int
-        get() = GL11C.glGetInteger(GL11C.GL_UNPACK_ALIGNMENT)
-        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_ALIGNMENT, value)
-
-    var unpackImageHeight: Int
-        get() = GL11C.glGetInteger(GL12.GL_UNPACK_IMAGE_HEIGHT)
-        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_IMAGE_HEIGHT, value)
-
-    var unpackLsbFirst: Boolean
-        get() = GL11C.glGetInteger(GL12.GL_UNPACK_LSB_FIRST).bool
-        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_LSB_FIRST, value.i)
-
-    var unpackRowLength: Int
-        get() = GL11C.glGetInteger(GL12.GL_UNPACK_ROW_LENGTH)
-        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_ROW_LENGTH, value)
-
-    var unpackSkipImages: Int
-        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_IMAGES)
-        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_IMAGES, value)
-
-    var unpackSkipPixels: Int
-        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_PIXELS)
-        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_PIXELS, value)
-
-    var unpackSkipRows: Int
-        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_ROWS)
-        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_ROWS, value)
-
-    var unpackSwapBytes: Boolean
-        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SWAP_BYTES).bool
-        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SWAP_BYTES, value.i)
+    // inlined var
 
     // --- [ glPointSize ] ---
-
-    /**
-     * Controls the rasterization of points if no vertex, tessellation control, tessellation evaluation, or geometry shader is active. The default point size is 1.0.
-     *
-     * @param size the request size of a point
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glPointSize">Reference Page</a>
-     */
-    var pointSize: Float
-        get() = GL11C.glGetFloat(GL11C.GL_POINT_SIZE)
-        set(value) = GL11C.glPointSize(value)
+    // inline var
 
     // --- [ glPolygonMode ] ---
 
@@ -745,7 +675,22 @@ interface gl11i {
      */
     var scissorBox: Vec4i
         get() = glGetVec4i(GL11C.GL_SCISSOR_BOX)
-        set(value) = GL11C.glViewport(value.x, value.y, value.z, value.w)
+        set(value) = GL11C.glScissor(value.x, value.y, value.z, value.w)
+
+    /**
+     * Defines the scissor rectangle for all viewports. The scissor test is enabled or disabled for all viewports using {@link #glEnable Enable} or {@link #glDisable Disable}
+     * with the symbolic constant {@link #GL_SCISSOR_TEST SCISSOR_TEST}. When disabled, it is as if the scissor test always passes. When enabled, if
+     * <code>left &le; x<sub>w</sub> &lt; left + width</code> and <code>bottom &le; y<sub>w</sub> &lt; bottom + height</code> for the scissor rectangle, then the scissor
+     * test passes. Otherwise, the test fails and the fragment is discarded.
+     *
+     * @param x      the left scissor rectangle coordinate
+     * @param y      the bottom scissor rectangle coordinate
+     * @param width  the scissor rectangle width
+     * @param getHeight the scissor rectangle height
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glScissor">Reference Page</a>
+     */
+    fun scissorBox(size: Vec2i) = GL11C.glScissor(0, 0, size.x, size.y)
 
     // --- [ glStencilFunc ] ---
 

@@ -16,6 +16,9 @@ enum class DSAType {
 }
 
 object OpenGlState {
+
+    var DSA = false
+
     private var _dsa = DSAType.CORE
 
     var dsa: DSAType

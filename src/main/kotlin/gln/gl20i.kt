@@ -1568,6 +1568,18 @@ interface gl20i {
      */
     fun drawBuffers(bufs: IntBuffer) = GL20C.nglDrawBuffers(bufs.rem, bufs.adr)
 
+    /**
+     * Specifies a list of color buffers to be drawn into.
+     *
+     * @param bufs an array of symbolic constants specifying the buffers into which fragment colors or data values will be written. One of:<br><table><tr><td>{@link GL11#GL_NONE NONE}</td><td>{@link GL11#GL_FRONT_LEFT FRONT_LEFT}</td><td>{@link GL11#GL_FRONT_RIGHT FRONT_RIGHT}</td><td>{@link GL11#GL_BACK_LEFT BACK_LEFT}</td><td>{@link GL11#GL_BACK_RIGHT BACK_RIGHT}</td><td>{@link GL30#GL_COLOR_ATTACHMENT0 COLOR_ATTACHMENT0}</td></tr><tr><td>GL30.GL_COLOR_ATTACHMENT[1-15]</td></tr></table>
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glDrawBuffers">Reference Page</a>
+     */
+    fun drawBuffers(vararg bufs: Int) = Stack {
+        val pBufs = bufs.toBuffer(it)
+        GL20C.nglDrawBuffers(bufs.size, pBufs.adr)
+    }
+
     // --- [ glBlendEquationSeparate ] ---
 
     /**

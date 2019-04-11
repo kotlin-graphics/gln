@@ -3,6 +3,7 @@ package gln
 import gli_.gl
 import glm_.BYTES
 import glm_.bool
+import glm_.i
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i
@@ -668,4 +669,91 @@ object gl :
     inline var depthRange: Vec2d
         get() = Stack.vec2dAddress { GL11C.nglGetDoublev(GL11C.GL_DEPTH_RANGE, it) }
         set(value) = GL11C.glDepthRange(value.x, value.y)
+
+    // --- [ glLineWidth ] ---
+
+    inline var lineWidth: Float
+        get() = GL11C.glGetFloat(GL11C.GL_LINE_WIDTH)
+        set(value) = GL11C.glLineWidth(value)
+
+    // --- [ glLogicOp ] ---
+
+    inline fun logicOp(opCode: LogicOp, block: () -> Unit) {
+        GL11C.glEnable(GL11C.GL_COLOR_LOGIC_OP)
+        GL11C.glLogicOp(opCode.i)
+        block()
+        GL11C.glDisable(GL11C.GL_COLOR_LOGIC_OP)
+    }
+
+    // --- [ glPixelStorei ] ---
+    // inlined
+
+    inline var packAlignment: Int
+        get() = GL11C.glGetInteger(GL11C.GL_PACK_ALIGNMENT)
+        set(value) = GL11C.glPixelStorei(GL11C.GL_PACK_ALIGNMENT, value)
+
+    inline var packImageHeight: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_IMAGE_HEIGHT)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_IMAGE_HEIGHT, value)
+
+    inline var packLsbFirst: Boolean
+        get() = GL11C.glGetInteger(GL12.GL_PACK_LSB_FIRST).bool
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_LSB_FIRST, value.i)
+
+    inline var packRowLength: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_ROW_LENGTH)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_ROW_LENGTH, value)
+
+    inline var packSkipImages: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_IMAGES)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_IMAGES, value)
+
+    inline var packSkipPixels: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_PIXELS)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_PIXELS, value)
+
+    inline var packSkipRows: Int
+        get() = GL11C.glGetInteger(GL12.GL_PACK_SKIP_ROWS)
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SKIP_ROWS, value)
+
+    inline var packSwapBytes: Boolean
+        get() = GL11C.glGetInteger(GL12.GL_PACK_SWAP_BYTES).bool
+        set(value) = GL11C.glPixelStorei(GL12.GL_PACK_SWAP_BYTES, value.i)
+
+    inline var unpackAlignment: Int
+        get() = GL11C.glGetInteger(GL11C.GL_UNPACK_ALIGNMENT)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_ALIGNMENT, value)
+
+    inline var unpackImageHeight: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_IMAGE_HEIGHT)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_IMAGE_HEIGHT, value)
+
+    inline var unpackLsbFirst: Boolean
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_LSB_FIRST).bool
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_LSB_FIRST, value.i)
+
+    inline var unpackRowLength: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_ROW_LENGTH)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_ROW_LENGTH, value)
+
+    inline var unpackSkipImages: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_IMAGES)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_IMAGES, value)
+
+    inline var unpackSkipPixels: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_PIXELS)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_PIXELS, value)
+
+    inline var unpackSkipRows: Int
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SKIP_ROWS)
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SKIP_ROWS, value)
+
+    inline var unpackSwapBytes: Boolean
+        get() = GL11C.glGetInteger(GL12.GL_UNPACK_SWAP_BYTES).bool
+        set(value) = GL11C.glPixelStorei(GL12.GL_UNPACK_SWAP_BYTES, value.i)
+
+    // --- [ glPointSize ] ---
+    inline var pointSize: Float
+        get() = GL11C.glGetFloat(GL11C.GL_POINT_SIZE)
+        set(value) = GL11C.glPointSize(value)
 }
