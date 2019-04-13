@@ -3,6 +3,8 @@
 package gln.texture
 
 import gli_.gl
+import gli_.gl.ExternalFormat
+import gli_.gl.TypeFormat
 import glm_.bool
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
@@ -16,6 +18,7 @@ import kool.rem
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memAddress
+import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
@@ -26,42 +29,42 @@ object GlTextureDsl {
     var name = 0
     var level = 0
 
-    inline fun image(internalFormat: gl.InternalFormat, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer) =
+    inline fun image(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
             image(0, internalFormat, width, format, type, pixels)
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer) =
+    inline fun image(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
             GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, memAddress(pixels))
 
-    inline fun image(internalFormat: gl.InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gli_.gl.TypeFormat, pixels: ByteBuffer) =
+    inline fun image(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
             image(0, internalFormat, size, format, type, pixels)
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer) =
+    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
             GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, memAddress(pixels))
 
-    inline fun image(internalFormat: gl.InternalFormat, size: Vec3i, format: gl.ExternalFormat, type: gli_.gl.TypeFormat, pixels: ByteBuffer) =
+    inline fun image(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
             image(0, internalFormat, size, format, type, pixels)
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer) =
+    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
             GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, memAddress(pixels))
 
     // null
 
-    inline fun image(internalFormat: gl.InternalFormat, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat) =
+    inline fun image(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat) =
             image(0, internalFormat, width, format, type)
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat) =
+    inline fun image(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat) =
             GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, NULL)
 
-    inline fun image(internalFormat: gl.InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gli_.gl.TypeFormat) =
+    inline fun image(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat) =
             image(0, internalFormat, size, format, type)
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat) =
+    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat) =
             GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, NULL)
 
-    inline fun image(internalFormat: gl.InternalFormat, size: Vec3i, format: gl.ExternalFormat, type: gli_.gl.TypeFormat) =
+    inline fun image(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat) =
             image(0, internalFormat, size, format, type)
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: gl.ExternalFormat, type: gl.TypeFormat) =
+    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat) =
             GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, NULL)
 
 
@@ -265,6 +268,122 @@ object GlTextureDsl {
     inline fun bufferSize(level: Int = this.level): Int = GL11C.glGetTexLevelParameteri(target.i, level, GL43C.GL_TEXTURE_BUFFER_SIZE)
 
     // -------------------------------------------
+
+    // --- [ glTexImage1D ] --- default target, proxy is basically useless, https://www.opengl.org/discussion_boards/showthread.php/182903-Texture-proxy-vs-just-allocating-it-and-check-for-OOM-condition
+
+    fun image1D(level: Int, internalFormat: InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage1D(level, internalFormat, width, format, type, pixels)
+
+    // --- [ glTexImage2D ] ---
+
+    fun image2D(level: Int, internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =  gln.gl.texImage2D(level, internalFormat, size, format, type, pixels)
+
+    // --- [ glCopyTexImage1D ] --- TODO custom InternalFormat?
+
+    fun copyImage1D(level: Int, internalFormat: InternalFormat, pos: Vec2i, width: Int) = gln.gl.copyTexImage1D(level, internalFormat, pos, width)
+
+    // --- [ glCopyTexImage2D ] ---
+
+    fun copyImage2D(level: Int, internalFormat: InternalFormat, pos: Vec2i, size: Vec2i) = gln.gl.copyTexImage2D(level, internalFormat, pos, size)
+
+    // --- [ glCopyTexSubImage1D ] ---
+
+    fun copySubImage1D(level: Int, xOffset: Int, pos: Vec2i, width: Int) = gln.gl.copyTexSubImage1D(level, xOffset, pos, width)
+
+    // --- [ glCopyTexSubImage2D ] ---
+
+    fun copySubImage2D(level: Int, offset: Vec2i, pos: Vec2i, size: Vec2i) = gln.gl.copyTexSubImage2D(level, offset, pos, size)
+
+    // --- [ glTexParameteri ] ---
+
+    fun parameter(name: TexParameter, param: Int) = gln.gl.texParameter(target, name, param)
+
+    // --- [ glTexParameterf ] ---
+
+    fun parameter(name: TexParameter, param: Float) = gln.gl.texParameter(target, name, param)
+
+    // --- [ glTexSubImage1D ] ---
+
+    fun subImage1D(level: Int, xOffset: Int, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer) = gln.gl.texSubImage1D(level, xOffset, width, format, type, pixels)
+
+    // --- [ glTexSubImage2D ] ---
+
+    fun subImage2D(target: TextureTarget, level: Int, offset: Vec2i, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer) = gln.gl.texSubImage2D(target, level, offset, size, format, type, pixels)
+
+    // default target
+
+    fun subImage2D(level: Int, offset: Vec2i, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer) = gln.gl.texSubImage2D(level, offset, size, format, type, pixels)
+
+    // ----- 1.2
+
+    // --- [ glTexImage3D ] ---
+
+    fun image3D(target: TextureTarget, level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(target, level, internalFormat, size, format, type, pixels)
+
+    // default target
+
+    fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(level, internalFormat, size, format, type, pixels)
+
+    // --- [ glTexSubImage3D ] ---
+
+    fun subImage3D(target: TextureTarget, level: Int, offset: Vec3i, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer) = gln.gl.texSubImage3D(target, level, offset, size, format, type, pixels)
+
+    // default target
+
+    fun subImage3D(level: Int, offset: Vec3i, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer) = gln.gl.texSubImage3D(level, offset, size, format, type, pixels)
+
+    // --- [ glCopyTexSubImage3D ] ---
+
+    fun copySubImage3D(target: TextureTarget, level: Int, offset: Vec3i, pos: Vec2i, size: Vec2i) = gln.gl.copyTexSubImage3D(target, level, offset, pos, size)
+
+    // default target
+
+    fun copySubImage3D(level: Int, offset: Vec3i, pos: Vec2i, size: Vec2i) = gln.gl.copyTexSubImage3D(level, offset, pos, size)
+
+    // ----- 1.3
+
+    // --- [ glCompressedTexImage3D ] ---
+
+    fun compressedImage3D(target: TextureTarget, level: Int, internalFormat: gl.InternalFormat, size: Vec3i, data: Buffer? = null) = gln.gl.compressedTexImage3D(target, level, internalFormat, size, data)
+
+    // --- default target
+
+    fun compressedImage3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, data: Buffer? = null) = gln.gl.compressedTexImage3D(level, internalFormat, size, data)
+
+    // --- [ glCompressedTexImage2D ] ---
+
+    fun compressedImage2D(target: TextureTarget, level: Int, internalFormat: gl.InternalFormat, size: Vec2i, data: Buffer? = null) = gln.gl.compressedTexImage2D(target, level, internalFormat, size, data)
+
+    // --- default target
+
+    fun compressedImage2D(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, data: Buffer? = null) = gln.gl.compressedTexImage2D()
+
+    // --- [ glCompressedTexImage1D ] ---
+
+    fun compressedImage1D(level: Int, internalFormat: gl.InternalFormat, width: Int, data: ByteBuffer? = null) = gln.gl.compressedTexImage1D(level, internalFormat, width, data)
+
+    // --- [ glCompressedTexSubImage3D ] ---
+
+    fun compressedSubImage3D(target: TextureTarget, level: Int, offset: Vec3i, size: Vec3i, format: gl.InternalFormat, data: ByteBuffer) = gln.gl.compressedTexSubImage3D(target, level, offset, size, format, data)
+
+    // --- default target
+
+    fun compressedSubImage3D(level: Int, offset: Vec3i, size: Vec3i, format: gl.InternalFormat, data: ByteBuffer) = gln.gl.compressedTexSubImage3D(level, offset, size, format, data)
+
+    // --- [ glCompressedTexSubImage2D ] ---
+
+    fun compressedSubImage2D(target: TextureTarget, level: Int, offset: Vec2i, size: Vec2i, format: gl.InternalFormat, data: ByteBuffer) = gln.gl.compressedTexSubImage2D(target, level, offset, size, format, data)
+
+    // --- default target
+
+    fun compressedSubImage2D(level: Int, offset: Vec2i, size: Vec2i, format: gl.InternalFormat, data: ByteBuffer) = gln.gl.compressedTexSubImage2D(level, offset, size, format, data)
+
+    // --- [ glCompressedTexSubImage1D ] ---
+
+    fun compressedSubImage1D(level: Int, offset: Int, width: Int, format: gl.InternalFormat, data: ByteBuffer) = gln.gl.compressedTexSubImage1D(level, offset, width, format, data)
+
+    // --- [ glGetCompressedTexImage ] ---
+
+    fun getCompressedImage(target: TextureTarget, level: Int, pixels: ByteBuffer) = gln.gl.getCompressedTexImage(target, level, pixels)
 
 //    inline fun gli_.Texture.image() { TODO
 //        val format = gli.gl.translate(format, swizzles)

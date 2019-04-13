@@ -392,34 +392,34 @@ inline class GlTexture(val name: Int = -1) {
 
     // --- [ glGetTexLevelParameteriv, glGetTexLevelParameterfv ] ---
 
-    inline fun width(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL11C.GL_TEXTURE_WIDTH)
-    inline fun height(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL11C.GL_TEXTURE_HEIGHT)
-    inline fun depth(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL12C.GL_TEXTURE_DEPTH)
-    inline fun size(level: Int = this.level): Vec3i = Vec3i(width(level), height(level), depth(level))
+    inline fun width(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL11C.GL_TEXTURE_WIDTH)
+    inline fun height(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL11C.GL_TEXTURE_HEIGHT)
+    inline fun depth(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL12C.GL_TEXTURE_DEPTH)
+    inline fun size(level: Int = 0): Vec3i = Vec3i(width(level), height(level), depth(level))
 
-    inline fun internalFormat(level: Int = this.level): InternalFormat = InternalFormat(GL45C.glGetTextureLevelParameteri(name, level, GL11C.GL_TEXTURE_INTERNAL_FORMAT))
+    inline fun internalFormat(level: Int = 0): InternalFormat = InternalFormat(GL45C.glGetTextureLevelParameteri(name, level, GL11C.GL_TEXTURE_INTERNAL_FORMAT))
 
-    inline fun redType(level: Int = this.level): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_RED_TYPE))
-    inline fun greenType(level: Int = this.level): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_GREEN_TYPE))
-    inline fun blueType(level: Int = this.level): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_BLUE_TYPE))
-    inline fun alphaType(level: Int = this.level): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_ALPHA_TYPE))
-    inline fun depthType(level: Int = this.level): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_DEPTH_TYPE))
+    inline fun redType(level: Int = 0): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_RED_TYPE))
+    inline fun greenType(level: Int = 0): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_GREEN_TYPE))
+    inline fun blueType(level: Int = 0): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_BLUE_TYPE))
+    inline fun alphaType(level: Int = 0): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_ALPHA_TYPE))
+    inline fun depthType(level: Int = 0): TextureComponentType = TextureComponentType(GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_DEPTH_TYPE))
     // TODO rgb(a)?
 
 
-    inline fun redSize(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_RED_SIZE)
-    inline fun greenSize(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_GREEN_SIZE)
-    inline fun blueSize(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_BLUE_SIZE)
-    inline fun alphaSize(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_ALPHA_SIZE)
-    inline fun depthSize(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_DEPTH_SIZE)
+    inline fun redSize(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_RED_SIZE)
+    inline fun greenSize(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_GREEN_SIZE)
+    inline fun blueSize(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_BLUE_SIZE)
+    inline fun alphaSize(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_ALPHA_SIZE)
+    inline fun depthSize(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL30C.GL_TEXTURE_DEPTH_SIZE)
     // TODO rgb(a)?
 
-    inline fun compressed(level: Int = this.level): Boolean = GL45C.glGetTextureLevelParameteri(name, level, GL13C.GL_TEXTURE_COMPRESSED).bool
+    inline fun compressed(level: Int = 0): Boolean = GL45C.glGetTextureLevelParameteri(name, level, GL13C.GL_TEXTURE_COMPRESSED).bool
 
-    inline fun compressedImageSize(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL13C.GL_TEXTURE_COMPRESSED_IMAGE_SIZE)
+    inline fun compressedImageSize(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL13C.GL_TEXTURE_COMPRESSED_IMAGE_SIZE)
 
-    inline fun bufferOffset(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL43C.GL_TEXTURE_BUFFER_OFFSET)
-    inline fun bufferSize(level: Int = this.level): Int = GL45C.glGetTextureLevelParameteri(name, level, GL43C.GL_TEXTURE_BUFFER_SIZE)
+    inline fun bufferOffset(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL43C.GL_TEXTURE_BUFFER_OFFSET)
+    inline fun bufferSize(level: Int = 0): Int = GL45C.glGetTextureLevelParameteri(name, level, GL43C.GL_TEXTURE_BUFFER_SIZE)
 
 
     companion object {

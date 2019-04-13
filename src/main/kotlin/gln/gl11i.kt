@@ -7,7 +7,6 @@
 package gln
 
 import gli_.gl
-import glm_.bool
 import glm_.i
 import glm_.vec2.Vec2i
 import glm_.vec4.Vec4
@@ -18,7 +17,6 @@ import gln.identifiers.GlTextures
 import kool.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11C
-import org.lwjgl.opengl.GL12
 import org.lwjgl.system.MemoryUtil.NULL
 import java.awt.Color
 import java.nio.Buffer
@@ -863,21 +861,6 @@ interface gl11i {
      */
     fun copyTexImage1D(level: Int, internalFormat: InternalFormat, pos: Vec2i, width: Int) = GL11C.glCopyTexImage1D(GL11C.GL_TEXTURE_1D, level, internalFormat.i, pos.x, pos.y, width, 0)
 
-    /**
-     * Defines a one-dimensional texel array in exactly the manner of {@link #glTexImage1D TexImage1D}, except that the image data are taken from the framebuffer rather
-     * than from client memory. For the purposes of decoding the texture image, {@code CopyTexImage1D} is equivalent to calling {@link #glCopyTexImage2D CopyTexImage2D}
-     * with corresponding arguments and height of 1, except that the height of the image is always 1, regardless of the value of border. level, internalformat,
-     * and border are specified using the same values, with the same meanings, as the corresponding arguments of {@link #glTexImage1D TexImage1D}. The constraints on
-     * width and border are exactly those of the corresponding arguments of {@link #glTexImage1D TexImage1D}.
-     *
-     * @param internalFormat the texture internal format. See {@link #glTexImage2D TexImage2D} for a list of supported formats.
-     * @param pos            the lower-left framebuffer pixel coordinate
-     * @param width          the texture width
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glCopyTexImage1D">Reference Page</a>
-     */
-    fun copyTexImage1D(internalFormat: InternalFormat, pos: Vec2i, width: Int) = GL11C.glCopyTexImage1D(GL11C.GL_TEXTURE_1D, 0, internalFormat.i, pos.x, pos.y, width, 0)
-
     // --- [ glCopyTexImage2D ] ---
 
     /**
@@ -907,33 +890,7 @@ interface gl11i {
      */
     fun copyTexImage2D(target: TextureTarget, level: Int, internalFormat: InternalFormat, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexImage2D(target.i, level, internalFormat.i, pos.x, pos.y, size.x, size.y, 0)
 
-    /**
-     * Defines a two-dimensional texel array in exactly the manner of {@link #glTexImage2D TexImage2D}, except that the image data are taken from the framebuffer rather
-     * than from client memory.
-     *
-     * <p>{@code x}, {@code y}, {@code width}, and {@code height} correspond precisely to the corresponding arguments to {@link #glReadPixels ReadPixels}; they specify the
-     * image's width and height, and the lower left (x, y) coordinates of the framebuffer region to be copied.</p>
-     *
-     * <p>The image is taken from the framebuffer exactly as if these arguments were passed to {@link GL11#glCopyPixels CopyPixels} with argument type set to {@link #GL_COLOR COLOR},
-     * {@link #GL_DEPTH DEPTH}, or {@link GL30#GL_DEPTH_STENCIL DEPTH_STENCIL}, depending on {@code internalformat}. RGBA data is taken from the current color buffer, while depth
-     * component and stencil index data are taken from the depth and stencil buffers, respectively.</p>
-     *
-     * <p>Subsequent processing is identical to that described for {@link #glTexImage2D TexImage2D}, beginning with clamping of the R, G, B, A, or depth values, and masking
-     * of the stencil index values from the resulting pixel groups. Parameters {@code level}, {@code internalformat}, and {@code border} are specified using
-     * the same values, with the same meanings, as the corresponding arguments of {@link #glTexImage2D TexImage2D}.</p>
-     *
-     * <p>The constraints on width, height, and border are exactly those for the corresponding arguments of {@link #glTexImage2D TexImage2D}.</p>
-     *
-     * @param target         the texture target. One of:<br><table><tr><td>{@link #GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr></table>
-     * @param internalFormat the texture internal format. See {@link #glTexImage2D TexImage2D} for a list of supported formats.
-     * @param pos            the lower-left framebuffer pixel coordinate
-     * @param size           the texture size
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glCopyTexImage2D">Reference Page</a>
-     */
-    fun copyTexImage2D(target: TextureTarget, internalFormat: InternalFormat, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexImage2D(target.i, 0, internalFormat.i, pos.x, pos.y, size.x, size.y, 0)
-
-    // --- [ glCopyTexImage2D ] --- default target
+    // default target
 
     /**
      * Defines a two-dimensional texel array in exactly the manner of {@link #glTexImage2D TexImage2D}, except that the image data are taken from the framebuffer rather
@@ -961,31 +918,6 @@ interface gl11i {
      */
     fun copyTexImage2D(level: Int, internalFormat: InternalFormat, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexImage2D(GL11C.GL_TEXTURE_2D, level, internalFormat.i, pos.x, pos.y, size.x, size.y, 0)
 
-    /**
-     * Defines a two-dimensional texel array in exactly the manner of {@link #glTexImage2D TexImage2D}, except that the image data are taken from the framebuffer rather
-     * than from client memory.
-     *
-     * <p>{@code x}, {@code y}, {@code width}, and {@code height} correspond precisely to the corresponding arguments to {@link #glReadPixels ReadPixels}; they specify the
-     * image's width and height, and the lower left (x, y) coordinates of the framebuffer region to be copied.</p>
-     *
-     * <p>The image is taken from the framebuffer exactly as if these arguments were passed to {@link GL11#glCopyPixels CopyPixels} with argument type set to {@link #GL_COLOR COLOR},
-     * {@link #GL_DEPTH DEPTH}, or {@link GL30#GL_DEPTH_STENCIL DEPTH_STENCIL}, depending on {@code internalformat}. RGBA data is taken from the current color buffer, while depth
-     * component and stencil index data are taken from the depth and stencil buffers, respectively.</p>
-     *
-     * <p>Subsequent processing is identical to that described for {@link #glTexImage2D TexImage2D}, beginning with clamping of the R, G, B, A, or depth values, and masking
-     * of the stencil index values from the resulting pixel groups. Parameters {@code level}, {@code internalformat}, and {@code border} are specified using
-     * the same values, with the same meanings, as the corresponding arguments of {@link #glTexImage2D TexImage2D}.</p>
-     *
-     * <p>The constraints on width, height, and border are exactly those for the corresponding arguments of {@link #glTexImage2D TexImage2D}.</p>
-     *
-     * @param internalFormat the texture internal format. See {@link #glTexImage2D TexImage2D} for a list of supported formats.
-     * @param pos            the lower-left framebuffer pixel coordinate
-     * @param size           the texture size
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glCopyTexImage2D">Reference Page</a>
-     */
-    fun copyTexImage2D(internalFormat: InternalFormat, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexImage2D(GL11C.GL_TEXTURE_2D, 0, internalFormat.i, pos.x, pos.y, size.x, size.y, 0)
-
     // --- [ glCopyTexSubImage1D ] ---
 
     /**
@@ -1001,19 +933,6 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCopyTexSubImage1D">Reference Page</a>
      */
     fun copyTexSubImage1D(level: Int, xOffset: Int, pos: Vec2i, width: Int) = GL11C.glCopyTexSubImage1D(GL11C.GL_TEXTURE_1D, level, xOffset, pos.x, pos.y, width)
-
-    /**
-     * Respecifies a rectangular subregion of an existing texel array. No change is made to the {@code internalformat}, {@code width} or {@code border}
-     * parameters of the specified texel array, nor is any change made to texel values outside the specified subregion. See {@link #glCopyTexImage1D CopyTexImage1D} for more
-     * details.
-     *
-     * @param xOffset the left texel coordinate of the texture subregion to update
-     * @param pos     the lower-left framebuffer pixel coordinate
-     * @param width   the texture subregion width
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glCopyTexSubImage1D">Reference Page</a>
-     */
-    fun copyTexSubImage1D(xOffset: Int, pos: Vec2i, width: Int) = GL11C.glCopyTexSubImage1D(GL11C.GL_TEXTURE_1D, 0, xOffset, pos.x, pos.y, width)
 
     // --- [ glCopyTexSubImage2D ] ---
 
@@ -1032,21 +951,7 @@ interface gl11i {
      */
     fun copyTexSubImage2D(target: TextureTarget, level: Int, offset: Vec2i, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexSubImage2D(target.i, level, offset.x, offset.y, pos.x, pos.y, size.x, size.y)
 
-    /**
-     * Respecifies a rectangular subregion of an existing texel array. No change is made to the {@code internalformat}, {@code width}, {@code height},
-     * or {@code border} parameters of the specified texel array, nor is any change made to texel values outside the specified subregion. See
-     * {@link #glCopyTexImage2D CopyTexImage2D} for more details.
-     *
-     * @param target  the texture target. One of:<br><table><tr><td>{@link #GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr></table>
-     * @param offset  the lower-left texel coordinate of the texture subregion to update
-     * @param pos     the lower-left framebuffer pixel coordinate
-     * @param size    the texture subregion size
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glCopyTexSubImage2D">Reference Page</a>
-     */
-    fun copyTexSubImage2D(target: TextureTarget, offset: Vec2i, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexSubImage2D(target.i, 0, offset.x, offset.y, pos.x, pos.y, size.x, size.y)
-
-    // --- [ glCopyTexSubImage2D ] --- default target
+    // default target
 
     /**
      * Respecifies a rectangular subregion of an existing texel array. No change is made to the {@code internalformat}, {@code width}, {@code height},
@@ -1062,31 +967,18 @@ interface gl11i {
      */
     fun copyTexSubImage2D(level: Int, offset: Vec2i, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexSubImage2D(GL11C.GL_TEXTURE_2D, level, offset.x, offset.y, pos.x, pos.y, size.x, size.y)
 
-    /**
-     * Respecifies a rectangular subregion of an existing texel array. No change is made to the {@code internalformat}, {@code width}, {@code height},
-     * or {@code border} parameters of the specified texel array, nor is any change made to texel values outside the specified subregion. See
-     * {@link #glCopyTexImage2D CopyTexImage2D} for more details.
-     *
-     * @param offset  the lower-left texel coordinate of the texture subregion to update
-     * @param pos     the lower-left framebuffer pixel coordinate
-     * @param size    the texture subregion size
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glCopyTexSubImage2D">Reference Page</a>
-     */
-    fun copyTexSubImage2D(offset: Vec2i, pos: Vec2i, size: Vec2i) = GL11C.glCopyTexSubImage2D(GL11C.GL_TEXTURE_2D, 0, offset.x, offset.y, pos.x, pos.y, size.x, size.y)
-
     // --- [ glTexParameteri ] ---
 
     /**
      * Sets the integer value of a texture parameter, which controls how the texel array is treated when specified or changed, and when applied to a fragment.
      *
      * @param target the texture target. One of:<br><table><tr><td>{@link #GL_TEXTURE_1D TEXTURE_1D}</td><td>{@link #GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL12#GL_TEXTURE_3D TEXTURE_3D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td></tr><tr><td>{@link GL30#GL_TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td><td>{@link GL40#GL_TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}</td></tr><tr><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}</td><td>{@link GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}</td></tr></table>
-     * @param pName  the parameter to set. One of:<br><table><tr><td>{@link GL12#GL_TEXTURE_BASE_LEVEL TEXTURE_BASE_LEVEL}</td><td>{@link #GL_TEXTURE_BORDER_COLOR TEXTURE_BORDER_COLOR}</td><td>{@link GL14#GL_TEXTURE_COMPARE_MODE TEXTURE_COMPARE_MODE}</td><td>{@link GL14#GL_TEXTURE_COMPARE_FUNC TEXTURE_COMPARE_FUNC}</td></tr><tr><td>{@link GL14#GL_TEXTURE_LOD_BIAS TEXTURE_LOD_BIAS}</td><td>{@link #GL_TEXTURE_MAG_FILTER TEXTURE_MAG_FILTER}</td><td>{@link GL12#GL_TEXTURE_MAX_LEVEL TEXTURE_MAX_LEVEL}</td><td>{@link GL12#GL_TEXTURE_MAX_LOD TEXTURE_MAX_LOD}</td></tr><tr><td>{@link #GL_TEXTURE_MIN_FILTER TEXTURE_MIN_FILTER}</td><td>{@link GL12#GL_TEXTURE_MIN_LOD TEXTURE_MIN_LOD}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_R TEXTURE_SWIZZLE_R}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_G TEXTURE_SWIZZLE_G}</td></tr><tr><td>{@link GL33#GL_TEXTURE_SWIZZLE_B TEXTURE_SWIZZLE_B}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_A TEXTURE_SWIZZLE_A}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_RGBA TEXTURE_SWIZZLE_RGBA}</td><td>{@link #GL_TEXTURE_WRAP_S TEXTURE_WRAP_S}</td></tr><tr><td>{@link #GL_TEXTURE_WRAP_T TEXTURE_WRAP_T}</td><td>{@link GL12#GL_TEXTURE_WRAP_R TEXTURE_WRAP_R}</td><td>{@link GL14#GL_DEPTH_TEXTURE_MODE DEPTH_TEXTURE_MODE}</td><td>{@link GL14#GL_GENERATE_MIPMAP GENERATE_MIPMAP}</td></tr></table>
+     * @param name  the parameter to set. One of:<br><table><tr><td>{@link GL12#GL_TEXTURE_BASE_LEVEL TEXTURE_BASE_LEVEL}</td><td>{@link #GL_TEXTURE_BORDER_COLOR TEXTURE_BORDER_COLOR}</td><td>{@link GL14#GL_TEXTURE_COMPARE_MODE TEXTURE_COMPARE_MODE}</td><td>{@link GL14#GL_TEXTURE_COMPARE_FUNC TEXTURE_COMPARE_FUNC}</td></tr><tr><td>{@link GL14#GL_TEXTURE_LOD_BIAS TEXTURE_LOD_BIAS}</td><td>{@link #GL_TEXTURE_MAG_FILTER TEXTURE_MAG_FILTER}</td><td>{@link GL12#GL_TEXTURE_MAX_LEVEL TEXTURE_MAX_LEVEL}</td><td>{@link GL12#GL_TEXTURE_MAX_LOD TEXTURE_MAX_LOD}</td></tr><tr><td>{@link #GL_TEXTURE_MIN_FILTER TEXTURE_MIN_FILTER}</td><td>{@link GL12#GL_TEXTURE_MIN_LOD TEXTURE_MIN_LOD}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_R TEXTURE_SWIZZLE_R}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_G TEXTURE_SWIZZLE_G}</td></tr><tr><td>{@link GL33#GL_TEXTURE_SWIZZLE_B TEXTURE_SWIZZLE_B}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_A TEXTURE_SWIZZLE_A}</td><td>{@link GL33#GL_TEXTURE_SWIZZLE_RGBA TEXTURE_SWIZZLE_RGBA}</td><td>{@link #GL_TEXTURE_WRAP_S TEXTURE_WRAP_S}</td></tr><tr><td>{@link #GL_TEXTURE_WRAP_T TEXTURE_WRAP_T}</td><td>{@link GL12#GL_TEXTURE_WRAP_R TEXTURE_WRAP_R}</td><td>{@link GL14#GL_DEPTH_TEXTURE_MODE DEPTH_TEXTURE_MODE}</td><td>{@link GL14#GL_GENERATE_MIPMAP GENERATE_MIPMAP}</td></tr></table>
      * @param param  the parameter value
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameteri">Reference Page</a>
      */
-    fun texParameter(target: TextureTarget, pName: TexParameter, param: Int) = GL11C.glTexParameteri(target.i, pName.i, param)
+    fun texParameter(target: TextureTarget, name: TexParameter, param: Int) = GL11C.glTexParameteri(target.i, name.i, param)
 
     // --- [ glTexParameterf ] ---
 
@@ -1094,12 +986,12 @@ interface gl11i {
      * Float version of {@link #glTexParameteri TexParameteri}.
      *
      * @param target the texture target
-     * @param pName  the parameter to set
+     * @param name  the parameter to set
      * @param param  the parameter value
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameterf">Reference Page</a>
      */
-    fun texParameter(target: TextureTarget, pName: TexParameter, param: Float) = GL11C.glTexParameterf(target.i, pName.i, param)
+    fun texParameter(target: TextureTarget, name: TexParameter, param: Float) = GL11C.glTexParameterf(target.i, name.i, param)
 
     // --- [ glTexSubImage1D ] ---
 
@@ -1117,20 +1009,6 @@ interface gl11i {
      */
     fun texSubImage1D(level: Int, xOffset: Int, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
         GL11C.nglTexSubImage1D(GL11C.GL_TEXTURE_1D, level, xOffset, width, format.i, type.i, pixels.adr)
-
-    /**
-     * One-dimensional version of {@link #glTexSubImage2D TexSubImage2D}.
-     *
-     * @param xOffset the left coordinate of the texel subregion
-     * @param width   the subregion width
-     * @param format  the pixel data format. One of:<br><table><tr><td>{@link #GL_RED RED}</td><td>{@link #GL_GREEN GREEN}</td><td>{@link #GL_BLUE BLUE}</td><td>{@link #GL_ALPHA ALPHA}</td><td>{@link GL30#GL_RG RG}</td><td>{@link #GL_RGB RGB}</td><td>{@link #GL_RGBA RGBA}</td><td>{@link GL12#GL_BGR BGR}</td></tr><tr><td>{@link GL12#GL_BGRA BGRA}</td><td>{@link GL30#GL_RED_INTEGER RED_INTEGER}</td><td>{@link GL30#GL_GREEN_INTEGER GREEN_INTEGER}</td><td>{@link GL30#GL_BLUE_INTEGER BLUE_INTEGER}</td><td>{@link GL30#GL_ALPHA_INTEGER ALPHA_INTEGER}</td><td>{@link GL30#GL_RG_INTEGER RG_INTEGER}</td><td>{@link GL30#GL_RGB_INTEGER RGB_INTEGER}</td><td>{@link GL30#GL_RGBA_INTEGER RGBA_INTEGER}</td></tr><tr><td>{@link GL30#GL_BGR_INTEGER BGR_INTEGER}</td><td>{@link GL30#GL_BGRA_INTEGER BGRA_INTEGER}</td><td>{@link #GL_STENCIL_INDEX STENCIL_INDEX}</td><td>{@link #GL_DEPTH_COMPONENT DEPTH_COMPONENT}</td><td>{@link GL30#GL_DEPTH_STENCIL DEPTH_STENCIL}</td></tr></table>
-     * @param type    the pixel data type. One of:<br><table><tr><td>{@link #GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link #GL_BYTE BYTE}</td><td>{@link #GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link #GL_SHORT SHORT}</td></tr><tr><td>{@link #GL_UNSIGNED_INT UNSIGNED_INT}</td><td>{@link #GL_INT INT}</td><td>{@link GL30#GL_HALF_FLOAT HALF_FLOAT}</td><td>{@link #GL_FLOAT FLOAT}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_BYTE_3_3_2 UNSIGNED_BYTE_3_3_2}</td><td>{@link GL12#GL_UNSIGNED_BYTE_2_3_3_REV UNSIGNED_BYTE_2_3_3_REV}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_6_5 UNSIGNED_SHORT_5_6_5}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_6_5_REV UNSIGNED_SHORT_5_6_5_REV}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_SHORT_4_4_4_4 UNSIGNED_SHORT_4_4_4_4}</td><td>{@link GL12#GL_UNSIGNED_SHORT_4_4_4_4_REV UNSIGNED_SHORT_4_4_4_4_REV}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_5_5_1 UNSIGNED_SHORT_5_5_5_1}</td><td>{@link GL12#GL_UNSIGNED_SHORT_1_5_5_5_REV UNSIGNED_SHORT_1_5_5_5_REV}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_INT_8_8_8_8 UNSIGNED_INT_8_8_8_8}</td><td>{@link GL12#GL_UNSIGNED_INT_8_8_8_8_REV UNSIGNED_INT_8_8_8_8_REV}</td><td>{@link GL12#GL_UNSIGNED_INT_10_10_10_2 UNSIGNED_INT_10_10_10_2}</td><td>{@link GL12#GL_UNSIGNED_INT_2_10_10_10_REV UNSIGNED_INT_2_10_10_10_REV}</td></tr><tr><td>{@link GL30#GL_UNSIGNED_INT_24_8 UNSIGNED_INT_24_8}</td><td>{@link GL30#GL_UNSIGNED_INT_10F_11F_11F_REV UNSIGNED_INT_10F_11F_11F_REV}</td><td>{@link GL30#GL_UNSIGNED_INT_5_9_9_9_REV UNSIGNED_INT_5_9_9_9_REV}</td><td>{@link GL30#GL_FLOAT_32_UNSIGNED_INT_24_8_REV FLOAT_32_UNSIGNED_INT_24_8_REV}</td></tr></table>
-     * @param pixels  the pixel data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glTexSubImage1D">Reference Page</a>
-     */
-    fun texSubImage1D(xOffset: Int, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
-        GL11C.nglTexSubImage1D(GL11C.GL_TEXTURE_1D, 0, xOffset, width, format.i, type.i, pixels.adr)
 
     // --- [ glTexSubImage2D ] ---
 
@@ -1151,23 +1029,7 @@ interface gl11i {
     fun texSubImage2D(target: TextureTarget, level: Int, offset: Vec2i, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
         GL11C.nglTexSubImage2D(target.i, level, offset.x, offset.y, size.x, size.y, format.i, type.i, pixels.adr)
 
-    /**
-     * Respecifies a rectangular subregion of an existing texel array. No change is made to the internalformat, width, height, depth, or border parameters of
-     * the specified texel array, nor is any change made to texel values outside the specified subregion.
-     *
-     * @param target  the texture target. One of:<br><table><tr><td>{@link #GL_TEXTURE_2D TEXTURE_2D}</td><td>{@link GL30#GL_TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}</td><td>{@link GL31#GL_TEXTURE_RECTANGLE TEXTURE_RECTANGLE}</td><td>{@link GL13#GL_TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}</td></tr></table>
-     * @param offset  the bottom-left coordinate of the texel subregion
-     * @param size    the subregion size
-     * @param format  the pixel data format. One of:<br><table><tr><td>{@link #GL_RED RED}</td><td>{@link #GL_GREEN GREEN}</td><td>{@link #GL_BLUE BLUE}</td><td>{@link #GL_ALPHA ALPHA}</td><td>{@link GL30#GL_RG RG}</td><td>{@link #GL_RGB RGB}</td><td>{@link #GL_RGBA RGBA}</td><td>{@link GL12#GL_BGR BGR}</td></tr><tr><td>{@link GL12#GL_BGRA BGRA}</td><td>{@link GL30#GL_RED_INTEGER RED_INTEGER}</td><td>{@link GL30#GL_GREEN_INTEGER GREEN_INTEGER}</td><td>{@link GL30#GL_BLUE_INTEGER BLUE_INTEGER}</td><td>{@link GL30#GL_ALPHA_INTEGER ALPHA_INTEGER}</td><td>{@link GL30#GL_RG_INTEGER RG_INTEGER}</td><td>{@link GL30#GL_RGB_INTEGER RGB_INTEGER}</td><td>{@link GL30#GL_RGBA_INTEGER RGBA_INTEGER}</td></tr><tr><td>{@link GL30#GL_BGR_INTEGER BGR_INTEGER}</td><td>{@link GL30#GL_BGRA_INTEGER BGRA_INTEGER}</td><td>{@link #GL_STENCIL_INDEX STENCIL_INDEX}</td><td>{@link #GL_DEPTH_COMPONENT DEPTH_COMPONENT}</td><td>{@link GL30#GL_DEPTH_STENCIL DEPTH_STENCIL}</td></tr></table>
-     * @param type    the pixel data type. One of:<br><table><tr><td>{@link #GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link #GL_BYTE BYTE}</td><td>{@link #GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link #GL_SHORT SHORT}</td></tr><tr><td>{@link #GL_UNSIGNED_INT UNSIGNED_INT}</td><td>{@link #GL_INT INT}</td><td>{@link GL30#GL_HALF_FLOAT HALF_FLOAT}</td><td>{@link #GL_FLOAT FLOAT}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_BYTE_3_3_2 UNSIGNED_BYTE_3_3_2}</td><td>{@link GL12#GL_UNSIGNED_BYTE_2_3_3_REV UNSIGNED_BYTE_2_3_3_REV}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_6_5 UNSIGNED_SHORT_5_6_5}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_6_5_REV UNSIGNED_SHORT_5_6_5_REV}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_SHORT_4_4_4_4 UNSIGNED_SHORT_4_4_4_4}</td><td>{@link GL12#GL_UNSIGNED_SHORT_4_4_4_4_REV UNSIGNED_SHORT_4_4_4_4_REV}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_5_5_1 UNSIGNED_SHORT_5_5_5_1}</td><td>{@link GL12#GL_UNSIGNED_SHORT_1_5_5_5_REV UNSIGNED_SHORT_1_5_5_5_REV}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_INT_8_8_8_8 UNSIGNED_INT_8_8_8_8}</td><td>{@link GL12#GL_UNSIGNED_INT_8_8_8_8_REV UNSIGNED_INT_8_8_8_8_REV}</td><td>{@link GL12#GL_UNSIGNED_INT_10_10_10_2 UNSIGNED_INT_10_10_10_2}</td><td>{@link GL12#GL_UNSIGNED_INT_2_10_10_10_REV UNSIGNED_INT_2_10_10_10_REV}</td></tr><tr><td>{@link GL30#GL_UNSIGNED_INT_24_8 UNSIGNED_INT_24_8}</td><td>{@link GL30#GL_UNSIGNED_INT_10F_11F_11F_REV UNSIGNED_INT_10F_11F_11F_REV}</td><td>{@link GL30#GL_UNSIGNED_INT_5_9_9_9_REV UNSIGNED_INT_5_9_9_9_REV}</td><td>{@link GL30#GL_FLOAT_32_UNSIGNED_INT_24_8_REV FLOAT_32_UNSIGNED_INT_24_8_REV}</td></tr></table>
-     * @param pixels  the pixel data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glTexSubImage2D">Reference Page</a>
-     */
-    fun texSubImage2D(target: TextureTarget, offset: Vec2i, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
-        GL11C.nglTexSubImage2D(target.i, 0, offset.x, offset.y, size.x, size.y, format.i, type.i, pixels.adr)
-
-    // --- [ glTexSubImage2D ] --- default target
+    // default target
 
     /**
      * Respecifies a rectangular subregion of an existing texel array. No change is made to the internalformat, width, height, depth, or border parameters of
@@ -1184,21 +1046,6 @@ interface gl11i {
      */
     fun texSubImage2D(level: Int, offset: Vec2i, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
         GL11C.nglTexSubImage2D(GL11C.GL_TEXTURE_2D, level, offset.x, offset.y, size.x, size.y, format.i, type.i, pixels.adr)
-
-    /**
-     * Respecifies a rectangular subregion of an existing texel array. No change is made to the internalformat, width, height, depth, or border parameters of
-     * the specified texel array, nor is any change made to texel values outside the specified subregion.
-     *
-     * @param offset  the bottom-left coordinate of the texel subregion
-     * @param size    the subregion size
-     * @param format  the pixel data format. One of:<br><table><tr><td>{@link #GL_RED RED}</td><td>{@link #GL_GREEN GREEN}</td><td>{@link #GL_BLUE BLUE}</td><td>{@link #GL_ALPHA ALPHA}</td><td>{@link GL30#GL_RG RG}</td><td>{@link #GL_RGB RGB}</td><td>{@link #GL_RGBA RGBA}</td><td>{@link GL12#GL_BGR BGR}</td></tr><tr><td>{@link GL12#GL_BGRA BGRA}</td><td>{@link GL30#GL_RED_INTEGER RED_INTEGER}</td><td>{@link GL30#GL_GREEN_INTEGER GREEN_INTEGER}</td><td>{@link GL30#GL_BLUE_INTEGER BLUE_INTEGER}</td><td>{@link GL30#GL_ALPHA_INTEGER ALPHA_INTEGER}</td><td>{@link GL30#GL_RG_INTEGER RG_INTEGER}</td><td>{@link GL30#GL_RGB_INTEGER RGB_INTEGER}</td><td>{@link GL30#GL_RGBA_INTEGER RGBA_INTEGER}</td></tr><tr><td>{@link GL30#GL_BGR_INTEGER BGR_INTEGER}</td><td>{@link GL30#GL_BGRA_INTEGER BGRA_INTEGER}</td><td>{@link #GL_STENCIL_INDEX STENCIL_INDEX}</td><td>{@link #GL_DEPTH_COMPONENT DEPTH_COMPONENT}</td><td>{@link GL30#GL_DEPTH_STENCIL DEPTH_STENCIL}</td></tr></table>
-     * @param type    the pixel data type. One of:<br><table><tr><td>{@link #GL_UNSIGNED_BYTE UNSIGNED_BYTE}</td><td>{@link #GL_BYTE BYTE}</td><td>{@link #GL_UNSIGNED_SHORT UNSIGNED_SHORT}</td><td>{@link #GL_SHORT SHORT}</td></tr><tr><td>{@link #GL_UNSIGNED_INT UNSIGNED_INT}</td><td>{@link #GL_INT INT}</td><td>{@link GL30#GL_HALF_FLOAT HALF_FLOAT}</td><td>{@link #GL_FLOAT FLOAT}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_BYTE_3_3_2 UNSIGNED_BYTE_3_3_2}</td><td>{@link GL12#GL_UNSIGNED_BYTE_2_3_3_REV UNSIGNED_BYTE_2_3_3_REV}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_6_5 UNSIGNED_SHORT_5_6_5}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_6_5_REV UNSIGNED_SHORT_5_6_5_REV}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_SHORT_4_4_4_4 UNSIGNED_SHORT_4_4_4_4}</td><td>{@link GL12#GL_UNSIGNED_SHORT_4_4_4_4_REV UNSIGNED_SHORT_4_4_4_4_REV}</td><td>{@link GL12#GL_UNSIGNED_SHORT_5_5_5_1 UNSIGNED_SHORT_5_5_5_1}</td><td>{@link GL12#GL_UNSIGNED_SHORT_1_5_5_5_REV UNSIGNED_SHORT_1_5_5_5_REV}</td></tr><tr><td>{@link GL12#GL_UNSIGNED_INT_8_8_8_8 UNSIGNED_INT_8_8_8_8}</td><td>{@link GL12#GL_UNSIGNED_INT_8_8_8_8_REV UNSIGNED_INT_8_8_8_8_REV}</td><td>{@link GL12#GL_UNSIGNED_INT_10_10_10_2 UNSIGNED_INT_10_10_10_2}</td><td>{@link GL12#GL_UNSIGNED_INT_2_10_10_10_REV UNSIGNED_INT_2_10_10_10_REV}</td></tr><tr><td>{@link GL30#GL_UNSIGNED_INT_24_8 UNSIGNED_INT_24_8}</td><td>{@link GL30#GL_UNSIGNED_INT_10F_11F_11F_REV UNSIGNED_INT_10F_11F_11F_REV}</td><td>{@link GL30#GL_UNSIGNED_INT_5_9_9_9_REV UNSIGNED_INT_5_9_9_9_REV}</td><td>{@link GL30#GL_FLOAT_32_UNSIGNED_INT_24_8_REV FLOAT_32_UNSIGNED_INT_24_8_REV}</td></tr></table>
-     * @param pixels  the pixel data
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glTexSubImage2D">Reference Page</a>
-     */
-    fun texSubImage2D(offset: Vec2i, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
-        GL11C.nglTexSubImage2D(GL11C.GL_TEXTURE_2D, 0, offset.x, offset.y, size.x, size.y, format.i, type.i, pixels.adr)
 
     // --- [ glViewport ] ---
 
