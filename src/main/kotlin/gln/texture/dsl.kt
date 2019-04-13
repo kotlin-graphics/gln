@@ -355,7 +355,7 @@ object GlTextureDsl {
 
     // --- default target
 
-    fun compressedImage2D(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, data: Buffer? = null) = gln.gl.compressedTexImage2D()
+    fun compressedImage2D(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, data: Buffer? = null) = gln.gl.compressedTexImage2D(level, internalFormat, size, data)
 
     // --- [ glCompressedTexImage1D ] ---
 
