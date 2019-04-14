@@ -1,7 +1,6 @@
 package gln
 
 import glm_.L
-import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import glm_.vec4.Vec4i
@@ -9,16 +8,10 @@ import glm_.vec4.Vec4ui
 import gln.framebuffer.GlFramebuffer
 import gln.framebuffer.GlFramebuffers
 import gln.identifiers.*
-import gln.program.GlPipeline
-import gln.program.GlPipelines
 import gln.renderbuffer.GlRenderbuffer
 import gln.renderbuffer.GlRenderbuffers
-import gln.sampler.GlSampler
-import gln.sampler.GlSamplers
 import gln.transformFeedback.GlTransformFeedback
 import gln.transformFeedback.GlTransformFeedbacks
-import gln.vertexArray.GlVertexArray
-import gln.vertexArray.GlVertexArrays
 import kool.Ptr
 import kool.adr
 import kool.rem
@@ -69,7 +62,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClipControl">Reference Page</a>
      */
-    fun clipControl(origin: ClipOrigin, depth: ClipDepthMode) = GL45C.glClipControl(origin.i, depth.i)
+    fun clipControl(origin: ControlOrigin, depth: ClipDepthMode) = GL45C.glClipControl(origin.i, depth.i)
 
     // --- [ glCreateTransformFeedbacks ] ---
 

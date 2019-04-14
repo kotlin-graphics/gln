@@ -129,63 +129,16 @@ interface gl14i {
         GL14C.nglMultiDrawElements(GL11C.GL_TRIANGLES, count.adr, type.i, indices.adr, count.rem)
 
     // --- [ glPointParameterf ] ---
-    // glGetSet
+
+    var pointFadeThresholdSize: Float
+        get() = GL11C.glGetFloat(GL20.GL_POINT_FADE_THRESHOLD_SIZE)
+        set(value) = GL14C.glPointParameterf(GL20.GL_POINT_FADE_THRESHOLD_SIZE, value)
 
     // --- [ glPointParameteri ] ---
 
-    /**
-     * Integer version of {@link #glPointParameterf PointParameterf}.
-     *
-     * @param pname the parameter to set. Must be:<br><table><tr><td>{@link #GL_POINT_FADE_THRESHOLD_SIZE POINT_FADE_THRESHOLD_SIZE}</td></tr></table>
-     * @param param the parameter value
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glPointParameteri">Reference Page</a>
-     */
-    var pointSpriteCoordOrigin: PointSpriteCoordOrigin
-        get() = PointSpriteCoordOrigin(GL11C.glGetInteger(GL20.GL_POINT_SPRITE_COORD_ORIGIN))
+    var pointSpriteCoordOrigin: ControlOrigin
+        get() = ControlOrigin(GL11C.glGetInteger(GL20.GL_POINT_SPRITE_COORD_ORIGIN))
         set(value) = GL14C.glPointParameteri(GL20.GL_POINT_SPRITE_COORD_ORIGIN, value.i)
-
-    // --- [ glPointParameterfv ] ---
-
-//    /** Unsafe version of: {@link #glPointParameterfv PointParameterfv} */
-//    public static native void nglPointParameterfv(int pname, long params);
-//
-//    /**
-//     * Pointer version of {@link #glPointParameterf PointParameterf}.
-//     *
-//     * @param pname  the parameter to set
-//     * @param params the parameter value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glPointParameter">Reference Page</a>
-//     */
-//    public static void glPointParameterfv(@NativeType("GLenum") int pname, @NativeType("GLfloat const *") FloatBuffer params)
-//    {
-//        if (CHECKS) {
-//            check(params, 3);
-//        }
-//        nglPointParameterfv(pname, memAddress(params));
-//    }
-//
-//    // --- [ glPointParameteriv ] ---
-//
-//    /** Unsafe version of: {@link #glPointParameteriv PointParameteriv} */
-//    public static native void nglPointParameteriv(int pname, long params);
-//
-//    /**
-//     * Pointer version of {@link #glPointParameteri PointParameteri}.
-//     *
-//     * @param pname  the parameter to set
-//     * @param params the parameter value
-//     *
-//     * @see <a target="_blank" href="http://docs.gl/gl4/glPointParameter">Reference Page</a>
-//     */
-//    public static void glPointParameteriv(@NativeType("GLenum") int pname, @NativeType("GLint const *") IntBuffer params)
-//    {
-//        if (CHECKS) {
-//            check(params, 3);
-//        }
-//        nglPointParameteriv(pname, memAddress(params));
-//    }
 
     // --- [ glBlendFuncSeparate ] ---
 
@@ -199,7 +152,6 @@ interface gl14i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFuncSeparate">Reference Page</a>
      */
-    fun blendFuncSeparate(sFactorRGB: BlendEquationMode, dFactorRGB: BlendEquationMode, sFactorAlpha: BlendEquationMode, dFactorAlpha: BlendEquationMode) {
+    fun blendFuncSeparate(sFactorRGB: BlendEquationMode, dFactorRGB: BlendEquationMode, sFactorAlpha: BlendEquationMode, dFactorAlpha: BlendEquationMode) =
         GL14C.glBlendFuncSeparate(sFactorRGB.i, dFactorRGB.i, sFactorAlpha.i, dFactorAlpha.i)
-    }
 }

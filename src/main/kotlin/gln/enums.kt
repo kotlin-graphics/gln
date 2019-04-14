@@ -5725,12 +5725,6 @@ inline class Usage(val i: Int) {
 //
 //# VERSION_2_0 enum:
 //#	POINT_SPRITE_COORD_ORIGIN			= 0x8CA0
-inline class PointSpriteCoordOrigin(val i: Int) {
-    companion object {
-        val LOWER_LEFT = PointSpriteCoordOrigin(GL20.GL_LOWER_LEFT)
-        val UPPER_LEFT = PointSpriteCoordOrigin(GL20.GL_UPPER_LEFT)
-    }
-}
 
 //#	STENCIL_BACK_REF				= 0x8CA3
 //#	STENCIL_BACK_VALUE_MASK				= 0x8CA4
@@ -7241,10 +7235,10 @@ inline class GetProgramInterface(val i: Int) {
     }
 }
 
-inline class ClipOrigin(val i: Int) {
+inline class ControlOrigin(val i: Int) {
     companion object {
-        val LOWER_LEFT = ClipOrigin(GL20C.GL_LOWER_LEFT)
-        val UPPER_LEFT = ClipOrigin(GL20C.GL_UPPER_LEFT)
+        val LOWER_LEFT = ControlOrigin(GL20C.GL_LOWER_LEFT)
+        val UPPER_LEFT = ControlOrigin(GL20C.GL_UPPER_LEFT)
     }
 }
 

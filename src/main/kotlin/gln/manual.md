@@ -156,6 +156,15 @@ Same applies to `glCopyTexImage1D` as well.
 
 They are inline reified, T is inferred. `Int`, `Float` and `Boolean` accepted.   
 
+#### glPointParameter
+
+since there are only a `GL_POINT_FADE_THRESHOLD_SIZE: Float` and a `GL_POINT_SPRITE_COORD_ORIGIN: GlEnum` possible, 
+we then have 
+
+`var pointFadeThresholdSize: Float`
+
+`var pointSpriteCoordOrigin: PointSpriteCoordOrigin`
+
 ------- 
 
 glVertexAttribI1i to vertexAttrib

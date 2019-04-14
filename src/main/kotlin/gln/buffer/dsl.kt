@@ -5,7 +5,6 @@ import glm_.L
 import glm_.bool
 import glm_.i
 import glm_.mat4x4.Mat4
-import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import gln.*
@@ -14,8 +13,11 @@ import gln.identifiers.GlBuffers
 import kool.Ptr
 import kool.adr
 import kool.pos
+import kool.remSize
 import org.lwjgl.opengl.*
+import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
+import org.lwjgl.system.MemoryUtil.memByteBuffer
 import java.nio.*
 
 
@@ -45,8 +47,6 @@ object GlBufferDsl {
         buf.putFloat(0, data.x).putFloat(Float.BYTES, data.y).putFloat(Float.BYTES * 2, data.z).putFloat(Float.BYTES * 3, data.w)
         GL15C.nglBufferData(target.i, size.L, bufAd, usage.i)
     }
-
-    fun data(size: Int, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
     fun subData(offset: Int, data: ByteBuffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remaining().L, data.adr + data.pos)
     fun subData(offset: Int, data: ShortBuffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES)
@@ -81,69 +81,38 @@ object GlBufferDsl {
     }
 
     // --- [ glGetBufferParameteriv / glGetBufferParameteri64v ] ---
-    // --- [ glGetNamedBufferParameteriv / glGetNamedBufferParameteri64v ] ---
 
     val access: BufferAccess
-        get() = BufferAccess(when {
-            DSA -> GL45C.glGetNamedBufferParameteri(name, GL15C.GL_BUFFER_ACCESS)
-            else -> GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_ACCESS)
-        })
+        get() = BufferAccess(GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_ACCESS))
 
     val accessFlag: MapBufferFlags
-        get() = when {
-            DSA -> GL45C.glGetNamedBufferParameteri(name, GL30C.GL_BUFFER_ACCESS_FLAGS)
-            else -> GL15C.glGetBufferParameteri(target.i, GL30C.GL_BUFFER_ACCESS_FLAGS)
-        }
+        get() = GL15C.glGetBufferParameteri(target.i, GL30C.GL_BUFFER_ACCESS_FLAGS)
 
     val immutableStorage: Boolean
-        get() = when {
-            DSA -> GL45C.glGetNamedBufferParameteri(name, GL44C.GL_BUFFER_IMMUTABLE_STORAGE)
-            else -> GL15C.glGetBufferParameteri(target.i, GL44C.GL_BUFFER_IMMUTABLE_STORAGE)
-        }.bool
+        get() = GL15C.glGetBufferParameteri(target.i, GL44C.GL_BUFFER_IMMUTABLE_STORAGE).bool
 
     val mapped: Boolean
-        get() = when {
-            DSA -> GL45C.glGetNamedBufferParameteri(name, GL15C.GL_BUFFER_MAPPED)
-            else -> GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_MAPPED)
-        }.bool
+        get() = GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_MAPPED).bool
 
     val mapLength: Int
-        get() = when {
-            DSA -> GL45C.glGetNamedBufferParameteri64(name, GL30C.GL_BUFFER_MAP_LENGTH)
-            else -> GL32C.glGetBufferParameteri64(target.i, GL30C.GL_BUFFER_MAP_LENGTH)
-        }.i
+        get() = GL32C.glGetBufferParameteri64(target.i, GL30C.GL_BUFFER_MAP_LENGTH).i
 
     val mapOffset: Int
-        get() = when {
-            DSA -> GL45C.glGetNamedBufferParameteri64(name, GL30C.GL_BUFFER_MAP_OFFSET)
-            else -> GL32C.glGetBufferParameteri64(target.i, GL30C.GL_BUFFER_MAP_OFFSET)
-        }.i
+        get() = GL32C.glGetBufferParameteri64(target.i, GL30C.GL_BUFFER_MAP_OFFSET).i
 
     val size: Int
-        get() = when {
-            DSA -> GL45C.glGetNamedBufferParameteri(name, GL15C.GL_BUFFER_SIZE)
-            else -> GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE)
-        }
+        get() = GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE)
 
     val storageFlags: BufferStorageFlags
-        get() = when {
-            DSA -> GL45C.glGetNamedBufferParameteri(name, GL44C.GL_BUFFER_STORAGE_FLAGS)
-            else -> GL15C.glGetBufferParameteri(target.i, GL44C.GL_BUFFER_STORAGE_FLAGS)
-        }
+        get() = GL15C.glGetBufferParameteri(target.i, GL44C.GL_BUFFER_STORAGE_FLAGS)
 
     val usage: Usage
-        get() = Usage(when {
-            DSA -> GL45C.glGetNamedBufferParameteri(name, GL15C.GL_BUFFER_USAGE)
-            else -> GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_USAGE)
-        })
+        get() = Usage(GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_USAGE))
 
-    // --- [ glGetBufferPointerv, glGetNamedBufferPointerv ] ---
+    // --- [ glGetBufferPointerv ] ---
 
     val pointer: Ptr
-        get() = when {
-            DSA -> GL45C.glGetNamedBufferPointer(name, GL15C.GL_BUFFER_MAP_POINTER)
-            else -> GL15C.glGetBufferPointer(target.i, GL15C.GL_BUFFER_MAP_POINTER)
-        }
+        get() = GL15C.glGetBufferPointer(target.i, GL15C.GL_BUFFER_MAP_POINTER)
 
 
     fun bindRange(index: Int, offset: Int, size: Int) = GL30C.glBindBufferRange(target.i, index, name, offset.L, size.L)
@@ -162,7 +131,51 @@ object GlBufferDsl {
     fun flushRange(length: Int) = flushRange(0, length)
     fun flushRange(offset: Int, length: Int) = GL30.glFlushMappedBufferRange(target.i, offset.L, length.L)
 
-    fun unmap() = GL15C.glUnmapBuffer(target.i)
+    // --- [ glBufferData ] ---
+
+    fun data(size: Int, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
+
+    fun data(data: Buffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
+
+    // --- [ glBufferSubData ] ---
+
+    fun subData(offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
+
+    // --- [ glGetBufferSubData ] ---
+
+    fun getSubData(offset: Int, data: Buffer) = GL15C.nglGetBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
+
+    // --- [ glMapBuffer ] ---
+
+    fun map(access: BufferAccess): ByteBuffer? {
+        val ptr = GL15C.nglMapBuffer(target.i, access.i)
+        return when (ptr) {
+            NULL -> null
+            else -> memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE))
+        }
+    }
+
+    inline fun map(access: BufferAccess, block: (Ptr) -> Unit): ByteBuffer? {
+        val ptr = GL15C.nglMapBuffer(target.i, access.i)
+        block(ptr)
+        return when (ptr) {
+            NULL -> null
+            else -> memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE))
+        }
+    }
+
+    inline fun mapped(access: BufferAccess, block: (Ptr) -> Unit): ByteBuffer? {
+        val ptr = GL15C.nglMapBuffer(target.i, access.i)
+        block(ptr)
+        return when (ptr) {
+            NULL -> null
+            else -> memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE))
+        }.also { unmap() }
+    }
+
+    // --- [ glUnmapBuffer ] ---
+
+    fun unmap(): Boolean = GL15C.glUnmapBuffer(target.i)
 }
 
 inline fun glGenBuffers(bufferName: IntBuffer, block: GlBuffersDsl.() -> Unit) {
