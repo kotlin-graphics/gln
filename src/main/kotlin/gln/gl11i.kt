@@ -234,17 +234,18 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCullFace">Reference Page</a>
      */
     var cullFace: CullFaceMode
-        get() = when {
-            gln.gl.state.cullFaceEnabled -> CullFaceMode(GL11C.glGetInteger(GL11C.GL_CULL_FACE_MODE))
-            else -> CullFaceMode(GL11.GL_FALSE)
-        }
+        get() = gln.gl.state.cullFaceMode
         set(value) = when {
             gln.gl.state.cullFaceEnabled -> when (value) {
                 CullFaceMode(GL11.GL_FALSE) -> {
                     GL11C.glDisable(GL11C.GL_CULL_FACE)
                     gln.gl.state.cullFaceEnabled = false
+                    gln.gl.state.cullFaceMode = value
                 }
-                else -> GL11C.glCullFace(value.i)
+                else -> {
+                    GL11C.glCullFace(value.i)
+                    gln.gl.state.cullFaceMode = value
+                }
             }
             else -> when (value) {
                 CullFaceMode(GL11.GL_FALSE) -> Unit
@@ -252,6 +253,7 @@ interface gl11i {
                     GL11C.glEnable(GL11C.GL_CULL_FACE)
                     GL11C.glCullFace(value.i)
                     gln.gl.state.cullFaceEnabled = true
+                    gln.gl.state.cullFaceMode = value
                 }
             }
         }
@@ -560,17 +562,18 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glLogicOp">Reference Page</a>
      */
     var logicOp: LogicOp
-        get() = when {
-            gln.gl.state.logicOpEnabled -> LogicOp(GL11C.glGetInteger(GL11C.GL_LOGIC_OP_MODE))
-            else -> LogicOp(GL11.GL_FALSE)
-        }
+        get() = gln.gl.state.logicOp
         set(value) = when {
             gln.gl.state.logicOpEnabled -> when (value) {
                 LogicOp(GL11.GL_FALSE) -> {
                     GL11C.glDisable(GL11C.GL_COLOR_LOGIC_OP)
                     gln.gl.state.logicOpEnabled = false
+                    gln.gl.state.logicOp = value
                 }
-                else -> GL11C.glLogicOp(value.i)
+                else -> {
+                    GL11C.glLogicOp(value.i)
+                    gln.gl.state.logicOp = value
+                }
             }
             else -> when (value) {
                 LogicOp(GL11.GL_FALSE) -> Unit
@@ -578,6 +581,7 @@ interface gl11i {
                     GL11C.glEnable(GL11C.GL_COLOR_LOGIC_OP)
                     GL11C.glLogicOp(value.i)
                     gln.gl.state.logicOpEnabled = true
+                    gln.gl.state.logicOp = value
                 }
             }
         }

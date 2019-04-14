@@ -3,6 +3,7 @@ package gln
 import gln.dsa.dsaARB
 import gln.dsa.dsaCore
 import gln.dsa.dsaInterface
+import org.lwjgl.opengl.GL11C
 
 @FunctionalInterface
 private interface StateChangedCallback {
@@ -16,9 +17,6 @@ enum class DSAType {
 }
 
 object OpenGlState {
-
-    var DSA = false
-
     private var _dsa = DSAType.CORE
 
     var dsa: DSAType
@@ -38,8 +36,39 @@ object OpenGlState {
         }
 
     var cullFaceEnabled: Boolean = false
+        internal set(value) {
+            valueChanged { "Cull Face Enabled was $field, is now $value" }
+            field = value
+        }
+    var cullFaceMode = CullFaceMode(GL11C.GL_BACK)
+        internal set(value) {
+            valueChanged {
+                if(logicOpEnabled) {
+                    "Cull Face Mode was $field, is now $value"
+                } else {
+                    "Cull Face Mode was $field, is now $value. However, Cull Face is disabled!"
+                }
+            }
+            field = value
+        }
+
 
     var logicOpEnabled: Boolean = false
+        internal set(value) {
+            valueChanged { "Logic Op Enabled was $field, is now $value" }
+            field = value
+        }
+    var logicOp = LogicOp(GL11C.GL_FALSE)
+        internal set(value) {
+            valueChanged {
+                if(logicOpEnabled) {
+                    "Logic Op was $field, is now $value"
+                } else {
+                    "Logic Op was $field, is now $value. However, Logic Op is disabled!"
+                }
+            }
+            field = value
+        }
 
 
     @Suppress("OVERRIDE_BY_INLINE")
