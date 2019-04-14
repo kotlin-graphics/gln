@@ -278,6 +278,15 @@ interface gl15i {
     /**
      * Generates query object names.
      *
+     * @param count an int representing the wished queries names to be allocated
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
+     */
+    infix fun genQueries(query: KMutableProperty0<GlQuery>) = query.set(genQuery())
+
+    /**
+     * Generates query object names.
+     *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
     fun genQuery(): GlQuery = GlQuery(Stack.intAddress { GL15C.nglGenQueries(1, it) })
