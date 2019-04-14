@@ -91,19 +91,6 @@ interface glGetSet {
 //    val pixelUnpackBufferBinding: GlBuffer
 //        get() = GlBuffer(int(GL21.GL_PIXEL_UNPACK_BUFFER_BINDING))
 
-    var pointFadeThresholdSize: Float
-        get() = float(GL14.GL_POINT_FADE_THRESHOLD_SIZE)
-    // --- [ glPointParameterf ] ---
-        /**
-         * Sets the float value of a pointer parameter.
-         *
-         * @param pname the parameter to set. Must be:<br><table><tr><td>{@link #GL_POINT_FADE_THRESHOLD_SIZE POINT_FADE_THRESHOLD_SIZE}</td></tr></table>
-         * @param param the parameter value
-         *
-         * @see <a target="_blank" href="http://docs.gl/gl4/glPointParameterf">Reference Page</a>
-         */
-        set(value) = GL14C.glPointParameterf(GL14C.GL_POINT_FADE_THRESHOLD_SIZE, value)
-
     val primitiveRestartIndex: Int
         get() = int(GL31.GL_PRIMITIVE_RESTART_INDEX)
 
