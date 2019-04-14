@@ -3,6 +3,9 @@ package gln
 import gln.dsa.dsaARB
 import gln.dsa.dsaCore
 import gln.dsa.dsaInterface
+import gln.framebuffer.Framebuffers
+import gln.framebuffer.GlFramebuffer
+import gln.framebuffer.GlFramebuffers
 import org.lwjgl.opengl.GL11C
 
 @FunctionalInterface
@@ -69,6 +72,20 @@ object OpenGlState {
             }
             field = value
         }
+
+    @PublishedApi
+    internal var _framebuffer = GlFramebuffer.DEFAULT
+        set(value) {
+            valueChanged {
+                val was = if(field == GlFramebuffer.DEFAULT) "screen" else "${value.name}"
+                val new = if(value == GlFramebuffer.DEFAULT) "screen" else "${value.name}"
+                "Framebuffer was $was, is now $value"
+            }
+            field = value
+        }
+
+    val framebuffer: GlFramebuffer
+        get() = _framebuffer
 
 
     @Suppress("OVERRIDE_BY_INLINE")
