@@ -92,3 +92,8 @@ val bufferImmutability /* : Boolean */ = buffer.bound(ARRAY_BUFFER) { immutableS
 ```
 
 This of course applies also for other variable types, such as inlined `BufferAccess` or typealiased `MapBufferFlags`.
+
+
+#### Manual
+
+[here](https://github.com/kotlin-graphics/gln/blob/master/src/main/kotlin/gln/manual.md)
