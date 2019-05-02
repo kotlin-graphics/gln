@@ -91,7 +91,7 @@ it makes sense to return a `Boolean`
 val bufferImmutability /* : Boolean */ = buffer.bound(ARRAY_BUFFER) { immutableStorage }
 ```
 
-This of course applies also for other variable types, such as inlined `BufferAccess` or typealiased `MapBufferFlags`.
+This of course applies also for other variable types, such as the inlined enum `BufferAccess` or the typealiased  integer `MapBufferFlags`.
 
 
 #### Manual
