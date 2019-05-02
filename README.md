@@ -85,7 +85,7 @@ val bufferImmutability /* : Boolean */ = glGetBufferParameteriv(GL_ARRAY_BUFFER,
 glBindBuffer(GL_ARRAY_BUFFER, 0)
 ```
 
-it makes sense to return a `Boolean`
+it makes sense to return directly a `Boolean`
 
 ```kotlin
 val bufferImmutability /* : Boolean */ = buffer.bound(ARRAY_BUFFER) { immutableStorage }
