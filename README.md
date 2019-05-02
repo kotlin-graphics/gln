@@ -73,7 +73,7 @@ glBindBuffer(GL_ARRAY_BUFFER, 0)
 Again, syntax redundancy can be avoided, so with gln you can simply type
 
 ```kotlin
-bufferSize = buffer.bound(ARRAY_BUFFER) { size }
+val bufferSize = buffer.bound(ARRAY_BUFFER) { size }
 ```
 
 The nice thing is that we do know the type of request, so we can deliver it directly as it should be logically.
