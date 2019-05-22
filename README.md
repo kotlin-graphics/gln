@@ -15,7 +15,7 @@ To show you a practical example, you can take a look at the different code snipp
 
 Intensive usage of inline classes and enums.. use them as a class or an enum, compiled as `Int`s
 
-##### Buffer
+#### Buffer
 
 A buffer in means of OpenGL can be used for vertex attributes, indices, uniform data, atomic counters, texture data, and shader storage data.
 
@@ -33,7 +33,7 @@ This
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
 ```
 
-We can see a lot of redundancy here, starting from the world "Buffer". 
+We can see a lot of redundancy here, starting from the word "Buffer". 
 
 Second, we can enclose in a lambda whatever we want to execute when a buffer gets bound.
 
@@ -94,6 +94,6 @@ val bufferImmutability /* : Boolean */ = buffer.bound(ARRAY_BUFFER) { immutableS
 This of course applies also for other variable types, such as the inlined enum `BufferAccess` or the typealiased  integer `MapBufferFlags`.
 
 
-#### Manual
+### Manual
 
 [here](https://github.com/kotlin-graphics/gln/blob/master/src/main/kotlin/gln/manual.md)
