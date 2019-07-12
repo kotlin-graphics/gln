@@ -32,6 +32,10 @@ inline class GlQuery(val name: Int) {
 
     companion object {
 
+        // --- [ glGenQueries ] ---
+
+        fun gen() = gl.genQuery()
+
         // --- [ glCreateQueries ] ---
 
         infix fun create(target: QueryTarget): GlQuery = gl.createQueries(target)
