@@ -8,10 +8,7 @@ import glm_.vec4.Vec4i
 import gln.*
 import gln.identifiers.GlTexture
 import gln.renderbuffer.GlRenderbuffer
-import kool.IntBuffer
-import kool.adr
-import kool.get
-import kool.rem
+import kool.*
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.opengl.GL30C

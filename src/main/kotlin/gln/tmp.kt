@@ -22,8 +22,6 @@ import org.lwjgl.system.MemoryUtil.*
 import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
-import kotlin.reflect.KMutableProperty0
-import kotlin.reflect.KProperty
 
 interface GlBufferEnum
 
@@ -133,9 +131,6 @@ fun ByteBuffer.rem(type: IndexType): Int = rem shr when (type.i) {
 }
 
 inline fun MemoryStack.intAddress(int: Int): Adr = nmalloc(4, Int.BYTES).also { memPutInt(it, int) }
-
-operator fun <R> KMutableProperty0<R>.setValue(host: Any?, property: KProperty<*>, value: R) = set(value)
-operator fun <R> KMutableProperty0<R>.getValue(host: Any?, property: KProperty<*>): R = get()
 
 fun a(b: GlBuffer) = b.bound(BufferTarget.ARRAY) {
     access

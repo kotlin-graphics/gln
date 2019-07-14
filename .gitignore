@@ -47,3 +47,7 @@ hs_err_pid*
 .gradle/
 .idea/
 build/
+
+# Project exclude paths
+/out/
+/out/production/classes/
