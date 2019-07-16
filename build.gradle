@@ -16,10 +16,10 @@ ext {
     kotlin = 'org.jetbrains.kotlin:kotlin'
     kotlin_version = '1.3.41'
     kotlintest_version = '3.3.3'
-    gli_version = 'fb8828835f8736ef33771b8e2b2e17b6b445e56b'
-    glm_version = '96b8303d99a3d8cf0245c490b8fb4ca703393baa'
-    unsigned_version = '6a5060027e295c503e4fac39127bdd57c36c7083'
-    kool_version = '7b1e0522d1fe5a7d1a276f4d46b2e24be9e444cb'
+    gli_version = '414aef014802ee274ca41a32ebcea1c54ef449a7'
+    glm_version = '62dff2baa0b4cab738d55d7e41dee4c796e6cdfc'
+    unsigned_version = 'a530a8f63eda75a499e06beac468f0398526f5a4'
+    kool_version = '1d9a690fd33e62621d55bcb6843042390a21ae31'
     lwjgl_version = "3.2.2"
     lwjgl_natives = current() == WINDOWS ? "windows" : current() == LINUX ? "linux" : "macos"
 }
