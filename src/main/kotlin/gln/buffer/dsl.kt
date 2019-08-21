@@ -224,6 +224,6 @@ object GlBuffersDsl {
     fun <E> E.mapRange(offset: Int, size: Int, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glMapNamedBufferRange(names[ordinal], offset.L, size.L, flags)
     fun <E> E.mapRange(size: Int, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glMapNamedBufferRange(names[ordinal], 0L, size.L, flags)
 
-    operator fun Int.invoke() = GlBuffer(names[this])
+    fun Int.bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, names[this])
     operator fun <E : Enum<E>> E.invoke() = GlBuffer(names[ordinal])
 }
