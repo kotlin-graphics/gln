@@ -100,7 +100,6 @@ inline class GlBuffer(val name: Int = -1) {
     fun storage(data: ShortBuffer, flags: Int = 0) = GL45C.glNamedBufferStorage(name, data, flags)
 
 
-
     fun data(target: BufferTarget, size: Int, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
     fun data(target: BufferTarget, data: Buffer, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
@@ -231,7 +230,14 @@ inline class GlBuffers(val names: IntBuffer) {
     fun delete() = GL15C.nglDeleteBuffers(names.rem, names.adr)
 
     operator fun get(index: Int): GlBuffer = GlBuffer(names[index])
+    operator fun set(index: Int, buffer: GlBuffer) {
+        names.put(index, buffer.name)
+    }
+
     operator fun get(enum: Enum<*>): GlBuffer = GlBuffer(names[enum.ordinal])
+    operator fun set(enum: Enum<*>, buffer: GlBuffer) {
+        names.put(enum.ordinal, buffer.name)
+    }
 }
 
 fun GlBuffers(size: Int): GlBuffers = GlBuffers(IntBuffer(size))

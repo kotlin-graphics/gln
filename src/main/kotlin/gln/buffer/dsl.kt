@@ -10,6 +10,7 @@ import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import gln.*
 import gln.Usage.Companion.STATIC_DRAW
+import gln.identifiers.GlBuffer
 import gln.identifiers.GlBuffers
 import kool.Ptr
 import kool.adr
@@ -222,4 +223,6 @@ object GlBuffersDsl {
 
     fun <E> E.mapRange(offset: Int, size: Int, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glMapNamedBufferRange(names[ordinal], offset.L, size.L, flags)
     fun <E> E.mapRange(size: Int, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glMapNamedBufferRange(names[ordinal], 0L, size.L, flags)
+
+    operator fun Int.invoke() = GlBuffer(names[this])
 }
