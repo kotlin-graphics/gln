@@ -34,7 +34,7 @@ import kotlin.reflect.full.memberProperties
  * legacy functionality by mistake.
  * LWJGL will not try to load deprecated functions, so calling them will crash but the context will actually expose them"
  */
-class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean = true) {
+class Caps(val profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean = true) {
 
     // TODO rename?
     val caps: GLCapabilities = GL.createCapabilities(forwardCompatible)
@@ -43,7 +43,7 @@ class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean 
     fun unset() = GL.setCapabilities(null)
 
     @JvmField
-    val version = Version(profile)
+    val version = Version()
     @JvmField
     val extensions = Extensions()
 
@@ -61,7 +61,7 @@ class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean 
     @JvmField
     val formats = Formats()
 
-    inner class Version(val profile: Profile) {
+    inner class Version() {
 
         @JvmField
         val MINOR_VERSION = glGetInteger(GL_MINOR_VERSION)
@@ -933,7 +933,7 @@ class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean 
             if (check(3, 3) || extensions.ARB_texture_rectangle)
                 MAX_RECTANGLE_TEXTURE_SIZE = glGetInteger(GL_MAX_RECTANGLE_TEXTURE_SIZE)
 
-            if (check(2, 2) && version.profile == Profile.COMPATIBILITY) {
+            if (check(2, 2) && profile == Profile.COMPATIBILITY) {
                 MAX_VARYING_COMPONENTS = glGetInteger(GL_MAX_VARYING_COMPONENTS)
                 MAX_VARYING_VECTORS = glGetInteger(GL_MAX_VARYING_VECTORS)
                 MAX_VARYING_FLOATS = glGetInteger(GL_MAX_VARYING_FLOATS)
@@ -1038,16 +1038,28 @@ class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean 
         @JvmField
         var POINT_SIZE_MIN = 0f
         @JvmField
-        val POINT_SIZE_RANGE = glGetVec2(GL_POINT_SIZE_RANGE)
+        val POINT_SIZE_RANGE = when(profile) {
+            Profile.ES -> Vec2(1)
+            else -> glGetVec2(GL_POINT_SIZE_RANGE)
+        }
         @JvmField
-        val POINT_SIZE_GRANULARITY = glGetFloat(GL_POINT_SIZE_GRANULARITY)
+        val POINT_SIZE_GRANULARITY = when(profile) {
+            Profile.ES -> 1f
+            else -> glGetFloat(GL_POINT_SIZE_GRANULARITY)
+        }
 
         @JvmField
         val ALIASED_LINE_WIDTH_RANGE = glGetVec2(GL_ALIASED_LINE_WIDTH_RANGE)
         @JvmField
-        val SMOOTH_LINE_WIDTH_RANGE = glGetVec2(GL_SMOOTH_LINE_WIDTH_RANGE)
+        val SMOOTH_LINE_WIDTH_RANGE = when(profile) {
+            Profile.ES -> Vec2(1)
+            else -> glGetVec2(GL_SMOOTH_LINE_WIDTH_RANGE)
+        }
         @JvmField
-        val SMOOTH_LINE_WIDTH_GRANULARITY = glGetFloat(GL_SMOOTH_LINE_WIDTH_GRANULARITY)
+        val SMOOTH_LINE_WIDTH_GRANULARITY = when(profile) {
+            Profile.ES -> 1f
+            else -> glGetFloat(GL_SMOOTH_LINE_WIDTH_GRANULARITY)
+        }
 
         @JvmField
         var MAX_VERTEX_ATTRIB_RELATIVE_OFFSET = 0
@@ -1072,11 +1084,10 @@ class Caps(profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean 
             if (check(4, 3) || extensions.ARB_ES3_compatibility)
                 MAX_ELEMENT_INDEX = glGetInteger64(GL_MAX_ELEMENT_INDEX)
 
-            if (version.profile == Profile.COMPATIBILITY) {
+            if (profile == Profile.COMPATIBILITY) {
                 POINT_SIZE_MIN = glGetFloat(GL_POINT_SIZE_MIN)
                 POINT_SIZE_MAX = glGetFloat(GL_POINT_SIZE_MAX)
             }
-
 
             if (check(2, 1)) {
                 SUBPIXEL_BITS = glGetInteger(GL_SUBPIXEL_BITS)

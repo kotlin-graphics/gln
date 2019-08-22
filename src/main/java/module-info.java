@@ -11,6 +11,7 @@ module com.github.kotlin_graphics.gln {
     requires com.github.kotlin_graphics.glm;
     requires com.github.kotlin_graphics.kool;
     requires com.github.kotlin_graphics.kotlin_unsigned;
+    requires kotlin.reflect;
 
     exports gln;
     exports gln.buffer;
