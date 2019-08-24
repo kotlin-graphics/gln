@@ -199,30 +199,31 @@ object GlBuffersDsl {
 
     fun bindBuffersRange(target: BufferTarget, first: Int, offsets: IntBuffer, sizes: IntBuffer) = gl.bindBuffersRange(target, first, GlBuffers(names), offsets, sizes)
 
-    fun <E> E.bind(target: BufferTarget) where E : Enum<E>, E : GlBufferEnum = GL15C.glBindBuffer(target.i, names[ordinal])
-    fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)
-    inline fun <E> E.bind(target: BufferTarget, block: GlBufferDsl.() -> Unit) where E : Enum<E>, E : GlBufferEnum {
+    fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0) // TODO?
+
+    fun <E : Enum<E>> E.bind(target: BufferTarget)  = GL15C.glBindBuffer(target.i, names[ordinal])
+    inline fun <E : Enum<E>> E.bind(target: BufferTarget, block: GlBufferDsl.() -> Unit) {
         bind(target)
         GlBufferDsl.target = target
         GlBufferDsl.name = names[ordinal]
         GlBufferDsl.block()
     }
 
-    inline fun <E> E.bound(target: BufferTarget, block: GlBufferDsl.() -> Unit) where E : Enum<E>, E : GlBufferEnum {
+    inline fun <E : Enum<E>> E.bound(target: BufferTarget, block: GlBufferDsl.() -> Unit) {
         bind(target, block)
         GL15C.glBindBuffer(target.i, 0)
     }
 
-    fun <E> E.bindBase(target: BufferTarget, index: Int) where E : Enum<E>, E : GlBufferEnum = GL30C.glBindBufferBase(target.i, index, names[ordinal])
+    fun <E : Enum<E>> E.bindBase(target: BufferTarget, index: Int) = GL30C.glBindBufferBase(target.i, index, names[ordinal])
 
-    fun <E> E.storage(size: Int, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glNamedBufferStorage(names[ordinal], size.L, flags)
+    fun <E : Enum<E>> E.storage(size: Int, flags: Int = 0) = GL45C.glNamedBufferStorage(names[ordinal], size.L, flags)
 
-    fun <E> E.storage(data: ByteBuffer, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glNamedBufferStorage(names[ordinal], data, flags)
-    fun <E> E.storage(data: ShortBuffer, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glNamedBufferStorage(names[ordinal], data, flags)
-    fun <E> E.storage(data: FloatBuffer, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glNamedBufferStorage(names[ordinal], data, flags)
+    fun <E : Enum<E>> E.storage(data: ByteBuffer, flags: Int = 0) = GL45C.glNamedBufferStorage(names[ordinal], data, flags)
+    fun <E : Enum<E>> E.storage(data: ShortBuffer, flags: Int = 0) = GL45C.glNamedBufferStorage(names[ordinal], data, flags)
+    fun <E : Enum<E>> E.storage(data: FloatBuffer, flags: Int = 0) = GL45C.glNamedBufferStorage(names[ordinal], data, flags)
 
-    fun <E> E.mapRange(offset: Int, size: Int, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glMapNamedBufferRange(names[ordinal], offset.L, size.L, flags)
-    fun <E> E.mapRange(size: Int, flags: Int = 0) where E : Enum<E>, E : GlBufferEnum = GL45C.glMapNamedBufferRange(names[ordinal], 0L, size.L, flags)
+    fun <E : Enum<E>> E.mapRange(offset: Int, size: Int, flags: Int = 0) = GL45C.glMapNamedBufferRange(names[ordinal], offset.L, size.L, flags)
+    fun <E : Enum<E>> E.mapRange(size: Int, flags: Int = 0) = GL45C.glMapNamedBufferRange(names[ordinal], 0L, size.L, flags)
 
     infix fun Int.bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, names[this])
     inline fun Int.bind(target: BufferTarget, block: GlBufferDsl.() -> Unit) {
