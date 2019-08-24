@@ -201,7 +201,7 @@ object GlBuffersDsl {
 
     fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0) // TODO?
 
-    fun <E : Enum<E>> E.bind(target: BufferTarget)  = GL15C.glBindBuffer(target.i, names[ordinal])
+    infix fun <E : Enum<E>> E.bind(target: BufferTarget)  = GL15C.glBindBuffer(target.i, names[ordinal])
     inline fun <E : Enum<E>> E.bind(target: BufferTarget, block: GlBufferDsl.() -> Unit) {
         bind(target)
         GlBufferDsl.target = target
