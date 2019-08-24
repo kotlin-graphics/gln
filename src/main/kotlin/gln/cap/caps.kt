@@ -23,6 +23,8 @@ import org.lwjgl.opengl.GLCapabilities
 import org.lwjgl.opengl.KHRTextureCompressionASTCLDR.*
 import org.lwjgl.opengl.NVDeepTexture3D.GL_MAX_DEEP_3D_TEXTURE_DEPTH_NV
 import org.lwjgl.opengl.NVDeepTexture3D.GL_MAX_DEEP_3D_TEXTURE_WIDTH_HEIGHT_NV
+import org.lwjgl.opengles.GLES
+import org.lwjgl.opengles.GLESCapabilities
 import java.io.File
 import java.io.PrintWriter
 import kotlin.reflect.KVisibility
@@ -36,11 +38,25 @@ import kotlin.reflect.full.memberProperties
  */
 class Caps(val profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean = true) {
 
-    // TODO rename?
-    val caps: GLCapabilities = GL.createCapabilities(forwardCompatible)
+    var gl: GLCapabilities? = null
+    var gles: GLESCapabilities? = null
 
-    fun set() = GL.setCapabilities(caps)
-    fun unset() = GL.setCapabilities(null)
+    init {
+        when (profile) {
+            Profile.ES -> gles = GLES.createCapabilities()
+            else -> gl = GL.createCapabilities(forwardCompatible)
+        }
+    }
+
+    fun set() = when (profile) {
+        Profile.ES -> GLES.setCapabilities(gles)
+        else -> GL.setCapabilities(gl)
+    }
+
+    fun unset() = when (profile) {
+        Profile.ES -> GLES.setCapabilities(null)
+        else -> GL.setCapabilities(null)
+    }
 
     @JvmField
     val version = Version()
@@ -1038,12 +1054,12 @@ class Caps(val profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Bool
         @JvmField
         var POINT_SIZE_MIN = 0f
         @JvmField
-        val POINT_SIZE_RANGE = when(profile) {
+        val POINT_SIZE_RANGE = when (profile) {
             Profile.ES -> Vec2(1)
             else -> glGetVec2(GL_POINT_SIZE_RANGE)
         }
         @JvmField
-        val POINT_SIZE_GRANULARITY = when(profile) {
+        val POINT_SIZE_GRANULARITY = when (profile) {
             Profile.ES -> 1f
             else -> glGetFloat(GL_POINT_SIZE_GRANULARITY)
         }
@@ -1051,12 +1067,12 @@ class Caps(val profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Bool
         @JvmField
         val ALIASED_LINE_WIDTH_RANGE = glGetVec2(GL_ALIASED_LINE_WIDTH_RANGE)
         @JvmField
-        val SMOOTH_LINE_WIDTH_RANGE = when(profile) {
+        val SMOOTH_LINE_WIDTH_RANGE = when (profile) {
             Profile.ES -> Vec2(1)
             else -> glGetVec2(GL_SMOOTH_LINE_WIDTH_RANGE)
         }
         @JvmField
-        val SMOOTH_LINE_WIDTH_GRANULARITY = when(profile) {
+        val SMOOTH_LINE_WIDTH_GRANULARITY = when (profile) {
             Profile.ES -> 1f
             else -> glGetFloat(GL_SMOOTH_LINE_WIDTH_GRANULARITY)
         }

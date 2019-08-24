@@ -1,17 +1,19 @@
 module com.github.kotlin_graphics.gln {
 
+    requires java.desktop;
+
     requires kotlin.stdlib;
+    requires kotlin.reflect;
 
     requires org.lwjgl;
     requires org.lwjgl.opengl;
+    requires org.lwjgl.opengles;
 
-    requires java.desktop;
 
     requires com.github.kotlin_graphics.gli;
     requires com.github.kotlin_graphics.glm;
     requires com.github.kotlin_graphics.kool;
     requires com.github.kotlin_graphics.kotlin_unsigned;
-    requires kotlin.reflect;
 
     exports gln;
     exports gln.buffer;
