@@ -7,7 +7,7 @@ module com.github.kotlin_graphics.gln {
 
     requires org.lwjgl;
     requires org.lwjgl.opengl;
-    requires org.lwjgl.opengles;
+//    requires org.lwjgl.opengles;
 
 
     requires com.github.kotlin_graphics.gli;

@@ -23,8 +23,8 @@ import org.lwjgl.opengl.GLCapabilities
 import org.lwjgl.opengl.KHRTextureCompressionASTCLDR.*
 import org.lwjgl.opengl.NVDeepTexture3D.GL_MAX_DEEP_3D_TEXTURE_DEPTH_NV
 import org.lwjgl.opengl.NVDeepTexture3D.GL_MAX_DEEP_3D_TEXTURE_WIDTH_HEIGHT_NV
-import org.lwjgl.opengles.GLES
-import org.lwjgl.opengles.GLESCapabilities
+//import org.lwjgl.opengles.GLES
+//import org.lwjgl.opengles.GLESCapabilities
 import java.io.File
 import java.io.PrintWriter
 import kotlin.reflect.KVisibility
@@ -38,25 +38,27 @@ import kotlin.reflect.full.memberProperties
  */
 class Caps(val profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Boolean = true) {
 
-    var gl: GLCapabilities? = null
-    var gles: GLESCapabilities? = null
+    val gl: GLCapabilities = GL.createCapabilities(forwardCompatible)
+//    var gles: GLESCapabilities? = null
 
-    init {
-        when (profile) {
-            Profile.ES -> gles = GLES.createCapabilities()
-            else -> gl = GL.createCapabilities(forwardCompatible)
-        }
-    }
+//    init {
+//        when (profile) {
+//            Profile.ES -> gles = GLES.createCapabilities()
+//            else -> gl = GL.createCapabilities(forwardCompatible)
+//        }
+//    }
 
-    fun set() = when (profile) {
-        Profile.ES -> GLES.setCapabilities(gles)
-        else -> GL.setCapabilities(gl)
-    }
+    fun set() = GL.setCapabilities(gl)
+//    when (profile) {
+//        Profile.ES -> GLES.setCapabilities(gles)
+//        else -> GL.setCapabilities(gl)
+//    }
 
-    fun unset() = when (profile) {
-        Profile.ES -> GLES.setCapabilities(null)
-        else -> GL.setCapabilities(null)
-    }
+    fun unset() = GL.setCapabilities(null)
+//    when (profile) {
+//        Profile.ES -> GLES.setCapabilities(null)
+//        else -> GL.setCapabilities(null)
+//    }
 
     @JvmField
     val version = Version()
