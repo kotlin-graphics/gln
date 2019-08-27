@@ -1,10 +1,15 @@
 package gln.renderbuffer
 
+import gli_.gl
+import glm_.vec2.Vec2i
 import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
 
 object GlRenderbufferDsl {
+
     var name = 0
+
+    fun storage(internalFormat: gl.InternalFormat, size: Vec2i) = GL30C.glRenderbufferStorage(GL30C.GL_RENDERBUFFER, internalFormat.i, size.x, size.y)
 }
 
 object GlRenderbuffersDsl {
