@@ -458,6 +458,12 @@ object GlTexturesDsl {
     //    var target = TextureTarget._1D
     lateinit var names: IntBuffer
 
+    var activeTexture: Int = 0
+        set(value) {
+            GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + value)
+            field = value
+        }
+
     // --- [ glBindImageTextures ] ---
 
     fun bindImages(first: Int = 0) = gln.gl.bindImageTextures(first, GlTextures(names))
