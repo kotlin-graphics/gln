@@ -615,6 +615,11 @@ inline class GlProgram(val name: Int) {
      */
     inline fun <reified T> getActiveAtomicCounterBufferiv(bufferIndex: Int, name: GetActiveAtomicCounterBuffer): T = gl.getActiveAtomicCounterBufferiv(this, bufferIndex, name)
 
+    inline operator fun invoke(block: ProgramBase.() -> Unit) {
+        ProgramBase.program = this
+        ProgramBase.block()
+    }
+
     companion object {
 
         val NULL = GlProgram(0)
