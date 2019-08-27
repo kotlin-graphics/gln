@@ -35,7 +35,7 @@ dependencies {
     implementation "$kx:kool:$kool_version"
     implementation "$kx:kotlin-unsigned:$unsigned_version"
 
-    ["", "-glfw", "-jemalloc", "-openal", "-opengl", "-stb"].each {
+    ["", "-glfw", "-jemalloc", "-openal", "-opengl", "-opengles", "-stb"].each {
         implementation "org.lwjgl:lwjgl$it:$lwjgl_version"
         runtime "org.lwjgl:lwjgl$it:$lwjgl_version:natives-$lwjgl_natives"
     }

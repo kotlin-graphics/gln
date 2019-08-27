@@ -199,7 +199,7 @@ object GlBuffersDsl {
 
     fun bindBuffersRange(target: BufferTarget, first: Int, offsets: IntBuffer, sizes: IntBuffer) = gl.bindBuffersRange(target, first, GlBuffers(names), offsets, sizes)
 
-    fun <E : Enum<E>> E.bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, names[ordinal])
+    infix fun <E : Enum<E>> E.bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, names[ordinal])
     fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)
     inline fun <E : Enum<E>> E.bind(target: BufferTarget, block: GlBufferDsl.() -> Unit) {
         bind(target)
