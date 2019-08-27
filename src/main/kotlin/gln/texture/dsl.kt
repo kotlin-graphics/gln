@@ -275,7 +275,7 @@ object GlTextureDsl {
 
     // --- [ glTexImage2D ] ---
 
-    fun image2D(level: Int, internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =  gln.gl.texImage2D(level, internalFormat, size, format, type, pixels)
+    fun image2D(level: Int, internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage2D(level, internalFormat, size, format, type, pixels)
 
     // --- [ glCopyTexImage1D ] --- TODO custom InternalFormat?
 
@@ -490,4 +490,25 @@ object GlTexturesDsl {
 //        Texture2d.name = names[index] // bind
 //        Texture2d.block()
 //    }
+
+    inline fun <E : Enum<E>> E.bind(target: TextureTarget, block: GlTextureDsl.() -> Unit) {
+        val name = names[ordinal]
+        GL11C.glBindTexture(target.i, name)
+        GlTextureDsl.name = name
+    }
+
+    inline fun <E : Enum<E>> E.bound(target: TextureTarget, block: GlTextureDsl.() -> Unit) {
+        bind(target, block)
+        GL11C.glBindTexture(target.i, 0)
+    }
+
+    inline fun <E : Enum<E>> E.bind(activeTexture: Int, target: TextureTarget, block: GlTextureDsl.() -> Unit) {
+        GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + activeTexture)
+        bind(target, block)
+    }
+
+    inline fun <E : Enum<E>> E.bound(activeTexture: Int, target: TextureTarget, block: GlTextureDsl.() -> Unit) {
+        GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + activeTexture)
+        bound(target, block)
+    }
 }
