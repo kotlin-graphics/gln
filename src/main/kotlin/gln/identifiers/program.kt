@@ -629,13 +629,13 @@ inline class GlProgram(val name: Int) {
         }
 
         /** for ogl-samples */
-        inline fun initFromPath(vertAndFrag: String, block: ProgramBase.() -> Unit): GlProgram =
+        inline fun initFromPath(vertAndFrag: String, block: ProgramBase.() -> Unit = {}): GlProgram =
                 init(GlShader.createFromPath("$vertAndFrag.vert"), GlShader.createFromPath("$vertAndFrag.frag"), block)
 
-        inline fun initFromPath(vert: String, frag: String, block: ProgramBase.() -> Unit): GlProgram =
+        inline fun initFromPath(vert: String, frag: String, block: ProgramBase.() -> Unit = {}): GlProgram =
                 init(GlShader.createFromPath(vert), GlShader.createFromPath(frag), block)
 
-        inline fun init(vert: GlShader, frag: GlShader, block: ProgramBase.() -> Unit): GlProgram {
+        inline fun init(vert: GlShader, frag: GlShader, block: ProgramBase.() -> Unit = {}): GlProgram {
             ProgramBase.apply {
                 program = create().apply {
                     attach(vert)
