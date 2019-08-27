@@ -23,8 +23,6 @@ import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
-interface GlBufferEnum
-
 inline fun Stack.vec2Address(block: (Ptr) -> Unit): Vec2 = Stack { Vec2.fromPointer(it.nmalloc(4, Vec2.size).also(block)) }
 
 inline fun Stack.vec2iAddress(block: (Ptr) -> Unit): Vec2i = Stack { Vec2i.fromPointer(it.nmalloc(4, Vec2i.size).also(block)) }
