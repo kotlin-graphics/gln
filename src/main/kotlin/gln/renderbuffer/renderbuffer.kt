@@ -44,6 +44,12 @@ inline class GlRenderbuffers(val names: IntBuffer) {
 
     // --- [ glGenRenderbuffers ] ---
     fun gen() = gl.genRenderbuffers(this)
+
+    inline fun gen(block: GlRenderbuffersDsl.() -> Unit) {
+        GL30C.glGenRenderbuffers(names)
+        GlRenderbuffersDsl.names = names
+        GlRenderbuffersDsl.block()
+    }
 }
 
 fun GlRenderbuffers(size: Int) = GlRenderbuffers(IntBuffer(size))
