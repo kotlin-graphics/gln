@@ -41,6 +41,9 @@ inline class GlRenderbuffers(val names: IntBuffer) {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateRenderbuffers">Reference Page</a>
      */
     fun create() = gl.createRenderbuffers(this)
+
+    // --- [ glGenRenderbuffers ] ---
+    fun gen() = gl.genRenderbuffers(this)
 }
 
 fun GlRenderbuffers(size: Int) = GlRenderbuffers(IntBuffer(size))
