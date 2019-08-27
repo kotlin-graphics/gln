@@ -477,6 +477,12 @@ inline class GlTextures(val names: IntBuffer) {
 
     infix fun deleteTextures(textures: GlTextures) = GL11C.nglDeleteTextures(textures.rem, textures.adr)
 
+    inline fun gen(block: GlTexturesDsl.() -> Unit) {
+        GL11C.glGenTextures(names)
+        GlTexturesDsl.names = names
+        GlTexturesDsl.block()
+    }
+
     companion object {
 
         // --- [ glGenTextures ] ---
