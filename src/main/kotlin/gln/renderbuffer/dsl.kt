@@ -17,11 +17,15 @@ object GlRenderbuffersDsl {
     lateinit var names: IntBuffer
 
     fun <E : Enum<E>> E.bind() = GL30C.glBindRenderbuffer(GL30C.GL_RENDERBUFFER, names[ordinal])
-    inline fun <E : Enum<E>> E.bound(block: GlRenderbufferDsl.() -> Unit) {
+    inline fun <E : Enum<E>> E.bind(block: GlRenderbufferDsl.() -> Unit) {
         val name = names[ordinal]
         GL30C.glBindRenderbuffer(GL30C.GL_RENDERBUFFER, name)
         GlRenderbufferDsl.name = name
         GlRenderbufferDsl.block()
+    }
+
+    inline fun <E : Enum<E>> E.bound(block: GlRenderbufferDsl.() -> Unit) {
+        bind(block)
         GL30C.glBindRenderbuffer(GL30C.GL_RENDERBUFFER, 0)
     }
 }
