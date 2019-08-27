@@ -638,8 +638,8 @@ inline class GlProgram(val name: Int) {
         inline fun init(vert: GlShader, frag: GlShader, block: ProgramBase.() -> Unit): GlProgram {
             ProgramBase.apply {
                 program = create().apply {
-                    plusAssign(vert)
-                    plusAssign(frag)
+                    attach(vert)
+                    attach(frag)
                 }
 
                 block()
@@ -650,8 +650,8 @@ inline class GlProgram(val name: Int) {
                     if (!linkStatus)
                         throw Exception("Linker failure: $infoLog")
 
-                    minusAssign(vert)
-                    minusAssign(frag)
+                    detach(vert)
+                    detach(frag)
                     vert.delete()
                     frag.delete()
                 }
