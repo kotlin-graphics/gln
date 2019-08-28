@@ -5,8 +5,8 @@ import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
-import gln.framebuffer.GlFramebuffer
-import gln.framebuffer.GlFramebuffers
+import gln.identifiers.GlFramebuffer
+import gln.identifiers.GlFramebuffers
 import gln.identifiers.*
 import gln.renderbuffer.GlRenderbuffer
 import gln.renderbuffer.GlRenderbuffers

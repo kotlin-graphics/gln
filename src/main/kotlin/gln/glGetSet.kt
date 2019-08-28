@@ -3,8 +3,8 @@ package gln
 import glm_.bool
 import glm_.vec2.Vec2
 import glm_.vec4.Vec4
-import gln.framebuffer.GlFramebuffer
-import gln.identifiers.*
+import gln.identifiers.GlFramebuffer
+import gln.identifiers.GlProgram
 import gln.renderbuffer.GlRenderbuffer
 import gln.sampler.GlSampler
 import gln.vertexArray.GlVertexArray

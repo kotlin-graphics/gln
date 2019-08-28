@@ -1,15 +1,10 @@
 package gln
 
 import glm_.bool
-import gln.framebuffer.GlFramebuffer
-import gln.texture.GlTexturesDsl
-import kool.IntBuffer
+import kool.Stack
 import kool.adr
 import kool.rem
-import kool.Stack
 import org.lwjgl.opengl.GL32C
-import org.lwjgl.opengl.GL40C
-import org.lwjgl.opengl.GL45C
 import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.ByteBuffer
 import java.nio.IntBuffer

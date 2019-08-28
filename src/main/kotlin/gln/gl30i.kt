@@ -18,23 +18,17 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
-import gln.framebuffer.GlFramebuffer
-import gln.framebuffer.GlFramebuffers
-import gln.identifiers.GlBuffer
-import gln.identifiers.GlProgram
-import gln.identifiers.GlQuery
-import gln.identifiers.GlTexture
+import gln.identifiers.*
 import gln.renderbuffer.GlRenderbuffer
 import gln.renderbuffer.GlRenderbuffers
 import gln.vertexArray.GlVertexArray
 import gln.vertexArray.GlVertexArrays
-import kool.adr
 import kool.Stack
+import kool.adr
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.system.MemoryUtil.*
 import unsigned.Uint
 import java.nio.ByteBuffer
-import java.nio.FloatBuffer
 import kotlin.reflect.KMutableProperty0
 
 /**

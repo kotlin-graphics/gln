@@ -17,7 +17,7 @@ import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.dsa.dsai
-import gln.framebuffer.GlFramebuffer
+import gln.identifiers.GlFramebuffer
 import gln.misc.BlendDsl
 import gln.misc.GlDebugSource
 import gln.identifiers.*
