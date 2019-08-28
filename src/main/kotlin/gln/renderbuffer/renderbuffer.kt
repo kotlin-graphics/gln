@@ -5,10 +5,7 @@ package gln.renderbuffer
 import glm_.vec2.Vec2i
 import gln.GetRenderbuffer
 import gln.gl
-import kool.IntBuffer
-import kool.adr
-import kool.get
-import kool.rem
+import kool.*
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
@@ -30,8 +27,15 @@ inline fun glRenderbufferStorage(target: Int, internalFormat: Int, size: Vec2i) 
 
 
 inline class GlRenderbuffers(val names: IntBuffer) {
-    val rem get() = names.rem
-    val adr get() = names.adr
+
+    val rem: Int
+        get() = names.rem
+
+    val adr: Adr
+        get() = names.adr
+
+    operator fun get(index: Int): GlRenderbuffer = GlRenderbuffer(names[index])
+    operator fun <E : Enum<E>> get(e: E): GlRenderbuffer = GlRenderbuffer(names[e.ordinal])
 
     // --- [ glCreateRenderbuffers ] ---
 
