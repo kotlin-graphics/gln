@@ -665,8 +665,8 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
-    fun framebufferRenderbuffer(framebuffer: GlFramebuffer, attachment: Int, renderbuffer: GlRenderbuffer) =
-            GL45C.glNamedFramebufferRenderbuffer(framebuffer.name, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.name)
+    fun framebufferRenderbuffer(framebuffer: GlFramebuffer, attachment: Attachment, renderbuffer: GlRenderbuffer) =
+            GL45C.glNamedFramebufferRenderbuffer(framebuffer.name, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     // --- [ glNamedFramebufferParameteri ] ---
 
@@ -694,8 +694,8 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture">Reference Page</a>
      */
-    fun framebufferTexture(framebuffer: GlFramebuffer, attachment: Int, texture: GlTexture, level: Int) =
-            GL45C.glNamedFramebufferTexture(framebuffer.name, attachment, texture.name, level)
+    fun framebufferTexture(framebuffer: GlFramebuffer, attachment: Attachment, texture: GlTexture, level: Int) =
+            GL45C.glNamedFramebufferTexture(framebuffer.name, attachment.i, texture.name, level)
 
     // --- [ glNamedFramebufferTextureLayer ] ---
 
@@ -710,8 +710,8 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
-    fun framebufferTextureLayer(framebuffer: GlFramebuffer, attachment: Int, texture: GlTexture, level: Int, layer: Int) =
-            GL45C.glNamedFramebufferTextureLayer(framebuffer.name, attachment, texture.name, level, layer)
+    fun framebufferTextureLayer(framebuffer: GlFramebuffer, attachment: Attachment, texture: GlTexture, level: Int, layer: Int) =
+            GL45C.glNamedFramebufferTextureLayer(framebuffer.name, attachment.i, texture.name, level, layer)
 
     // --- [ glNamedFramebufferDrawBuffer ] ---
 
@@ -782,8 +782,8 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferData">Reference Page</a>
      */
-    fun invalidateFramebufferData(framebuffer: GlFramebuffer, attachment: Int) =
-            Stack.intAddress(attachment) { GL45C.nglInvalidateNamedFramebufferData(framebuffer.name, 1, it) }
+    fun invalidateFramebufferData(framebuffer: GlFramebuffer, attachment: Attachment) =
+            Stack.intAddress(attachment.i) { GL45C.nglInvalidateNamedFramebufferData(framebuffer.name, 1, it) }
 
     // --- [ glInvalidateNamedFramebufferSubData ] ---
 
@@ -809,8 +809,8 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
      */
-    fun invalidateFramebufferSubData(framebuffer: GlFramebuffer, attachment: Int, offset: Vec2i, size: Vec2i) =
-            Stack.intAddress(attachment) { GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, it, offset.x, offset.y, size.x, size.y) }
+    fun invalidateFramebufferSubData(framebuffer: GlFramebuffer, attachment: Attachment, offset: Vec2i, size: Vec2i) =
+            Stack.intAddress(attachment.i) { GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, it, offset.x, offset.y, size.x, size.y) }
 
     // --- [ glClearNamedFramebufferiv ] ---
 

@@ -2,6 +2,8 @@
 
 package gln.framebuffer
 
+import gln.Attachment
+import gln.FramebufferTarget
 import gln.gl
 import gln.identifiers.GlFramebuffer
 import kool.get
@@ -20,8 +22,8 @@ var framebufferName: IntBuffer by Delegates.notNull()
 
 val defaultFramebuffer = 0
 
-inline fun glFramebufferRenderbuffer(attachment: Int, renderbuffer: IntArray) = GL30.glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, renderbuffer[0])
-inline fun glFramebufferRenderbuffer(attachment: Int, renderbuffer: IntBuffer) = GL30.glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, renderbuffer[0])
+inline fun glFramebufferRenderbuffer(attachment: Attachment, renderbuffer: IntArray) = GL30.glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment.i, GL_RENDERBUFFER, renderbuffer[0])
+inline fun glFramebufferRenderbuffer(attachment: Attachment, renderbuffer: IntBuffer) = GL30.glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment.i, GL_RENDERBUFFER, renderbuffer[0])
 
 
 inline fun glBindFramebuffer(target: Int, framebuffer: Enum<*>){
@@ -52,7 +54,7 @@ inline fun glBindFramebuffer(){
 }
 
 
-//inline fun glFramebufferTexture2D(target: Int, attachment: Int, textarget: Int, texture: Int) = GL30.glFramebufferTexture2D(target, attachment, textarget, texture, 0) TODO renable without target
-inline fun glFramebufferTexture(attachment: Int, texture: Int, level: Int = 0) = GL32.glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture, level)
+inline fun glFramebufferTexture2D(target: FramebufferTarget, attachment: Attachment, textarget: Int, texture: Int) = GL30.glFramebufferTexture2D(target.i, attachment.i, textarget, texture, 0)
+inline fun glFramebufferTexture(attachment: Attachment, texture: Int, level: Int = 0) = GL32.glFramebufferTexture(GL_FRAMEBUFFER, attachment.i, texture, level)
 
 inline fun glCheckFramebufferStatus() = GL30.glCheckFramebufferStatus(GL_FRAMEBUFFER)

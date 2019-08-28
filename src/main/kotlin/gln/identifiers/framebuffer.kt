@@ -119,7 +119,7 @@ inline class GlFramebuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
-    inline fun <reified T> getAttachmentParameter(attachment: Int, name: GetFramebufferAttachment): T = gl.getFramebufferAttachmentParameter(this, attachment, name)
+    inline fun <reified T> getAttachmentParameter(attachment: Attachment, name: GetFramebufferAttachment): T = gl.getFramebufferAttachmentParameter(this, attachment, name)
 
     // --- [ glGetNamedFramebufferParameteriv ] ---
 
@@ -152,7 +152,7 @@ inline class GlFramebuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebuffer">Reference Page</a>
      */
-    fun invalidate(target: FramebufferTarget, attachment: Int) = gl.invalidateFramebuffer(target, attachment)
+    fun invalidate(target: FramebufferTarget, attachment: Attachment) = gl.invalidateFramebuffer(target, attachment.i)
 
     // --- [ glInvalidateNamedFramebufferData ] ---
 
@@ -170,7 +170,7 @@ inline class GlFramebuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferData">Reference Page</a>
      */
-    infix fun invalidateData(attachment: Int) = gl.invalidateFramebufferData(this, attachment)
+    infix fun invalidateData(attachment: Attachment) = gl.invalidateFramebufferData(this, attachment)
 
     // --- [ glInvalidateNamedFramebufferSubData ] ---
 
@@ -193,7 +193,7 @@ inline class GlFramebuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
      */
-    fun invalidateSubData(attachment: Int, offset: Vec2i, size: Vec2i) = gl.invalidateFramebufferSubData(this, attachment, offset, size)
+    fun invalidateSubData(attachment: Attachment, offset: Vec2i, size: Vec2i) = gl.invalidateFramebufferSubData(this, attachment, offset, size)
 
     // --- [ glInvalidateSubFramebuffer ] ---
 
@@ -218,7 +218,7 @@ inline class GlFramebuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateSubFramebuffer">Reference Page</a>
      */
-    fun invalidateSubFramebuffer(target: FramebufferTarget, offset: Vec2i, size: Vec2i, attachment: Int) = gl.invalidateSubFramebuffer(target, offset, size, attachment)
+    fun invalidateSubFramebuffer(target: FramebufferTarget, offset: Vec2i, size: Vec2i, attachment: Attachment) = gl.invalidateSubFramebuffer(target, offset, size, attachment.i)
 
     // --- [ glNamedFramebufferDrawBuffer ] ---
 
@@ -283,7 +283,7 @@ inline class GlFramebuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
-    fun renderbuffer(attachment: Int, renderbuffer: GlRenderbuffer) = gl.framebufferRenderbuffer(this, attachment, renderbuffer)
+    fun renderbuffer(attachment: Attachment, renderbuffer: GlRenderbuffer) = gl.framebufferRenderbuffer(this, attachment, renderbuffer)
 
     // --- [ glCheckNamedFramebufferStatus ] ---
 
@@ -310,7 +310,7 @@ inline class GlFramebuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture">Reference Page</a>
      */
-    fun texture(attachment: Int, texture: GlTexture, level: Int) = gl.framebufferTexture(this, attachment, texture, level)
+    fun texture(attachment: Attachment, texture: GlTexture, level: Int) = gl.framebufferTexture(this, attachment, texture, level)
 
     // --- [ glNamedFramebufferTextureLayer ] ---
 
@@ -324,7 +324,7 @@ inline class GlFramebuffer(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
-    fun textureLayer(attachment: Int, texture: GlTexture, level: Int, layer: Int) = gl.framebufferTextureLayer(this, attachment, texture, level, layer)
+    fun textureLayer(attachment: Attachment, texture: GlTexture, level: Int, layer: Int) = gl.framebufferTextureLayer(this, attachment, texture, level, layer)
 
     companion object {
 

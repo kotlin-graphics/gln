@@ -2,6 +2,7 @@
 
 package gln.framebuffer
 
+import gln.Attachment
 import gln.FramebufferTarget
 import gln.identifiers.GlTexture
 import gln.renderbuffer.GlRenderbuffer
@@ -49,13 +50,13 @@ object GlFramebufferDsl {
     var name = 0
 
 
-    inline fun texture(target: FramebufferTarget, attachment: Int, texture: GlTexture, level: Int = 0) = GL32.glFramebufferTexture(target.i, attachment, texture.name, level)
-    inline fun texture(attachment: Int, texture: GlTexture, level: Int = 0) = GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, attachment, texture.name, level)
+    inline fun texture(target: FramebufferTarget, attachment: Attachment, texture: GlTexture, level: Int = 0) = GL32.glFramebufferTexture(target.i, attachment.i, texture.name, level)
+    inline fun texture(attachment: Attachment, texture: GlTexture, level: Int = 0) = GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, attachment.i, texture.name, level)
 
-    inline fun texture2D(target: Int, attachment: Int, texture: GlTexture, level: Int = 0) = GL30.glFramebufferTexture2D(target, attachment, GL11.GL_TEXTURE_2D, texture.name, level)
+    inline fun texture2D(target: FramebufferTarget, attachment: Attachment, texture: GlTexture, level: Int = 0) = GL30.glFramebufferTexture2D(target.i, attachment.i, GL11.GL_TEXTURE_2D, texture.name, level)
 
-    fun renderbuffer(target: FramebufferTarget, attachment: Int, renderbuffer: GlRenderbuffer) = GL30C.glFramebufferRenderbuffer(target.i, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.name)
-    fun renderbuffer(attachment: Int, renderbuffer: GlRenderbuffer) = GL30C.glFramebufferRenderbuffer(GL30C.GL_FRAMEBUFFER, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.name)
+    fun renderbuffer(target: FramebufferTarget, attachment: Attachment, renderbuffer: GlRenderbuffer) = GL30C.glFramebufferRenderbuffer(target.i, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
+    fun renderbuffer(attachment: Attachment, renderbuffer: GlRenderbuffer) = GL30C.glFramebufferRenderbuffer(GL30C.GL_FRAMEBUFFER, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     val complete: Boolean
         get() = when (val status = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER)) {
@@ -77,7 +78,7 @@ object GlFramebufferDsl {
             }
         }
 
-    fun getParameter(attachment: Int, pName: Int) = GL30.glGetFramebufferAttachmentParameteri(GL30.GL_FRAMEBUFFER, attachment, pName)
+    fun getParameter(attachment: Attachment, pName: Int) = GL30.glGetFramebufferAttachmentParameteri(GL30.GL_FRAMEBUFFER, attachment.i, pName)
 
     fun getDepthParameter(pName: Int) = GL30.glGetFramebufferAttachmentParameteri(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, pName)
     fun getStencilParameter(pName: Int) = GL30.glGetFramebufferAttachmentParameteri(GL30.GL_FRAMEBUFFER, GL30.GL_STENCIL_ATTACHMENT, pName)

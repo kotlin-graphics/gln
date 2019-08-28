@@ -426,8 +426,8 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture">Reference Page</a>
      */
-    fun framebufferTexture(target: FramebufferTarget, attachment: Int, texture: GlTexture, level: Int) =
-            GL32C.glFramebufferTexture(target.i, attachment, texture.name, level)
+    fun framebufferTexture(target: FramebufferTarget, attachment: Attachment, texture: GlTexture, level: Int) =
+            GL32C.glFramebufferTexture(target.i, attachment.i, texture.name, level)
 
     // --- [ glFenceSync ] ---
 

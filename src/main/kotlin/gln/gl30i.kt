@@ -1209,8 +1209,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture1D">Reference Page</a>
      */
-    fun framebufferTexture1D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture1D(target.i, attachment, texTarget.i, texture.name, level)
+    fun framebufferTexture1D(target: FramebufferTarget, attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
+            GL30C.glFramebufferTexture1D(target.i, attachment.i, texTarget.i, texture.name, level)
 
     /**
      * Attaches a level of a 1D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1222,8 +1222,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture1D">Reference Page</a>
      */
-    fun framebufferTexture1D(attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture1D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.name, level)
+    fun framebufferTexture1D(attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
+            GL30C.glFramebufferTexture1D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level)
 
     // --- [ glFramebufferTexture2D ] ---
 
@@ -1238,8 +1238,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture2D">Reference Page</a>
      */
-    fun framebufferTexture2D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture2D(target.i, attachment, texTarget.i, texture.name, level)
+    fun framebufferTexture2D(target: FramebufferTarget, attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
+            GL30C.glFramebufferTexture2D(target.i, attachment.i, texTarget.i, texture.name, level)
 
     /**
      * Attaches a level of a 2D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1251,8 +1251,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture2D">Reference Page</a>
      */
-    fun framebufferTexture2D(attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture2D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.name, level)
+    fun framebufferTexture2D(attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
+            GL30C.glFramebufferTexture2D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level)
 
     // --- [ glFramebufferTexture3D ] ---
 
@@ -1268,8 +1268,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture3D">Reference Page</a>
      */
-    fun framebufferTexture3D(target: FramebufferTarget, attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTexture3D(target.i, attachment, texTarget.i, texture.name, level, layer)
+    fun framebufferTexture3D(target: FramebufferTarget, attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
+            GL30C.glFramebufferTexture3D(target.i, attachment.i, texTarget.i, texture.name, level, layer)
 
     /**
      * Attaches a layer of a 3D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1282,8 +1282,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture3D">Reference Page</a>
      */
-    fun framebufferTexture3D(attachment: Int, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTexture3D(GL30C.GL_FRAMEBUFFER, attachment, texTarget.i, texture.name, level, layer)
+    fun framebufferTexture3D(attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
+            GL30C.glFramebufferTexture3D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level, layer)
 
     // --- [ glFramebufferTextureLayer ] ---
 
@@ -1298,8 +1298,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
-    fun framebufferTextureLayer(target: FramebufferTarget, attachment: Int, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTextureLayer(target.i, attachment, texture.name, level, layer)
+    fun framebufferTextureLayer(target: FramebufferTarget, attachment: Attachment, texture: GlTexture, level: Int, layer: Int) =
+            GL30C.glFramebufferTextureLayer(target.i, attachment.i, texture.name, level, layer)
 
     /**
      * Attaches a single layer of a texture to a framebuffer
@@ -1311,8 +1311,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
-    fun framebufferTextureLayer(attachment: Int, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTextureLayer(GL30C.GL_FRAMEBUFFER, attachment, texture.name, level, layer)
+    fun framebufferTextureLayer(attachment: Attachment, texture: GlTexture, level: Int, layer: Int) =
+            GL30C.glFramebufferTextureLayer(GL30C.GL_FRAMEBUFFER, attachment.i, texture.name, level, layer)
 
     // --- [ glFramebufferRenderbuffer ] ---
 
@@ -1326,8 +1326,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
-    fun framebufferRenderbuffer(target: FramebufferTarget, attachment: Int, renderbuffer: GlRenderbuffer) =
-            GL30C.glFramebufferRenderbuffer(target.i, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.name)
+    fun framebufferRenderbuffer(target: FramebufferTarget, attachment: Attachment, renderbuffer: GlRenderbuffer) =
+            GL30C.glFramebufferRenderbuffer(target.i, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     /**
      * Attaches a renderbuffer as a logical buffer to the currently bound framebuffer object.
@@ -1338,8 +1338,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
-    fun framebufferRenderbuffer(attachment: Int, renderbuffer: GlRenderbuffer) =
-            GL30C.glFramebufferRenderbuffer(GL30C.GL_FRAMEBUFFER, attachment, GL30C.GL_RENDERBUFFER, renderbuffer.name)
+    fun framebufferRenderbuffer(attachment: Attachment, renderbuffer: GlRenderbuffer) =
+            GL30C.glFramebufferRenderbuffer(GL30C.GL_FRAMEBUFFER, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     // --- [ glGetFramebufferAttachmentParameteriv ] ---
 
@@ -1352,8 +1352,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
-    fun getFramebufferAttachmentParameter(target: FramebufferTarget, attachment: Int, name: GetFramebufferAttachment): Int =
-            GL30C.glGetFramebufferAttachmentParameteri(target.i, attachment, name.i)
+    fun getFramebufferAttachmentParameter(target: FramebufferTarget, attachment: Attachment, name: GetFramebufferAttachment): Int =
+            GL30C.glGetFramebufferAttachmentParameteri(target.i, attachment.i, name.i)
 
     /**
      * Retrievees information about attachments of a bound framebuffer object.
@@ -1363,8 +1363,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
-    fun getFramebufferAttachmentParameter(attachment: Int, name: GetFramebufferAttachment): Int =
-            GL30C.glGetFramebufferAttachmentParameteri(GL30C.GL_FRAMEBUFFER, attachment, name.i)
+    fun getFramebufferAttachmentParameter(attachment: Attachment, name: GetFramebufferAttachment): Int =
+            GL30C.glGetFramebufferAttachmentParameteri(GL30C.GL_FRAMEBUFFER, attachment.i, name.i)
 
     // --- [ glBlitFramebuffer ] ---
 

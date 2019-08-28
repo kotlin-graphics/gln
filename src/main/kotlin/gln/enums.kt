@@ -5880,7 +5880,47 @@ inline class Usage(val i: Int) {
 //#	RENDERBUFFER_DEPTH_SIZE_EXT			= 0x8D54
 //#	RENDERBUFFER_STENCIL_SIZE			= 0x8D55    # 3.0 / ARB_fbo
 //#	RENDERBUFFER_STENCIL_SIZE_EXT			= 0x8D55
-//
+
+inline class Attachment(val i: Int) {
+    companion object {
+        val COLOR0 = Attachment(GL30C.GL_COLOR_ATTACHMENT0)
+        val COLOR1 = Attachment(GL30C.GL_COLOR_ATTACHMENT1)
+        val COLOR2 = Attachment(GL30C.GL_COLOR_ATTACHMENT2)
+        val COLOR3 = Attachment(GL30C.GL_COLOR_ATTACHMENT3)
+        val COLOR4 = Attachment(GL30C.GL_COLOR_ATTACHMENT4)
+        val COLOR5 = Attachment(GL30C.GL_COLOR_ATTACHMENT5)
+        val COLOR6 = Attachment(GL30C.GL_COLOR_ATTACHMENT6)
+        val COLOR7 = Attachment(GL30C.GL_COLOR_ATTACHMENT7)
+        val COLOR8 = Attachment(GL30C.GL_COLOR_ATTACHMENT8)
+        val COLOR9 = Attachment(GL30C.GL_COLOR_ATTACHMENT9)
+        val COLOR10 = Attachment(GL30C.GL_COLOR_ATTACHMENT10)
+        val COLOR11 = Attachment(GL30C.GL_COLOR_ATTACHMENT11)
+        val COLOR12 = Attachment(GL30C.GL_COLOR_ATTACHMENT12)
+        val COLOR13 = Attachment(GL30C.GL_COLOR_ATTACHMENT13)
+        val COLOR14 = Attachment(GL30C.GL_COLOR_ATTACHMENT14)
+        val COLOR15 = Attachment(GL30C.GL_COLOR_ATTACHMENT15)
+        val COLOR16 = Attachment(GL30C.GL_COLOR_ATTACHMENT16)
+        val COLOR17 = Attachment(GL30C.GL_COLOR_ATTACHMENT17)
+        val COLOR18 = Attachment(GL30C.GL_COLOR_ATTACHMENT18)
+        val COLOR19 = Attachment(GL30C.GL_COLOR_ATTACHMENT19)
+        val COLOR20 = Attachment(GL30C.GL_COLOR_ATTACHMENT20)
+        val COLOR21 = Attachment(GL30C.GL_COLOR_ATTACHMENT21)
+        val COLOR22 = Attachment(GL30C.GL_COLOR_ATTACHMENT22)
+        val COLOR23 = Attachment(GL30C.GL_COLOR_ATTACHMENT23)
+        val COLOR24 = Attachment(GL30C.GL_COLOR_ATTACHMENT24)
+        val COLOR25 = Attachment(GL30C.GL_COLOR_ATTACHMENT25)
+        val COLOR26 = Attachment(GL30C.GL_COLOR_ATTACHMENT26)
+        val COLOR27 = Attachment(GL30C.GL_COLOR_ATTACHMENT27)
+        val COLOR28 = Attachment(GL30C.GL_COLOR_ATTACHMENT28)
+        val COLOR29 = Attachment(GL30C.GL_COLOR_ATTACHMENT29)
+        val COLOR30 = Attachment(GL30C.GL_COLOR_ATTACHMENT30)
+        val COLOR31 = Attachment(GL30C.GL_COLOR_ATTACHMENT31)
+        val DEPTH = Attachment(GL30C.GL_DEPTH_ATTACHMENT)
+        val STENCIL = Attachment(GL30C.GL_STENCIL_ATTACHMENT)
+        val DEPTH_STENCIL = Attachment(GL30C.GL_DEPTH_STENCIL_ATTACHMENT)
+    }
+}
+
 //# VERSION_3_0 enum:
 //# ARB_framebuffer_object enum: (note: no ARB suffixes)
 //# EXT_framebuffer_multisample enum: (additional; see above)
