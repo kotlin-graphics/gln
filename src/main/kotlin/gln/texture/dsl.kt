@@ -279,6 +279,10 @@ object GlTextureDsl {
 
     fun image2D(level: Int, internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage2D(level, internalFormat, size, format, type, pixels)
 
+    // level 0
+    fun image1D(internalFormat: InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage1D(0, internalFormat, width, format, type, pixels)
+    fun image2D(internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage2D(0, internalFormat, size, format, type, pixels)
+
     // --- [ glCopyTexImage1D ] --- TODO custom InternalFormat?
 
     fun copyImage1D(level: Int, internalFormat: InternalFormat, pos: Vec2i, width: Int) = gln.gl.copyTexImage1D(level, internalFormat, pos, width)
@@ -322,8 +326,9 @@ object GlTextureDsl {
     fun image3D(target: TextureTarget, level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(target, level, internalFormat, size, format, type, pixels)
 
     // default target
-
     fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(level, internalFormat, size, format, type, pixels)
+    // default level
+    fun image3D(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(0, internalFormat, size, format, type, pixels)
 
     // --- [ glTexSubImage3D ] ---
 
