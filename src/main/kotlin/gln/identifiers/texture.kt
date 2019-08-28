@@ -444,6 +444,9 @@ inline class GlTextures(val names: IntBuffer) {
     inline val adr: Long
         get() = names.adr
 
+    operator fun get(index: Int): GlTexture = GlTexture(names[index])
+    operator fun <E : Enum<E>> get(e: E): GlTexture = GlTexture(names[e.ordinal])
+
     // --- [ glBindImageTextures ] ---
 
     fun bindImages(first: Int = 0) = gl.bindImageTextures(first, this)
