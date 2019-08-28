@@ -22,10 +22,10 @@ inline class GlFramebuffer(val name: Int = -1) {
 
     fun bind() = glBindFramebuffer(name)
 
-    inline fun bind(block: GlFramebufferDsl.() -> Unit) {
+    inline fun <R> bind(block: GlFramebufferDsl.() -> R): R {
         bind()
         GlFramebufferDsl.name = name
-        GlFramebufferDsl.block()
+        return GlFramebufferDsl.block()
     }
 
     fun bindRead() = GL30C.glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, name)

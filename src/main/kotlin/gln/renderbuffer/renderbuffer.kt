@@ -35,9 +35,6 @@ inline class GlRenderbuffers(val names: IntBuffer) {
     val adr: Adr
         get() = names.adr
 
-    val DEFAULT: GlFramebuffer
-        get() = GlFramebuffer(0)
-
     operator fun get(index: Int): GlRenderbuffer = GlRenderbuffer(names[index])
     operator fun <E : Enum<E>> get(e: E): GlRenderbuffer = GlRenderbuffer(names[e.ordinal])
 
