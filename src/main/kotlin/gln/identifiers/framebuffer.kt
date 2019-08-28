@@ -355,13 +355,10 @@ inline class GlFramebuffers(val names: IntBuffer) {
     val adr: Adr
         get() = names.adr
 
-    // --- [ glCreateFramebuffers ] ---
+    operator fun get(index: Int): GlFramebuffer = GlFramebuffer(names[index])
+    operator fun <E : Enum<E>> get(e: E): GlFramebuffer = GlFramebuffer(names[e.ordinal])
 
-    /**
-     * Returns {@code n} previously unused framebuffer names in {@code framebuffers}, each representing a new framebuffer object.
-     *
-     * @see <a target="_blank" href="http://docs.gl/gl4/glCreateFramebuffers">Reference Page</a>
-     */
+    // --- [ glCreateFramebuffers ] ---
     fun create() = gl.createFramebuffers(this)
 
     inline fun gen(block: GlFramebuffersDsl.() -> Unit) {
