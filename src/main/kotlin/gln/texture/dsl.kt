@@ -502,6 +502,7 @@ object GlTexturesDsl {
         val name = names[ordinal]
         GL11C.glBindTexture(target.i, name)
         GlTextureDsl.name = name
+        GlTextureDsl.block()
     }
 
     inline fun <E : Enum<E>> E.bound(target: TextureTarget, block: GlTextureDsl.() -> Unit) {
