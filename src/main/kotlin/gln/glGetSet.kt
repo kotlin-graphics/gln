@@ -62,8 +62,9 @@ interface glGetSet {
         get() = GlProgram(GL20.GL_CURRENT_PROGRAM)
 
 
-    val depthFunc: CompareFunction
+    var depthFunc: CompareFunction
         get() = CompareFunction(int(GL20.GL_DEPTH_FUNC))
+        set(value) = GL11C.glDepthFunc(value.i)
 
     fun drawBuffer(i: Int): BufferMode = int(GL20.GL_DRAW_BUFFER0 + i)
 
