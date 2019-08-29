@@ -111,7 +111,7 @@ inline class GlTexture(val name: Int = -1) {
 
     // --- [ glBindTexture ] ---
 
-    fun bind(target: TextureTarget) = GL11C.glBindTexture(target.i, name)
+    infix fun bind(target: TextureTarget) = GL11C.glBindTexture(target.i, name)
 
     fun bind(target: TextureTarget, unit: Int) {
         GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + unit)
