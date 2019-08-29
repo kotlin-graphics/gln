@@ -41,6 +41,7 @@ inline fun glVertexAttribPointer(index: Int, size: Int, type: Int, normalized: B
 inline fun glVertexAttribPointer(layout: VertexLayout) = layout.attributes.forEach(::glVertexAttribPointer)
 inline fun glEnableVertexAttribArray(layout: VertexLayout) = layout.attributes.forEach(::glEnableVertexAttribArray)
 inline fun glDisableVertexAttribArray(layout: VertexLayout) = layout.attributes.forEach(::glDisableVertexAttribArray)
+
 inline fun glVertexAttribPointer(attribute: VertexAttribute) = with(attribute) { GL20.glVertexAttribPointer(index, size, type.i, normalized, interleavedStride, pointer.L) }
 inline fun glEnableVertexAttribArray(attribute: VertexAttribute) = GL20.glEnableVertexAttribArray(attribute.index)
 inline fun glDisableVertexAttribArray(attribute: VertexAttribute) = GL20.glDisableVertexAttribArray(attribute.index)

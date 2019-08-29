@@ -8,6 +8,9 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4b
 import glm_.vec4.Vec4ub
 import gln.VertexAttrType
+import gln.vertexArray.glDisableVertexAttribArray
+import gln.vertexArray.glEnableVertexAttribArray
+import gln.vertexArray.glVertexAttribPointer
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL20C
 
@@ -258,6 +261,9 @@ object Vertex { // TODO
 interface VertexLayout {
     var attributes: Array<VertexAttribute>
     operator fun get(index: Int) = attributes[index]
+    fun set() = glVertexAttribPointer(this)
+    fun enable() = glEnableVertexAttribArray(this)
+    fun disable() = glDisableVertexAttribArray(this)
 }
 
 class VertexAttribute(
