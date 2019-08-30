@@ -372,6 +372,8 @@ inline class GlFramebuffers(val names: IntBuffer) {
         GlFramebuffersDsl.block()
     }
 
+    fun delete() = GL30C.glDeleteFramebuffers(names)
+
     companion object {
         // --- [ glCreateFramebuffers ] ---
 
