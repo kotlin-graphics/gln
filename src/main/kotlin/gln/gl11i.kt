@@ -340,7 +340,7 @@ interface gl11i {
      */
     var drawBuffer: BufferMode
         get() = GL11C.glGetInteger(GL11C.GL_DRAW_BUFFER)
-        set(value) = GL11C.glDrawBuffer(value.i)
+        set(value) = GL11C.glDrawBuffer(value)
 
     // --- [ glDrawElements ] ---
 
