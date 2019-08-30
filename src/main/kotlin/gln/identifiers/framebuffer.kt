@@ -361,6 +361,11 @@ inline class GlFramebuffers(val names: IntBuffer) {
     // --- [ glCreateFramebuffers ] ---
     fun create() = gl.createFramebuffers(this)
 
+    fun gen(): GlFramebuffers {
+        GL30C.glGenFramebuffers(names)
+        return this
+    }
+
     inline fun gen(block: GlFramebuffersDsl.() -> Unit) {
         GL30C.glGenFramebuffers(names)
         GlFramebuffersDsl.names = names

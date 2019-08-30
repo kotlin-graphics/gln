@@ -10,10 +10,6 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
 
-inline class GlProgramPipeline(val i: Int)
-
-
-
 inline class GlSync(val L: Long) {
 
     val isValid: Boolean

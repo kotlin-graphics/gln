@@ -93,14 +93,17 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    infix fun genBuffers(buffer: KMutableProperty0<GlBuffer>) = buffer.set(genBuffer())
+    infix fun genBuffers(buffer: KMutableProperty0<GlBuffer>): GlBuffer {
+        buffer.set(genBuffers())
+        return buffer()
+    }
 
     /**
      * Generates buffer object names.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    fun genBuffer(): GlBuffer = GlBuffer(Stack.intAddress { GL15C.nglGenBuffers(1, it) })
+    fun genBuffers(): GlBuffer = GlBuffer(Stack.intAddress { GL15C.nglGenBuffers(1, it) })
 
     // --- [ glIsBuffer ] ---
 
@@ -282,14 +285,17 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
-    infix fun genQueries(query: KMutableProperty0<GlQuery>) = query.set(genQuery())
+    infix fun genQueries(query: KMutableProperty0<GlQuery>): GlQuery {
+        query.set(genQueries())
+        return query()
+    }
 
     /**
      * Generates query object names.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
-    fun genQuery(): GlQuery = GlQuery(Stack.intAddress { GL15C.nglGenQueries(1, it) })
+    fun genQueries(): GlQuery = GlQuery(Stack.intAddress { GL15C.nglGenQueries(1, it) })
 
     // --- [ glDeleteQueries ] ---
 

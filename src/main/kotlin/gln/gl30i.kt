@@ -1030,7 +1030,19 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenRenderbuffers">Reference Page</a>
      */
-    fun genRenderbuffers(size: Int) = GlRenderbuffers(size)
+    fun genRenderbuffers(size: Int): GlRenderbuffers = GlRenderbuffers(size)
+
+    /**
+     * Generates renderbuffer object names.
+     *
+     * @param size the size of renderbuffers to generated
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenRenderbuffers">Reference Page</a>
+     */
+    fun genRenderbuffers(renderbuffer: KMutableProperty0<GlRenderbuffer>): GlRenderbuffer {
+        renderbuffer.set(genRenderbuffers())
+        return renderbuffer()
+    }
 
     /**
      * Generates renderbuffer object names.
@@ -1180,9 +1192,21 @@ interface gl30i {
     /**
      * Generates framebuffer object names.
      *
+     * @param size the number of framebuffer object names to generate
+     *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenFramebuffers">Reference Page</a>
      */
-    fun genFramebuffer(): GlFramebuffer = GlFramebuffer(GL30C.glGenFramebuffers())
+    fun genFramebuffers(framebuffer: KMutableProperty0<GlFramebuffer>): GlFramebuffer {
+        framebuffer.set(genFramebuffers())
+        return framebuffer()
+    }
+
+    /**
+     * Generates framebuffer object names.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenFramebuffers">Reference Page</a>
+     */
+    fun genFramebuffers(): GlFramebuffer = GlFramebuffer(GL30C.glGenFramebuffers())
 
     // --- [ glCheckFramebufferStatus ] ---
 
@@ -1770,7 +1794,10 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
      */
-    fun genVertexArrays(array: KMutableProperty0<GlVertexArray>) = array.set(genVertexArrays())
+    fun genVertexArrays(array: KMutableProperty0<GlVertexArray>): GlVertexArray {
+        array.set(genVertexArrays())
+        return array()
+    }
 
     /**
      * Generates vertex array object names.
