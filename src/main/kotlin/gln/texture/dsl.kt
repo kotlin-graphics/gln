@@ -398,19 +398,19 @@ object GlTextureDsl {
 //            image(i, format.internal, extent(i), format.external, format.type, data(0, 0, i))
 //    }
 
-    inline fun storage(internalFormat: gl.InternalFormat, size: Int) = storage(1, internalFormat, size)
-    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Int) = GL42.glTexStorage1D(target.i, levels, internalFormat.i, size)
+    inline fun storage1D(internalFormat: gl.InternalFormat, size: Int) = storage1D(1, internalFormat, size)
+    inline fun storage1D(levels: Int, internalFormat: gl.InternalFormat, size: Int) = GL42.glTexStorage1D(target.i, levels, internalFormat.i, size)
 
-    inline fun storage(internalFormat: gl.InternalFormat, size: Vec2i) = storage(1, internalFormat, size)
-    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Vec2i) = GL42.glTexStorage2D(target.i, levels, internalFormat.i, size.x, size.y)
+    inline fun storage2D(internalFormat: gl.InternalFormat, size: Vec2i) = storage2D(1, internalFormat, size)
+    inline fun storage2D(levels: Int, internalFormat: gl.InternalFormat, size: Vec2i) = GL42.glTexStorage2D(target.i, levels, internalFormat.i, size.x, size.y)
 
-    inline fun storage(internalFormat: gl.InternalFormat, size: Vec3i) = storage(1, internalFormat, size)
-    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Vec3i) = GL42.glTexStorage3D(target.i, levels, internalFormat.i, size.x, size.y, size.z)
+    inline fun storage3D(internalFormat: gl.InternalFormat, size: Vec3i) = storage3D(1, internalFormat, size)
+    inline fun storage3D(levels: Int, internalFormat: gl.InternalFormat, size: Vec3i) = GL42.glTexStorage3D(target.i, levels, internalFormat.i, size.x, size.y, size.z)
 
-    inline fun compressedSubImage(level: Int, size: Vec3i, format: gl.InternalFormat, data: ByteBuffer) =
-            compressedSubImage(level, 0, 0, size.x, size.y, format.i, data)
+    inline fun compressedSubImage2D(level: Int, size: Vec3i, format: gl.InternalFormat, data: ByteBuffer) =
+            compressedSubImage2D(level, 0, 0, size.x, size.y, format.i, data)
 
-    inline fun compressedSubImage(level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: Int, data: ByteBuffer) =
+    inline fun compressedSubImage2D(level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: Int, data: ByteBuffer) =
             GL13.nglCompressedTexSubImage2D(target.i, level, xOffset, yOffset, width, height, format, data.rem, data.adr + data.pos)
 
     inline fun levels(base: Int = 0, max: Int = 1_000) {
@@ -421,8 +421,6 @@ object GlTextureDsl {
     var maxAnisotropy: Float
         get() = GL11C.glGetTexParameterf(target.i, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT)
         set(value) = GL11C.glTexParameterf(target.i, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, value)
-
-
 }
 
 inline class TexMinFilter(val i: Int) {
