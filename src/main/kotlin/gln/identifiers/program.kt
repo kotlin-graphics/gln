@@ -728,5 +728,10 @@ inline class GlPrograms(val names: IntArray) {
         names[index] = value.name
     }
 
+    operator fun <E : Enum<E>> get(index: E): GlProgram = GlProgram(names[index.ordinal])
+    operator fun <E : Enum<E>> set(index: E, value: GlProgram) {
+        names[index.ordinal] = value.name
+    }
+
     fun delete() = names.forEach(GL20C::glDeleteProgram)
 }
