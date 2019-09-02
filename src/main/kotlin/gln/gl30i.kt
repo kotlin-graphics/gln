@@ -21,8 +21,8 @@ import glm_.vec4.Vec4ui
 import gln.identifiers.*
 import gln.renderbuffer.GlRenderbuffer
 import gln.renderbuffer.GlRenderbuffers
-import gln.vertexArray.GlVertexArray
-import gln.vertexArray.GlVertexArrays
+import gln.identifiers.GlVertexArray
+import gln.identifiers.GlVertexArrays
 import kool.Stack
 import kool.adr
 import org.lwjgl.opengl.GL30C

@@ -7,8 +7,8 @@ import gln.program.GlPipeline
 import gln.program.GlPipelines
 import gln.sampler.GlSampler
 import gln.sampler.GlSamplers
-import gln.vertexArray.GlVertexArray
-import gln.vertexArray.GlVertexArrays
+import gln.identifiers.GlVertexArray
+import gln.identifiers.GlVertexArrays
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.nio.LongBuffer

@@ -7,7 +7,7 @@ import gln.identifiers.GlFramebuffer
 import gln.identifiers.GlProgram
 import gln.renderbuffer.GlRenderbuffer
 import gln.sampler.GlSampler
-import gln.vertexArray.GlVertexArray
+import gln.identifiers.GlVertexArray
 import kool.Ptr
 import kool.Stack
 import org.lwjgl.opengl.*

@@ -22,7 +22,7 @@ import gln.misc.BlendDsl
 import gln.misc.GlDebugSource
 import gln.identifiers.*
 import gln.transformFeedback.GlTransformFeedback
-import gln.vertexArray.GlVertexArray
+import gln.identifiers.GlVertexArray
 import kool.IntBuffer
 import kool.adr
 import kool.lib.toIntArray
