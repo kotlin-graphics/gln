@@ -25,6 +25,7 @@ import glm_.vec4.Vec4ui
 import gln.*
 import gln.program.ProgramBase
 import gln.program.ProgramUse
+import gln.program.glDeleteProgram
 import kool.ByteBuffer
 import kool.adr
 import kool.rem
@@ -716,4 +717,16 @@ inline class GlProgram(val name: Int) {
 
         // TODO createFromPath
     }
+}
+
+inline fun <reified E : Enum<E>> GlPrograms() = GlPrograms(IntArray(enumValues<E>().size))
+
+inline class GlPrograms(val names: IntArray) {
+
+    operator fun get(index: Int): GlProgram = GlProgram(names[index])
+    operator fun set(index: Int, value: GlProgram) {
+        names[index] = value.name
+    }
+
+    fun delete() = names.forEach(GL20C::glDeleteProgram)
 }
