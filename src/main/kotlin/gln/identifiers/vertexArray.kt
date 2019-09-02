@@ -1,26 +1,16 @@
 package gln.identifiers
 
-import glm_.L
 import gln.VertexAttrIndex
 import gln.VertexAttrSize
 import gln.VertexAttrType
 import gln.gl
-import gln.glf.VertexAttribute
-import gln.glf.VertexLayout
-import gln.identifiers.GlBuffer
-import gln.identifiers.GlBuffers
 import gln.vertexArray.GlVertexArraysDsl
 import kool.IntBuffer
 import kool.adr
-import kool.get
 import kool.rem
-import org.lwjgl.opengl.GL20
-import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
 import java.nio.LongBuffer
-import kotlin.properties.Delegates
-import kotlin.reflect.KMutableProperty0
 
 fun GlVertexArrays(size: Int) = GlVertexArrays(IntBuffer(size))
 
@@ -43,6 +33,16 @@ inline class GlVertexArrays(val names: IntBuffer) {
         GL30C.glGenVertexArrays(names)
         GlVertexArraysDsl.names = names
         GlVertexArraysDsl.block()
+    }
+
+    operator fun get(index: Int): GlVertexArray = GlVertexArray(names[index])
+    operator fun set(index: Int, array: GlVertexArray) {
+        names.put(index, array.name)
+    }
+
+    operator fun get(enum: Enum<*>): GlVertexArray = GlVertexArray(names[enum.ordinal])
+    operator fun set(enum: Enum<*>, array: GlVertexArray) {
+        names.put(enum.ordinal, array.name)
     }
 
     companion object {
