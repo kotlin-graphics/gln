@@ -35,6 +35,8 @@ inline class GlVertexArrays(val names: IntBuffer) {
         GlVertexArraysDsl.block()
     }
 
+    fun delete() = GL30C.glDeleteVertexArrays(names)
+
     operator fun get(index: Int): GlVertexArray = GlVertexArray(names[index])
     operator fun set(index: Int, array: GlVertexArray) {
         names.put(index, array.name)
