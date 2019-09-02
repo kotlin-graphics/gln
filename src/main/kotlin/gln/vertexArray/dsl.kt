@@ -49,12 +49,28 @@ object GlVertexArraysDsl {
 
     lateinit var names: IntBuffer
 
-    inline fun at(index: Enum<*>, block: GlVertexArrayDsl.() -> Unit) = at(index.ordinal, block)
-    inline fun at(index: Int, block: GlVertexArrayDsl.() -> Unit) {
-        val name = names[index]
+    inline fun Int.bind(block: GlVertexArrayDsl.() -> Unit) {
+        val name = names[this]
         GlVertexArrayDsl.name = name
         GL30C.glBindVertexArray(name)
         GlVertexArrayDsl.block()
+    }
+
+    inline fun <E : Enum<E>> E.bind(block: GlVertexArrayDsl.() -> Unit) {
+        val name = names[this]
+        GlVertexArrayDsl.name = name
+        GL30C.glBindVertexArray(name)
+        GlVertexArrayDsl.block()
+    }
+
+    inline fun Int.bound(block: GlVertexArrayDsl.() -> Unit) {
+        bind(block)
+        GL30C.glBindVertexArray(0)
+    }
+
+    inline fun <E : Enum<E>> E.bound(block: GlVertexArrayDsl.() -> Unit) {
+        bind(block)
+        GL30C.glBindVertexArray(0)
     }
 }
 
