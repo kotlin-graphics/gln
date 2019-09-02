@@ -548,7 +548,7 @@ inline class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformBlockIndex">Reference Page</a>
      */
-    fun getUniformBlockIndex(uniformBlockName: CharSequence): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
+    infix fun getUniformBlockIndex(uniformBlockName: CharSequence): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
 
     // --- [ glGetActiveUniformBlockiv ] ---
 
