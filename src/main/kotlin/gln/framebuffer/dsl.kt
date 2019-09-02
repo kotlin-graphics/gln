@@ -91,10 +91,27 @@ object GlFramebuffersDsl {
 
     lateinit var names: IntBuffer
 
+    inline fun Int.bind(block: GlFramebufferDsl.() -> Unit) {
+        val name = names[this]
+        GL30C.glBindFramebuffer(GL30.GL_FRAMEBUFFER, name)
+        GlFramebufferDsl.name = name
+        GlFramebufferDsl.block()
+    }
+
     inline fun <E : Enum<E>> E.bind(block: GlFramebufferDsl.() -> Unit) {
         val name = names[ordinal]
         GL30C.glBindFramebuffer(GL30.GL_FRAMEBUFFER, name)
         GlFramebufferDsl.name = name
         GlFramebufferDsl.block()
+    }
+
+    inline fun Int.bound(block: GlFramebufferDsl.() -> Unit) {
+        bind(block)
+        GL30C.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0)
+    }
+
+    inline fun <E : Enum<E>> E.bound(block: GlFramebufferDsl.() -> Unit) {
+        bind(block)
+        GL30C.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0)
     }
 }
