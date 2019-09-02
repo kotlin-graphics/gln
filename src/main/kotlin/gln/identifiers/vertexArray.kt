@@ -13,6 +13,7 @@ import java.nio.IntBuffer
 import java.nio.LongBuffer
 
 fun GlVertexArrays(size: Int) = GlVertexArrays(IntBuffer(size))
+inline fun <reified E : Enum<E>> GlVertexArrays(): GlVertexArrays = GlVertexArrays(IntBuffer<E>())
 
 inline class GlVertexArrays(val names: IntBuffer) {
     val rem get() = names.rem

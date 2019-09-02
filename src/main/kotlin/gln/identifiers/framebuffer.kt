@@ -6,17 +6,14 @@ import gln.*
 import gln.framebuffer.GlFramebufferDsl
 import gln.framebuffer.GlFramebuffersDsl
 import gln.framebuffer.glBindFramebuffer
-import gln.identifiers.GlTexture
-import gln.renderbuffer.GlRenderbuffer
 import kool.*
-import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL30.*
 import org.lwjgl.opengl.GL30C
-import org.lwjgl.opengl.GL32
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
-import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty0
+
+
+val defaultFbo = GlFramebuffer(0)
 
 inline class GlFramebuffer(val name: Int = -1) {
 
@@ -346,6 +343,7 @@ inline class GlFramebuffer(val name: Int = -1) {
 }
 
 fun GlFramebuffers(size: Int) = GlFramebuffers(IntBuffer(size))
+inline fun <reified E : Enum<E>> GlFramebuffers(): GlFramebuffers = GlFramebuffers(IntBuffer<E>())
 
 inline class GlFramebuffers(val names: IntBuffer) {
 

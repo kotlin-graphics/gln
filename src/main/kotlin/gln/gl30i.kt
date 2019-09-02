@@ -19,8 +19,8 @@ import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.identifiers.*
-import gln.renderbuffer.GlRenderbuffer
-import gln.renderbuffer.GlRenderbuffers
+import gln.identifiers.GlRenderbuffer
+import gln.identifiers.GlRenderbuffers
 import gln.identifiers.GlVertexArray
 import gln.identifiers.GlVertexArrays
 import kool.Stack

@@ -227,9 +227,8 @@ interface gl31i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniforms">Reference Page</a>
      */
     fun getActiveUniformsi(program: GlProgram, uniformIndex: Int, name: GetActiveUniform): Int = Stack { s ->
-        val pUniformIndex = s.intAddress(uniformIndex)
         s.intAddress { pParam ->
-            GL31C.nglGetActiveUniformsiv(program.name, 1, pUniformIndex, name.i, pParam)
+            GL31C.nglGetActiveUniformsiv(program.name, 1, s.intAddress(uniformIndex), name.i, pParam)
         }
     }
 

@@ -5,9 +5,9 @@ import glm_.vec2.Vec2
 import glm_.vec4.Vec4
 import gln.identifiers.GlFramebuffer
 import gln.identifiers.GlProgram
-import gln.renderbuffer.GlRenderbuffer
-import gln.sampler.GlSampler
+import gln.identifiers.GlRenderbuffer
 import gln.identifiers.GlVertexArray
+import gln.sampler.GlSampler
 import kool.Ptr
 import kool.Stack
 import org.lwjgl.opengl.*

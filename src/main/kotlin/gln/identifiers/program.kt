@@ -719,6 +719,7 @@ inline class GlProgram(val name: Int) {
     }
 }
 
+fun GlPrograms(size: Int) = GlPrograms(IntArray(size))
 inline fun <reified E : Enum<E>> GlPrograms() = GlPrograms(IntArray(enumValues<E>().size))
 
 inline class GlPrograms(val names: IntArray) {

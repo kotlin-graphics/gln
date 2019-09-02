@@ -783,9 +783,8 @@ interface gl43i {
      */
     fun getProgramResource(program: GlProgram, programInterface: ProgramInterface, index: Int, props: Int): Int =
             Stack { s ->
-                val pProp = s.intAddress(props)
                 s.intAddress { pParam ->
-                    GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, 1, pProp, 1, NULL, pParam)
+                    GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, 1, s.intAddress(props), 1, NULL, pParam)
                 }
             }
 

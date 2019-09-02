@@ -8,8 +8,8 @@ import glm_.vec4.Vec4ui
 import gln.identifiers.GlFramebuffer
 import gln.identifiers.GlFramebuffers
 import gln.identifiers.*
-import gln.renderbuffer.GlRenderbuffer
-import gln.renderbuffer.GlRenderbuffers
+import gln.identifiers.GlRenderbuffer
+import gln.identifiers.GlRenderbuffers
 import gln.transformFeedback.GlTransformFeedback
 import gln.transformFeedback.GlTransformFeedbacks
 import kool.Ptr

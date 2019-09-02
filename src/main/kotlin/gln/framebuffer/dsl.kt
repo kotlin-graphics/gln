@@ -5,7 +5,7 @@ package gln.framebuffer
 import gln.Attachment
 import gln.FramebufferTarget
 import gln.identifiers.GlTexture
-import gln.renderbuffer.GlRenderbuffer
+import gln.identifiers.GlRenderbuffer
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
