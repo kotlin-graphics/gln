@@ -97,22 +97,22 @@ object GlTextureDsl {
             maxLevel = value.last
         }
 
-//    var swizzleR: gl.Swizzle
-//        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_R) }
-//        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, value.r.i)
-//
-//    var swizzleG: gl.Swizzle
-//        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_G) }
-//        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, value.r.i)
-//
-//    var swizzleB: gl.Swizzle
-//        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_B) }
-//        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, value.r.i)
-//
-//    var swizzleA: gl.Swizzle
-//        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_A) }
-//        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, value.r.i)
-//
+    var swizzleR: gl.Swizzle
+        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_R) }
+        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, value.i)
+
+    var swizzleG: gl.Swizzle
+        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_G) }
+        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, value.i)
+
+    var swizzleB: gl.Swizzle
+        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_B) }
+        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, value.i)
+
+    var swizzleA: gl.Swizzle
+        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_A) }
+        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, value.i)
+
 //    var swizzles: gl.Swizzles
 //        get() = Stack {
 //            val ints = it.mallocInt(4)
@@ -125,13 +125,13 @@ object GlTextureDsl {
 //            GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, value.b.i)
 //            GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, value.a.i)
 //        }
-//
-//    inline fun swizzles(r: Swizzle, g: Swizzle, b: Swizzle, a: Swizzle) {
-//        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, r.i)
-//        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, g.i)
-//        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, b.i)
-//        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, a.i)
-//    }
+
+    inline fun swizzles(r: Swizzle, g: Swizzle, b: Swizzle, a: Swizzle) {
+        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, r.i)
+        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, g.i)
+        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, b.i)
+        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, a.i)
+    }
 
     inline var wrapS: TexWrap
         get() = TexWrap(GL11C.glGetTexParameteri(target.i, GL11C.GL_TEXTURE_WRAP_S))
