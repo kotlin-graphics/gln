@@ -31,43 +31,25 @@ object GlTextureDsl {
 
     // TODO remove *D since dimensionality is implicit in the parameter given?
 
-    inline fun image1D(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
+    inline fun image1D(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
             image1D(0, internalFormat, width, format, type, pixels)
 
-    inline fun image1D(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, memAddress(pixels))
+    inline fun image1D(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, pixels?.adr ?: NULL)
 
-    inline fun image2D(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
+    inline fun image2D(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
             image2D(0, internalFormat, size, format, type, pixels)
 
-    inline fun image2D(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, memAddress(pixels))
+    inline fun image2D(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr
+                    ?: NULL)
 
-    inline fun image3D(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
+    inline fun image3D(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
             image3D(0, internalFormat, size, format, type, pixels)
 
-    inline fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, memAddress(pixels))
-
-    // null
-
-    inline fun image1D(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat) =
-            image1D(0, internalFormat, width, format, type)
-
-    inline fun image1D(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat) =
-            GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, NULL)
-
-    inline fun image2D(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat) =
-            image2D(0, internalFormat, size, format, type)
-
-    inline fun image2D(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat) =
-            GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, NULL)
-
-    inline fun image3D(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat) =
-            image3D(0, internalFormat, size, format, type)
-
-    inline fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat) =
-            GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, NULL)
+    inline fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr
+                    ?: NULL)
 
 
     // --- [ glGetTexParameterfv glGetTexParameteriv glGetTexParameterIiv glGetTexParameterIuiv ] ---
@@ -281,6 +263,7 @@ object GlTextureDsl {
 
     // level 0
     fun image1D(internalFormat: InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage1D(0, internalFormat, width, format, type, pixels)
+
     fun image2D(internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage2D(0, internalFormat, size, format, type, pixels)
 
     // --- [ glCopyTexImage1D ] --- TODO custom InternalFormat?
@@ -326,9 +309,12 @@ object GlTextureDsl {
     fun image3D(target: TextureTarget, level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(target, level, internalFormat, size, format, type, pixels)
 
     // default target
-    fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(level, internalFormat, size, format, type, pixels)
+    fun image3D(level: Int, internalFormat: InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL12C.nglTexImage3D(GL12C.GL_TEXTURE_3D, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr ?: NULL)
+
     // default level
-    fun image3D(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(0, internalFormat, size, format, type, pixels)
+    fun image3D(internalFormat: InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL12C.nglTexImage3D(GL12C.GL_TEXTURE_3D, 0, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr ?: NULL)
 
     // --- [ glTexSubImage3D ] ---
 
