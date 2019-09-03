@@ -7368,3 +7368,10 @@ inline class GraphicsResetStatus(val i: Int) { // TODO -> GraphicContextReset an
         val UNKNOWN_CONTEXT_RESET = GraphicsResetStatus(GL45C.GL_UNKNOWN_CONTEXT_RESET)
     }
 }
+
+inline class ColorEncoding(val i: Int) {
+    companion object {
+        val SRGB = ColorEncoding(GL21C.GL_SRGB)
+        val LINEAR = ColorEncoding(GL21C.GL_LINEAR)
+    }
+}
