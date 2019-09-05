@@ -470,18 +470,6 @@ object GlTexturesDsl {
         GlTextureDsl.block()
     }
 
-//    inline fun at1d(index: Enum<*>, block: Texture1d.() -> Unit) = at1d(index.ordinal, block)
-//    inline fun at1d(index: Int, block: Texture1d.() -> Unit) {
-//        Texture1d.name = names[index] // bind
-//        Texture1d.block()
-//    }
-//
-//    inline fun at2d(index: Enum<*>, block: Texture2d.() -> Unit) = at2d(index.ordinal, block)
-//    inline fun at2d(index: Int, block: Texture2d.() -> Unit) {
-//        Texture2d.name = names[index] // bind
-//        Texture2d.block()
-//    }
-
     inline fun <E : Enum<E>> E.bind(target: TextureTarget, block: GlTextureDsl.() -> Unit) {
         val name = names[ordinal]
         GL11C.glBindTexture(target.i, name)

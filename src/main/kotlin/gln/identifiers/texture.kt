@@ -486,6 +486,11 @@ inline class GlTextures(val names: IntBuffer) {
         GlTexturesDsl.block()
     }
 
+    inline operator fun invoke(block: GlTexturesDsl.() -> Unit) {
+        GlTexturesDsl.names = names
+        GlTexturesDsl.block()
+    }
+
     companion object {
 
         // --- [ glGenTextures ] ---
