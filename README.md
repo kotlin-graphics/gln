@@ -44,7 +44,8 @@ All successive calls will refer to that target.
 All of this, turns out as
 
 ```kotlin
-    glGenBuffers(::arrayBuffer).bound(ARRAY_BUFFER) {
+    val arrayBuffer = glGenBuffers()
+    arrayBuffer.bound(ARRAY) {
         data(positionData, STATIC_DRAW)
     }
 ```
@@ -53,7 +54,7 @@ We can push even further and specify the buffer name just once, and leave out th
 have everything as
 
 ```kotlin
-glGenBuffers(::elementBuffer).bound(ELEMENT_ARRAY_BUFFER) { data(elementData) }
+glGenBuffers(::elementBuffer).bound(ELEMENT_ARRAY) { data(elementData) }
 ```
 
 Thanks to the inline function, the compiler will take the burden to take our code and automatically transform it as you 
