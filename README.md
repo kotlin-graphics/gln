@@ -73,7 +73,7 @@ glBindBuffer(GL_ARRAY_BUFFER, 0)
 Again, syntax redundancy can be avoided, so with gln you can simply type
 
 ```kotlin
-val bufferSize = buffer.bound(ARRAY_BUFFER) { size }
+val bufferSize = buffer.bound(ARRAY) { size }
 ```
 
 The nice thing is that we do know the type of request, so we can deliver it directly as it should be logically.
@@ -88,7 +88,7 @@ glBindBuffer(GL_ARRAY_BUFFER, 0)
 it makes sense to return directly a `Boolean`
 
 ```kotlin
-val bufferImmutability /* : Boolean */ = buffer.bound(ARRAY_BUFFER) { immutableStorage }
+val bufferImmutability /* : Boolean */ = buffer.bound(ARRAY) { immutableStorage }
 ```
 
 This of course applies also for other variable types, such as the inlined enum `BufferAccess` or the typealiased  integer `MapBufferFlags`.
