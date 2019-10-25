@@ -403,7 +403,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFrontFace">Reference Page</a>
      */
-    var frontFace: FrontFaceDirection
+    var frontFace: FrontFaceDirection // TODO as cullFace?
         get() = FrontFaceDirection(GL11C.glGetInteger(GL11C.GL_FRONT_FACE))
         set(value) = GL11C.glFrontFace(value.i)
 

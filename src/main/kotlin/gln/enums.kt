@@ -1123,15 +1123,15 @@ inline class HintMode(val i: Int) {
 
 inline class HintTarget(val i: Int) {
     companion object {
-        val PERSPECTIVE_CORRECTION_HINT = HintTarget(GL11.GL_PERSPECTIVE_CORRECTION_HINT)
-        val POINT_SMOOTH_HINT = HintTarget(GL11.GL_POINT_SMOOTH_HINT)
-        val LINE_SMOOTH_HINT = HintTarget(GL11.GL_LINE_SMOOTH_HINT)
-        val POLYGON_SMOOTH_HINT = HintTarget(GL11.GL_POLYGON_SMOOTH_HINT)
-        val FOG_HINT = HintTarget(GL11.GL_FOG_HINT)
-        val PACK_CMYK_HINT_EXT = HintTarget(0x800e)
-        val UNPACK_CMYK_HINT_EXT = HintTarget(0x800f)
-        val TEXTURE_COMPRESSION_HINT = HintTarget(GL13.GL_TEXTURE_COMPRESSION_HINT)
-        val FRAGMENT_SHADER_DERIVATIVE_HINT = HintTarget(GL20.GL_FRAGMENT_SHADER_DERIVATIVE_HINT)
+//        val PERSPECTIVE_CORRECTION_HINT = HintTarget(GL11.GL_PERSPECTIVE_CORRECTION_HINT)
+//        val POINT_SMOOTH_HINT = HintTarget(GL11.GL_POINT_SMOOTH_HINT)
+        val LINE_SMOOTH = HintTarget(GL11.GL_LINE_SMOOTH_HINT)
+        val POLYGON_SMOOTH = HintTarget(GL11.GL_POLYGON_SMOOTH_HINT)
+//        val FOG_HINT = HintTarget(GL11.GL_FOG_HINT)
+//        val PACK_CMYK_HINT_EXT = HintTarget(0x800e)
+//        val UNPACK_CMYK_HINT_EXT = HintTarget(0x800f)
+        val TEXTURE_COMPRESSION = HintTarget(GL13.GL_TEXTURE_COMPRESSION_HINT)
+        val FRAGMENT_SHADER_DERIVATIVE = HintTarget(GL20.GL_FRAGMENT_SHADER_DERIVATIVE_HINT)
     }
 }
 

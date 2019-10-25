@@ -14,12 +14,12 @@ import org.lwjgl.opengl.*
 
 interface glGetSet {
 
-    fun int(pName: Int) = GL11C.glGetInteger(pName)
-    fun int(pName: Int, index: Int) = GL30C.glGetIntegeri(pName, index)
-    fun bool(pName: Int) = GL30C.glGetInteger(pName).bool
-    fun long(pName: Int) = GL32C.glGetInteger64(pName)
-    fun long(pName: Int, index: Int) = GL32C.glGetInteger64i(pName, index)
-    fun pointer(pName: Int): Ptr = Stack.pointerAddress { GL11C.nglGetPointerv(pName, it) }
+    private fun int(pName: Int) = GL11C.glGetInteger(pName)
+//    private fun int(pName: Int, index: Int) = GL30C.glGetIntegeri(pName, index)
+    private fun bool(pName: Int) = GL30C.glGetInteger(pName).bool
+    private fun long(pName: Int) = GL32C.glGetInteger64(pName)
+    private fun long(pName: Int, index: Int) = GL32C.glGetInteger64i(pName, index)
+    private fun pointer(pName: Int): Ptr = Stack.pointerAddress { GL11C.nglGetPointerv(pName, it) }
 
     fun float(pName: Int) = GL11C.glGetFloat(pName)
 
