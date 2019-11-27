@@ -78,8 +78,8 @@ inline class GlBuffer(val name: Int = -1) {
 
     // --- [ glBindBuffer ] ---
 
-    fun bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, name)
-    fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)
+    infix fun bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, name)
+    infix fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)
 
     inline fun <R> bind(target: BufferTarget, block: GlBufferDsl.() -> R): R {
         bind(target)
@@ -90,6 +90,8 @@ inline class GlBuffer(val name: Int = -1) {
 
     inline fun <R> bound(target: BufferTarget, block: GlBufferDsl.() -> R): R =
             bind(target, block).also { GL15C.glBindBuffer(target.i, 0) }
+
+    fun bindBase(target: BufferTarget, index: Int) = GL30.glBindBufferBase(target.i, index, name)
 
     // --- [ glDeleteBuffers ] ---
 

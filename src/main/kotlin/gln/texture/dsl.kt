@@ -29,43 +29,27 @@ object GlTextureDsl {
     var name = 0
     var level = 0
 
-    inline fun image(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            image(0, internalFormat, width, format, type, pixels)
+    // TODO remove *D since dimensionality is implicit in the parameter given?
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, memAddress(pixels))
+    inline fun image1D(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            image1D(0, internalFormat, width, format, type, pixels)
 
-    inline fun image(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            image(0, internalFormat, size, format, type, pixels)
+    inline fun image1D(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, pixels?.adr ?: NULL)
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, memAddress(pixels))
+    inline fun image2D(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            image2D(0, internalFormat, size, format, type, pixels)
 
-    inline fun image(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            image(0, internalFormat, size, format, type, pixels)
+    inline fun image2D(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr
+                    ?: NULL)
 
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: ByteBuffer) =
-            GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, memAddress(pixels))
+    inline fun image3D(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            image3D(0, internalFormat, size, format, type, pixels)
 
-    // null
-
-    inline fun image(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat) =
-            image(0, internalFormat, width, format, type)
-
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat) =
-            GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, NULL)
-
-    inline fun image(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat) =
-            image(0, internalFormat, size, format, type)
-
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat) =
-            GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, NULL)
-
-    inline fun image(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat) =
-            image(0, internalFormat, size, format, type)
-
-    inline fun image(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat) =
-            GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, NULL)
+    inline fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr
+                    ?: NULL)
 
 
     // --- [ glGetTexParameterfv glGetTexParameteriv glGetTexParameterIiv glGetTexParameterIuiv ] ---
@@ -113,22 +97,22 @@ object GlTextureDsl {
             maxLevel = value.last
         }
 
-//    var swizzleR: gl.Swizzle
-//        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_R) }
-//        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, value.r.i)
-//
-//    var swizzleG: gl.Swizzle
-//        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_G) }
-//        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, value.r.i)
-//
-//    var swizzleB: gl.Swizzle
-//        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_B) }
-//        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, value.r.i)
-//
-//    var swizzleA: gl.Swizzle
-//        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_A) }
-//        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, value.r.i)
-//
+    var swizzleR: gl.Swizzle
+        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_R) }
+        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, value.i)
+
+    var swizzleG: gl.Swizzle
+        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_G) }
+        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, value.i)
+
+    var swizzleB: gl.Swizzle
+        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_B) }
+        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, value.i)
+
+    var swizzleA: gl.Swizzle
+        get() = gl.Swizzle.values().first { it.i == GL11C.glGetTexParameteri(target.i, GL33C.GL_TEXTURE_SWIZZLE_A) }
+        set(value) = GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, value.i)
+
 //    var swizzles: gl.Swizzles
 //        get() = Stack {
 //            val ints = it.mallocInt(4)
@@ -141,13 +125,13 @@ object GlTextureDsl {
 //            GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, value.b.i)
 //            GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, value.a.i)
 //        }
-//
-//    inline fun swizzles(r: Swizzle, g: Swizzle, b: Swizzle, a: Swizzle) {
-//        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, r.i)
-//        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, g.i)
-//        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, b.i)
-//        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, a.i)
-//    }
+
+    inline fun swizzles(r: Swizzle, g: Swizzle, b: Swizzle, a: Swizzle) {
+        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_R, r.i)
+        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_G, g.i)
+        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_B, b.i)
+        GL11C.glTexParameteri(target.i, GL33.GL_TEXTURE_SWIZZLE_A, a.i)
+    }
 
     inline var wrapS: TexWrap
         get() = TexWrap(GL11C.glGetTexParameteri(target.i, GL11C.GL_TEXTURE_WRAP_S))
@@ -275,7 +259,12 @@ object GlTextureDsl {
 
     // --- [ glTexImage2D ] ---
 
-    fun image2D(level: Int, internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =  gln.gl.texImage2D(level, internalFormat, size, format, type, pixels)
+    fun image2D(level: Int, internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage2D(level, internalFormat, size, format, type, pixels)
+
+    // level 0
+    fun image1D(internalFormat: InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage1D(0, internalFormat, width, format, type, pixels)
+
+    fun image2D(internalFormat: InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) = gln.gl.texImage2D(0, internalFormat, size, format, type, pixels)
 
     // --- [ glCopyTexImage1D ] --- TODO custom InternalFormat?
 
@@ -320,8 +309,12 @@ object GlTextureDsl {
     fun image3D(target: TextureTarget, level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(target, level, internalFormat, size, format, type, pixels)
 
     // default target
+    fun image3D(level: Int, internalFormat: InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL12C.nglTexImage3D(GL12C.GL_TEXTURE_3D, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr ?: NULL)
 
-    fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) = gln.gl.texImage3D(level, internalFormat, size, format, type, pixels)
+    // default level
+    fun image3D(internalFormat: InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
+            GL12C.nglTexImage3D(GL12C.GL_TEXTURE_3D, 0, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr ?: NULL)
 
     // --- [ glTexSubImage3D ] ---
 
@@ -391,19 +384,19 @@ object GlTextureDsl {
 //            image(i, format.internal, extent(i), format.external, format.type, data(0, 0, i))
 //    }
 
-    inline fun storage(internalFormat: gl.InternalFormat, size: Int) = storage(1, internalFormat, size)
-    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Int) = GL42.glTexStorage1D(target.i, levels, internalFormat.i, size)
+    inline fun storage1D(internalFormat: gl.InternalFormat, size: Int) = storage1D(1, internalFormat, size)
+    inline fun storage1D(levels: Int, internalFormat: gl.InternalFormat, size: Int) = GL42.glTexStorage1D(target.i, levels, internalFormat.i, size)
 
-    inline fun storage(internalFormat: gl.InternalFormat, size: Vec2i) = storage(1, internalFormat, size)
-    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Vec2i) = GL42.glTexStorage2D(target.i, levels, internalFormat.i, size.x, size.y)
+    inline fun storage2D(internalFormat: gl.InternalFormat, size: Vec2i) = storage2D(1, internalFormat, size)
+    inline fun storage2D(levels: Int, internalFormat: gl.InternalFormat, size: Vec2i) = GL42.glTexStorage2D(target.i, levels, internalFormat.i, size.x, size.y)
 
-    inline fun storage(internalFormat: gl.InternalFormat, size: Vec3i) = storage(1, internalFormat, size)
-    inline fun storage(levels: Int, internalFormat: gl.InternalFormat, size: Vec3i) = GL42.glTexStorage3D(target.i, levels, internalFormat.i, size.x, size.y, size.z)
+    inline fun storage3D(internalFormat: gl.InternalFormat, size: Vec3i) = storage3D(1, internalFormat, size)
+    inline fun storage3D(levels: Int, internalFormat: gl.InternalFormat, size: Vec3i) = GL42.glTexStorage3D(target.i, levels, internalFormat.i, size.x, size.y, size.z)
 
-    inline fun compressedSubImage(level: Int, size: Vec3i, format: gl.InternalFormat, data: ByteBuffer) =
-            compressedSubImage(level, 0, 0, size.x, size.y, format.i, data)
+    inline fun compressedSubImage2D(level: Int, size: Vec3i, format: gl.InternalFormat, data: ByteBuffer) =
+            compressedSubImage2D(level, 0, 0, size.x, size.y, format.i, data)
 
-    inline fun compressedSubImage(level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: Int, data: ByteBuffer) =
+    inline fun compressedSubImage2D(level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: Int, data: ByteBuffer) =
             GL13.nglCompressedTexSubImage2D(target.i, level, xOffset, yOffset, width, height, format, data.rem, data.adr + data.pos)
 
     inline fun levels(base: Int = 0, max: Int = 1_000) {
@@ -414,8 +407,6 @@ object GlTextureDsl {
     var maxAnisotropy: Float
         get() = GL11C.glGetTexParameterf(target.i, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT)
         set(value) = GL11C.glTexParameterf(target.i, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, value)
-
-
 }
 
 inline class TexMinFilter(val i: Int) {
@@ -458,6 +449,12 @@ object GlTexturesDsl {
     //    var target = TextureTarget._1D
     lateinit var names: IntBuffer
 
+    var activeTexture: Int = 0
+        set(value) {
+            GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + value)
+            field = value
+        }
+
     // --- [ glBindImageTextures ] ---
 
     fun bindImages(first: Int = 0) = gln.gl.bindImageTextures(first, GlTextures(names))
@@ -473,15 +470,26 @@ object GlTexturesDsl {
         GlTextureDsl.block()
     }
 
-//    inline fun at1d(index: Enum<*>, block: Texture1d.() -> Unit) = at1d(index.ordinal, block)
-//    inline fun at1d(index: Int, block: Texture1d.() -> Unit) {
-//        Texture1d.name = names[index] // bind
-//        Texture1d.block()
-//    }
-//
-//    inline fun at2d(index: Enum<*>, block: Texture2d.() -> Unit) = at2d(index.ordinal, block)
-//    inline fun at2d(index: Int, block: Texture2d.() -> Unit) {
-//        Texture2d.name = names[index] // bind
-//        Texture2d.block()
-//    }
+    inline fun <E : Enum<E>> E.bind(target: TextureTarget, block: GlTextureDsl.() -> Unit) {
+        val name = names[ordinal]
+        GL11C.glBindTexture(target.i, name)
+        GlTextureDsl.name = name
+        GlTextureDsl.target = target
+        GlTextureDsl.block()
+    }
+
+    inline fun <E : Enum<E>> E.bound(target: TextureTarget, block: GlTextureDsl.() -> Unit) {
+        bind(target, block)
+        GL11C.glBindTexture(target.i, 0)
+    }
+
+    inline fun <E : Enum<E>> E.bind(activeTexture: Int, target: TextureTarget, block: GlTextureDsl.() -> Unit) {
+        GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + activeTexture)
+        bind(target, block)
+    }
+
+    inline fun <E : Enum<E>> E.bound(activeTexture: Int, target: TextureTarget, block: GlTextureDsl.() -> Unit) {
+        GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + activeTexture)
+        bound(target, block)
+    }
 }

@@ -340,7 +340,7 @@ interface gl11i {
      */
     var drawBuffer: BufferMode
         get() = GL11C.glGetInteger(GL11C.GL_DRAW_BUFFER)
-        set(value) = GL11C.glDrawBuffer(value.i)
+        set(value) = GL11C.glDrawBuffer(value)
 
     // --- [ glDrawElements ] ---
 
@@ -403,7 +403,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFrontFace">Reference Page</a>
      */
-    var frontFace: FrontFaceDirection
+    var frontFace: FrontFaceDirection // TODO as cullFace?
         get() = FrontFaceDirection(GL11C.glGetInteger(GL11C.GL_FRONT_FACE))
         set(value) = GL11C.glFrontFace(value.i)
 
@@ -437,7 +437,10 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    infix fun genTextures(texture: KMutableProperty0<GlTexture>) = texture.set(genTextures())
+    infix fun genTextures(texture: KMutableProperty0<GlTexture>): GlTexture {
+        texture.set(genTextures())
+        return texture()
+    }
 
     /**
      * Returns n previously unused texture names in textures. These names are marked as used, for the purposes of GenTextures only, but they acquire texture

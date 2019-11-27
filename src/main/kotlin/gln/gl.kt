@@ -17,12 +17,12 @@ import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.dsa.dsai
-import gln.framebuffer.GlFramebuffer
+import gln.identifiers.GlFramebuffer
 import gln.misc.BlendDsl
 import gln.misc.GlDebugSource
 import gln.identifiers.*
 import gln.transformFeedback.GlTransformFeedback
-import gln.vertexArray.GlVertexArray
+import gln.identifiers.GlVertexArray
 import kool.IntBuffer
 import kool.adr
 import kool.lib.toIntArray
@@ -560,14 +560,14 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
-    inline fun <reified T> getFramebufferAttachmentParameter(framebuffer: GlFramebuffer, attachment: Int, name: GetFramebufferAttachment): T =
+    inline fun <reified T> getFramebufferAttachmentParameter(framebuffer: GlFramebuffer, attachment: Attachment, name: GetFramebufferAttachment): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }.bool as T
-                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }) as T
-                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }) as T
-                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment, name.i, it) }) as T
+                    Int::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) } as T
+                    Boolean::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }.bool as T
+                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
+                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
+                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
                     else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
                 }
             }

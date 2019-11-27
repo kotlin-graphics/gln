@@ -34,7 +34,7 @@ inline class GlQuery(val name: Int) {
 
         // --- [ glGenQueries ] ---
 
-        fun gen() = gl.genQuery()
+        fun gen() = gl.genQueries()
 
         // --- [ glCreateQueries ] ---
 

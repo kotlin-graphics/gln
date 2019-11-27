@@ -12,41 +12,13 @@ import kool.set
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
+import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
 
 
-inline fun initVertexArrays(block: VertexArrays.() -> Unit) = initVertexArrays(vertexArrayName, block)
-inline fun initVertexArrays(vertexArrays: IntBuffer, block: VertexArrays.() -> Unit) {
-    GL30.nglGenVertexArrays(1, bufAd)
-    vertexArrays[0] = buf.getInt(0)
-    VertexArrays.names = vertexArrays
-    VertexArrays.block()
-    glBindVertexArray()
-}
-
-inline fun initVertexArray(vertexArray: Enum<*>, block: VertexArray.() -> Unit) = vertexArrayName.put(vertexArray.ordinal, initVertexArray(block))
-inline fun initVertexArray(vertexArray: IntBuffer, block: VertexArray.() -> Unit) = vertexArray.put(0, initVertexArray(block))
-inline fun initVertexArray(block: VertexArray.() -> Unit): Int {
-    GL30.nglGenVertexArrays(1, bufAd)
-    val res = buf.getInt(0)
-    VertexArray.name = res   // bind
-    VertexArray.block()
-    glBindVertexArray()
-    return res
-}
-
-inline fun withVertexArray(vertexArray: Enum<*>, block: VertexArray.() -> Unit) = withVertexArray(vertexArrayName[vertexArray], block)
-inline fun withVertexArray(vertexArray: IntBuffer, block: VertexArray.() -> Unit) = withVertexArray(vertexArray[0], block)
-inline fun withVertexArray(vertexArray: Int, block: VertexArray.() -> Unit) {
-    VertexArray.name = vertexArray   // bind
-    VertexArray.block()
-    glBindVertexArray()
-}
-
-object VertexArray {
+object GlVertexArrayDsl {
 
     var name = 0
-        set(value) = GL30.glBindVertexArray(value)
 
     inline fun array(array: IntBuffer, format: VertexLayout) = array(array[0], format)
     inline fun array(array: Int, format: VertexLayout) {
@@ -73,14 +45,32 @@ object VertexArray {
     inline fun element(element: Int) = GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, element)
 }
 
-object VertexArrays {
+object GlVertexArraysDsl {
 
     lateinit var names: IntBuffer
 
-    inline fun at(index: Enum<*>, block: VertexArray.() -> Unit) = at(index.ordinal, block)
-    inline fun at(index: Int, block: VertexArray.() -> Unit) {
-        VertexArray.name = names[index]   // bind
-        VertexArray.block()
+    inline fun Int.bind(block: GlVertexArrayDsl.() -> Unit) {
+        val name = names[this]
+        GlVertexArrayDsl.name = name
+        GL30C.glBindVertexArray(name)
+        GlVertexArrayDsl.block()
+    }
+
+    inline fun <E : Enum<E>> E.bind(block: GlVertexArrayDsl.() -> Unit) {
+        val name = names[this]
+        GlVertexArrayDsl.name = name
+        GL30C.glBindVertexArray(name)
+        GlVertexArrayDsl.block()
+    }
+
+    inline fun Int.bound(block: GlVertexArrayDsl.() -> Unit) {
+        bind(block)
+        GL30C.glBindVertexArray(0)
+    }
+
+    inline fun <E : Enum<E>> E.bound(block: GlVertexArrayDsl.() -> Unit) {
+        bind(block)
+        GL30C.glBindVertexArray(0)
     }
 }
 

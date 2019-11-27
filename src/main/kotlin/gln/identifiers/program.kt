@@ -25,6 +25,7 @@ import glm_.vec4.Vec4ui
 import gln.*
 import gln.program.ProgramBase
 import gln.program.ProgramUse
+import gln.program.glDeleteProgram
 import kool.ByteBuffer
 import kool.adr
 import kool.rem
@@ -547,7 +548,7 @@ inline class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformBlockIndex">Reference Page</a>
      */
-    fun getUniformBlockIndex(uniformBlockName: CharSequence): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
+    infix fun getUniformBlockIndex(uniformBlockName: CharSequence): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
 
     // --- [ glGetActiveUniformBlockiv ] ---
 
@@ -615,6 +616,11 @@ inline class GlProgram(val name: Int) {
      */
     inline fun <reified T> getActiveAtomicCounterBufferiv(bufferIndex: Int, name: GetActiveAtomicCounterBuffer): T = gl.getActiveAtomicCounterBufferiv(this, bufferIndex, name)
 
+    inline operator fun invoke(block: ProgramBase.() -> Unit) {
+        ProgramBase.program = this
+        ProgramBase.block()
+    }
+
     companion object {
 
         val NULL = GlProgram(0)
@@ -629,14 +635,17 @@ inline class GlProgram(val name: Int) {
         }
 
         /** for ogl-samples */
-        inline fun initFromPath(vert: String, frag: String, block: ProgramBase.() -> Unit): GlProgram =
+        inline fun initFromPath(vertAndFrag: String, block: ProgramBase.() -> Unit = {}): GlProgram =
+                init(GlShader.createFromPath("$vertAndFrag.vert"), GlShader.createFromPath("$vertAndFrag.frag"), block)
+
+        inline fun initFromPath(vert: String, frag: String, block: ProgramBase.() -> Unit = {}): GlProgram =
                 init(GlShader.createFromPath(vert), GlShader.createFromPath(frag), block)
 
-        inline fun init(vert: GlShader, frag: GlShader, block: ProgramBase.() -> Unit): GlProgram {
+        inline fun init(vert: GlShader, frag: GlShader, block: ProgramBase.() -> Unit = {}): GlProgram {
             ProgramBase.apply {
                 program = create().apply {
-                    plusAssign(vert)
-                    plusAssign(frag)
+                    attach(vert)
+                    attach(frag)
                 }
 
                 block()
@@ -647,8 +656,8 @@ inline class GlProgram(val name: Int) {
                     if (!linkStatus)
                         throw Exception("Linker failure: $infoLog")
 
-                    minusAssign(vert)
-                    minusAssign(frag)
+                    detach(vert)
+                    detach(frag)
                     vert.delete()
                     frag.delete()
                 }
@@ -708,4 +717,22 @@ inline class GlProgram(val name: Int) {
 
         // TODO createFromPath
     }
+}
+
+fun GlPrograms(size: Int) = GlPrograms(IntArray(size))
+inline fun <reified E : Enum<E>> GlPrograms() = GlPrograms(IntArray(enumValues<E>().size))
+
+inline class GlPrograms(val names: IntArray) {
+
+    operator fun get(index: Int): GlProgram = GlProgram(names[index])
+    operator fun set(index: Int, value: GlProgram) {
+        names[index] = value.name
+    }
+
+    operator fun <E : Enum<E>> get(index: E): GlProgram = GlProgram(names[index.ordinal])
+    operator fun <E : Enum<E>> set(index: E, value: GlProgram) {
+        names[index.ordinal] = value.name
+    }
+
+    fun delete() = names.forEach(GL20C::glDeleteProgram)
 }

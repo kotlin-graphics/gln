@@ -3,9 +3,8 @@ package gln
 import gln.dsa.dsaARB
 import gln.dsa.dsaCore
 import gln.dsa.dsaInterface
-import gln.framebuffer.Framebuffers
-import gln.framebuffer.GlFramebuffer
-import gln.framebuffer.GlFramebuffers
+import gln.identifiers.GlFramebuffer
+import gln.identifiers.GlFramebuffers
 import org.lwjgl.opengl.GL11C
 
 @FunctionalInterface

@@ -130,6 +130,5 @@ fun ByteBuffer.rem(type: IndexType): Int = rem shr when (type.i) {
 
 inline fun MemoryStack.intAddress(int: Int): Adr = nmalloc(4, Int.BYTES).also { memPutInt(it, int) }
 
-fun a(b: GlBuffer) = b.bound(BufferTarget.ARRAY) {
-    access
-}
+operator fun <E : Enum<E>, T> Array<T>.get(index: E): T = get(index.ordinal)
+operator fun <E : Enum<E>, T> Array<T>.set(index: E, value: T) = set(index.ordinal, value)

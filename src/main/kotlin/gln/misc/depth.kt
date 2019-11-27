@@ -24,7 +24,7 @@ object ObjectDepth {
 
     var func: CompareFunction
         get() = CompareFunction(GL11C.glGetInteger(GL11C.GL_DEPTH_FUNC))
-        set(value) = GL11C.glDepthFunc(func.i)
+        set(value) = GL11C.glDepthFunc(value.i)
 
     var range: ClosedFloatingPointRange<Double>
         get() = Stack {

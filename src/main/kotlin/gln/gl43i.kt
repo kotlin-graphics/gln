@@ -543,8 +543,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebuffer">Reference Page</a>
      */
-    fun invalidateFramebuffer(target: FramebufferTarget, attachment: Int) =
-            Stack.intAddress(attachment) { GL43C.nglInvalidateFramebuffer(target.i, 1, it) }
+    fun invalidateFramebuffer(target: FramebufferTarget, attachment: Attachment) =
+            Stack.intAddress(attachment.i) { GL43C.nglInvalidateFramebuffer(target.i, 1, it) }
 
     // --- [ glInvalidateSubFramebuffer ] ---
 
@@ -570,8 +570,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateSubFramebuffer">Reference Page</a>
      */
-    fun invalidateSubFramebuffer(target: FramebufferTarget, offset: Vec2i, size: Vec2i, attachment: Int) =
-            Stack.intAddress(attachment) { GL43C.nglInvalidateSubFramebuffer(target.i, 1, it, offset.x, offset.y, size.x, size.y) }
+    fun invalidateSubFramebuffer(target: FramebufferTarget, offset: Vec2i, size: Vec2i, attachment: Attachment) =
+            Stack.intAddress(attachment.i) { GL43C.nglInvalidateSubFramebuffer(target.i, 1, it, offset.x, offset.y, size.x, size.y) }
 
     // --- [ glMultiDrawArraysIndirect ] ---
 
@@ -783,9 +783,8 @@ interface gl43i {
      */
     fun getProgramResource(program: GlProgram, programInterface: ProgramInterface, index: Int, props: Int): Int =
             Stack { s ->
-                val pProp = s.intAddress(props)
                 s.intAddress { pParam ->
-                    GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, 1, pProp, 1, NULL, pParam)
+                    GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, 1, s.intAddress(props), 1, NULL, pParam)
                 }
             }
 

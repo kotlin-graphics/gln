@@ -290,14 +290,17 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenProgramPipelines">Reference Page</a>
      */
-    fun genProgramPipelines(): GlPipeline = GlPipeline(Stack.intAddress { GL41C.nglGenProgramPipelines(1, it) })
+    fun genProgramPipelines(pipeline: KMutableProperty0<GlPipeline>): GlPipeline{
+        pipeline.set(genProgramPipelines())
+        return pipeline()
+    }
 
     /**
      * Reserves program pipeline object names.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenProgramPipelines">Reference Page</a>
      */
-    fun genProgramPipelines(pipeline: KMutableProperty0<GlPipeline>) = pipeline.set(genProgramPipelines())
+    fun genProgramPipelines(): GlPipeline = GlPipeline(Stack.intAddress { GL41C.nglGenProgramPipelines(1, it) })
 
     // --- [ glIsProgramPipeline ] ---
 

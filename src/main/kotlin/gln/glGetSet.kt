@@ -3,23 +3,23 @@ package gln
 import glm_.bool
 import glm_.vec2.Vec2
 import glm_.vec4.Vec4
-import gln.framebuffer.GlFramebuffer
-import gln.identifiers.*
-import gln.renderbuffer.GlRenderbuffer
+import gln.identifiers.GlFramebuffer
+import gln.identifiers.GlProgram
+import gln.identifiers.GlRenderbuffer
+import gln.identifiers.GlVertexArray
 import gln.sampler.GlSampler
-import gln.vertexArray.GlVertexArray
 import kool.Ptr
 import kool.Stack
 import org.lwjgl.opengl.*
 
 interface glGetSet {
 
-    fun int(pName: Int) = GL11C.glGetInteger(pName)
-    fun int(pName: Int, index: Int) = GL30C.glGetIntegeri(pName, index)
-    fun bool(pName: Int) = GL30C.glGetInteger(pName).bool
-    fun long(pName: Int) = GL32C.glGetInteger64(pName)
-    fun long(pName: Int, index: Int) = GL32C.glGetInteger64i(pName, index)
-    fun pointer(pName: Int): Ptr = Stack.pointerAddress { GL11C.nglGetPointerv(pName, it) }
+    private fun int(pName: Int) = GL11C.glGetInteger(pName)
+//    private fun int(pName: Int, index: Int) = GL30C.glGetIntegeri(pName, index)
+    private fun bool(pName: Int) = GL30C.glGetInteger(pName).bool
+    private fun long(pName: Int) = GL32C.glGetInteger64(pName)
+    private fun long(pName: Int, index: Int) = GL32C.glGetInteger64i(pName, index)
+    private fun pointer(pName: Int): Ptr = Stack.pointerAddress { GL11C.nglGetPointerv(pName, it) }
 
     fun float(pName: Int) = GL11C.glGetFloat(pName)
 
@@ -62,8 +62,9 @@ interface glGetSet {
         get() = GlProgram(GL20.GL_CURRENT_PROGRAM)
 
 
-    val depthFunc: CompareFunction
+    var depthFunc: CompareFunction
         get() = CompareFunction(int(GL20.GL_DEPTH_FUNC))
+        set(value) = GL11C.glDepthFunc(value.i)
 
     fun drawBuffer(i: Int): BufferMode = int(GL20.GL_DRAW_BUFFER0 + i)
 

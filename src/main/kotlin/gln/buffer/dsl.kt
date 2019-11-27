@@ -119,7 +119,7 @@ object GlBufferDsl {
 
     fun bindRange(index: Int, offset: Int, size: Int) = GL30C.glBindBufferRange(target.i, index, name, offset.L, size.L)
 
-    fun bindBase(index: Int) = GL30.glBindBufferBase(target.i, index, 0)
+    fun bindBase(index: Int) = GL30.glBindBufferBase(target.i, index, name)
 
     fun mapRange(length: Int, access: Int) = mapRange(0, length, access)
     fun mapRange(offset: Int, length: Int, access: Int) = GL30.glMapBufferRange(target.i, offset.L, length.L, access)
@@ -199,9 +199,8 @@ object GlBuffersDsl {
 
     fun bindBuffersRange(target: BufferTarget, first: Int, offsets: IntBuffer, sizes: IntBuffer) = gl.bindBuffersRange(target, first, GlBuffers(names), offsets, sizes)
 
-    fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0) // TODO?
-
-    infix fun <E : Enum<E>> E.bind(target: BufferTarget)  = GL15C.glBindBuffer(target.i, names[ordinal])
+    infix fun <E : Enum<E>> E.bind(target: BufferTarget) = GL15C.glBindBuffer(target.i, names[ordinal])
+    fun unbind(target: BufferTarget) = GL15C.glBindBuffer(target.i, 0)
     inline fun <E : Enum<E>> E.bind(target: BufferTarget, block: GlBufferDsl.() -> Unit) {
         bind(target)
         GlBufferDsl.target = target
@@ -233,5 +232,6 @@ object GlBuffersDsl {
         GlBufferDsl.name = name
         GlBufferDsl.block()
     }
+
     operator fun <E : Enum<E>> E.invoke() = GlBuffer(names[ordinal])
 }

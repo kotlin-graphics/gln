@@ -111,7 +111,7 @@ inline class GlTexture(val name: Int = -1) {
 
     // --- [ glBindTexture ] ---
 
-    fun bind(target: TextureTarget) = GL11C.glBindTexture(target.i, name)
+    infix fun bind(target: TextureTarget) = GL11C.glBindTexture(target.i, name)
 
     fun bind(target: TextureTarget, unit: Int) {
         GL13C.glActiveTexture(GL13C.GL_TEXTURE0 + unit)
@@ -444,6 +444,9 @@ inline class GlTextures(val names: IntBuffer) {
     inline val adr: Long
         get() = names.adr
 
+    operator fun get(index: Int): GlTexture = GlTexture(names[index])
+    operator fun <E : Enum<E>> get(e: E): GlTexture = GlTexture(names[e.ordinal])
+
     // --- [ glBindImageTextures ] ---
 
     fun bindImages(first: Int = 0) = gl.bindImageTextures(first, this)
@@ -476,6 +479,17 @@ inline class GlTextures(val names: IntBuffer) {
     // --- [ glDeleteTextures ] ---
 
     infix fun deleteTextures(textures: GlTextures) = GL11C.nglDeleteTextures(textures.rem, textures.adr)
+
+    inline fun gen(block: GlTexturesDsl.() -> Unit) {
+        GL11C.glGenTextures(names)
+        GlTexturesDsl.names = names
+        GlTexturesDsl.block()
+    }
+
+    inline operator fun invoke(block: GlTexturesDsl.() -> Unit) {
+        GlTexturesDsl.names = names
+        GlTexturesDsl.block()
+    }
 
     companion object {
 

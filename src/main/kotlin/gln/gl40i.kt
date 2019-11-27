@@ -16,6 +16,7 @@ import org.lwjgl.system.MemoryUtil.memGetInt
 import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
+import kotlin.reflect.KMutableProperty0
 
 /**
  * The OpenGL functionality up to version 4.0. Includes only Core Profile symbols.
@@ -805,6 +806,18 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTransformFeedbacks">Reference Page</a>
      */
     fun genTransformFeedbacks(size: Int): GlTransformFeedbacks = GlTransformFeedbacks(size).also(::genTransformFeedbacks)
+
+    /**
+     * Reserves transform feedback object names.
+     *
+     * @param ids an array of into which the reserved names will be written
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenTransformFeedbacks">Reference Page</a>
+     */
+    fun genTransformFeedbacks(feedback: KMutableProperty0<GlTransformFeedback>): GlTransformFeedback {
+        feedback.set(genTransformFeedbacks())
+        return feedback()
+    }
 
     /**
      * Reserves transform feedback object names.

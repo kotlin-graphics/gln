@@ -9,6 +9,7 @@ import gln.sampler.GlSamplers
 import kool.Stack
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL33C
+import kotlin.reflect.KMutableProperty0
 
 /**
  * The OpenGL functionality up to version 3.3. Includes only Core Profile symbols.
@@ -83,9 +84,21 @@ interface gl33i {
     /**
      * Generates sampler object names.
      *
+     * @param samplers a buffer in which the generated sampler object names are stored
+     *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
      */
-    fun genSamplers() = GlSamplers(Stack.intAddress { GL33C.nglGenSamplers(1, it) })
+    fun genSamplers(sampler: KMutableProperty0<GlSampler>): GlSampler {
+        sampler.set(genSamplers())
+        return sampler()
+    }
+
+    /**
+     * Generates sampler object names.
+     *
+     * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
+     */
+    fun genSamplers(): GlSampler = GlSampler(Stack.intAddress { GL33C.nglGenSamplers(1, it) })
 
     // --- [ glDeleteSamplers ] ---
 
