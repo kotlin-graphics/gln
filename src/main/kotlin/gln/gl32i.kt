@@ -400,7 +400,7 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetMultisample">Reference Page</a>
      */
-    fun getMultisample(index: Int): Float = Stack.floatAddress { GL32C.nglGetMultisamplefv(GL32C.GL_SAMPLE_POSITION, index, it) }
+    fun getMultisample(index: Int): Float = Stack.floatAdr { GL32C.nglGetMultisamplefv(GL32C.GL_SAMPLE_POSITION, index, it) }
 
     // --- [ glSampleMaski ] ---
 
@@ -563,7 +563,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSync">Reference Page</a>
      */
     fun isSyncSignaled(sync: GlSync): Boolean =
-            Stack.intAddress {
+            Stack.intAdr {
                 GL32C.nglGetSynciv(sync.L, GL32C.GL_SYNC_STATUS, 1, NULL, it)
             }.bool
 }

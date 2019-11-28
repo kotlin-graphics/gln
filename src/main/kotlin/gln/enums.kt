@@ -4,6 +4,7 @@ import glm_.BYTES
 import glm_.vec2.Vec2b
 import glm_.vec3.Vec3b
 import glm_.vec4.Vec4b
+import kool.BYTES
 import org.lwjgl.opengl.*
 
 /*  This is the OpenGL and OpenGL ES enumerant registry.

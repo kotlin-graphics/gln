@@ -8,6 +8,7 @@ import glm_.vec1.Vec1
 import glm_.vec4.Vec4
 import gln.buf
 import gln.bufAd
+import kool.BYTES
 import kool.Stack
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30

@@ -54,7 +54,7 @@ inline fun Stack.vec4iAddress(vec4i: Vec4i, block: (Ptr) -> Unit) = Stack { bloc
 
 inline fun Stack.vec4uiAddress(vec4ui: Vec4ui, block: (Ptr) -> Unit) = Stack { block(vec4ui.toIntBuffer(it).adr) }
 
-inline fun MemoryStack.intAddress(block: (Adr) -> Unit): Int = memGetInt(nmalloc(4, Int.BYTES).also(block))
+inline fun MemoryStack.intAdr(block: (Adr) -> Unit): Int = memGetInt(nmalloc(4, Int.BYTES).also(block))
 
 inline fun MemoryStack.longAddress(block: (Adr) -> Unit): Long = memGetLong(nmalloc(8, Long.BYTES).also(block))
 
@@ -128,7 +128,7 @@ fun ByteBuffer.rem(type: IndexType): Int = rem shr when (type.i) {
     else -> throw Exception("Unsupported OpenGL type: $type")
 }
 
-inline fun MemoryStack.intAddress(int: Int): Adr = nmalloc(4, Int.BYTES).also { memPutInt(it, int) }
+inline fun MemoryStack.intAdr(int: Int): Adr = nmalloc(4, Int.BYTES).also { memPutInt(it, int) }
 
 operator fun <E : Enum<E>, T> Array<T>.get(index: E): T = get(index.ordinal)
 operator fun <E : Enum<E>, T> Array<T>.set(index: E, value: T) = set(index.ordinal, value)

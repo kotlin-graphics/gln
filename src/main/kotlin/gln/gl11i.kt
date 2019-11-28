@@ -448,7 +448,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    fun genTextures(): GlTexture = GlTexture(Stack.intAddress { GL11C.nglGenTextures(1, it) })
+    fun genTextures(): GlTexture = GlTexture(Stack.intAdr { GL11C.nglGenTextures(1, it) })
 
     // --- [ glDeleteTextures ] ---
 
@@ -478,7 +478,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTexture(texture: GlTexture) = Stack.intAddress(texture.name) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTexture(texture: GlTexture) = Stack.intAdr(texture.name) { GL11C.nglDeleteTextures(1, it) }
 
     // --- [ glGetBooleanv / glGetFloatv / glGetIntegerv / glGetDoublev ] ---
     // inline reified

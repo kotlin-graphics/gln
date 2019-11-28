@@ -46,7 +46,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateVertexArrays">Reference Page</a>
      */
     override fun createVertexArrays(): GlVertexArray =
-            GlVertexArray(Stack.intAddress { ARBDirectStateAccess.nglCreateVertexArrays(1, it) })
+            GlVertexArray(Stack.intAdr { ARBDirectStateAccess.nglCreateVertexArrays(1, it) })
 
     // TODO vertexArray* -> vertex*?
 
@@ -212,7 +212,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArray">Reference Page</a>
      */
     override fun getVertexArrayElementBuffer(vaobj: GlVertexArray): GlBuffer =
-            GlBuffer(Stack.intAddress { ARBDirectStateAccess.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
+            GlBuffer(Stack.intAdr { ARBDirectStateAccess.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
 
     // --- [ glGetVertexArrayIndexediv ] ---
     // inline reified
@@ -246,7 +246,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateSamplers">Reference Page</a>
      */
     override fun createSamplers(): GlSampler =
-            GlSampler(Stack.intAddress { ARBDirectStateAccess.nglCreateSamplers(1, it) })
+            GlSampler(Stack.intAdr { ARBDirectStateAccess.nglCreateSamplers(1, it) })
 
     // --- [ glCreateProgramPipelines ] ---
 
@@ -275,7 +275,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgramPipelines">Reference Page</a>
      */
     override fun createProgramPipelines(): GlPipeline =
-            GlPipeline(Stack.intAddress { ARBDirectStateAccess.nglCreateProgramPipelines(1, it) })
+            GlPipeline(Stack.intAdr { ARBDirectStateAccess.nglCreateProgramPipelines(1, it) })
 
     // --- [ glCreateQueries ] ---
 
@@ -308,7 +308,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateQueries">Reference Page</a>
      */
     override infix fun createQueries(target: QueryTarget): GlQuery =
-            GlQuery(Stack.intAddress { ARBDirectStateAccess.nglCreateQueries(target.i, 1, it) })
+            GlQuery(Stack.intAdr { ARBDirectStateAccess.nglCreateQueries(target.i, 1, it) })
 
     /**
      * Obtains sub-regions of a texture image from a texture object.

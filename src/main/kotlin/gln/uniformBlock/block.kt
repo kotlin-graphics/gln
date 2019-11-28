@@ -5,6 +5,7 @@ import glm_.bool
 import glm_.glm
 import gln.buf
 import gln.bufAd
+import kool.BYTES
 import kool.rem
 import org.lwjgl.opengl.GL31
 import org.lwjgl.opengl.GL40

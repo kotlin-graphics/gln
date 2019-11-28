@@ -240,7 +240,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDebugMessageControl">Reference Page</a>
      */
     fun debugMessageControl(source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int, enabled: Boolean) =
-            Stack.intAddress(id) { GL43C.nglDebugMessageControl(source.i, type.i, severity.i, 1, it, enabled) }
+            Stack.intAdr(id) { GL43C.nglDebugMessageControl(source.i, type.i, severity.i, 1, it, enabled) }
 
     // --- [ glDebugMessageInsert ] ---
 
@@ -544,7 +544,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebuffer">Reference Page</a>
      */
     fun invalidateFramebuffer(target: FramebufferTarget, attachment: Attachment) =
-            Stack.intAddress(attachment.i) { GL43C.nglInvalidateFramebuffer(target.i, 1, it) }
+            Stack.intAdr(attachment.i) { GL43C.nglInvalidateFramebuffer(target.i, 1, it) }
 
     // --- [ glInvalidateSubFramebuffer ] ---
 
@@ -571,7 +571,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateSubFramebuffer">Reference Page</a>
      */
     fun invalidateSubFramebuffer(target: FramebufferTarget, offset: Vec2i, size: Vec2i, attachment: Attachment) =
-            Stack.intAddress(attachment.i) { GL43C.nglInvalidateSubFramebuffer(target.i, 1, it, offset.x, offset.y, size.x, size.y) }
+            Stack.intAdr(attachment.i) { GL43C.nglInvalidateSubFramebuffer(target.i, 1, it, offset.x, offset.y, size.x, size.y) }
 
     // --- [ glMultiDrawArraysIndirect ] ---
 
@@ -733,7 +733,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramInterface">Reference Page</a>
      */
     fun getProgramInterface(program: GlProgram, programInterface: ProgramInterface, name: GetProgramInterface): Int =
-            Stack.intAddress { GL43C.nglGetProgramInterfaceiv(program.name, programInterface.i, name.i, it) }
+            Stack.intAdr { GL43C.nglGetProgramInterfaceiv(program.name, programInterface.i, name.i, it) }
 
     // --- [ glGetProgramResourceIndex ] ---
 
@@ -783,8 +783,8 @@ interface gl43i {
      */
     fun getProgramResource(program: GlProgram, programInterface: ProgramInterface, index: Int, props: Int): Int =
             Stack { s ->
-                s.intAddress { pParam ->
-                    GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, 1, s.intAddress(props), 1, NULL, pParam)
+                s.intAdr { pParam ->
+                    GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, 1, s.intAdr(props), 1, NULL, pParam)
                 }
             }
 
@@ -816,7 +816,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceLocation">Reference Page</a>
      */
     fun getProgramResourceLocation(program: GlProgram, programInterface: ProgramInterface, name: CharSequence): Int =
-            Stack.asciiAddress(name) { GL43C.nglGetProgramResourceLocation(program.name, programInterface.i, it) }
+            Stack.asciiAdr(name) { GL43C.nglGetProgramResourceLocation(program.name, programInterface.i, it) }
 
     // --- [ glGetProgramResourceLocationIndex ] ---
 
@@ -830,7 +830,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceLocationIndex">Reference Page</a>
      */
     fun getProgramResourceLocationIndex(program: GlProgram, programInterface: ProgramInterface, name: CharSequence) =
-            Stack.asciiAddress(name) { GL43C.nglGetProgramResourceLocationIndex(program.name, programInterface.i, it) }
+            Stack.asciiAdr(name) { GL43C.nglGetProgramResourceLocationIndex(program.name, programInterface.i, it) }
 
     // --- [ glShaderStorageBlockBinding ] ---
 

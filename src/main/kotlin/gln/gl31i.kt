@@ -227,8 +227,8 @@ interface gl31i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniforms">Reference Page</a>
      */
     fun getActiveUniformsi(program: GlProgram, uniformIndex: Int, name: GetActiveUniform): Int = Stack { s ->
-        s.intAddress { pParam ->
-            GL31C.nglGetActiveUniformsiv(program.name, 1, s.intAddress(uniformIndex), name.i, pParam)
+        s.intAdr { pParam ->
+            GL31C.nglGetActiveUniformsiv(program.name, 1, s.intAdr(uniformIndex), name.i, pParam)
         }
     }
 
@@ -262,7 +262,7 @@ interface gl31i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformBlockIndex">Reference Page</a>
      */
     fun getUniformBlockIndex(program: GlProgram, uniformBlockName: CharSequence): UniformBlockIndex =
-            Stack.asciiAddress(uniformBlockName) { GL31C.nglGetUniformBlockIndex(program.name, it) }
+            Stack.asciiAdr(uniformBlockName) { GL31C.nglGetUniformBlockIndex(program.name, it) }
 
     // --- [ glGetActiveUniformBlockiv ] ---
     // inline reified

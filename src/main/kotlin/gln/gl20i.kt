@@ -1447,7 +1447,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindAttribLocation">Reference Page</a>
      */
     fun bindAttribLocation(program: GlProgram, index: Int, name: CharSequence) =
-            Stack.asciiAddress(name) { GL20C.nglBindAttribLocation(program.name, index, it) }
+            Stack.asciiAdr(name) { GL20C.nglBindAttribLocation(program.name, index, it) }
 
     // --- [ glGetActiveAttrib ] ---
 
@@ -1499,7 +1499,7 @@ interface gl20i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
     fun getVertexAttribI(index: Int, pName: VertexAttrib): Int = // TODO this is smelly, check I
-            Stack.intAddress { GL20C.nglGetVertexAttribiv(index, pName.i, it) }
+            Stack.intAdr { GL20C.nglGetVertexAttribiv(index, pName.i, it) }
 
     /**
      * Returns a full Vertex Attribute class TODO move to gl?
@@ -1555,7 +1555,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttribPointerv">Reference Page</a>
      */
-    infix fun getVertexAttribPointer(index: Int): Ptr = Stack.pointerAddress { GL20C.nglGetVertexAttribPointerv(index, GL20C.GL_VERTEX_ATTRIB_ARRAY_POINTER, it) }
+    infix fun getVertexAttribPointer(index: Int): Ptr = Stack.pointerAdr { GL20C.nglGetVertexAttribPointerv(index, GL20C.GL_VERTEX_ATTRIB_ARRAY_POINTER, it) }
 
     // --- [ glDrawBuffers ] ---
 

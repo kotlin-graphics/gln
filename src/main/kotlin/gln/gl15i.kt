@@ -64,7 +64,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteBuffers">Reference Page</a>
      */
-    infix fun deleteBuffers(buffer: GlBuffer) = Stack.intAddress(buffer.name) { GL15C.nglDeleteBuffers(1, it) }
+    infix fun deleteBuffers(buffer: GlBuffer) = Stack.intAdr(buffer.name) { GL15C.nglDeleteBuffers(1, it) }
 
     // --- [ glGenBuffers ] ---
 
@@ -103,7 +103,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenBuffers">Reference Page</a>
      */
-    fun genBuffers(): GlBuffer = GlBuffer(Stack.intAddress { GL15C.nglGenBuffers(1, it) })
+    fun genBuffers(): GlBuffer = GlBuffer(Stack.intAdr { GL15C.nglGenBuffers(1, it) })
 
     // --- [ glIsBuffer ] ---
 
@@ -256,7 +256,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferPointerv">Reference Page</a>
      */
-    infix fun getBufferPointer(target: BufferTarget) = Stack.pointerAddress { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) }
+    infix fun getBufferPointer(target: BufferTarget) = Stack.pointerAdr { GL15C.nglGetBufferPointerv(target.i, GL15C.GL_BUFFER_MAP_POINTER, it) }
 
     // --- [ glGenQueries ] ---
 
@@ -295,7 +295,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenQueries">Reference Page</a>
      */
-    fun genQueries(): GlQuery = GlQuery(Stack.intAddress { GL15C.nglGenQueries(1, it) })
+    fun genQueries(): GlQuery = GlQuery(Stack.intAdr { GL15C.nglGenQueries(1, it) })
 
     // --- [ glDeleteQueries ] ---
 
@@ -313,7 +313,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteQueries">Reference Page</a>
      */
-    fun deleteQuery(id: GlQuery) = Stack.intAddress(id.name) { GL15C.nglDeleteQueries(1, it) }
+    fun deleteQuery(id: GlQuery) = Stack.intAdr(id.name) { GL15C.nglDeleteQueries(1, it) }
 
     // --- [ glIsQuery ] ---
 
@@ -359,7 +359,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQuery">Reference Page</a>
      */
-    fun getQueryI(target: QueryTarget, pName: GetQuery): Int = Stack.intAddress { GL15C.nglGetQueryiv(target.i, pName.i, it) }
+    fun getQueryI(target: QueryTarget, pName: GetQuery): Int = Stack.intAdr { GL15C.nglGetQueryiv(target.i, pName.i, it) }
 
     // --- [ glGetQueryObjectiv ] ---
 
@@ -371,7 +371,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
      */
-    fun getQueryObjectI(id: GlQuery, pName: GetQueryObject): Int = Stack.intAddress { GL15C.nglGetQueryObjectiv(id.name, pName.i, it) }
+    fun getQueryObjectI(id: GlQuery, pName: GetQueryObject): Int = Stack.intAdr { GL15C.nglGetQueryObjectiv(id.name, pName.i, it) }
 
     // --- [ glGetQueryObjectuiv ] ---
 
@@ -383,5 +383,5 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryObject">Reference Page</a>
      */
-    fun getQueryObjectUI(id: GlQuery, pName: GetQueryObject): Uint = Uint(Stack.intAddress { GL15C.nglGetQueryObjectiv(id.name, pName.i, it) })
+    fun getQueryObjectUI(id: GlQuery, pName: GetQueryObject): Uint = Uint(Stack.intAdr { GL15C.nglGetQueryObjectiv(id.name, pName.i, it) })
 }

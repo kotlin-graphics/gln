@@ -59,7 +59,7 @@ inline class GlProgram(val name: Int) {
          */
         get() {
             val data = ByteBuffer(binaryLength)
-            val format = Stack.intAddress { GL41C.nglGetProgramBinary(name, data.rem, MemoryUtil.NULL, it, data.adr) }
+            val format = Stack.intAdr { GL41C.nglGetProgramBinary(name, data.rem, MemoryUtil.NULL, it, data.adr) }
             return ProgramBinary(data, format)
         }
     // --- [ glProgramBinary ] ---

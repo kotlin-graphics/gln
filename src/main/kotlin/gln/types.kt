@@ -23,7 +23,7 @@ inline class GlSync(val L: Long) {
             SyncStatus(GL32C.nglClientWaitSync(L, if (flushFirst) GL32C.GL_SYNC_FLUSH_COMMANDS_BIT else 0, timeout.L))
 
     val isSignaled: Boolean
-        get() = Stack.intAddress {
+        get() = Stack.intAdr {
             GL32C.nglGetSynciv(L, GL32C.GL_SYNC_STATUS, 1, NULL, it)
         }.bool
 

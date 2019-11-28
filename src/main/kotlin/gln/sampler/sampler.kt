@@ -146,7 +146,7 @@ inline class GlSampler(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
-    fun delete() = Stack.intAddress(name) { GL33C.nglDeleteSamplers(1, it) }
+    fun delete() = Stack.intAdr(name) { GL33C.nglDeleteSamplers(1, it) }
 
     // --- [ glIsSampler ] ---
 
@@ -198,7 +198,7 @@ inline class GlSampler(val name: Int = -1) {
          *
          * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
          */
-        fun gen() = GlSamplers(Stack.intAddress { GL33C.nglGenSamplers(1, it) })
+        fun gen() = GlSamplers(Stack.intAdr { GL33C.nglGenSamplers(1, it) })
 
 
         inline fun create(block: GlSampler.() -> Unit): GlSampler = create().also(block)

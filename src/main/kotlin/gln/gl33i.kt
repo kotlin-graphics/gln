@@ -46,7 +46,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocationIndexed">Reference Page</a>
      */
     fun bindFragDataLocationIndexed(program: GlProgram, colorNumber: Int, index: Int, name: CharSequence) =
-            Stack.asciiAddress(name) { GL33C.nglBindFragDataLocationIndexed(program.name, colorNumber, index, it) }
+            Stack.asciiAdr(name) { GL33C.nglBindFragDataLocationIndexed(program.name, colorNumber, index, it) }
 
     // --- [ glGetFragDataIndex ] ---
 
@@ -59,7 +59,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataIndex">Reference Page</a>
      */
     fun getFragDataIndex(program: GlProgram, name: CharSequence) =
-            Stack.asciiAddress(name) { GL33C.nglGetFragDataIndex(program.name, it) }
+            Stack.asciiAdr(name) { GL33C.nglGetFragDataIndex(program.name, it) }
 
     // --- [ glGenSamplers ] ---
 
@@ -98,7 +98,7 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
      */
-    fun genSamplers(): GlSampler = GlSampler(Stack.intAddress { GL33C.nglGenSamplers(1, it) })
+    fun genSamplers(): GlSampler = GlSampler(Stack.intAdr { GL33C.nglGenSamplers(1, it) })
 
     // --- [ glDeleteSamplers ] ---
 
@@ -116,7 +116,7 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
-    fun deleteSamplers(sampler: GlSampler) = Stack.intAddress(sampler.name) { GL33C.nglDeleteSamplers(1, it) }
+    fun deleteSamplers(sampler: GlSampler) = Stack.intAdr(sampler.name) { GL33C.nglDeleteSamplers(1, it) }
 
     // --- [ glIsSampler ] ---
 

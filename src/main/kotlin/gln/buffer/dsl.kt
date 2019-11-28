@@ -12,10 +12,7 @@ import gln.*
 import gln.Usage.Companion.STATIC_DRAW
 import gln.identifiers.GlBuffer
 import gln.identifiers.GlBuffers
-import kool.Ptr
-import kool.adr
-import kool.pos
-import kool.remSize
+import kool.*
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL

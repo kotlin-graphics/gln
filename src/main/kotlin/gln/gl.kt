@@ -23,10 +23,8 @@ import gln.misc.GlDebugSource
 import gln.identifiers.*
 import gln.transformFeedback.GlTransformFeedback
 import gln.identifiers.GlVertexArray
-import kool.IntBuffer
-import kool.adr
+import kool.*
 import kool.lib.toIntArray
-import kool.Stack
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.memGetInt
 import unsigned.Uint
@@ -59,9 +57,9 @@ object gl :
     inline fun <reified T : Number> get(name: Int): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL11C.nglGetIntegerv(name, it) } as T
-                    Long::class -> s.longAddress { GL32C.nglGetInteger64v(name, it) } as T
-                    Float::class -> s.floatAddress { GL11C.nglGetFloatv(name, it) } as T
+                    Int::class -> s.intAdr { GL11C.nglGetIntegerv(name, it) } as T
+                    Long::class -> s.longAdr { GL32C.nglGetInteger64v(name, it) } as T
+                    Float::class -> s.floatAdr { GL11C.nglGetFloatv(name, it) } as T
                     else -> throw Exception("Invalid")
                 }
             }
@@ -80,9 +78,9 @@ object gl :
     inline fun <reified T> getTexLevelParameter(target: TextureTarget, level: Int, name: TexLevelParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) } as T
-                    Float::class -> s.floatAddress { GL11C.nglGetTexLevelParameterfv(target.i, level, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) } as T
+                    Float::class -> s.floatAdr { GL11C.nglGetTexLevelParameterfv(target.i, level, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) }.bool as T
                     else -> throw Exception("Invalid")
                 }
             }
@@ -100,9 +98,9 @@ object gl :
     inline fun <reified T> getTexParameter(target: TextureTarget, name: TexParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL11C.nglGetTexParameteriv(target.i, name.i, it) } as T
-                    Float::class -> s.floatAddress { GL11C.nglGetTexParameterfv(target.i, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL11C.nglGetTexParameteriv(target.i, name.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL11C.nglGetTexParameteriv(target.i, name.i, it) } as T
+                    Float::class -> s.floatAdr { GL11C.nglGetTexParameterfv(target.i, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL11C.nglGetTexParameteriv(target.i, name.i, it) }.bool as T
                     else -> throw Exception("Invalid")
                 }
             }
@@ -134,15 +132,15 @@ object gl :
     inline fun <reified T> getUniform(program: GlProgram, location: UniformLocation): T =
             Stack { s ->
                 when (T::class) {
-                    Float::class -> s.floatAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
+                    Float::class -> s.floatAdr { GL20C.nglGetUniformfv(program.name, location, it) } as T
                     Vec2::class -> s.vec2Address { GL20C.nglGetUniformfv(program.name, location, it) } as T
                     Vec3::class -> s.vec3Address { GL20C.nglGetUniformfv(program.name, location, it) } as T
                     Vec4::class -> s.vec4Address { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Int::class -> s.intAddress { GL20C.nglGetUniformiv(program.name, location, it) } as T
+                    Int::class -> s.intAdr { GL20C.nglGetUniformiv(program.name, location, it) } as T
                     Vec2i::class -> s.vec2iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
                     Vec3i::class -> s.vec3iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
                     Vec4i::class -> s.vec4iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Uint::class -> Uint(s.intAddress { GL20C.nglGetUniformiv(program.name, location, it) }) as T
+                    Uint::class -> Uint(s.intAdr { GL20C.nglGetUniformiv(program.name, location, it) }) as T
                     Vec2ui::class -> s.vec2uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
                     Vec3ui::class -> s.vec3uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
                     Vec4ui::class -> s.vec4uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
@@ -167,9 +165,9 @@ object gl :
     inline fun <reified T> getShader(shader: GlShader, name: GetShader): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL20C.nglGetShaderiv(shader.name, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL20C.nglGetShaderiv(shader.name, name.i, it) }.bool as T
-                    ShaderType::class -> ShaderType(s.intAddress { GL20C.nglGetShaderiv(shader.name, name.i, it) }) as T
+                    Int::class -> s.intAdr { GL20C.nglGetShaderiv(shader.name, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL20C.nglGetShaderiv(shader.name, name.i, it) }.bool as T
+                    ShaderType::class -> ShaderType(s.intAdr { GL20C.nglGetShaderiv(shader.name, name.i, it) }) as T
                     else -> throw Exception("[gln.gl.getShader] invalid T")
                 }
             }
@@ -189,8 +187,8 @@ object gl :
     inline fun <reified T> getProgram(program: GlProgram, name: GetProgram): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL20C.nglGetProgramiv(program.name, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL20C.nglGetProgramiv(program.name, name.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL20C.nglGetProgramiv(program.name, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL20C.nglGetProgramiv(program.name, name.i, it) }.bool as T
                     Vec3i::class -> s.vec3iAddress { GL20C.nglGetProgramiv(program.name, name.i, it) } as T // GL_COMPUTE_WORK_GROUP_SIZE
                     else -> throw Exception("[gln.gl.getShader] invalid T")
                 }
@@ -245,9 +243,9 @@ object gl :
     inline fun <reified T> getBufferParameter(target: BufferTarget, param: BufferParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.i, param.i, it) } as T
-                    Long::class -> s.longAddress { GL32C.nglGetBufferParameteri64v(target.i, param.i, it) } as T
-                    Boolean::class -> s.intAddress { GL15C.nglGetBufferParameteriv(target.i, param.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL15C.nglGetBufferParameteriv(target.i, param.i, it) } as T
+                    Long::class -> s.longAdr { GL32C.nglGetBufferParameteri64v(target.i, param.i, it) } as T
+                    Boolean::class -> s.intAdr { GL15C.nglGetBufferParameteriv(target.i, param.i, it) }.bool as T
                     else -> throw Exception("[gln.gl.getBufferParameter(target, ..)] invalid T")
                 }
             }
@@ -269,10 +267,10 @@ object gl :
     inline fun <reified T> getActiveUniformBlockiv(program: GlProgram, uniformBlockIndex: UniformBlockIndex, name: GetActiveUniformBlock): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) }.bool as T
                     IntArray::class -> {
-                        val size = s.intAddress { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, it) }
+                        val size = s.intAdr { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, it) }
                         val ints = s.IntBuffer(size)
                         GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, ints.adr)
                         ints.toIntArray() as T
@@ -295,11 +293,11 @@ object gl :
     inline fun <reified T> getSamplerParameter(target: GlBuffer, param: SamplerParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) } as T
-                    Float::class -> s.floatAddress { GL33C.nglGetSamplerParameterfv(target.name, param.i, it) } as T
+                    Int::class -> s.intAdr { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) } as T
+                    Float::class -> s.floatAdr { GL33C.nglGetSamplerParameterfv(target.name, param.i, it) } as T
                     Vec4i::class -> s.vec4iAddress { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) } as T
                     Vec4ui::class -> s.vec4uiAddress { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) } as T
-                    Boolean::class -> s.intAddress { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) }.bool as T
+                    Boolean::class -> s.intAdr { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) }.bool as T
                     else -> throw Exception("[gln.gl.getBufferParam] invalid T")
                 }
             }
@@ -334,8 +332,8 @@ object gl :
     inline fun <reified T> getQueryIndexed(target: QueryIndexedTarget, index: Int): T =
             Stack { s ->
                 when (T::class) {
-                    GlQuery::class -> GlQuery(s.intAddress { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_CURRENT_QUERY, it) }) as T
-                    Int::class -> s.intAddress { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_QUERY_COUNTER_BITS, it) } as T
+                    GlQuery::class -> GlQuery(s.intAdr { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_CURRENT_QUERY, it) }) as T
+                    Int::class -> s.intAdr { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_QUERY_COUNTER_BITS, it) } as T
                     else -> throw Exception("[gln.gl.glGetQueryIndexediv] invalid T")
                 }
             }
@@ -355,7 +353,7 @@ object gl :
             Stack { s ->
                 when (T::class) {
                     // --- [ glGetFloati_v ] ---
-                    Float::class -> s.floatAddress { GL41C.nglGetFloati_v(target, index, it) } as T
+                    Float::class -> s.floatAdr { GL41C.nglGetFloati_v(target, index, it) } as T
                     // --- [ glGetDoublei_v ] ---
                     Double::class -> s.doubleAddress { GL41C.nglGetDoublei_v(target, index, it) } as T
                     else -> throw Exception("[gln.gl.get] invalid T")
@@ -379,10 +377,10 @@ object gl :
     inline fun <reified T> getActiveAtomicCounterBufferiv(program: GlProgram, bufferIndex: Int, name: GetActiveAtomicCounterBuffer): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) }.bool as T
                     IntArray::class -> {
-                        val size = s.intAddress { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTERS, it) }
+                        val size = s.intAdr { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTERS, it) }
                         val ints = s.IntBuffer(size)
                         GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTER_INDICES, ints.adr)
                         ints.toIntArray() as T
@@ -405,14 +403,14 @@ object gl :
     inline fun <reified T> getInternalformat(target: TextureTarget, internalformat: gl.InternalFormat, name: GetInternalFormat, bufSize: Int = 1): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) } as T
-                    Long::class -> s.longAddress { GL43C.nglGetInternalformati64v(target.i, internalformat.i, name.i, 1, it) } as T
+                    Int::class -> s.intAdr { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) } as T
+                    Long::class -> s.longAdr { GL43C.nglGetInternalformati64v(target.i, internalformat.i, name.i, 1, it) } as T
                     IntArray::class -> {
                         val ints = s.nmalloc(4, bufSize * Int.BYTES)
                         GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, bufSize, ints)
                         IntArray(bufSize) { memGetInt(ints + it * Int.BYTES) } as T
                     }
-                    Boolean::class -> s.intAddress { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) }.bool as T
+                    Boolean::class -> s.intAdr { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) }.bool as T
                     else -> throw Exception("[gln.gl.getInternalformat] invalid T")
                 }
             }
@@ -458,11 +456,11 @@ object gl :
     inline fun <reified T> getFramebufferParameter(target: FramebufferTarget, name: FramebufferParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }.bool as T
-                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
-                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
-                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAddress { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
+                    Int::class -> s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }.bool as T
+                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
+                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
+                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
                     else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
                 }
             }
@@ -482,8 +480,8 @@ object gl :
     inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedback): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) }.bool as T
                     else -> throw Exception("[gln.gl.getTransformFeedback] invalid T")
                 }
             }
@@ -502,8 +500,8 @@ object gl :
     inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedbackIndexed, index: Int): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetTransformFeedbacki_v(xfb.name, name.i, index, it) } as T
-                    Long::class -> s.longAddress { GL45C.nglGetTransformFeedbacki64_v(xfb.name, name.i, index, it) } as T
+                    Int::class -> s.intAdr { GL45C.nglGetTransformFeedbacki_v(xfb.name, name.i, index, it) } as T
+                    Long::class -> s.longAdr { GL45C.nglGetTransformFeedbacki64_v(xfb.name, name.i, index, it) } as T
                     else -> throw Exception("[gln.gl.getTransformFeedback] invalid T")
                 }
             }
@@ -522,9 +520,9 @@ object gl :
     inline fun <reified T> getBufferParameter(buffer: GlBuffer, param: BufferParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) } as T
-                    Long::class -> s.longAddress { GL45C.nglGetNamedBufferParameteri64v(buffer.name, param.i, it) } as T
-                    Boolean::class -> s.intAddress { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) } as T
+                    Long::class -> s.longAdr { GL45C.nglGetNamedBufferParameteri64v(buffer.name, param.i, it) } as T
+                    Boolean::class -> s.intAdr { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) }.bool as T
                     else -> throw Exception("[gln.gl.getBufferParameter(buffer, ..)] invalid T")
                 }
             }
@@ -543,8 +541,8 @@ object gl :
     inline fun <reified T> getFramebufferParameter(framebuffer: GlFramebuffer, name: FramebufferParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) }.bool as T
                     else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
                 }
             }
@@ -563,11 +561,11 @@ object gl :
     inline fun <reified T> getFramebufferAttachmentParameter(framebuffer: GlFramebuffer, attachment: Attachment, name: GetFramebufferAttachment): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }.bool as T
-                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
-                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
-                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAddress { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
+                    Int::class -> s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }.bool as T
+                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
+                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
+                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
                     else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
                 }
             }
@@ -585,9 +583,9 @@ object gl :
     inline fun <reified T> getTexLevelParameter(texture: GlTexture, level: Int, name: TexLevelParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) }.bool as T
-                    Float::class -> s.intAddress { GL45C.nglGetTextureLevelParameterfv(texture.name, level, name.i, it) } as T
+                    Int::class -> s.intAdr { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) }.bool as T
+                    Float::class -> s.intAdr { GL45C.nglGetTextureLevelParameterfv(texture.name, level, name.i, it) } as T
                     else -> throw Exception("[gln.gl.getTexLevelParameter] invalid T")
                 }
             }
@@ -605,9 +603,9 @@ object gl :
     inline fun <reified T> getTexParameter(texture: GlTexture, name: TexParameter): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) }.bool as T
-                    Float::class -> s.intAddress { GL45C.nglGetTextureParameterfv(texture.name, name.i, it) }.bool as T
+                    Int::class -> s.intAdr { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) }.bool as T
+                    Float::class -> s.intAdr { GL45C.nglGetTextureParameterfv(texture.name, name.i, it) }.bool as T
                     Vec4i::class -> s.vec4iAddress { GL45C.nglGetTextureParameterIiv(texture.name, name.i, it) } as T
                     Vec4ui::class -> s.vec4uiAddress { GL45C.nglGetTextureParameterIuiv(texture.name, name.i, it) } as T
                     else -> throw Exception("[gln.gl.getTexParameter DSA] invalid T")
@@ -629,9 +627,9 @@ object gl :
     inline fun <reified T> getVertexArrayIndexed(vaobj: GlVertexArray, index: VertexAttrIndex, name: VertexAttrib): T =
             Stack { s ->
                 when (T::class) {
-                    Int::class -> s.intAddress { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
-                    Boolean::class -> s.intAddress { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
-                    Long::class -> s.longAddress { GL45C.nglGetVertexArrayIndexed64iv(vaobj.name, index, name.i, it) } as T
+                    Int::class -> s.intAdr { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
+                    Boolean::class -> s.intAdr { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
+                    Long::class -> s.longAdr { GL45C.nglGetVertexArrayIndexed64iv(vaobj.name, index, name.i, it) } as T
                     else -> throw Exception("[gln.gl.getVertexArrayIndexed DSA] invalid T")
                 }
             }

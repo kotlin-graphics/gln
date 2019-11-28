@@ -23,6 +23,7 @@ import gln.identifiers.GlRenderbuffer
 import gln.identifiers.GlRenderbuffers
 import gln.identifiers.GlVertexArray
 import gln.identifiers.GlVertexArrays
+import kool.BYTES
 import kool.Stack
 import kool.adr
 import org.lwjgl.opengl.GL30C
@@ -639,7 +640,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
-    fun getVertexAttribI(index: Int, name: Int) = Stack.intAddress { GL30C.nglGetVertexAttribIiv(index, name, it) }
+    fun getVertexAttribI(index: Int, name: Int) = Stack.intAdr { GL30C.nglGetVertexAttribIiv(index, name, it) }
 
     // --- [ glGetVertexAttribIuiv ] ---
 
@@ -651,7 +652,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
-    fun getVertexAttribIu(index: Int, name: Int) = Uint(Stack.intAddress { GL30C.nglGetVertexAttribIuiv(index, name, it) })
+    fun getVertexAttribIu(index: Int, name: Int) = Uint(Stack.intAdr { GL30C.nglGetVertexAttribIuiv(index, name, it) })
 
     // --- [ glUniform1ui ] ---
 
@@ -884,7 +885,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocation">Reference Page</a>
      */
     fun bindFragDataLocation(program: GlProgram, colorNumber: Int, name: CharSequence) =
-            Stack.asciiAddress(name) { GL30C.nglBindFragDataLocation(program.name, colorNumber, it) }
+            Stack.asciiAdr(name) { GL30C.nglBindFragDataLocation(program.name, colorNumber, it) }
 
     // --- [ glGetFragDataLocation ] ---
 
@@ -1003,7 +1004,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteRenderbuffers">Reference Page</a>
      */
-    fun deleteRenderbuffers(renderbuffer: GlRenderbuffer) = Stack.intAddress(renderbuffer.name) { GL30C.nglDeleteRenderbuffers(1, it) }
+    fun deleteRenderbuffers(renderbuffer: GlRenderbuffer) = Stack.intAdr(renderbuffer.name) { GL30C.nglDeleteRenderbuffers(1, it) }
 
     /**
      * Deletes renderbuffer objects.
@@ -1469,7 +1470,7 @@ interface gl30i {
 //     * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
 //     */
 //    fun texParameterI(target: TextureTarget, name: Int, param: Int) =
-//            Stack.intAddress(param) { GL30C.nglTexParameterIiv(target.i, name, it) }
+//            Stack.intAdr(param) { GL30C.nglTexParameterIiv(target.i, name, it) }
 
     /**
      * Sets the integer value of a texture parameter. Only BORDER_COLOR and SWIZZLE_RGBA
@@ -1767,7 +1768,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteVertexArrays">Reference Page</a>
      */
-    fun deleteVertexArrays(array: GlVertexArray) = Stack.intAddress(array.name) { GL30C.nglDeleteVertexArrays(1, it) }
+    fun deleteVertexArrays(array: GlVertexArray) = Stack.intAdr(array.name) { GL30C.nglDeleteVertexArrays(1, it) }
 
     // --- [ glGenVertexArrays ] ---
 
@@ -1804,7 +1805,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
      */
-    fun genVertexArrays() = GlVertexArray(Stack.intAddress { GL30C.nglGenVertexArrays(1, it) })
+    fun genVertexArrays() = GlVertexArray(Stack.intAdr { GL30C.nglGenVertexArrays(1, it) })
 
     // --- [ glIsVertexArray ] ---
 

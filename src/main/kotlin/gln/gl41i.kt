@@ -135,7 +135,7 @@ interface gl41i {
      */
     fun getProgramBinary(program: GlProgram): ProgramBinary {
         val data = ByteBuffer(program.binaryLength)
-        val format = Stack.intAddress { GL41C.nglGetProgramBinary(program.name, data.rem, NULL, it, data.adr) }
+        val format = Stack.intAdr { GL41C.nglGetProgramBinary(program.name, data.rem, NULL, it, data.adr) }
         return ProgramBinary(data, format)
     }
 
@@ -263,7 +263,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteProgramPipelines">Reference Page</a>
      */
-    fun deleteProgramPipelines(pipeline: GlPipeline) = Stack.intAddress(pipeline.name) { GL41C.nglDeleteProgramPipelines(1, it) }
+    fun deleteProgramPipelines(pipeline: GlPipeline) = Stack.intAdr(pipeline.name) { GL41C.nglDeleteProgramPipelines(1, it) }
 
     // --- [ glGenProgramPipelines ] ---
 
@@ -300,7 +300,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenProgramPipelines">Reference Page</a>
      */
-    fun genProgramPipelines(): GlPipeline = GlPipeline(Stack.intAddress { GL41C.nglGenProgramPipelines(1, it) })
+    fun genProgramPipelines(): GlPipeline = GlPipeline(Stack.intAdr { GL41C.nglGenProgramPipelines(1, it) })
 
     // --- [ glIsProgramPipeline ] ---
 
@@ -324,7 +324,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipeline">Reference Page</a>
      */
     fun getProgramPipeline(pipeline: GlPipeline, name: GetProgramPipeline) =
-            Stack.intAddress { GL41C.nglGetProgramPipelineiv(pipeline.name, name.i, it) }
+            Stack.intAdr { GL41C.nglGetProgramPipelineiv(pipeline.name, name.i, it) }
 
     // --- [ glProgramUniform1i ] ---
 

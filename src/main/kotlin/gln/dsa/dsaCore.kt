@@ -47,7 +47,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateVertexArrays">Reference Page</a>
      */
     override fun createVertexArrays(): GlVertexArray =
-            GlVertexArray(Stack.intAddress { GL45C.nglCreateVertexArrays(1, it) })
+            GlVertexArray(Stack.intAdr { GL45C.nglCreateVertexArrays(1, it) })
 
     // TODO vertexArray* -> vertex*?
 
@@ -213,7 +213,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArray">Reference Page</a>
      */
     override fun getVertexArrayElementBuffer(vaobj: GlVertexArray): GlBuffer =
-            GlBuffer(Stack.intAddress { GL45C.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
+            GlBuffer(Stack.intAdr { GL45C.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
 
     // --- [ glGetVertexArrayIndexediv ] ---
     // inline reified
@@ -247,7 +247,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateSamplers">Reference Page</a>
      */
     override fun createSamplers(): GlSampler =
-            GlSampler(Stack.intAddress { GL45C.nglCreateSamplers(1, it) })
+            GlSampler(Stack.intAdr { GL45C.nglCreateSamplers(1, it) })
 
     // --- [ glCreateProgramPipelines ] ---
 
@@ -276,7 +276,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgramPipelines">Reference Page</a>
      */
     override fun createProgramPipelines(): GlPipeline =
-            GlPipeline(Stack.intAddress { GL45C.nglCreateProgramPipelines(1, it) })
+            GlPipeline(Stack.intAdr { GL45C.nglCreateProgramPipelines(1, it) })
 
     // --- [ glCreateQueries ] ---
 
@@ -309,7 +309,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateQueries">Reference Page</a>
      */
     override infix fun createQueries(target: QueryTarget): GlQuery =
-            GlQuery(Stack.intAddress { GL45C.nglCreateQueries(target.i, 1, it) })
+            GlQuery(Stack.intAdr { GL45C.nglCreateQueries(target.i, 1, it) })
 
     /**
      * Obtains sub-regions of a texture image from a texture object.

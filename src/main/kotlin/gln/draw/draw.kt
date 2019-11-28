@@ -6,6 +6,7 @@ import glm_.BYTES
 import glm_.L
 import gln.DataType
 import gln.draw.DrawMode.Companion.TRIANGLES
+import kool.BYTES
 import kool.rem
 import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL32.*
