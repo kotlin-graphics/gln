@@ -1,10 +1,10 @@
 # gln
 
-[![Build Status](https://travis-ci.org/kotlin-graphics/gln.svg?branch=master)](https://travis-ci.org/kotlin-graphics/gln) 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)]()
-![](https://reposs.herokuapp.com/?path=kotlin-graphics/gln&color=yellow) 
+[![Build Status](https://github.com/kotlin-graphics/gln/workflows/build/badge.svg)](https://github.com/kotlin-graphics/gln/actions?workflow=build)
+[![license](https://img.shields.io/badge/License-MIT-orange.svg)](https://github.com/kotlin-graphics/gln/blob/master/LICENSE) 
 [![Release](https://jitpack.io/v/kotlin-graphics/gln.svg)](https://jitpack.io/#kotlin-graphics/gln) 
-[![Slack Status](http://slack.kotlinlang.org/badge.svg)](http://slack.kotlinlang.org/)
+![Size](https://github-size-badge.herokuapp.com/kotlin-graphics/gln.svg)
+[![Github All Releases](https://img.shields.io/github/downloads/kotlin-graphics/gln/total.svg)]()
 
 OpenGL Next, functional programming
 
