@@ -1,7 +1,7 @@
 # gln
 
 [![Build Status](https://github.com/kotlin-graphics/gln/workflows/build/badge.svg)](https://github.com/kotlin-graphics/gln/actions?workflow=build)
-[![license](https://img.shields.io/badge/License-MIT-orange.svg)](https://github.com/kotlin-graphics/gln/blob/master/LICENSE) 
+[![license](https://img.shields.io/badge/License-Apache%202.0-orange.svg)](https://github.com/kotlin-graphics/gln/blob/master/LICENSE) 
 [![Release](https://jitpack.io/v/kotlin-graphics/gln.svg)](https://jitpack.io/#kotlin-graphics/gln) 
 ![Size](https://github-size-badge.herokuapp.com/kotlin-graphics/gln.svg)
 [![Github All Releases](https://img.shields.io/github/downloads/kotlin-graphics/gln/total.svg)]()
