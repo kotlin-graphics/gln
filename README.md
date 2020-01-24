@@ -22,12 +22,12 @@ A buffer in means of OpenGL can be used for vertex attributes, indices, uniform 
 This
 
 ```kotlin
-    arrayBufferName = glGenBuffers()
+    val arrayBufferName = glGenBuffers()
     glBindBuffer(GL_ARRAY_BUFFER, arrayBufferName)
     glBufferData(GL_ARRAY_BUFFER, positionData, GL_STATIC_DRAW)
     glBindBuffer(GL_ARRAY_BUFFER, 0)
 
-    elementBufferName = glGenBuffers()
+    val elementBufferName = glGenBuffers()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferName)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementData, GL_STATIC_DRAW)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
