@@ -1,10 +1,10 @@
 # gln
 
-[![Build Status](https://travis-ci.org/kotlin-graphics/gln.svg?branch=master)](https://travis-ci.org/kotlin-graphics/gln) 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)]()
-![](https://reposs.herokuapp.com/?path=kotlin-graphics/gln&color=yellow) 
+[![Build Status](https://github.com/kotlin-graphics/gln/workflows/build/badge.svg)](https://github.com/kotlin-graphics/gln/actions?workflow=build)
+[![license](https://img.shields.io/badge/License-Apache%202.0-orange.svg)](https://github.com/kotlin-graphics/gln/blob/master/LICENSE) 
 [![Release](https://jitpack.io/v/kotlin-graphics/gln.svg)](https://jitpack.io/#kotlin-graphics/gln) 
-[![Slack Status](http://slack.kotlinlang.org/badge.svg)](http://slack.kotlinlang.org/)
+![Size](https://github-size-badge.herokuapp.com/kotlin-graphics/gln.svg)
+[![Github All Releases](https://img.shields.io/github/downloads/kotlin-graphics/gln/total.svg)]()
 
 OpenGL Next, functional programming
 
@@ -22,12 +22,12 @@ A buffer in means of OpenGL can be used for vertex attributes, indices, uniform 
 This
 
 ```kotlin
-    arrayBufferName = glGenBuffers()
+    val arrayBufferName = glGenBuffers()
     glBindBuffer(GL_ARRAY_BUFFER, arrayBufferName)
     glBufferData(GL_ARRAY_BUFFER, positionData, GL_STATIC_DRAW)
     glBindBuffer(GL_ARRAY_BUFFER, 0)
 
-    elementBufferName = glGenBuffers()
+    val elementBufferName = glGenBuffers()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferName)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementData, GL_STATIC_DRAW)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
