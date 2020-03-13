@@ -86,7 +86,7 @@ fun checkError(location: String = "", throws: Boolean = true): Boolean {
 
 var DSA = false
 
-val VERSION = "0.4.9"
+val VERSION = "0.5.0"
 
 
 val Buffer.glType: Int
