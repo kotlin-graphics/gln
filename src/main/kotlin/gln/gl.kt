@@ -1,7 +1,6 @@
 package gln
 
 import gli_.gl
-import glm_.BYTES
 import glm_.bool
 import glm_.i
 import glm_.vec2.Vec2
@@ -17,12 +16,10 @@ import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.dsa.dsai
-import gln.identifiers.GlFramebuffer
+import gln.identifiers.*
 import gln.misc.BlendDsl
 import gln.misc.GlDebugSource
-import gln.identifiers.*
 import gln.transformFeedback.GlTransformFeedback
-import gln.identifiers.GlVertexArray
 import kool.*
 import kool.lib.toIntArray
 import org.lwjgl.opengl.*
@@ -39,7 +36,7 @@ object gl :
 
     val state = OpenGlState
 
-    inline operator fun invoke(block: gln.gl.() -> Unit) = block()
+    inline operator fun <R> invoke(block: gln.gl.() -> R): R = block.invoke(gln.gl)
 
     // --- [ glGet* ] ---
 
