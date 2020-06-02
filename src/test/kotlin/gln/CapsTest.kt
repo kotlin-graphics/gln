@@ -8,31 +8,37 @@ import org.lwjgl.system.MemoryUtil.NULL
 import java.io.File
 import java.nio.file.Files
 
+val isNotCI: Boolean
+    get() = System.getenv("GITHUB_ACTIONS") != "true" && System.getenv("TRAVIS") != "true"
+
 class CapsTest : StringSpec() {
 
     init {
         "caps" {
 
-            // Initialize GLFW. Most GLFW functions will not work before doing this.
-            if ( !glfwInit() )
-                throw IllegalStateException("Unable to initialize GLFW")
+            if (isNotCI) {
 
-            // Configure GLFW
-            glfwDefaultWindowHints() // optional, the current window hints are already the default
-            glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE) // the window will stay hidden after creation
-            glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE) // the window will be resizable
+                // Initialize GLFW. Most GLFW functions will not work before doing this.
+                if (!glfwInit())
+                    throw IllegalStateException("Unable to initialize GLFW")
 
-            // Create the window
-            val window = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL)
-            // Make the OpenGL context current
-            glfwMakeContextCurrent(window)
+                // Configure GLFW
+                glfwDefaultWindowHints() // optional, the current window hints are already the default
+                glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE) // the window will stay hidden after creation
+                glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE) // the window will be resizable
 
-            val caps = Caps()
-            caps.writeTo("opengl.caps")
+                // Create the window
+                val window = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL)
+                // Make the OpenGL context current
+                glfwMakeContextCurrent(window)
 
-            val capsFile = File("opengl.caps")
-            assert(capsFile.exists() && capsFile.canRead())
-            assert(capsFile.delete())
+                val caps = Caps()
+                caps.writeTo("opengl.caps")
+
+                val capsFile = File("opengl.caps")
+                assert(capsFile.exists() && capsFile.canRead())
+                assert(capsFile.delete())
+            }
         }
     }
 }
