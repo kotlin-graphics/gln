@@ -3,10 +3,8 @@ package gln
 import gln.cap.Caps
 import io.kotest.core.spec.style.StringSpec
 import org.lwjgl.glfw.GLFW.*
-import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
 import java.io.File
-import java.nio.file.Files
 
 val isNotCI: Boolean
     get() = System.getenv("GITHUB_ACTIONS") != "true" && System.getenv("TRAVIS") != "true"
