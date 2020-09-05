@@ -14,7 +14,6 @@ val group = "com.github.kotlin_graphics"
 val moduleName = "$group.gln"
 val kotestVersion = "4.0.5"
 
-
 val kx = "com.github.kotlin-graphics"
 val unsignedVersion = "87630c4d"
 val koolVersion = "3be0cc2f"
@@ -26,6 +25,9 @@ val lwjglNatives = when (current()) {
     LINUX -> "linux"
     else -> "macos"
 }
+
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
