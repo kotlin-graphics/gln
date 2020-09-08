@@ -58,7 +58,7 @@ tasks {
         dokkaSourceSets.configureEach {
             sourceLink {
                 localDirectory.set(file("src/main/kotlin"))
-                remoteUrl.set(URL("https://github.com/kotlin-graphics/gli/tree/master/src/main/kotlin"))
+                remoteUrl.set(URL("https://github.com/kotlin-graphics/gln/tree/master/src/main/kotlin"))
                 remoteLineSuffix.set("#L")
             }
         }
