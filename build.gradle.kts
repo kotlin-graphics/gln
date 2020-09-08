@@ -19,7 +19,7 @@ val kotestVersion = "4.2.0"
 
 
 val kx = "com.github.kotlin-graphics"
-val unsignedVersion = "0af6fae4"
+val unsignedVersion = "81ff91a5"
 val koolVersion = "3962a0be"
 val glmVersion = "5b0f3461"
 val gliVersion = "290b4a7f"
