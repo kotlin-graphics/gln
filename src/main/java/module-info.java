@@ -3,7 +3,7 @@ module com.github.kotlin_graphics.gln {
     requires java.desktop;
 
     requires kotlin.stdlib;
-//    requires kotlin.reflect;
+    requires kotlin.reflect;
 
     requires org.lwjgl;
     requires org.lwjgl.opengl;

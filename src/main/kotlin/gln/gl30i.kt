@@ -1188,7 +1188,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenFramebuffers">Reference Page</a>
      */
-    fun genFramebuffers(size: Int) = GlFramebuffers(size).also(::genFramebuffers)
+    fun genFramebuffers(size: Int): GlFramebuffers = GlFramebuffers(size).also(::genFramebuffers)
 
     /**
      * Generates framebuffer object names.
@@ -1788,7 +1788,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
      */
-    fun genVertexArrays(size: Int) = GlVertexArrays(size).also(::genVertexArrays)
+    fun genVertexArrays(size: Int): GlVertexArrays = GlVertexArrays(size).also(::genVertexArrays)
 
     /**
      * Generates vertex array object names.
