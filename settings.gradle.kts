@@ -1,1 +1,1 @@
-rootProject.name = "gln"
+rootProject.name = "gln-jdk8"

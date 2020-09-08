@@ -1,4 +1,5 @@
 import org.gradle.internal.os.OperatingSystem.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URL
 
 plugins {
@@ -14,10 +15,10 @@ group = "com.github.kotlin_graphics"
 
 val kotestVersion = "4.2.0"
 val kx = "com.github.kotlin-graphics"
-val unsignedVersion = "87630c4d"
-val koolVersion = "3be0cc2f"
-val glmVersion = "3cb433d5"
-val gliVersion = "b0ecb4cd"
+val unsignedVersion = "2e1fd0d7"
+val koolVersion = "0200c2a0"
+val glmVersion = "bd5f9bb7"
+val gliVersion = "266a4dfa"
 val lwjglVersion = "3.2.3"
 val lwjglNatives = "natives-" + when (current()) {
     WINDOWS -> "windows"
@@ -34,10 +35,6 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-
-    attributesSchema.attribute(LIBRARY_ELEMENTS_ATTRIBUTE).compatibilityRules.add(ModularJarCompatibilityRule::class)
-    components { withModule<ModularKotlinRule>(kotlin("stdlib")) }
-    components { withModule<ModularKotlinRule>(kotlin("stdlib-jdk8")) }
 
     implementation("$kx:kotlin-unsigned:$unsignedVersion")
     implementation("$kx:kool:$koolVersion")
@@ -67,7 +64,7 @@ tasks {
         }
     }
 
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    withType<KotlinCompile>().all {
         kotlinOptions {
             jvmTarget = "1.8"
             freeCompilerArgs += listOf("-Xinline-classes", "-Xopt-in=kotlin.RequiresOptIn")
@@ -118,4 +115,4 @@ publishing {
 }
 
 // == Add access to the 'modular' variant of kotlin("stdlib"): Put this into a buildSrc plugin and reuse it in all your subprojects
-configurations.all {    attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8)}
+configurations.all { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8) }
