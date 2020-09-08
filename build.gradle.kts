@@ -18,7 +18,7 @@ val kx = "com.github.kotlin-graphics"
 val unsignedVersion = "2e1fd0d7"
 val koolVersion = "0200c2a0"
 val glmVersion = "bd5f9bb7"
-val gliVersion = "266a4dfa"
+val gliVersion = "4c290e0d"
 val lwjglVersion = "3.2.3"
 val lwjglNatives = "natives-" + when (current()) {
     WINDOWS -> "windows"
