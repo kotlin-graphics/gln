@@ -239,7 +239,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateSamplers">Reference Page</a>
      */
-    override fun createSamplers(size: Int) = GlSamplers(size).apply(::createSamplers)
+    override fun createSamplers(size: Int): GlSamplers = GlSamplers(size).apply(::createSamplers)
 
     /**
      * Returns {@code n} previously unused sampler names in {@code samplers}, each representing a new sampler object.
@@ -268,7 +268,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgramPipelines">Reference Page</a>
      */
-    override fun createProgramPipelines(size: Int) = GlPipelines(size).apply(::createProgramPipelines)
+    override fun createProgramPipelines(size: Int): GlPipelines = GlPipelines(size).apply(::createProgramPipelines)
 
     /**
      * Returns {@code n} previously unused program pipeline names in {@code pipelines}, each representing a new program pipeline object.
