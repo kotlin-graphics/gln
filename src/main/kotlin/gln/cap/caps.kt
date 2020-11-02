@@ -6,7 +6,7 @@ import gln.GL_COMPRESSED_RGB_FXT1_3DFX
 import gln.GL_ETC1_RGB8_OES
 import gln.glGetVec2
 import kool.IntBuffer
-import kool.toList
+import kool.lib.toList
 import kool.use
 import org.lwjgl.opengl.ATITextureCompression3DC.GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI
 import org.lwjgl.opengl.EXTTextureCompressionLATC.*

@@ -134,15 +134,15 @@ object GlBufferDsl {
 
     fun data(size: Int, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
-    fun data(data: Buffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
+    fun data(data: Buffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remByte.L, data.adr, usage.i)
 
     // --- [ glBufferSubData ] ---
 
-    fun subData(offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
+    fun subData(offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remByte.L, data.adr)
 
     // --- [ glGetBufferSubData ] ---
 
-    fun getSubData(offset: Int, data: Buffer) = GL15C.nglGetBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
+    fun getSubData(offset: Int, data: Buffer) = GL15C.nglGetBufferSubData(target.i, offset.L, data.remByte.L, data.adr)
 
     // --- [ glMapBuffer ] ---
 
