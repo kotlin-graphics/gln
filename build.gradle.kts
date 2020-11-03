@@ -32,7 +32,7 @@ val lwjglNatives = "natives-" + when (current()) {
 repositories {
     mavenCentral()
     jcenter()
-    maven { url = uri("https://jitpack.io") }
+    maven("https://jitpack.io")
 }
 
 dependencies {
