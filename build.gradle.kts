@@ -4,21 +4,21 @@ import java.net.URL
 
 plugins {
     java
-    kotlin("jvm") version "1.4.0"
+    kotlin("jvm") version "1.4.10"
     `maven-publish`
     //    id "org.jetbrains.kotlin.kapt" version "1.3.10"
-    id("org.jetbrains.dokka") version "1.4.0"
-    id("com.github.johnrengelman.shadow").version("6.0.0")
+    id("org.jetbrains.dokka") version "1.4.10"
+    id("com.github.johnrengelman.shadow").version("6.1.0")
 }
 
 group = "com.github.kotlin_graphics"
 
-val kotestVersion = "4.2.0"
+val kotestVersion = "4.2.5"
 val kx = "com.github.kotlin-graphics"
-val unsignedVersion = "2e1fd0d7"
-val koolVersion = "0200c2a0"
-val glmVersion = "bd5f9bb7"
-val gliVersion = "4c290e0d"
+val unsignedVersion = "1e2fda82"
+val koolVersion = "b393e4c2"
+val glmVersion = "a4185eec"
+val gliVersion = "01358f8c"
 val lwjglVersion = "3.2.3"
 val lwjglNatives = "natives-" + when (current()) {
     WINDOWS -> "windows"

@@ -9,7 +9,7 @@ import glm_.L
 import kool.adr
 import kool.IntBuffer
 import kool.rem
-import kool.remSize
+import kool.remByte
 import gln.identifiers.GlBuffer
 import gln.identifiers.GlBuffers
 import gln.identifiers.GlQueries
@@ -176,7 +176,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
      */
-    fun bufferData(target: BufferTarget, data: Buffer, usage: Usage) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
+    fun bufferData(target: BufferTarget, data: Buffer, usage: Usage) = GL15C.nglBufferData(target.i, data.remByte.L, data.adr, usage.i)
 
     // --- [ glBufferSubData ] ---
 
@@ -189,7 +189,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
      */
-    fun bufferSubData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
+    fun bufferSubData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remByte.L, data.adr)
 
     // --- [ glGetBufferSubData ] ---
 
@@ -202,7 +202,7 @@ interface gl15i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferSubData">Reference Page</a>
      */
-    fun getBufferSubData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglGetBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
+    fun getBufferSubData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglGetBufferSubData(target.i, offset.L, data.remByte.L, data.adr)
 
     // --- [ glMapBuffer ] ---
 

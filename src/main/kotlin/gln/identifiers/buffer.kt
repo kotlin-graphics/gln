@@ -104,14 +104,14 @@ inline class GlBuffer(val name: Int = -1) {
 
     fun data(target: BufferTarget, size: Int, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
-    fun data(target: BufferTarget, data: Buffer, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remSize.L, data.adr, usage.i)
+    fun data(target: BufferTarget, data: Buffer, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remByte.L, data.adr, usage.i)
 
     // --- [ glBufferStorage ] ---
 
     fun storage(target: BufferTarget, data: Buffer, flags: BufferStorageFlags) = gl.bufferStorage(target, data, flags)
 
-    fun subData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remSize.L, data.adr)
-    fun subData(target: BufferTarget, data: Buffer) = GL15C.nglBufferSubData(target.i, 0, data.remSize.L, data.adr)
+    fun subData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remByte.L, data.adr)
+    fun subData(target: BufferTarget, data: Buffer) = GL15C.nglBufferSubData(target.i, 0, data.remByte.L, data.adr)
 
     fun map(target: BufferTarget, access: BufferAccess): ByteBuffer? {
         val ptr = GL15C.nglMapBuffer(target.i, access.i)
@@ -120,7 +120,7 @@ inline class GlBuffer(val name: Int = -1) {
 
     infix fun unmap(target: BufferTarget): Boolean = GL15C.glUnmapBuffer(target.i)
 
-    fun mapped(target: BufferTarget, access: BufferAccess, block: (ByteBuffer?) -> Boolean): Boolean? = block(map(target, access)).also { unmap(target) }
+    fun mapped(target: BufferTarget, access: BufferAccess, block: (ByteBuffer?) -> Boolean): Boolean = block(map(target, access)).also { unmap(target) }
 
     // --- [ glInvalidateBufferSubData ] ---
 
