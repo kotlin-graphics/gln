@@ -1,2 +1,6 @@
 jdk:
   - openjdk11
+
+install:
+  - echo "Running a custom install command"
+  - ./gradlew clean assemble -x dokkaHtml -x dokkaHtmlJar -x javadoc -x dokkaJavadocJar publishToMavenLocal

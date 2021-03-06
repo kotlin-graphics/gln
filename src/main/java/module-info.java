@@ -1,4 +1,4 @@
-module com.github.kotlin_graphics.gln {
+module com.github.kotlin.graphics.gln {
 
     requires java.desktop;
 
@@ -10,10 +10,10 @@ module com.github.kotlin_graphics.gln {
 //    requires org.lwjgl.opengles;
 
 
-    requires com.github.kotlin_graphics.gli;
-    requires com.github.kotlin_graphics.glm;
-    requires com.github.kotlin_graphics.kool;
-    requires com.github.kotlin_graphics.kotlin_unsigned;
+    requires com.github.kotlin.graphics.gli;
+    requires com.github.kotlin.graphics.glm;
+    requires com.github.kotlin.graphics.kool;
+    requires com.github.kotlin.graphics.unsigned;
 
     exports gln;
     exports gln.buffer;
