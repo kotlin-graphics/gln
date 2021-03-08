@@ -79,7 +79,7 @@ class Caps(val profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Bool
     @JvmField
     val formats = Formats()
 
-    inner class Version() {
+    inner class Version {
 
         @JvmField
         val MINOR_VERSION = glGetInteger(GL_MINOR_VERSION)

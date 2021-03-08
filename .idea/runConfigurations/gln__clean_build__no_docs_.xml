@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="gln [clean&amp;assemble - jitpack]" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="gln [clean build, no docs]" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -11,7 +11,7 @@
       <option name="taskNames">
         <list>
           <option value="clean" />
-          <option value="assemble" />
+          <option value="build" />
         </list>
       </option>
       <option name="vmOptions" value="" />

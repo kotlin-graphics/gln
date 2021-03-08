@@ -3,6 +3,7 @@ package gln
 import gln.cap.Caps
 import io.kotest.core.spec.style.StringSpec
 import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.system.Configuration
 import org.lwjgl.system.MemoryUtil.NULL
 import java.io.File
 
@@ -30,6 +31,7 @@ class CapsTest : StringSpec() {
                 // Make the OpenGL context current
                 glfwMakeContextCurrent(window)
 
+//                Configuration.DEBUG = true
                 val caps = Caps()
                 caps.writeTo("opengl.caps")
 
