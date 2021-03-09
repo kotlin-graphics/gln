@@ -102,7 +102,7 @@ This of course applies also for other variable types, such as the inlined enum `
 
 The build logic has been extracted in dedicated [plugins](https://github.com/elect86/build-logic), as well as the versioning in specific platform [plugins](https://github.com/elect86/platforms).
 
-In order to import kool you need then to add the repository where these plugins are getting published for the time being.
+In order to import gln you need then to add the repository where these plugins are getting published for the time being.
 
 In Gradle KTS you can do that by adding the following to your `settings.gradle.kts`:
 
