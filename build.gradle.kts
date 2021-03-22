@@ -13,7 +13,7 @@ plugins {
     java
 }
 
-version = "0.5.2+12"
+version = "0.5.2+13"
 
 dependencies {
 
