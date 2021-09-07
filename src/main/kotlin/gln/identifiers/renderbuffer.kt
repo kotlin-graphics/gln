@@ -10,7 +10,8 @@ import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
 
 
-inline class GlRenderbuffers(val names: IntBuffer) {
+@JvmInline
+value class GlRenderbuffers(val names: IntBuffer) {
 
     val rem: Int
         get() = names.rem
@@ -43,7 +44,8 @@ inline class GlRenderbuffers(val names: IntBuffer) {
 fun GlRenderbuffers(size: Int) = GlRenderbuffers(IntBuffer(size))
 inline fun <reified E : Enum<E>> GlRenderbuffers(): GlRenderbuffers = GlRenderbuffers(IntBuffer<E>())
 
-inline class GlRenderbuffer(val name: Int = -1) {
+@JvmInline
+value class GlRenderbuffer(val name: Int = -1) {
 
     inline fun bind(block: GlRenderBufferDsl.() -> Unit): GlRenderbuffer {
         GL30C.glBindRenderbuffer(GL30C.GL_RENDERBUFFER, name)

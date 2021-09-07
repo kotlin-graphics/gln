@@ -15,7 +15,8 @@ import java.nio.LongBuffer
 fun GlVertexArrays(size: Int) = GlVertexArrays(IntBuffer(size))
 inline fun <reified E : Enum<E>> GlVertexArrays(): GlVertexArrays = GlVertexArrays(IntBuffer<E>())
 
-inline class GlVertexArrays(val names: IntBuffer) {
+@JvmInline
+value class GlVertexArrays(val names: IntBuffer) {
     val rem get() = names.rem
     val adr get() = names.adr
 
@@ -56,7 +57,8 @@ inline class GlVertexArrays(val names: IntBuffer) {
 }
 
 
-inline class GlVertexArray(val name: Int = -1) {
+@JvmInline
+value class GlVertexArray(val name: Int = -1) {
 
     fun bind() = GL30C.glBindVertexArray(name)
     inline fun bound(block: () -> Unit): GlVertexArray {

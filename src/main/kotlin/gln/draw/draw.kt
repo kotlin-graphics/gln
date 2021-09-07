@@ -16,7 +16,8 @@ import java.nio.IntBuffer
 import java.nio.ShortBuffer
 
 
-inline class DrawMode(val i: Int) {
+@JvmInline
+value class DrawMode(val i: Int) {
     companion object {
         val POINTS = DrawMode(GL_POINTS)
         val LINE_STRIP = DrawMode(GL_LINE_STRIP)

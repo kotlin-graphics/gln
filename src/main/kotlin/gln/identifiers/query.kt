@@ -10,7 +10,8 @@ import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL20C
 import java.nio.IntBuffer
 
-inline class GlQuery(val name: Int) {
+@JvmInline
+value class GlQuery(val name: Int) {
 
     // --- [ glBeginQuery ] ---
 
@@ -44,7 +45,8 @@ inline class GlQuery(val name: Int) {
 
 fun GlQueries(size: Int): GlQueries = GlQueries(IntBuffer(size))
 
-inline class GlQueries(val i: IntBuffer) {
+@JvmInline
+value class GlQueries(val i: IntBuffer) {
 
     inline val rem: Int
         get() = i.rem

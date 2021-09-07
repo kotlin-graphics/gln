@@ -409,7 +409,8 @@ object GlTextureDsl {
         set(value) = GL11C.glTexParameterf(target.i, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, value)
 }
 
-inline class TexMinFilter(val i: Int) {
+@JvmInline
+value class TexMinFilter(val i: Int) {
     companion object {
         val NEAREST = TexMinFilter(GL11C.GL_NEAREST)
         val LINEAR = TexMinFilter(GL11C.GL_LINEAR)
@@ -420,14 +421,16 @@ inline class TexMinFilter(val i: Int) {
     }
 }
 
-inline class TexMagFilter(val i: Int) {
+@JvmInline
+value class TexMagFilter(val i: Int) {
     companion object {
         val NEAREST = TexMagFilter(GL11C.GL_NEAREST)
         val LINEAR = TexMagFilter(GL11C.GL_LINEAR)
     }
 }
 
-inline class TexWrap(val i: Int) {
+@JvmInline
+value class TexWrap(val i: Int) {
     companion object {
         val CLAMP_TO_EDGE = TexWrap(GL12C.GL_CLAMP_TO_EDGE)
         val MIRRORED_REPEAT = TexWrap(GL14C.GL_MIRRORED_REPEAT)
@@ -435,7 +438,8 @@ inline class TexWrap(val i: Int) {
     }
 }
 
-inline class Swizzle(val i: Int) {
+@JvmInline
+value class Swizzle(val i: Int) {
     companion object {
         val RED = Swizzle(GL11C.GL_RED)
         val GREEN = Swizzle(GL11C.GL_GREEN)

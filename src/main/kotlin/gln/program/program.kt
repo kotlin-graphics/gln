@@ -39,6 +39,7 @@ open class GlslProgram(
 
     constructor() : this(GL20.glCreateProgram())
 
+    // TODO wtf is block: Program
     constructor(vert: GlShader, frag: GlShader, block: GlProgram) : this() {
 
         plusAssign(vert)

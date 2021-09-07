@@ -2,14 +2,12 @@
 
 package gln.misc
 
-import glm_.BYTES
 import glm_.f
 import glm_.vec1.Vec1
 import glm_.vec4.Vec4
-import gln.buf
-import gln.bufAd
-import kool.BYTES
+import gln.vec4Address
 import kool.Stack
+import kool.ptrOf
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
@@ -49,24 +47,13 @@ inline fun glClearStencilBuffer(stencil: Int = 0) = Stack.intBuffer(stencil) { G
 inline fun glClearDepthStencilBuffer(depth: Float, stencil: Int = 0) = GL30C.glClearBufferfi(GL30C.GL_DEPTH_STENCIL, 0, depth, stencil)
 
 
-inline fun glClearBuffer(buffer: Int, value: Vec4) {
-    value to buf
-    GL30.nglClearBufferfv(buffer, 0, bufAd)
-}
+inline fun glClearBuffer(buffer: Int, value: Vec4) = Stack.vec4Address(value) { GL30.nglClearBufferfv(buffer, 0, it) }
 
-inline fun glClearBuffer(buffer: Int, drawbuffer: Int, value: Vec1) {
-    buf.putFloat(0, value.x)
-    GL30.nglClearBufferfv(buffer, drawbuffer, bufAd)
-}
+inline fun glClearBuffer(buffer: Int, drawbuffer: Int, value: Vec1) = Stack.floatAdr(value.x) { GL30.nglClearBufferfv(buffer, drawbuffer, it) }
 
 inline fun glClearBuffer(buffer: Int, drawbuffer: Int, color: Vec4) = glClearBuffer(buffer, drawbuffer, color.x, color.y, color.z, color.w)
 
-inline fun glClearBuffer(buffer: Int, drawbuffer: Int, float: Float) {
-    buf.putFloat(0, float)
-    GL30.nglClearBufferfv(buffer, drawbuffer, bufAd)
-}
+inline fun glClearBuffer(buffer: Int, drawbuffer: Int, float: Float) = Stack.floatAdr(float) { GL30.nglClearBufferfv(buffer, drawbuffer, it) }
 
-inline fun glClearBuffer(buffer: Int, drawbuffer: Int, red: Float, green: Float, blue: Float, alpha: Float) {
-    buf.putFloat(0, red).putFloat(Float.BYTES, green).putFloat(Float.BYTES * 2, blue).putFloat(Float.BYTES * 3, alpha)
-    GL30.nglClearBufferfv(buffer, drawbuffer, bufAd)
-}
+inline fun glClearBuffer(buffer: Int, drawbuffer: Int, red: Float, green: Float, blue: Float, alpha: Float) =
+    Stack { GL30.nglClearBufferfv(buffer, drawbuffer, it.ptrOf(red, green, blue, alpha).adr) }

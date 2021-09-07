@@ -37,7 +37,8 @@ import unsigned.Uint
 import java.lang.Exception
 import java.nio.IntBuffer
 
-inline class GlProgram(val name: Int) {
+@JvmInline
+value class GlProgram(val name: Int) {
 
     // --- [ glAttachShader ] ---
 
@@ -722,7 +723,8 @@ inline class GlProgram(val name: Int) {
 fun GlPrograms(size: Int) = GlPrograms(IntArray(size))
 inline fun <reified E : Enum<E>> GlPrograms() = GlPrograms(IntArray(enumValues<E>().size))
 
-inline class GlPrograms(val names: IntArray) {
+@JvmInline
+value class GlPrograms(val names: IntArray) {
 
     operator fun get(index: Int): GlProgram = GlProgram(names[index])
     operator fun set(index: Int, value: GlProgram) {

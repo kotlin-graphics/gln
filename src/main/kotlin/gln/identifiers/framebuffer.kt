@@ -15,7 +15,8 @@ import kotlin.reflect.KMutableProperty0
 
 val defaultFbo = GlFramebuffer(0)
 
-inline class GlFramebuffer(val name: Int = -1) {
+@JvmInline
+value class GlFramebuffer(val name: Int = -1) {
 
     fun bind() = glBindFramebuffer(name)
 
@@ -345,7 +346,8 @@ inline class GlFramebuffer(val name: Int = -1) {
 fun GlFramebuffers(size: Int) = GlFramebuffers(IntBuffer(size))
 inline fun <reified E : Enum<E>> GlFramebuffers(): GlFramebuffers = GlFramebuffers(IntBuffer<E>())
 
-inline class GlFramebuffers(val names: IntBuffer) {
+@JvmInline
+value class GlFramebuffers(val names: IntBuffer) {
 
     val rem: Int
         get() = names.rem

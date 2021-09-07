@@ -8,10 +8,10 @@ import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
-import gln.buf
-import gln.bufAd
+import gln.*
 import gln.identifiers.GlProgram
 import gln.identifiers.GlShader
+import kool.Stack
 import org.lwjgl.opengl.GL20
 
 
@@ -74,70 +74,35 @@ object ProgramUse {
     fun link() = program.link()
 
     infix fun Int.to(location: Int) = GL20.glUniform1i(location, this)
+
     infix fun Float.to(location: Int) = GL20.glUniform1f(location, this)
 
-    infix fun Vec2.to(location: Int) {
-        to(buf)
-        GL20.nglUniform2fv(location, 1, bufAd)
-    }
+    infix fun Vec2.to(location: Int) = Stack.vec2Address(this) { GL20.nglUniform2fv(location, 1, it) }
 
-    infix fun Vec3.to(location: Int) {
-        to(buf)
-        GL20.nglUniform3fv(location, 1, bufAd)
-    }
+    infix fun Vec3.to(location: Int) = Stack.vec3Address(this) { GL20.nglUniform3fv(location, 1, it) }
 
-    infix fun Vec4.to(location: Int) {
-        to(buf)
-        GL20.nglUniform4fv(location, 1, bufAd)
-    }
+    infix fun Vec4.to(location: Int) = Stack.vec4Address(this) { GL20.nglUniform4fv(location, 1, it) }
 
-    infix fun Mat2.to(location: Int) {
-        to(buf)
-        GL20.nglUniformMatrix2fv(location, 1, false, bufAd)
-    }
+    infix fun Mat2.to(location: Int) = Stack.mat2Address(this) { GL20.nglUniformMatrix2fv(location, 1, false, it) }
 
-    infix fun Mat3.to(location: Int) {
-        to(buf)
-        GL20.nglUniformMatrix3fv(location, 1, false, bufAd)
-    }
+    infix fun Mat3.to(location: Int) = Stack.mat3Address(this) { GL20.nglUniformMatrix3fv(location, 1, false, it) }
 
-    infix fun Mat4.to(location: Int) {
-        to(buf)
-        GL20.nglUniformMatrix4fv(location, 1, false, bufAd)
-    }
+    infix fun Mat4.to(location: Int) = Stack.mat4Address(this) { GL20.nglUniformMatrix4fv(location, 1, false, it) }
 
     infix fun Int.to(uniform: String) = GL20.glUniform1i(uniform.uniform, this)
     infix fun Float.to(uniform: String) = GL20.glUniform1f(uniform.uniform, this)
 
-    infix fun Vec2.to(uniform: String) {
-        to(buf)
-        GL20.nglUniform2fv(uniform.uniform, 1, bufAd)
-    }
+    infix fun Vec2.to(uniform: String) = Stack.vec2Address(this) { GL20.nglUniform2fv(uniform.uniform, 1, it) }
 
-    infix fun Vec3.to(uniform: String) {
-        to(buf)
-        GL20.nglUniform3fv(uniform.uniform, 1, bufAd)
-    }
+    infix fun Vec3.to(uniform: String) = Stack.vec3Address(this) { GL20.nglUniform3fv(uniform.uniform, 1, it) }
 
-    infix fun Vec4.to(uniform: String) {
-        to(buf)
-        GL20.nglUniform4fv(uniform.uniform, 1, bufAd)
-    }
+    infix fun Vec4.to(uniform: String) = Stack.vec4Address(this) { GL20.nglUniform4fv(uniform.uniform, 1, it) }
 
-    infix fun Mat2.to(uniform: String) {
-        to(buf)
-        GL20.nglUniformMatrix2fv(uniform.uniform, 1, false, bufAd)
-    }
+    infix fun Mat2.to(uniform: String) = Stack.mat2Address(this) { GL20.nglUniformMatrix2fv(uniform.uniform, 1, false, it) }
 
-    infix fun Mat3.to(uniform: String) {
-        to(buf)
-        GL20.nglUniformMatrix3fv(uniform.uniform, 1, false, bufAd)
-    }
+    infix fun Mat3.to(uniform: String) = Stack.mat3Address(this) { GL20.nglUniformMatrix3fv(uniform.uniform, 1, false, it) }
 
-    infix fun Mat4.to(uniform: String) {
-        to(buf)
-        GL20.nglUniformMatrix4fv(uniform.uniform, 1, false, bufAd)
-    }
+    infix fun Mat4.to(uniform: String) = Stack.mat4Address(this) { GL20.nglUniformMatrix4fv(uniform.uniform, 1, false, it) }
 }
 
 object ProgramBase {

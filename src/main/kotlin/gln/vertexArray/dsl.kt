@@ -4,14 +4,10 @@ package gln.vertexArray
 
 
 import glm_.L
-import gln.buf
-import gln.bufAd
 import gln.glf.VertexLayout
 import kool.get
-import kool.set
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL20
-import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
 

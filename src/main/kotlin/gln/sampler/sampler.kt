@@ -12,7 +12,8 @@ import java.nio.IntBuffer
 
 fun GlSamplers(size: Int): GlSamplers = GlSamplers(IntBuffer(size))
 
-inline class GlSamplers(val names: IntBuffer) {
+@JvmInline
+value class GlSamplers(val names: IntBuffer) {
     inline val rem: Int
         get() = names.rem
     inline val adr: Adr
@@ -44,7 +45,8 @@ inline class GlSamplers(val names: IntBuffer) {
     }
 }
 
-inline class GlSampler(val name: Int = -1) {
+@JvmInline
+value class GlSampler(val name: Int = -1) {
 
 //    fun bind() = GL30C.glBindFramebuffer(GL30C.GL_FRAMEBUFFER, name)
 //

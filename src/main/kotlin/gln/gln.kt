@@ -19,11 +19,6 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
 
-@Deprecated("use kool instead")
-val buf: ByteBuffer = MemoryUtil.memAlloc(256)
-@Deprecated("use kool instead")
-val bufAd = buf.adr
-
 
 inline fun glViewport(size: Vec2i) = GL11.glViewport(0, 0, size.x, size.y)
 inline fun glViewport(width: Int, height: Int) = GL11.glViewport(0, 0, width, height)

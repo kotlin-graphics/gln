@@ -11,7 +11,8 @@ import org.lwjgl.opengl.*
     https://opensource.apple.com/source/X11server/X11server-85/libGL/AppleSGLX-57/specs/enum.spec
  */
 
-inline class AttribMask(val i: Int) {
+@JvmInline
+value class AttribMask(val i: Int) {
 
     companion object {
         val DEPTH_BUFFER_BIT = AttribMask(GL11.GL_DEPTH_BUFFER_BIT)
@@ -24,7 +25,8 @@ inline class AttribMask(val i: Int) {
     fun inv() = AttribMask(i.inv())
 }
 
-inline class ClearBufferMask(val i: Int) {
+@JvmInline
+value class ClearBufferMask(val i: Int) {
 
     companion object {
         val COLOR_BUFFER_BIT = ClearBufferMask(GL11.GL_COLOR_BUFFER_BIT)
@@ -72,7 +74,8 @@ inline class ClearBufferMask(val i: Int) {
 //
 //###############################################################################
 
-inline class DrawMode(val i: Int) {
+@JvmInline
+value class DrawMode(val i: Int) {
 
     companion object {
         val POINTS = DrawMode(GL11.GL_POINTS)
@@ -113,7 +116,8 @@ inline class DrawMode(val i: Int) {
 //
 //###############################################################################
 
-inline class BlendFactor(val i: Int) {
+@JvmInline
+value class BlendFactor(val i: Int) {
 
     companion object {
         val ZERO = BlendFactor(GL11.GL_ZERO)
@@ -140,7 +144,8 @@ inline class BlendFactor(val i: Int) {
 
 //###############################################################################
 
-inline class BlendEquationMode(val i: Int) {
+@JvmInline
+value class BlendEquationMode(val i: Int) {
 
     companion object {
         val FUNC_ADD = BlendEquationMode(GL14.GL_FUNC_ADD)
@@ -217,7 +222,8 @@ inline class BlendEquationMode(val i: Int) {
 //
 //###############################################################################
 
-inline class FaceMode(val i: Int) {
+@JvmInline
+value class FaceMode(val i: Int) {
 
     companion object {
         val FRONT = FaceMode(GL11.GL_FRONT)
@@ -228,7 +234,8 @@ inline class FaceMode(val i: Int) {
 
 //###############################################################################
 
-inline class CullFaceMode(val i: Int) {
+@JvmInline
+value class CullFaceMode(val i: Int) {
 
     companion object {
         val DISABLED = CullFaceMode(GL11.GL_FALSE)
@@ -241,7 +248,8 @@ inline class CullFaceMode(val i: Int) {
 //###############################################################################
 
 /** Depth, Stencil and textureCompareMode func */
-inline class CompareFunction(val i: Int) {
+@JvmInline
+value class CompareFunction(val i: Int) {
 
     companion object {
         val NEVER = CompareFunction(GL11.GL_NEVER)
@@ -388,7 +396,8 @@ typealias BufferMode = Int
 
 //###############################################################################
 
-inline class ErrorCode(val i: Int) {
+@JvmInline
+value class ErrorCode(val i: Int) {
 
     companion object {
         val NO_ERROR = ErrorCode(GL11.GL_NO_ERROR)
@@ -470,7 +479,8 @@ inline class ErrorCode(val i: Int) {
 //
 //###############################################################################
 
-inline class FrontFaceDirection(val i: Int) {
+@JvmInline
+value class FrontFaceDirection(val i: Int) {
     companion object {
         val CW = FrontFaceDirection(GL11.GL_CW)
         val CCW = FrontFaceDirection(GL11.GL_CCW)
@@ -1037,7 +1047,8 @@ inline class FrontFaceDirection(val i: Int) {
 //
 //###############################################################################
 
-inline class TexLevelParameter(val i: Int) {
+@JvmInline
+value class TexLevelParameter(val i: Int) {
     companion object {
         val WIDTH = TexLevelParameter(GL11.GL_TEXTURE_WIDTH)
         val HEIGHT = TexLevelParameter(GL11.GL_TEXTURE_HEIGHT)
@@ -1062,7 +1073,8 @@ inline class TexLevelParameter(val i: Int) {
 }
 
 
-inline class TexParameter(val i: Int) {
+@JvmInline
+value class TexParameter(val i: Int) {
     companion object {
         val DEPTH_STENCIL_MODE = TexParameter(GL43.GL_DEPTH_STENCIL_TEXTURE_MODE)
         val IMAGE_FORMAT_COMPATIBILITY_TYPE = TexParameter(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_TYPE)
@@ -1094,7 +1106,8 @@ inline class TexParameter(val i: Int) {
     }
 }
 
-inline class SamplerParameter(val i: Int) {
+@JvmInline
+value class SamplerParameter(val i: Int) {
     companion object {
         val BORDER_COLOR = SamplerParameter(GL11.GL_TEXTURE_BORDER_COLOR)
         val COMPARE_MODE = SamplerParameter(GL14.GL_TEXTURE_COMPARE_MODE)
@@ -1112,7 +1125,8 @@ inline class SamplerParameter(val i: Int) {
 
 //###############################################################################
 
-inline class HintMode(val i: Int) {
+@JvmInline
+value class HintMode(val i: Int) {
     companion object {
         val DONT_CARE = HintMode(GL11.GL_DONT_CARE)
         val FASTEST = HintMode(GL11.GL_FASTEST)
@@ -1122,7 +1136,8 @@ inline class HintMode(val i: Int) {
 
 //###############################################################################
 
-inline class HintTarget(val i: Int) {
+@JvmInline
+value class HintTarget(val i: Int) {
     companion object {
 //        val PERSPECTIVE_CORRECTION_HINT = HintTarget(GL11.GL_PERSPECTIVE_CORRECTION_HINT)
 //        val POINT_SMOOTH_HINT = HintTarget(GL11.GL_POINT_SMOOTH_HINT)
@@ -1198,7 +1213,8 @@ inline class HintTarget(val i: Int) {
 //
 //###############################################################################
 
-inline class DataType(val i: Int) {
+@JvmInline
+value class DataType(val i: Int) {
     companion object {
         val BYTE = DataType(GL11.GL_BYTE)
         val UNSIGNED_BYTE = DataType(GL11.GL_UNSIGNED_BYTE)
@@ -1258,7 +1274,8 @@ inline class DataType(val i: Int) {
 //
 //###############################################################################
 
-inline class LogicOp(val i: Int) {
+@JvmInline
+value class LogicOp(val i: Int) {
     companion object {
         val DISABLED = LogicOp(GL11.GL_FALSE)
         val CLEAR = LogicOp(GL11.GL_CLEAR)
@@ -1359,7 +1376,8 @@ inline class LogicOp(val i: Int) {
 //
 //###############################################################################
 
-inline class BufferType(val i: Int) {
+@JvmInline
+value class BufferType(val i: Int) {
     companion object {
         val COLOR = BufferType(GL11.GL_COLOR)
         val DEPTH = BufferType(GL11C.GL_DEPTH)
@@ -1409,7 +1427,8 @@ inline class BufferType(val i: Int) {
 //
 //###############################################################################
 
-inline class PixelStoreParameter(val i: Int) {
+@JvmInline
+value class PixelStoreParameter(val i: Int) {
     companion object {
         val UNPACK_SWAP_BYTES = PixelStoreParameter(GL11.GL_UNPACK_SWAP_BYTES)
         val UNPACK_LSB_FIRST = PixelStoreParameter(GL11.GL_UNPACK_LSB_FIRST)
@@ -1524,7 +1543,8 @@ inline class PixelStoreParameter(val i: Int) {
 //
 //###############################################################################
 
-inline class PolygonMode(val i: Int) {
+@JvmInline
+value class PolygonMode(val i: Int) {
     companion object {
         val POINT = PolygonMode(GL11.GL_POINT)
         val LINE = PolygonMode(GL11.GL_LINE)
@@ -1591,7 +1611,8 @@ inline class PolygonMode(val i: Int) {
 //
 //###############################################################################
 
-inline class StencilOp(val i: Int) {
+@JvmInline
+value class StencilOp(val i: Int) {
     companion object {
         val ZERO = StencilOp(GL11.GL_ZERO)
         val KEEP = StencilOp(GL11.GL_KEEP)
@@ -1678,7 +1699,8 @@ inline class StencilOp(val i: Int) {
 //
 //###############################################################################
 
-inline class MagFilter(val i: Int) {
+@JvmInline
+value class MagFilter(val i: Int) {
     companion object {
         val NEAREST = MagFilter(GL11.GL_NEAREST)
         val LINEAR = MagFilter(GL11.GL_LINEAR)
@@ -1687,7 +1709,8 @@ inline class MagFilter(val i: Int) {
 
 //###############################################################################
 
-inline class MinFilter(val i: Int) {
+@JvmInline
+value class MinFilter(val i: Int) {
     companion object {
         val NEAREST = MinFilter(GL11.GL_NEAREST)
         val LINEAR = MinFilter(GL11.GL_LINEAR)
@@ -1734,7 +1757,8 @@ inline class MinFilter(val i: Int) {
 //
 //###############################################################################
 
-inline class TextureTarget(val i: Int) {
+@JvmInline
+value class TextureTarget(val i: Int) {
     companion object {
         val _1D = TextureTarget(GL11.GL_TEXTURE_1D)
         val _2D = TextureTarget(GL11.GL_TEXTURE_2D)
@@ -1764,7 +1788,8 @@ inline class TextureTarget(val i: Int) {
     }
 }
 
-inline class Tex2dTarget(val i: Int) {
+@JvmInline
+value class Tex2dTarget(val i: Int) {
     companion object {
         val _2D = Tex2dTarget(GL11.GL_TEXTURE_2D)
         val _1D_ARRAY = Tex2dTarget(GL30.GL_TEXTURE_1D_ARRAY)
@@ -1783,7 +1808,8 @@ inline class Tex2dTarget(val i: Int) {
 
 //###############################################################################
 
-inline class TextureWrapMode(val i: Int) {
+@JvmInline
+value class TextureWrapMode(val i: Int) {
     companion object {
         val CLAMP = TextureWrapMode(GL11.GL_CLAMP)
         val REPEAT = TextureWrapMode(GL11.GL_REPEAT)
@@ -4945,7 +4971,8 @@ inline class TextureWrapMode(val i: Int) {
 //#	VERTEX_ATTRIB_ARRAY_BUFFER_BINDING		= 0x889F
 //#	VERTEX_ATTRIB_ARRAY_BUFFER_BINDING_ARB		= 0x889F
 
-inline class BufferTarget(val i: Int) {
+@JvmInline
+value class BufferTarget(val i: Int) {
     companion object {
         val ARRAY = BufferTarget(GL15.GL_ARRAY_BUFFER)
         val ATOMIC_COUNTER = BufferTarget(GL42.GL_ATOMIC_COUNTER_BUFFER)
@@ -4965,7 +4992,8 @@ inline class BufferTarget(val i: Int) {
 }
 
 
-inline class BufferTarget2(val i: Int) {
+@JvmInline
+value class BufferTarget2(val i: Int) {
     companion object {
         /** Atomic counter storage */
         val ATOMIC_COUNTER = BufferTarget2(GL42.GL_ATOMIC_COUNTER_BUFFER)
@@ -5013,7 +5041,8 @@ inline class BufferTarget2(val i: Int) {
 //
 //# VERSION_1_5 enum: (Promoted for OpenGL 1.5)
 //# ARB_vertex_buffer_object enum: (additional; see above)
-inline class BufferAccess(val i: Int) {
+@JvmInline
+value class BufferAccess(val i: Int) {
     companion object {
         val READ_ONLY = BufferAccess(GL15.GL_READ_ONLY)
         //#	READ_ONLY_ARB					= 0x88B8
@@ -5074,7 +5103,8 @@ inline class BufferAccess(val i: Int) {
 //
 //# VERSION_1_5 enum: (Promoted for OpenGL 1.5)
 //# ARB_vertex_buffer_object enum: (additional; see above)
-inline class Usage(val i: Int) {
+@JvmInline
+value class Usage(val i: Int) {
     companion object {
         val STREAM_DRAW = Usage(GL15.GL_STREAM_DRAW)
         val STREAM_READ = Usage(GL15.GL_STREAM_READ)
@@ -5882,7 +5912,8 @@ inline class Usage(val i: Int) {
 //#	RENDERBUFFER_STENCIL_SIZE			= 0x8D55    # 3.0 / ARB_fbo
 //#	RENDERBUFFER_STENCIL_SIZE_EXT			= 0x8D55
 
-inline class Attachment(val i: Int) {
+@JvmInline
+value class Attachment(val i: Int) {
     companion object {
         val COLOR0 = Attachment(GL30C.GL_COLOR_ATTACHMENT0)
         val COLOR1 = Attachment(GL30C.GL_COLOR_ATTACHMENT1)
@@ -6212,7 +6243,8 @@ inline class Attachment(val i: Int) {
 //
 //# NV_future_use: 0x8E30-0x8E41
 
-inline class TextureSwizzle(val i: Int) {
+@JvmInline
+value class TextureSwizzle(val i: Int) {
     companion object {
         val SWIZZLE_R = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_R)
         val SWIZZLE_G = TextureSwizzle(GL33.GL_TEXTURE_SWIZZLE_G)
@@ -6332,7 +6364,8 @@ inline class TextureSwizzle(val i: Int) {
 //
 //###############################################################################
 
-inline class ProvokeMode(val i: Int) {
+@JvmInline
+value class ProvokeMode(val i: Int) {
     companion object {
         val FIRST_VERTEX_CONVENTION = ProvokeMode(GL32.GL_FIRST_VERTEX_CONVENTION)
         val LAST_VERTEX_CONVENTION = ProvokeMode(GL32.GL_LAST_VERTEX_CONVENTION)
@@ -6341,7 +6374,8 @@ inline class ProvokeMode(val i: Int) {
 
 //###############################################################################
 
-inline class DepthStencilTextureMode(val i: Int) {
+@JvmInline
+value class DepthStencilTextureMode(val i: Int) {
     companion object {
         val DEPTH_COMPONENT = DepthStencilTextureMode(GL32.GL_DEPTH_COMPONENT)
         val STENCIL_COMPONENT = DepthStencilTextureMode(GL43.GL_STENCIL_COMPONENTS)
@@ -6350,7 +6384,8 @@ inline class DepthStencilTextureMode(val i: Int) {
 
 //###############################################################################
 
-inline class TextureCompareMode(val i: Int) {
+@JvmInline
+value class TextureCompareMode(val i: Int) {
     companion object {
         val COMPARE_REF_TO_TEXTURE = TextureCompareMode(GL30C.GL_COMPARE_REF_TO_TEXTURE)
         val NONE = TextureCompareMode(GL11.GL_NONE)
@@ -6359,7 +6394,8 @@ inline class TextureCompareMode(val i: Int) {
 
 //###############################################################################
 
-inline class ImageFormatCompatibilityType(val i: Int) {
+@JvmInline
+value class ImageFormatCompatibilityType(val i: Int) {
     companion object {
         val BY_SIZE = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_SIZE)
         val BY_CLASS = ImageFormatCompatibilityType(GL42.GL_IMAGE_FORMAT_COMPATIBILITY_BY_CLASS)
@@ -6369,7 +6405,8 @@ inline class ImageFormatCompatibilityType(val i: Int) {
 
 //###############################################################################
 
-inline class BufferParameter(val i: Int) {
+@JvmInline
+value class BufferParameter(val i: Int) {
     companion object {
         val ACCESS = BufferParameter(GL15.GL_BUFFER_ACCESS)
         val ACCESS_FLAGS = BufferParameter(GL30.GL_BUFFER_ACCESS_FLAGS)
@@ -6385,7 +6422,8 @@ inline class BufferParameter(val i: Int) {
 
 //###############################################################################
 
-inline class QueryTarget(val i: Int) {
+@JvmInline
+value class QueryTarget(val i: Int) {
     companion object {
         val SAMPLES_PASSED = QueryTarget(GL15.GL_SAMPLES_PASSED)
         val ANY_SAMPLES_PASSED = QueryTarget(GL33.GL_ANY_SAMPLES_PASSED)
@@ -6397,7 +6435,8 @@ inline class QueryTarget(val i: Int) {
     }
 }
 
-inline class QueryIndexedTarget(val i: Int) {
+@JvmInline
+value class QueryIndexedTarget(val i: Int) {
     companion object {
         val SAMPLES_PASSED = QueryTarget(GL15.GL_SAMPLES_PASSED)
         val ANY_SAMPLES_PASSED = QueryTarget(GL33.GL_ANY_SAMPLES_PASSED)
@@ -6409,7 +6448,8 @@ inline class QueryIndexedTarget(val i: Int) {
 
 //###############################################################################
 
-inline class GetQuery(val i: Int) {
+@JvmInline
+value class GetQuery(val i: Int) {
     companion object {
         val CURRENT_QUERY = GetQuery(GL15.GL_CURRENT_QUERY)
         val COUNTER_BITS = GetQuery(GL15.GL_QUERY_COUNTER_BITS)
@@ -6418,7 +6458,8 @@ inline class GetQuery(val i: Int) {
 
 //###############################################################################
 
-inline class GetQueryObject(val i: Int) {
+@JvmInline
+value class GetQueryObject(val i: Int) {
     companion object {
         val RESULT = GetQueryObject(GL15.GL_QUERY_RESULT)
         val RESULT_NO_WAIT = GetQueryObject(GL44.GL_QUERY_RESULT_NO_WAIT)
@@ -6428,7 +6469,8 @@ inline class GetQueryObject(val i: Int) {
 
 //###############################################################################
 
-inline class ShaderType(val i: Int) {
+@JvmInline
+value class ShaderType(val i: Int) {
     companion object {
         val COMPUTE_SHADER = ShaderType(GL43.GL_COMPUTE_SHADER)
         val VERTEX_SHADER = ShaderType(GL20.GL_VERTEX_SHADER)
@@ -6441,7 +6483,8 @@ inline class ShaderType(val i: Int) {
 
 //###############################################################################
 
-inline class GetShader(val i: Int) {
+@JvmInline
+value class GetShader(val i: Int) {
     companion object {
         val SHADER_TYPE = GetShader(GL20.GL_SHADER_TYPE)
         val DELETE_STATUS = GetShader(GL20.GL_DELETE_STATUS)
@@ -6453,7 +6496,8 @@ inline class GetShader(val i: Int) {
 
 //###############################################################################
 
-inline class GetProgram(val i: Int) {
+@JvmInline
+value class GetProgram(val i: Int) {
     companion object {
         val DELETE_STATUS = GetProgram(GL20.GL_DELETE_STATUS)
         val LINK_STATUS = GetProgram(GL20.GL_LINK_STATUS)
@@ -6482,7 +6526,8 @@ inline class GetProgram(val i: Int) {
 
 //###############################################################################
 
-inline class UniformType(val i: Int) {
+@JvmInline
+value class UniformType(val i: Int) {
     companion object {
         val FLOAT = UniformType(GL11.GL_FLOAT)
         val FLOAT_VEC2 = UniformType(GL20.GL_FLOAT_VEC2)
@@ -6592,7 +6637,8 @@ inline class UniformType(val i: Int) {
 
 //###############################################################################
 
-inline class VertexAttrType(val i: Int) { // TODO -> VertexAttribType?
+@JvmInline
+value class VertexAttrType(val i: Int) { // TODO -> VertexAttribType?
     companion object {
         val BYTE = VertexAttrType(GL11.GL_BYTE)
         val UNSIGNED_BYTE = VertexAttrType(GL20.GL_UNSIGNED_BYTE)
@@ -6621,7 +6667,8 @@ inline class VertexAttrType(val i: Int) { // TODO -> VertexAttribType?
 
 //###############################################################################
 
-inline class AttributeType(val i: Int) {
+@JvmInline
+value class AttributeType(val i: Int) {
     companion object {
         val FLOAT = AttributeType(GL11.GL_FLOAT)
         val FLOAT_VEC2 = AttributeType(GL20.GL_FLOAT_VEC2)
@@ -6661,7 +6708,8 @@ inline class AttributeType(val i: Int) {
 
 //###############################################################################
 
-inline class VertexAttrib(val i: Int) {
+@JvmInline
+value class VertexAttrib(val i: Int) {
     companion object {
         val BUFFER_BINDING = VertexAttrib(GL15.GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)
         val ENABLED = VertexAttrib(GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED)
@@ -6677,7 +6725,8 @@ inline class VertexAttrib(val i: Int) {
 
 //###############################################################################
 
-inline class ConditionalMode(val i: Int) { // TODO get rid of QUERY_?
+@JvmInline
+value class ConditionalMode(val i: Int) { // TODO get rid of QUERY_?
     companion object {
         val QUERY_WAIT = ConditionalMode(GL30C.GL_QUERY_WAIT)
         val QUERY_NO_WAIT = ConditionalMode(GL30C.GL_QUERY_NO_WAIT)
@@ -6690,7 +6739,8 @@ inline class ConditionalMode(val i: Int) { // TODO get rid of QUERY_?
     }
 }
 
-inline class ClampColor(val i: Int) {
+@JvmInline
+value class ClampColor(val i: Int) {
     companion object {
         val TRUE = ClampColor(GL30C.GL_TRUE)
         val FALSE = ClampColor(GL30C.GL_FALSE)
@@ -6698,7 +6748,8 @@ inline class ClampColor(val i: Int) {
     }
 }
 
-inline class GetRenderbuffer(val i: Int) {
+@JvmInline
+value class GetRenderbuffer(val i: Int) {
     companion object {
         val WIDTH = GetRenderbuffer(GL30C.GL_RENDERBUFFER_WIDTH)
         val HEIGHT = GetRenderbuffer(GL30C.GL_RENDERBUFFER_HEIGHT)
@@ -6713,7 +6764,8 @@ inline class GetRenderbuffer(val i: Int) {
     }
 }
 
-inline class FramebufferBindTarget(val i: Int) {
+@JvmInline
+value class FramebufferBindTarget(val i: Int) {
     companion object {
         /**  Calling glBindFramebuffer with target set to GL_FRAMEBUFFER binds framebuffer to both the read and draw framebuffer targets. */
         val BOTH = FramebufferBindTarget(GL30C.GL_FRAMEBUFFER)
@@ -6722,7 +6774,8 @@ inline class FramebufferBindTarget(val i: Int) {
     }
 }
 
-inline class FramebufferTarget(val i: Int) {
+@JvmInline
+value class FramebufferTarget(val i: Int) {
     companion object {
         val READ = FramebufferTarget(GL30C.GL_READ_FRAMEBUFFER)
         /** GL_FRAMEBUFFER is equivalent to GL_DRAW_FRAMEBUFFER */
@@ -6730,7 +6783,8 @@ inline class FramebufferTarget(val i: Int) {
     }
 }
 
-inline class GetFramebufferAttachment(val i: Int) {
+@JvmInline
+value class GetFramebufferAttachment(val i: Int) {
     companion object {
         val OBJECT_TYPE = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE)
         val OBJECT_NAME = GetFramebufferAttachment(GL30C.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME)
@@ -6749,7 +6803,8 @@ inline class GetFramebufferAttachment(val i: Int) {
     }
 }
 
-inline class GeometryInputType(val i: Int) {
+@JvmInline
+value class GeometryInputType(val i: Int) {
     companion object {
         val POINTS = GeometryInputType(GL11C.GL_POINTS)
         val LINES = GeometryInputType(GL11C.GL_LINES)
@@ -6759,7 +6814,8 @@ inline class GeometryInputType(val i: Int) {
     }
 }
 
-inline class GeometryOutputType(val i: Int) {
+@JvmInline
+value class GeometryOutputType(val i: Int) {
     companion object {
         val POINTS = GeometryOutputType(GL11C.GL_POINTS)
         val LINE_STRIP = GeometryOutputType(GL11C.GL_LINE_STRIP)
@@ -6767,7 +6823,8 @@ inline class GeometryOutputType(val i: Int) {
     }
 }
 
-inline class State(val i: Int) {
+@JvmInline
+value class State(val i: Int) {
     companion object {
         val BLEND = State(GL11C.GL_BLEND)
         val CLIP_DISTANCE0 = State(GL30C.GL_CLIP_DISTANCE0)
@@ -6801,14 +6858,16 @@ inline class State(val i: Int) {
     operator fun plus(i: Int) = State(this.i + i)
 }
 
-inline class IndexedState(val i: Int) {
+@JvmInline
+value class IndexedState(val i: Int) {
     companion object {
         val BLEND = IndexedState(GL11C.GL_BLEND)
         val SCISSOR_TEST = IndexedState(GL11C.GL_SCISSOR_TEST)
     }
 }
 
-inline class PrimitiveMode(val i: Int) {
+@JvmInline
+value class PrimitiveMode(val i: Int) {
     companion object {
         val POINTS = PrimitiveMode(GL11C.GL_POINTS)
         val LINES = PrimitiveMode(GL11C.GL_LINES)
@@ -6816,14 +6875,16 @@ inline class PrimitiveMode(val i: Int) {
     }
 }
 
-inline class TransformBufferMode(val i: Int) {
+@JvmInline
+value class TransformBufferMode(val i: Int) {
     companion object {
         val INTERLEAVED_ATTRIBS = TransformBufferMode(GL30C.GL_INTERLEAVED_ATTRIBS)
         val SEPARATE_ATTRIBS = TransformBufferMode(GL30C.GL_SEPARATE_ATTRIBS)
     }
 }
 
-inline class IndexType(val i: Int) {
+@JvmInline
+value class IndexType(val i: Int) {
     companion object {
         val UNSIGNED_BYTE = IndexType(GL11C.GL_UNSIGNED_BYTE)
         val UNSIGNED_SHORT = IndexType(GL11C.GL_UNSIGNED_SHORT)
@@ -6839,7 +6900,8 @@ inline class IndexType(val i: Int) {
         }
 }
 
-inline class InternalFormat(val i: Int) {
+@JvmInline
+value class InternalFormat(val i: Int) {
     companion object {
         val R8 = InternalFormat(GL30C.GL_R8)
         val R16 = InternalFormat(GL30C.GL_R16)
@@ -6876,7 +6938,8 @@ inline class InternalFormat(val i: Int) {
     }
 }
 
-inline class TextureFormat(val i: Int) {
+@JvmInline
+value class TextureFormat(val i: Int) {
     companion object {
         val RED = TextureFormat(GL44C.GL_RED)
         val RG = TextureFormat(GL44C.GL_RG)
@@ -6897,7 +6960,8 @@ inline class TextureFormat(val i: Int) {
 }
 
 // TextureFormat + Green and Blue
-inline class TextureFormat2(val i: Int) {
+@JvmInline
+value class TextureFormat2(val i: Int) {
     companion object {
         val RED = TextureFormat2(GL44C.GL_RED)
         val GREEN = TextureFormat2(GL44C.GL_GREEN)
@@ -6922,7 +6986,8 @@ inline class TextureFormat2(val i: Int) {
 }
 
 // for glGetTextureSubImage and glReadnPixel
-inline class TextureFormat3(val i: Int) {
+@JvmInline
+value class TextureFormat3(val i: Int) {
     companion object {
         val RED = TextureFormat2(GL44C.GL_RED)
         val RG = TextureFormat2(GL44C.GL_RG)
@@ -6935,7 +7000,8 @@ inline class TextureFormat3(val i: Int) {
     }
 }
 
-inline class TextureType(val i: Int) {
+@JvmInline
+value class TextureType(val i: Int) {
     companion object {
         val UNSIGNED_BYTE = TextureType(GL44C.GL_UNSIGNED_BYTE)
         val BYTE = TextureType(GL44C.GL_BYTE)
@@ -6959,7 +7025,8 @@ inline class TextureType(val i: Int) {
     }
 }
 
-inline class TextureType2(val i: Int) {
+@JvmInline
+value class TextureType2(val i: Int) {
     companion object {
         val UNSIGNED_BYTE = TextureType2(GL44C.GL_UNSIGNED_BYTE)
         val BYTE = TextureType2(GL44C.GL_BYTE)
@@ -6988,7 +7055,8 @@ inline class TextureType2(val i: Int) {
     }
 }
 
-inline class GetActiveUniform(val i: Int) {
+@JvmInline
+value class GetActiveUniform(val i: Int) {
     companion object {
         val UNIFORM_TYPE = GetActiveUniform(GL31C.GL_UNIFORM_TYPE)
         val UNIFORM_SIZE = GetActiveUniform(GL31C.GL_UNIFORM_SIZE)
@@ -7002,7 +7070,8 @@ inline class GetActiveUniform(val i: Int) {
     }
 }
 
-inline class GetActiveUniformBlock(val i: Int) {
+@JvmInline
+value class GetActiveUniformBlock(val i: Int) {
     companion object {
         val BINDING = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_BINDING)
         val DATA_SIZE = GetActiveUniformBlock(GL31C.GL_UNIFORM_BLOCK_DATA_SIZE)
@@ -7017,7 +7086,8 @@ inline class GetActiveUniformBlock(val i: Int) {
     }
 }
 
-inline class GetActiveAtomicCounterBuffer(val i: Int) {
+@JvmInline
+value class GetActiveAtomicCounterBuffer(val i: Int) {
     companion object {
         val BINDING = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_BINDING)
         val DATA_SIZE = GetActiveAtomicCounterBuffer(GL42C.GL_ATOMIC_COUNTER_BUFFER_DATA_SIZE)
@@ -7032,7 +7102,8 @@ inline class GetActiveAtomicCounterBuffer(val i: Int) {
     }
 }
 
-inline class SyncStatus(val i: Int) {
+@JvmInline
+value class SyncStatus(val i: Int) {
     companion object {
         val ALREADY_SIGNALED = SyncStatus(GL32C.GL_ALREADY_SIGNALED)
         val TIMEOUT_EXPIRED = SyncStatus(GL32C.GL_TIMEOUT_EXPIRED)
@@ -7041,7 +7112,8 @@ inline class SyncStatus(val i: Int) {
     }
 }
 
-inline class GetActiveSubroutineUniform(val i: Int) {
+@JvmInline
+value class GetActiveSubroutineUniform(val i: Int) {
     companion object {
         val NUM_COMPATIBLE_SUBROUTINES = GetActiveSubroutineUniform(GL40C.GL_NUM_COMPATIBLE_SUBROUTINES)
         @Deprecated("use getActiveSubroutineUniformCompatibles instead")
@@ -7051,7 +7123,8 @@ inline class GetActiveSubroutineUniform(val i: Int) {
     }
 }
 
-inline class GetProgramStage(val i: Int) {
+@JvmInline
+value class GetProgramStage(val i: Int) {
     companion object {
         val ACTIVE_SUBROUTINE_UNIFORMS = GetProgramStage(GL40C.GL_ACTIVE_SUBROUTINE_UNIFORMS)
         val ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS = GetProgramStage(GL40C.GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS)
@@ -7061,7 +7134,8 @@ inline class GetProgramStage(val i: Int) {
     }
 }
 
-inline class PatchParameter(val i: Int) {
+@JvmInline
+value class PatchParameter(val i: Int) {
     companion object {
         @Deprecated("use patchVertices instead")
         val PATCH_VERTICES = PatchParameter(GL40C.GL_PATCH_VERTICES)
@@ -7070,7 +7144,8 @@ inline class PatchParameter(val i: Int) {
     }
 }
 
-inline class PrecisionType(val i: Int) {
+@JvmInline
+value class PrecisionType(val i: Int) {
     companion object {
         val LOW_FLOAT = PrecisionType(GL41C.GL_LOW_FLOAT)
         val MEDIUM_FLOAT = PrecisionType(GL41C.GL_MEDIUM_FLOAT)
@@ -7081,14 +7156,16 @@ inline class PrecisionType(val i: Int) {
     }
 }
 
-inline class ProgramParameter(val i: Int) {
+@JvmInline
+value class ProgramParameter(val i: Int) {
     companion object {
         val PROGRAM_BINARY_RETRIEVABLE_HINT = ProgramParameter(GL41C.GL_PROGRAM_BINARY_RETRIEVABLE_HINT)
         val PROGRAM_SEPARABLE = ProgramParameter(GL41C.GL_PROGRAM_SEPARABLE)
     }
 }
 
-inline class GetProgramPipeline(val i: Int) {
+@JvmInline
+value class GetProgramPipeline(val i: Int) {
     companion object {
         val ACTIVE_PROGRAM = GetProgramPipeline(GL41C.GL_ACTIVE_PROGRAM)
         val VERTEX_SHADER = GetProgramPipeline(GL41C.GL_VERTEX_SHADER)
@@ -7102,7 +7179,8 @@ inline class GetProgramPipeline(val i: Int) {
 
 typealias BufferStorageFlags = Int
 
-inline class BufferStorageFlag(val i: Int) {
+@JvmInline
+value class BufferStorageFlag(val i: Int) {
     companion object {
         val DYNAMIC_STORAGE_BIT = BufferStorageFlag(GL44C.GL_DYNAMIC_STORAGE_BIT)
         val MAP_READ_BIT = BufferStorageFlag(GL44C.GL_MAP_READ_BIT)
@@ -7115,7 +7193,8 @@ inline class BufferStorageFlag(val i: Int) {
 
 typealias MapBufferFlags = Int
 
-inline class MapBufferFlag(val i: Int) {
+@JvmInline
+value class MapBufferFlag(val i: Int) {
     companion object {
         val READ_BIT = MapBufferFlag(GL44C.GL_MAP_READ_BIT)
         val WRITE_BIT = MapBufferFlag(GL44C.GL_MAP_WRITE_BIT)
@@ -7129,7 +7208,8 @@ inline class MapBufferFlag(val i: Int) {
 }
 
 
-inline class TextureAccess(val i: Int) {
+@JvmInline
+value class TextureAccess(val i: Int) {
     companion object {
         val READ_ONLY = TextureAccess(GL42C.GL_READ_ONLY)
         val WRITE_ONLY = TextureAccess(GL42C.GL_WRITE_ONLY)
@@ -7137,7 +7217,8 @@ inline class TextureAccess(val i: Int) {
     }
 }
 
-inline class GetInternalFormat(val i: Int) {
+@JvmInline
+value class GetInternalFormat(val i: Int) {
     companion object {
         val NUM_SAMPLE_COUNTS = GetInternalFormat(GL42C.GL_NUM_SAMPLE_COUNTS)
         val SAMPLES = GetInternalFormat(GL42C.GL_SAMPLES)
@@ -7215,7 +7296,8 @@ inline class GetInternalFormat(val i: Int) {
     }
 }
 
-inline class GlIdentifier(val i: Int) {
+@JvmInline
+value class GlIdentifier(val i: Int) {
     companion object {
         val BUFFER = GlIdentifier(GL43C.GL_BUFFER)
         val SHADER = GlIdentifier(GL43C.GL_SHADER)
@@ -7231,7 +7313,8 @@ inline class GlIdentifier(val i: Int) {
     }
 }
 
-inline class FramebufferParameter(val i: Int) {
+@JvmInline
+value class FramebufferParameter(val i: Int) {
     companion object {
         val DEFAULT_WIDTH = FramebufferParameter(GL43C.GL_FRAMEBUFFER_DEFAULT_WIDTH)
         val DEFAULT_HEIGHT = FramebufferParameter(GL43C.GL_FRAMEBUFFER_DEFAULT_HEIGHT)
@@ -7241,7 +7324,8 @@ inline class FramebufferParameter(val i: Int) {
     }
 }
 
-inline class ProgramInterface(val i: Int) {
+@JvmInline
+value class ProgramInterface(val i: Int) {
     companion object {
         val UNIFORM = ProgramInterface(GL43C.GL_UNIFORM)
         val UNIFORM_BLOCK = ProgramInterface(GL43C.GL_UNIFORM_BLOCK)
@@ -7267,7 +7351,8 @@ inline class ProgramInterface(val i: Int) {
     }
 }
 
-inline class GetProgramInterface(val i: Int) {
+@JvmInline
+value class GetProgramInterface(val i: Int) {
     companion object {
         val ACTIVE_RESOURCES = GetProgramInterface(GL43C.GL_ACTIVE_RESOURCES)
         val MAX_NAME_LENGTH = GetProgramInterface(GL43C.GL_MAX_NAME_LENGTH)
@@ -7276,21 +7361,24 @@ inline class GetProgramInterface(val i: Int) {
     }
 }
 
-inline class ControlOrigin(val i: Int) {
+@JvmInline
+value class ControlOrigin(val i: Int) {
     companion object {
         val LOWER_LEFT = ControlOrigin(GL20C.GL_LOWER_LEFT)
         val UPPER_LEFT = ControlOrigin(GL20C.GL_UPPER_LEFT)
     }
 }
 
-inline class ClipDepthMode(val i: Int) {
+@JvmInline
+value class ClipDepthMode(val i: Int) {
     companion object {
         val NEGATIVE_ONE_TO_ONE = ClipDepthMode(GL45C.GL_NEGATIVE_ONE_TO_ONE)
         val ZERO_TO_ONE = ClipDepthMode(GL45C.GL_ZERO_TO_ONE)
     }
 }
 
-inline class GetTransformFeedback(val i: Int) {
+@JvmInline
+value class GetTransformFeedback(val i: Int) {
     companion object {
         val BUFFER_BINDING = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
         val PAUSED = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_PAUSED)
@@ -7298,7 +7386,8 @@ inline class GetTransformFeedback(val i: Int) {
     }
 }
 
-inline class GetTransformFeedbackIndexed(val i: Int) {
+@JvmInline
+value class GetTransformFeedbackIndexed(val i: Int) {
     companion object {
         val BUFFER_BINDING = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
         val BUFFER_START = GetTransformFeedbackIndexed(GL45C.GL_TRANSFORM_FEEDBACK_BUFFER_START)
@@ -7306,7 +7395,8 @@ inline class GetTransformFeedbackIndexed(val i: Int) {
     }
 }
 
-inline class FramebufferStatus(val i: Int) {
+@JvmInline
+value class FramebufferStatus(val i: Int) {
     val isComplete: Boolean
         get() = this == COMPLETE
 
@@ -7323,7 +7413,8 @@ inline class FramebufferStatus(val i: Int) {
     }
 }
 
-inline class FramebufferAttachmentObjectType(val i: Int) {
+@JvmInline
+value class FramebufferAttachmentObjectType(val i: Int) {
     companion object {
         val NONE = FramebufferAttachmentObjectType(GL11C.GL_NONE)
         val FRAMEBUFFER_DEFAULT = FramebufferAttachmentObjectType(GL30C.GL_FRAMEBUFFER_DEFAULT)
@@ -7332,7 +7423,8 @@ inline class FramebufferAttachmentObjectType(val i: Int) {
     }
 }
 
-inline class FramebufferAttachmentComponentType(val i: Int) {
+@JvmInline
+value class FramebufferAttachmentComponentType(val i: Int) {
     companion object {
         val FLOAT = FramebufferAttachmentComponentType(GL11C.GL_FLOAT)
         val INT = FramebufferAttachmentComponentType(GL30C.GL_INT)
@@ -7343,7 +7435,8 @@ inline class FramebufferAttachmentComponentType(val i: Int) {
 }
 
 // same as FramebufferAttachmentComponentType + None
-inline class TextureComponentType(val i: Int) {
+@JvmInline
+value class TextureComponentType(val i: Int) {
     companion object {
         val NONE = TextureComponentType(GL11C.GL_NONE)
         val FLOAT = TextureComponentType(GL11C.GL_FLOAT)
@@ -7354,14 +7447,16 @@ inline class TextureComponentType(val i: Int) {
     }
 }
 
-inline class FramebufferAttachmentColorEncoding(val i: Int) {
+@JvmInline
+value class FramebufferAttachmentColorEncoding(val i: Int) {
     companion object {
         val LINEAR = FramebufferAttachmentColorEncoding(GL11C.GL_LINEAR)
         val SRGB = FramebufferAttachmentColorEncoding(GL21C.GL_SRGB)
     }
 }
 
-inline class GraphicsResetStatus(val i: Int) { // TODO -> GraphicContextReset and remove _CONTEXT_RESET?
+@JvmInline
+value class GraphicsResetStatus(val i: Int) { // TODO -> GraphicContextReset and remove _CONTEXT_RESET?
     companion object {
         val NO_ERROR = GraphicsResetStatus(GL11C.GL_NO_ERROR)
         val GUILTY_CONTEXT_RESET = GraphicsResetStatus(GL45C.GL_GUILTY_CONTEXT_RESET)
@@ -7370,7 +7465,8 @@ inline class GraphicsResetStatus(val i: Int) { // TODO -> GraphicContextReset an
     }
 }
 
-inline class ColorEncoding(val i: Int) {
+@JvmInline
+value class ColorEncoding(val i: Int) {
     companion object {
         val SRGB = ColorEncoding(GL21C.GL_SRGB)
         val LINEAR = ColorEncoding(GL21C.GL_LINEAR)

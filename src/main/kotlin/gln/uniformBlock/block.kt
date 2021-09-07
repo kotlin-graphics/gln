@@ -1,81 +1,56 @@
 package gln.uniformBlock
 
-import glm_.BYTES
 import glm_.bool
-import glm_.glm
-import gln.buf
-import gln.bufAd
-import kool.BYTES
-import kool.rem
-import org.lwjgl.opengl.GL31
-import org.lwjgl.opengl.GL40
-import org.lwjgl.opengl.GL43
+import gln.identifiers.GlProgram
+import kool.Stack
+import kool.mByte
+import kool.mInt
+import org.lwjgl.opengl.GL31C
+import org.lwjgl.opengl.GL40C
+import org.lwjgl.opengl.GL43C
+import org.lwjgl.system.MemoryUtil.memASCII
 
 
 object UniformBlock {
 
     var programName = 0
+    val program: GlProgram
+        get() = GlProgram(programName)
     var blockIndex = 0
 
     inline val name: String
-        get() {
-            GL31.nglGetActiveUniformBlockName(programName, blockIndex, buf.rem, bufAd, bufAd + Int.BYTES)
-            val bytes = ByteArray(buf.getInt(0)) { buf[Int.BYTES + it] }
-            return String(bytes)
+        get() = Stack {
+            val size = nameLength
+            val pLength = it.mInt()
+            val pUniformBlockName = it.mByte(size)
+            GL31C.nglGetActiveUniformBlockName(program.name, blockIndex, size, pLength.adr, pUniformBlockName.adr)
+            memASCII(pUniformBlockName.adr, pLength[0])
         }
     inline val binding: Int
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_BINDING, bufAd)
-            return buf.getInt(0)
-        }
+        get() = Stack.intAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL31C.GL_UNIFORM_BLOCK_BINDING, it) }
     inline val dataSize: Int
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_DATA_SIZE, bufAd)
-            return buf.getInt(0)
-        }
+        get() = Stack.intAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL31C.GL_UNIFORM_BLOCK_DATA_SIZE, it) }
     inline val nameLength: Int
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_NAME_LENGTH, bufAd)
-            return buf.getInt(0)
-        }
+        get() = Stack.intAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL31C.GL_UNIFORM_BLOCK_NAME_LENGTH, it) }
     inline val activeUniforms: Int
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, bufAd)
-            return buf.getInt(0)
-        }
+        get() = Stack.intAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, it) }
     inline val activeUniformsIndices: IntArray
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, bufAd)
-            return IntArray(glm.min(activeUniforms, 32)) { buf.getInt(it * Int.BYTES) }
+        get() = Stack {
+            val size = activeUniforms
+            val pIndices = it.mInt(size)
+            GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, pIndices.adr)
+            IntArray(size) { i -> pIndices[i] }
         }
     inline val byVertexShader: Boolean
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER, bufAd)
-            return buf.get(0).bool
-        }
+        get() = Stack.byteAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER, it) }.bool
     inline val byTessControlShader: Boolean
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL40.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER, bufAd)
-            return buf.get(0).bool
-        }
+        get() = Stack.byteAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL40C.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER, it) }.bool
     inline val byTessEvaluationShader: Boolean
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL40.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_EVALUATION_SHADER, bufAd)
-            return buf.get(0).bool
-        }
+        get() = Stack.byteAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL40C.GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_EVALUATION_SHADER, it) }.bool
     inline val byGeometryShader: Boolean
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER, bufAd)
-            return buf.get(0).bool
-        }
+        get() = Stack.byteAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER, it) }.bool
     inline val byFragmentShader: Boolean
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL31.GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER, bufAd)
-            return buf.get(0).bool
-        }
+        get() = Stack.byteAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL31C.GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER, it) }.bool
     inline val byComputeShader: Boolean
-        get() {
-            GL31.nglGetActiveUniformBlockiv(programName, blockIndex, GL43.GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER, bufAd)
-            return buf.get(0).bool
-        }
+        get() = Stack.byteAdr { GL31C.nglGetActiveUniformBlockiv(programName, blockIndex, GL43C.GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER, it) }.bool
 }

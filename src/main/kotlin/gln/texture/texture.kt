@@ -3,17 +3,14 @@
 package gln.texture
 
 import gli_.gl
-import glm_.BYTES
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
-import gln.buf
-import gln.bufAd
-import kool.BYTES
+import kool.Stack
 import kool.adr
-import kool.get
 import kool.pos
+import kool.ptrOf
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.GL_TEXTURE_1D
 import org.lwjgl.opengl.GL11.GL_TEXTURE_2D
@@ -26,7 +23,6 @@ import org.lwjgl.opengl.GL42
 import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
-import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty0
 
 
@@ -60,10 +56,8 @@ inline fun glTex2dParameter(name: Int, param: FloatArray) = GL11.glTexParameterf
 
 inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: Int) = GL11.glTexParameteri(target.i, name, param)
 inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: Float) = GL11.glTexParameterf(target.i, name, param)
-inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: gli_.gl.Swizzles) {
-    buf.putInt(0, param[0].i).putInt(Int.BYTES, param[1].i).putInt(Int.BYTES * 2, param[2].i).putInt(Int.BYTES * 3, param[3].i)
-    GL11.nglTexParameteriv(target.i, name, bufAd)
-}
+inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: gli_.gl.Swizzles) =
+    Stack { GL11.nglTexParameteriv(target.i, name, it.ptrOf(param[0].i, param[1].i, param[2].i, param[3].i).adr) }
 
 inline fun glTexImage2D(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) {
     GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type, pixels.adr + pixels.pos)

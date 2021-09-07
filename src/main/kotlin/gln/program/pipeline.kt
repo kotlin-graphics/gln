@@ -12,7 +12,8 @@ import java.nio.IntBuffer
 
 fun GlPipelines(size: Int) = GlPipelines(IntBuffer(size))
 
-inline class GlPipelines(val names: IntBuffer) {
+@JvmInline
+value class GlPipelines(val names: IntBuffer) {
     inline val rem: Int
         get() = names.rem
     inline val adr: Adr
@@ -40,7 +41,8 @@ inline class GlPipelines(val names: IntBuffer) {
     }
 }
 
-inline class GlPipeline(val name: Int = 0) {
+@JvmInline
+value class GlPipeline(val name: Int = 0) {
 
     // --- [ glActiveShaderProgram ] ---
 

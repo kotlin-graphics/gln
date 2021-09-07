@@ -2,6 +2,9 @@ package gln
 
 import glm_.BYTES
 import glm_.bool
+import glm_.mat2x2.Mat2
+import glm_.mat3x3.Mat3
+import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i
@@ -25,11 +28,15 @@ import java.nio.IntBuffer
 
 inline fun Stack.vec2Address(block: (Ptr) -> Unit): Vec2 = Stack { Vec2.fromPointer(it.nmalloc(4, Vec2.size).also(block)) }
 
+inline fun Stack.vec2Address(vec: Vec2, block: (Ptr) -> Unit) = Stack { block(vec.toBuffer(it).adr) }
+
 inline fun Stack.vec2iAddress(block: (Ptr) -> Unit): Vec2i = Stack { Vec2i.fromPointer(it.nmalloc(4, Vec2i.size).also(block)) }
 
 inline fun Stack.vec2dAddress(block: (Ptr) -> Unit): Vec2d = Stack { Vec2d.fromPointer(it.nmalloc(8, Vec2d.size).also(block)) }
 
 inline fun Stack.vec3Address(block: (Ptr) -> Unit): Vec3 = Stack { Vec3.fromPointer(it.nmalloc(4, Vec3.size).also(block)) }
+
+inline fun Stack.vec3Address(vec: Vec3, block: (Ptr) -> Unit) = Stack { block(vec.toBuffer(it).adr) }
 
 inline fun Stack.vec3iAddress(block: (Ptr) -> Unit): Vec3i = Stack { Vec3i.fromPointer(it.nmalloc(4, Vec3i.size).also(block)) }
 
@@ -54,6 +61,10 @@ inline fun Stack.vec4iAddress(vec4i: Vec4i, block: (Ptr) -> Unit) = Stack { bloc
 
 inline fun Stack.vec4uiAddress(vec4ui: Vec4ui, block: (Ptr) -> Unit) = Stack { block(vec4ui.toIntBuffer(it).adr) }
 
+inline fun Stack.mat2Address(mat: Mat2, block: (Ptr) -> Unit) = Stack { block(mat.toBuffer(it).adr) }
+inline fun Stack.mat3Address(mat: Mat3, block: (Ptr) -> Unit) = Stack { block(mat.toBuffer(it).adr) }
+inline fun Stack.mat4Address(mat: Mat4, block: (Ptr) -> Unit) = Stack { block(mat.toBuffer(it).adr) }
+
 inline fun MemoryStack.intAdr(block: (Adr) -> Unit): Int = memGetInt(nmalloc(4, Int.BYTES).also(block))
 
 inline fun MemoryStack.longAddress(block: (Adr) -> Unit): Long = memGetLong(nmalloc(8, Long.BYTES).also(block))
@@ -70,7 +81,7 @@ inline fun MemoryStack.vec2Address(block: (Ptr) -> Unit): Vec2 = Vec2.fromPointe
 inline fun MemoryStack.vec2iAddress(block: (Ptr) -> Unit): Vec2i = Vec2i.fromPointer(nmalloc(4, Vec2i.size).also(block))
 inline fun MemoryStack.vec2dAddress(block: (Ptr) -> Unit): Vec2d = Vec2d.fromPointer(nmalloc(8, Vec2d.size).also(block))
 
-inline fun MemoryStack.vec3Address(block: (Ptr) -> Unit): Vec3 = Vec3.fromPointer(nmalloc(4, Vec3.size))
+inline fun MemoryStack.vec3Address(block: (Ptr) -> Unit): Vec3 = Vec3.fromPointer(nmalloc(4, Vec3.size).also(block))
 
 inline fun MemoryStack.vec3iAddress(block: (Ptr) -> Unit): Vec3i = Vec3i.fromPointer(nmalloc(4, Vec3i.size).also(block))
 inline fun MemoryStack.vec3dAddress(block: (Ptr) -> Unit): Vec3d = Vec3d.fromPointer(nmalloc(8, Vec3d.size).also(block))

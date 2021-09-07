@@ -15,7 +15,8 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
 
-inline class GlBuffer(val name: Int = -1) {
+@JvmInline
+value class GlBuffer(val name: Int = -1) {
 
     // --- [ glIsBuffer ] ---
 
@@ -27,7 +28,7 @@ inline class GlBuffer(val name: Int = -1) {
 
     // --- [ glClearNamedBufferData ] --- TODO format and type
 
-    fun clearData(buffer: GlBuffer, internalFormat: InternalFormat, format: Int, type: Int, data: Buffer? = null) = gl.clearBufferData(this, internalFormat, format, type, data)
+    fun clearData(internalFormat: InternalFormat, format: Int, type: Int, data: Buffer? = null) = gl.clearBufferData(this, internalFormat, format, type, data)
 
     // --- [ glCopyNamedBufferSubData ] --- TODO -> copySubDataTo?
 
@@ -39,7 +40,7 @@ inline class GlBuffer(val name: Int = -1) {
 
     // --- [ glFlushMappedNamedBufferRange ] --- TODO rename to flushMappedRange ?
 
-    fun flushMappedBufferRange(buffer: GlBuffer, offset: Int, length: Int) = gl.flushMappedBufferRange(this, offset, length)
+    fun flushMappedBufferRange(offset: Int, length: Int) = gl.flushMappedBufferRange(this, offset, length)
 
     // --- [ glGetNamedBufferSubData ] ---
 
@@ -187,7 +188,8 @@ inline class GlBuffer(val name: Int = -1) {
     }
 }
 
-inline class GlBuffers(val names: IntBuffer) {
+@JvmInline
+value class GlBuffers(val names: IntBuffer) {
 
     inline val rem: Int
         get() = names.rem

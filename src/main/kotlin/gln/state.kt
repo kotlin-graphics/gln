@@ -78,7 +78,7 @@ object OpenGlState {
             valueChanged {
                 val was = if(field == GlFramebuffer.DEFAULT) "screen" else "${value.name}"
                 val new = if(value == GlFramebuffer.DEFAULT) "screen" else "${value.name}"
-                "Framebuffer was $was, is now $value"
+                "Framebuffer was $was, is now $new"
             }
             field = value
         }

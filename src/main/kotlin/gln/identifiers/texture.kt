@@ -59,7 +59,8 @@ import java.nio.IntBuffer
 //        get() = RECTANGLE
 //}
 
-inline class GlTexture(val name: Int = -1) {
+@JvmInline
+value class GlTexture(val name: Int = -1) {
 
     // --- [ glBindTextureUnit ] --- TODO bindToUnit?
     infix fun bindUnit(unit: TexUnit) = gl.bindTextureUnit(unit, this)
@@ -436,7 +437,8 @@ inline class GlTexture(val name: Int = -1) {
 
 fun GlTextures(size: Int) = GlTextures(IntBuffer(size))
 
-inline class GlTextures(val names: IntBuffer) {
+@JvmInline
+value class GlTextures(val names: IntBuffer) {
 
     inline val rem: Int
         get() = names.rem

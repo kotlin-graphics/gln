@@ -12,7 +12,8 @@ import java.nio.IntBuffer
 
 fun GlTransformFeedbacks(size: Int): GlTransformFeedbacks = GlTransformFeedbacks(IntBuffer(size))
 
-inline class GlTransformFeedbacks(val names: IntBuffer) {
+@JvmInline
+value class GlTransformFeedbacks(val names: IntBuffer) {
     inline val rem: Int
         get() = names.rem
 
@@ -49,7 +50,8 @@ inline class GlTransformFeedbacks(val names: IntBuffer) {
     fun gen() = GL40C.nglGenTransformFeedbacks(rem, adr)
 }
 
-inline class GlTransformFeedback(val name: Int = 0) {
+@JvmInline
+value class GlTransformFeedback(val name: Int = 0) {
 
     // --- [ glBindTransformFeedback ] ---
 

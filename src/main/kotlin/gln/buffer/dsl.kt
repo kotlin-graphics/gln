@@ -42,10 +42,7 @@ object GlBufferDsl {
     fun data(data: FloatBuffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remaining().L * Float.BYTES, data.adr + data.pos * Float.BYTES, usage.i)
     fun data(data: DoubleBuffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remaining().L * Double.BYTES, data.adr + data.pos * Double.BYTES, usage.i)
 
-    fun data(size: Int, data: Vec4, usage: Usage = STATIC_DRAW) {
-        buf.putFloat(0, data.x).putFloat(Float.BYTES, data.y).putFloat(Float.BYTES * 2, data.z).putFloat(Float.BYTES * 3, data.w)
-        GL15C.nglBufferData(target.i, size.L, bufAd, usage.i)
-    }
+    fun data(size: Int, data: Vec4, usage: Usage = STATIC_DRAW) = Stack.vec4Address(data) { GL15C.nglBufferData(target.i, size.L, it, usage.i) }
 
     fun subData(offset: Int, data: ByteBuffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remaining().L, data.adr + data.pos)
     fun subData(offset: Int, data: ShortBuffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES)
@@ -61,23 +58,14 @@ object GlBufferDsl {
     fun subData(data: FloatBuffer) = GL15C.nglBufferSubData(target.i, 0L, data.remaining().L * Float.BYTES, data.adr + data.pos * Float.BYTES)
     fun subData(data: DoubleBuffer) = GL15C.nglBufferSubData(target.i, 0L, data.remaining().L * Double.BYTES, data.adr + data.pos * Double.BYTES)
 
-    fun data(data: Vec3, usage: Usage = STATIC_DRAW) = GL15C.glBufferData(target.i, data to buf, usage.i)
+    fun data(data: Vec3, usage: Usage = STATIC_DRAW) = Stack.vec3Address(data) { GL15C.nglBufferData(target.i, Vec3.size.L, it, usage.i) }
 
     // ----- Mat4 -----
-    fun data(mat: Mat4, usage: Usage) {
-        mat to buf
-        GL15C.nglBufferData(target.i, Mat4.size.L, bufAd, usage.i)
-    }
+    fun data(mat: Mat4, usage: Usage) = Stack.mat4Address(mat) { GL15C.nglBufferData(target.i, Mat4.size.L, it, usage.i) }
 
-    fun subData(offset: Int, mat: Mat4) {
-        mat to buf
-        GL15C.nglBufferSubData(target.i, offset.L, Mat4.size.L, bufAd)
-    }
+    fun subData(offset: Int, mat: Mat4) = Stack.mat4Address(mat) { GL15C.nglBufferSubData(target.i, offset.L, Mat4.size.L, it) }
 
-    fun subData(mat: Mat4) {
-        mat to buf
-        GL15C.nglBufferSubData(target.i, 0L, Mat4.size.L, bufAd)
-    }
+    fun subData(mat: Mat4) = subData(0, mat)
 
     // --- [ glGetBufferParameteriv / glGetBufferParameteri64v ] ---
 
@@ -186,7 +174,7 @@ inline fun glGenBuffers(bufferName: IntBuffer, block: GlBuffersDsl.() -> Unit) {
 object GlBuffersDsl {
 
     lateinit var names: IntBuffer
-//    var target = BufferTarget.ARRAY
+    //    var target = BufferTarget.ARRAY
 
     // --- [ glBindBuffersBase ] ---
 

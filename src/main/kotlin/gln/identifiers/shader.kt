@@ -9,7 +9,8 @@ import java.io.FileNotFoundException
 import java.io.InputStreamReader
 import java.nio.IntBuffer
 
-inline class GlShader(val name: Int) {
+@JvmInline
+value class GlShader(val name: Int) {
 
     // --- [ glDeleteShader ] ---
 
@@ -168,4 +169,5 @@ inline class GlShader(val name: Int) {
     }
 }
 
-inline class GLshaders(val i: IntBuffer)
+@JvmInline
+value class GLshaders(val i: IntBuffer)

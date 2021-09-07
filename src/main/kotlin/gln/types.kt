@@ -10,7 +10,8 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
 
-inline class GlSync(val L: Long) {
+@JvmInline
+value class GlSync(val L: Long) {
 
     val isValid: Boolean
         get() = GL32C.glIsSync(L)
@@ -32,9 +33,11 @@ inline class GlSync(val L: Long) {
     }
 }
 
-inline class NanoSecond(val L: Long)
+@JvmInline
+value class NanoSecond(val L: Long)
 
-inline class Subroutine(val p: Pair<Int, UniformLocation>) {
+@JvmInline
+value class Subroutine(val p: Pair<Int, UniformLocation>) {
     val index: Int
         get() = p.first
     val uniformLocation: UniformLocation
@@ -59,7 +62,8 @@ typealias VertexAttrSize = Int  // TODO -> VertexAttribSize?
  *  - GL_MAP_UNSYNCHRONIZED_BIT MAP_UNSYNCHRONIZED_BIT  */
 typealias BufferMapFlags = Int
 
-inline class ShaderPrecisionFormat(val p: Pair<IntRange, Int>) {
+@JvmInline
+value class ShaderPrecisionFormat(val p: Pair<IntRange, Int>) {
     val range: IntRange
         get() = p.first
     val precision: Int
@@ -70,7 +74,8 @@ typealias BinaryFormat = Int
 
 class ProgramBinary(val data: ByteBuffer, val format: BinaryFormat)
 
-inline class UintBuffer(val data: IntBuffer) {
+@JvmInline
+value class UintBuffer(val data: IntBuffer) {
 
     inline val rem: Int
         get() = data.rem
