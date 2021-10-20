@@ -5,6 +5,7 @@ import glm_.bool
 import glm_.mat2x2.Mat2
 import glm_.mat3x3.Mat3
 import glm_.mat4x4.Mat4
+import glm_.quat.Quat
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2d
 import glm_.vec2.Vec2i
@@ -25,6 +26,10 @@ import org.lwjgl.system.MemoryUtil.*
 import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
+
+fun main() {
+    Quat().x
+}
 
 inline fun Stack.vec2Address(block: (Ptr) -> Unit): Vec2 = Stack { Vec2.fromPointer(it.nmalloc(4, Vec2.size).also(block)) }
 

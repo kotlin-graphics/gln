@@ -10,5 +10,5 @@ pluginManagement {
 
 gradle.rootProject {
     group = "kotlin.graphics"
-    version = "0.5.2+26"
+    version = "0.5.2+27"
 }
