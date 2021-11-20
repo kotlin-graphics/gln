@@ -144,6 +144,7 @@ fun ByteBuffer.rem(type: IndexType): Int = rem shr when (type.i) {
     else -> throw Exception("Unsupported OpenGL type: $type")
 }
 
+@Suppress("NOTHING_TO_INLINE")
 inline fun MemoryStack.intAdr(int: Int): Adr = nmalloc(4, Int.BYTES).also { memPutInt(it, int) }
 
 operator fun <E : Enum<E>, T> Array<T>.get(index: E): T = get(index.ordinal)
