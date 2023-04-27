@@ -47,7 +47,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexImage3D">Reference Page</a>
      */
     fun compressedTexImage3D(target: TextureTarget, level: Int, internalFormat: InternalFormat, size: Vec3i, data: Buffer? = null) =
-            GL13C.nglCompressedTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, data?.rem ?: 0, data?.adr ?: NULL)
+            GL13C.nglCompressedTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, data?.rem ?: 0, data?.adr?.L ?: NULL)
 
     // --- [ glCompressedTexImage3D ] --- default target
 
@@ -62,7 +62,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexImage3D">Reference Page</a>
      */
     fun compressedTexImage3D(level: Int, internalFormat: InternalFormat, size: Vec3i, data: Buffer? = null) =
-            GL13C.nglCompressedTexImage3D(GL12.GL_TEXTURE_3D, level, internalFormat.i, size.x, size.y, size.z, 0, data?.rem ?: 0, data?.adr ?: NULL)
+            GL13C.nglCompressedTexImage3D(GL12.GL_TEXTURE_3D, level, internalFormat.i, size.x, size.y, size.z, 0, data?.rem ?: 0, data?.adr?.L ?: NULL)
 
     // --- [ glCompressedTexImage2D ] ---
 
@@ -78,7 +78,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexImage2D">Reference Page</a>
      */
     fun compressedTexImage2D(target: TextureTarget, level: Int, internalFormat: InternalFormat, size: Vec2i, data: Buffer? = null) =
-        GL13C.nglCompressedTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, data?.rem ?: 0, data?.adr ?: NULL)
+        GL13C.nglCompressedTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, data?.rem ?: 0, data?.adr?.L ?: NULL)
 
     // --- [ glCompressedTexImage2D ] --- default target
 
@@ -93,7 +93,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexImage2D">Reference Page</a>
      */
     fun compressedTexImage2D(level: Int, internalFormat: InternalFormat, size: Vec2i, data: Buffer? = null) =
-        GL13C.nglCompressedTexImage2D(GL11C.GL_TEXTURE_2D, level, internalFormat.i, size.x, size.y, 0, data?.rem ?: 0, data?.adr ?: NULL)
+        GL13C.nglCompressedTexImage2D(GL11C.GL_TEXTURE_2D, level, internalFormat.i, size.x, size.y, 0, data?.rem ?: 0, data?.adr?.L ?: NULL)
 
     // --- [ glCompressedTexImage1D ] ---
 
@@ -108,7 +108,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexImage1D">Reference Page</a>
      */
     fun compressedTexImage1D(level: Int, internalFormat: InternalFormat, width: Int, data: ByteBuffer? = null) =
-        GL13C.nglCompressedTexImage1D(GL11C.GL_TEXTURE_1D, level, internalFormat.i, width, 0, data?.rem ?: 0, data?.adr ?: NULL)
+        GL13C.nglCompressedTexImage1D(GL11C.GL_TEXTURE_1D, level, internalFormat.i, width, 0, data?.rem ?: 0, data?.adr?.L ?: NULL)
 
     // --- [ glCompressedTexSubImage3D ] ---
 
@@ -125,7 +125,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexSubImage3D">Reference Page</a>
      */
     fun compressedTexSubImage3D(target: TextureTarget, level: Int, offset: Vec3i, size: Vec3i, format: InternalFormat, data: ByteBuffer) =
-        GL13C.nglCompressedTexSubImage3D(target.i, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, data.rem, data.adr)
+        GL13C.nglCompressedTexSubImage3D(target.i, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, data.rem, data.adr.L)
 
     // --- [ glCompressedTexSubImage3D ] --- default target
 
@@ -141,7 +141,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexSubImage3D">Reference Page</a>
      */
     fun compressedTexSubImage3D(level: Int, offset: Vec3i, size: Vec3i, format: InternalFormat, data: ByteBuffer) =
-        GL13C.nglCompressedTexSubImage3D(GL12.GL_TEXTURE_3D, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, data.rem, data.adr)
+        GL13C.nglCompressedTexSubImage3D(GL12.GL_TEXTURE_3D, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, data.rem, data.adr.L)
 
     // --- [ glCompressedTexSubImage2D ] ---
 
@@ -158,7 +158,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexSubImage2D">Reference Page</a>
      */
     fun compressedTexSubImage2D(target: TextureTarget, level: Int, offset: Vec2i, size: Vec2i, format: InternalFormat, data: ByteBuffer) =
-        GL13C.nglCompressedTexSubImage2D(target.i, level, offset.x, offset.y, size.x, size.y, format.i, data.rem, data.adr)
+        GL13C.nglCompressedTexSubImage2D(target.i, level, offset.x, offset.y, size.x, size.y, format.i, data.rem, data.adr.L)
 
     // --- [ glCompressedTexSubImage2D ] --- default target
 
@@ -174,7 +174,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexSubImage2D">Reference Page</a>
      */
     fun compressedTexSubImage2D(level: Int, offset: Vec2i, size: Vec2i, format: InternalFormat, data: ByteBuffer) =
-        GL13C.nglCompressedTexSubImage2D(GL11C.GL_TEXTURE_2D, level, offset.x, offset.y, size.x, size.y, format.i, data.rem, data.adr)
+        GL13C.nglCompressedTexSubImage2D(GL11C.GL_TEXTURE_2D, level, offset.x, offset.y, size.x, size.y, format.i, data.rem, data.adr.L)
 
     // --- [ glCompressedTexSubImage1D ] ---
 
@@ -190,7 +190,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTexSubImage1D">Reference Page</a>
      */
     fun compressedTexSubImage1D(level: Int, offset: Int, width: Int, format: InternalFormat, data: ByteBuffer) =
-        GL13C.nglCompressedTexSubImage1D(GL11C.GL_TEXTURE_1D, level, offset, width, format.i, data.rem, data.adr)
+        GL13C.nglCompressedTexSubImage1D(GL11C.GL_TEXTURE_1D, level, offset, width, format.i, data.rem, data.adr.L)
 
     // --- [ glGetCompressedTexImage ] ---
 
@@ -204,7 +204,7 @@ interface gl13i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetCompressedTexImage">Reference Page</a>
      */
     fun getCompressedTexImage(target: TextureTarget, level: Int, pixels: ByteBuffer) =
-        GL13C.nglGetCompressedTexImage(target.i, level, pixels.adr)
+        GL13C.nglGetCompressedTexImage(target.i, level, pixels.adr.L)
 
     // --- [ glSampleCoverage ] ---
 

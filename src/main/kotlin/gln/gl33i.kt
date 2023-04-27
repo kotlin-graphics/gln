@@ -6,7 +6,7 @@ import glm_.vec4.Vec4ui
 import gln.identifiers.GlProgram
 import gln.sampler.GlSampler
 import gln.sampler.GlSamplers
-import kool.Stack
+import kool.stack
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL33C
 import kotlin.reflect.KMutableProperty0
@@ -46,7 +46,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocationIndexed">Reference Page</a>
      */
     fun bindFragDataLocationIndexed(program: GlProgram, colorNumber: Int, index: Int, name: CharSequence) =
-            Stack.asciiAdr(name) { GL33C.nglBindFragDataLocationIndexed(program.name, colorNumber, index, it) }
+            stack.writeAsciiToAdr(name) { GL33C.nglBindFragDataLocationIndexed(program.name, colorNumber, index, it.L) }
 
     // --- [ glGetFragDataIndex ] ---
 
@@ -59,7 +59,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataIndex">Reference Page</a>
      */
     fun getFragDataIndex(program: GlProgram, name: CharSequence) =
-            Stack.asciiAdr(name) { GL33C.nglGetFragDataIndex(program.name, it) }
+            stack.writeAsciiToAdr(name) { GL33C.nglGetFragDataIndex(program.name, it.L) }
 
     // --- [ glGenSamplers ] ---
 
@@ -70,7 +70,7 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
      */
-    fun genSamplers(samplers: GlSamplers) = GL33C.nglGenSamplers(samplers.rem, samplers.adr)
+    fun genSamplers(samplers: GlSamplers) = GL33C.nglGenSamplers(samplers.rem, samplers.adr.L)
 
     /**
      * Generates sampler object names.
@@ -98,7 +98,7 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
      */
-    fun genSamplers(): GlSampler = GlSampler(Stack.intAdr { GL33C.nglGenSamplers(1, it) })
+    fun genSamplers(): GlSampler = GlSampler(readInt { GL33C.nglGenSamplers(1, it) })
 
     // --- [ glDeleteSamplers ] ---
 
@@ -109,14 +109,14 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
-    fun deleteSamplers(samplers: GlSamplers) = GL33C.nglDeleteSamplers(samplers.rem, samplers.adr)
+    fun deleteSamplers(samplers: GlSamplers) = GL33C.nglDeleteSamplers(samplers.rem, samplers.adr.L)
 
     /**
      * Deletes named sampler objects.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
-    fun deleteSamplers(sampler: GlSampler) = Stack.intAdr(sampler.name) { GL33C.nglDeleteSamplers(1, it) }
+    fun deleteSamplers(sampler: GlSampler) = GL33C.nglDeleteSamplers(1, sampler.name.toOffHeap())
 
     // --- [ glIsSampler ] ---
 
@@ -195,7 +195,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glSamplerParameter">Reference Page</a>
      */
     fun samplerBorderColor(sampler: GlSampler, color: Vec4) =
-            Stack.vec4Address(color) { GL33C.nglSamplerParameterfv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+            GL33C.nglSamplerParameterfv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, color.toOffHeap())
 
     // --- [ glSamplerParameterIiv ] ---
 
@@ -208,7 +208,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glSamplerParameter">Reference Page</a>
      */
     fun samplerBorderColor(sampler: GlSampler, color: Vec4i) =
-            Stack.vec4iAddress(color) { GL33C.nglSamplerParameterIiv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+            GL33C.nglSamplerParameterIiv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, color.toOffHeap())
 
     // --- [ glSamplerParameterIuiv ] ---
 
@@ -221,7 +221,7 @@ interface gl33i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glSamplerParameter">Reference Page</a>
      */
     fun samplerBorderColor(sampler: GlSampler, color: Vec4ui) =
-            Stack.vec4uiAddress(color) { GL33C.nglSamplerParameterfv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+            GL33C.nglSamplerParameterfv(sampler.name, GL11C.GL_TEXTURE_BORDER_COLOR, color.toOffHeap())
 
     // --- [ glGetSamplerParameteriv ] ---
     // inline reified

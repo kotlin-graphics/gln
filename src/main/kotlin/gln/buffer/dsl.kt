@@ -1,11 +1,9 @@
 package gln.buffer
 
-import glm_.BYTES
 import glm_.L
 import glm_.bool
 import glm_.i
 import glm_.mat4x4.Mat4
-import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import gln.*
@@ -14,7 +12,6 @@ import gln.identifiers.GlBuffer
 import gln.identifiers.GlBuffers
 import kool.*
 import org.lwjgl.opengl.*
-import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memByteBuffer
 import java.nio.*
@@ -42,7 +39,7 @@ object GlBufferDsl {
     fun data(data: FloatBuffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remaining().L * Float.BYTES, data.adr + data.pos * Float.BYTES, usage.i)
     fun data(data: DoubleBuffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remaining().L * Double.BYTES, data.adr + data.pos * Double.BYTES, usage.i)
 
-    fun data(size: Int, data: Vec4, usage: Usage = STATIC_DRAW) = Stack.vec4Address(data) { GL15C.nglBufferData(target.i, size.L, it, usage.i) }
+    fun data(size: Int, data: Vec4, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, data at offHeapPtr, usage.i)
 
     fun subData(offset: Int, data: ByteBuffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remaining().L, data.adr + data.pos)
     fun subData(offset: Int, data: ShortBuffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remaining().L * Short.BYTES, data.adr + data.pos * Short.BYTES)
@@ -58,12 +55,12 @@ object GlBufferDsl {
     fun subData(data: FloatBuffer) = GL15C.nglBufferSubData(target.i, 0L, data.remaining().L * Float.BYTES, data.adr + data.pos * Float.BYTES)
     fun subData(data: DoubleBuffer) = GL15C.nglBufferSubData(target.i, 0L, data.remaining().L * Double.BYTES, data.adr + data.pos * Double.BYTES)
 
-    fun data(data: Vec3, usage: Usage = STATIC_DRAW) = Stack.vec3Address(data) { GL15C.nglBufferData(target.i, Vec3.size.L, it, usage.i) }
+    fun data(vec: Vec3, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, Vec3.size.L, vec at offHeapPtr, usage.i)
 
     // ----- Mat4 -----
-    fun data(mat: Mat4, usage: Usage) = Stack.mat4Address(mat) { GL15C.nglBufferData(target.i, Mat4.size.L, it, usage.i) }
+    fun data(mat: Mat4, usage: Usage) = GL15C.nglBufferData(target.i, Mat4.size.L, mat at offHeapPtr, usage.i)
 
-    fun subData(offset: Int, mat: Mat4) = Stack.mat4Address(mat) { GL15C.nglBufferSubData(target.i, offset.L, Mat4.size.L, it) }
+    fun subData(offset: Int, mat: Mat4) = GL15C.nglBufferSubData(target.i, offset.L, Mat4.size.L, mat at offHeapPtr)
 
     fun subData(mat: Mat4) = subData(0, mat)
 
@@ -98,8 +95,8 @@ object GlBufferDsl {
 
     // --- [ glGetBufferPointerv ] ---
 
-    val pointer: Ptr
-        get() = GL15C.glGetBufferPointer(target.i, GL15C.GL_BUFFER_MAP_POINTER)
+    val pointer: Ptr<Byte>
+        get() = GL15C.glGetBufferPointer(target.i, GL15C.GL_BUFFER_MAP_POINTER).toPtr()
 
 
     fun bindRange(index: Int, offset: Int, size: Int) = GL30C.glBindBufferRange(target.i, index, name, offset.L, size.L)
@@ -122,15 +119,15 @@ object GlBufferDsl {
 
     fun data(size: Int, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
-    fun data(data: Buffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remByte.L, data.adr, usage.i)
+    fun data(data: Buffer, usage: Usage = STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remByte.L, data.adr.L, usage.i)
 
     // --- [ glBufferSubData ] ---
 
-    fun subData(offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remByte.L, data.adr)
+    fun subData(offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remByte.L, data.adr.L)
 
     // --- [ glGetBufferSubData ] ---
 
-    fun getSubData(offset: Int, data: Buffer) = GL15C.nglGetBufferSubData(target.i, offset.L, data.remByte.L, data.adr)
+    fun getSubData(offset: Int, data: Buffer) = GL15C.nglGetBufferSubData(target.i, offset.L, data.remByte.L, data.adr.L)
 
     // --- [ glMapBuffer ] ---
 
@@ -142,18 +139,18 @@ object GlBufferDsl {
         }
     }
 
-    inline fun map(access: BufferAccess, block: (Ptr) -> Unit): ByteBuffer? {
+    inline fun map(access: BufferAccess, block: (Ptr<Byte>) -> Unit): ByteBuffer? {
         val ptr = GL15C.nglMapBuffer(target.i, access.i)
-        block(ptr)
+        block(ptr.toPtr())
         return when (ptr) {
             NULL -> null
             else -> memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE))
         }
     }
 
-    inline fun mapped(access: BufferAccess, block: (Ptr) -> Unit): ByteBuffer? {
+    inline fun mapped(access: BufferAccess, block: (Ptr<Byte>) -> Unit): ByteBuffer? {
         val ptr = GL15C.nglMapBuffer(target.i, access.i)
-        block(ptr)
+        block(ptr.toPtr())
         return when (ptr) {
             NULL -> null
             else -> memByteBuffer(ptr, GL15C.glGetBufferParameteri(target.i, GL15C.GL_BUFFER_SIZE))

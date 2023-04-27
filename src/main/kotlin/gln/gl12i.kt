@@ -64,7 +64,7 @@ interface gl12i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage3D">Reference Page</a>
      */
     fun texImage3D(target: TextureTarget, level: Int, internalFormat: InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) =
-        GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr ?: NULL)
+        GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     // --- [ glTexImage3D ] --- default target
 
@@ -81,7 +81,7 @@ interface gl12i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage3D">Reference Page</a>
      */
     fun texImage3D(level: Int, internalFormat: InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer?) =
-        GL12C.nglTexImage3D(GL12.GL_TEXTURE_3D, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr ?: NULL)
+        GL12C.nglTexImage3D(GL12.GL_TEXTURE_3D, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     // --- [ glTexSubImage3D ] ---
 
@@ -100,7 +100,7 @@ interface gl12i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexSubImage3D">Reference Page</a>
      */
     fun texSubImage3D(target: TextureTarget, level: Int, offset: Vec3i, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer) =
-        GL12C.nglTexSubImage3D(target.i, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, pixels.adr)
+        GL12C.nglTexSubImage3D(target.i, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, pixels.adr.L)
 
     // --- [ glTexSubImage3D ] --- default target
 
@@ -118,7 +118,7 @@ interface gl12i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexSubImage3D">Reference Page</a>
      */
     fun texSubImage3D(level: Int, offset: Vec3i, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer) =
-        GL12C.nglTexSubImage3D(GL12.GL_TEXTURE_3D, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, pixels.adr)
+        GL12C.nglTexSubImage3D(GL12.GL_TEXTURE_3D, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, pixels.adr.L)
 
     // --- [ glCopyTexSubImage3D ] ---
 
@@ -198,8 +198,8 @@ interface gl12i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElements">Reference Page</a>
      */
-    fun drawRangeElements(mode: DrawMode, start: Int, end: Int, count: Int, type: DataType, indices: Ptr = NULL) =
-        GL12C.nglDrawRangeElements(mode.i, start, end, count, type.i, indices)
+    fun drawRangeElements(mode: DrawMode, start: Int, end: Int, count: Int, type: DataType, indices: Ptr<*> = Ptr.NULL) =
+        GL12C.nglDrawRangeElements(mode.i, start, end, count, type.i, indices.adr.L)
 
     /**
      * A restricted form of {@link GL11C#glDrawElements DrawElements}. mode, start, end, and count match the corresponding arguments to glDrawElements, with the additional
@@ -242,7 +242,7 @@ interface gl12i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElements">Reference Page</a>
      */
     fun drawRangeElements(mode: DrawMode, start: Int, end: Int, type: DataType, indices: Buffer) =
-        GL12C.nglDrawRangeElements(mode.i, start, end, indices.rem * type.size, type.i, indices.adr)
+        GL12C.nglDrawRangeElements(mode.i, start, end, indices.rem * type.size, type.i, indices.adr.L)
 
     /**
      * A restricted form of {@link GL11C#glDrawElements DrawElements}. mode, start, end, and count match the corresponding arguments to glDrawElements, with the additional
@@ -284,7 +284,7 @@ interface gl12i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElements">Reference Page</a>
      */
     fun drawRangeElements(mode: DrawMode, start: Int, end: Int, indices: Buffer) =
-        GL12C.nglDrawRangeElements(mode.i, start, end, indices.rem, GL11.GL_UNSIGNED_BYTE, indices.adr)
+        GL12C.nglDrawRangeElements(mode.i, start, end, indices.rem, GL11.GL_UNSIGNED_BYTE, indices.adr.L)
 
     // --- [ glDrawRangeElements ] --- default mode
 
@@ -328,8 +328,8 @@ interface gl12i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElements">Reference Page</a>
      */
-    fun drawRangeElements(start: Int, end: Int, count: Int, type: DataType, indices: Ptr = NULL) =
-        GL12C.nglDrawRangeElements(GL11C.GL_TRIANGLES, start, end, count, type.i, indices)
+    fun drawRangeElements(start: Int, end: Int, count: Int, type: DataType, indices: Ptr<*> = Ptr.NULL) =
+        GL12C.nglDrawRangeElements(GL11C.GL_TRIANGLES, start, end, count, type.i, indices.adr.L)
 
     /**
      * A restricted form of {@link GL11C#glDrawElements DrawElements}. mode, start, end, and count match the corresponding arguments to glDrawElements, with the additional
@@ -371,7 +371,7 @@ interface gl12i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElements">Reference Page</a>
      */
     fun drawRangeElements(start: Int, end: Int, type: DataType, indices: Buffer) =
-        GL12C.nglDrawRangeElements(GL11C.GL_TRIANGLES, start, end, indices.rem * type.size, type.i, indices.adr)
+        GL12C.nglDrawRangeElements(GL11C.GL_TRIANGLES, start, end, indices.rem * type.size, type.i, indices.adr.L)
 
     /**
      * A restricted form of {@link GL11C#glDrawElements DrawElements}. mode, start, end, and count match the corresponding arguments to glDrawElements, with the additional
@@ -412,5 +412,5 @@ interface gl12i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElements">Reference Page</a>
      */
     fun drawRangeElements(start: Int, end: Int, indices: Buffer) =
-        GL12C.nglDrawRangeElements(GL11C.GL_TRIANGLES, start, end, indices.rem, GL11.GL_UNSIGNED_BYTE, indices.adr)
+        GL12C.nglDrawRangeElements(GL11C.GL_TRIANGLES, start, end, indices.rem, GL11.GL_UNSIGNED_BYTE, indices.adr.L)
 }

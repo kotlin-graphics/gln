@@ -1,7 +1,9 @@
 package gln.misc
 
 import gln.CompareFunction
-import kool.Stack
+import gln.L
+import gln.offHeapPtr
+import kool.get
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL32
 import org.lwjgl.opengl.GL32C
@@ -27,18 +29,18 @@ object ObjectDepth {
         set(value) = GL11C.glDepthFunc(value.i)
 
     var range: ClosedFloatingPointRange<Double>
-        get() = Stack {
-            val d = it.callocDouble(2)
-            GL11C.glGetDoublev(GL11C.GL_DEPTH_RANGE, d)
-            d[0]..d[1]
+        get() {
+            GL11C.nglGetDoublev(GL11C.GL_DEPTH_RANGE, offHeapAdr)
+            val p = offHeapPtr.toPtr<Double>()
+            return p[0]..p[1]
         }
         set(value) = GL11C.glDepthRange(value.start, value.endInclusive)
 
     var rangef: ClosedFloatingPointRange<Float>
-        get() = Stack {
-            val f = it.callocFloat(2)
-            GL11C.glGetFloatv(GL11C.GL_DEPTH_RANGE, f)
-            f[0]..f[1]
+        get() {
+            GL11C.nglGetFloatv(GL11C.GL_DEPTH_RANGE, offHeapAdr)
+            val p = offHeapPtr.toPtr<Float>()
+            return p[0]..p[1]
         }
         set(value) = GL41C.glDepthRangef(value.start, value.endInclusive)
 

@@ -3,23 +3,12 @@
 package gln.vertexArray
 
 import glm_.L
-import gln.VertexAttrIndex
-import gln.VertexAttrSize
-import gln.VertexAttrType
-import gln.gl
 import gln.glf.VertexAttribute
 import gln.glf.VertexLayout
-import gln.identifiers.GlBuffer
-import gln.identifiers.GlBuffers
-import kool.IntBuffer
-import kool.adr
 import kool.get
-import kool.rem
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL30C
 import java.nio.IntBuffer
-import java.nio.LongBuffer
 import kotlin.properties.Delegates
 import kotlin.reflect.KMutableProperty0
 

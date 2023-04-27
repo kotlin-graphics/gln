@@ -1,6 +1,5 @@
 package gln
 
-import glm_.BYTES
 import glm_.mat2x2.Mat2d
 import glm_.mat3x3.Mat3d
 import glm_.mat4x4.Mat4d
@@ -8,11 +7,9 @@ import gln.identifiers.GlProgram
 import gln.identifiers.GlQuery
 import gln.transformFeedback.GlTransformFeedback
 import gln.transformFeedback.GlTransformFeedbacks
-import kool.BYTES
-import kool.adr
-import kool.rem
-import kool.Stack
+import kool.*
 import org.lwjgl.opengl.GL40C
+import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.memGetInt
 import java.nio.ByteBuffer
 import java.nio.FloatBuffer
@@ -68,7 +65,7 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendEquationSeparatei">Reference Page</a>
      */
     fun blendEquationSeparate(buf: Int, modeRGB: BlendEquationMode, modeAlpha: BlendEquationMode) =
-            GL40C.glBlendEquationSeparatei(buf, modeRGB.i, modeAlpha.i)
+        GL40C.glBlendEquationSeparatei(buf, modeRGB.i, modeAlpha.i)
 
     // --- [ glBlendFunci ] ---
 
@@ -97,7 +94,7 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlendFuncSeparatei">Reference Page</a>
      */
     fun blendFuncSeparate(buf: Int, srcRGB: BlendFactor, dstRGB: BlendFactor, srcAlpha: BlendFactor, dstAlpha: BlendFactor) =
-            GL40C.glBlendFuncSeparatei(buf, srcRGB.i, dstRGB.i, srcAlpha.i, dstAlpha.i)
+        GL40C.glBlendFuncSeparatei(buf, srcRGB.i, dstRGB.i, srcAlpha.i, dstAlpha.i)
 
     // --- [ glDrawArraysIndirect ] ---
 
@@ -125,7 +122,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArraysIndirect">Reference Page</a>
      */
-    fun drawArraysIndirect(mode: DrawMode, indirect: ByteBuffer) = GL40C.nglDrawArraysIndirect(mode.i, indirect.adr)
+    fun drawArraysIndirect(mode: DrawMode, indirect: ByteBuffer) = GL40C.nglDrawArraysIndirect(mode.i, indirect.adr.L)
 
     /**
      * Renders primitives from array data, taking parameters from memory.
@@ -151,7 +148,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawArraysIndirect">Reference Page</a>
      */
-    fun drawArraysIndirect(mode: DrawMode, indirect: IntBuffer) = GL40C.nglDrawArraysIndirect(mode.i, indirect.adr)
+    fun drawArraysIndirect(mode: DrawMode, indirect: IntBuffer) = GL40C.nglDrawArraysIndirect(mode.i, indirect.adr.L)
 
     // --- [ glDrawElementsIndirect ] ---
 
@@ -194,8 +191,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsIndirect">Reference Page</a>
      */
-    fun drawElementsIndirect(mode: DrawMode, type: IndexType, indirect: ByteBuffer) =
-            GL40C.nglDrawElementsIndirect(mode.i, type.i, indirect.adr)
+    fun drawElementsIndirect(mode: DrawMode, type: IndexType, indirect: ByteBuffer) = GL40C.nglDrawElementsIndirect(mode.i, type.i, indirect.adr.L)
 
     /**
      * Renders indexed primitives from array data, taking parameters from memory.
@@ -236,8 +232,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsIndirect">Reference Page</a>
      */
-    fun drawElementsIndirect(mode: DrawMode, type: IndexType, indirect: IntBuffer) =
-            GL40C.nglDrawElementsIndirect(mode.i, type.i, indirect.adr)
+    fun drawElementsIndirect(mode: DrawMode, type: IndexType, indirect: IntBuffer) = GL40C.nglDrawElementsIndirect(mode.i, type.i, indirect.adr.L)
 
     // --- [ glUniform1d ] ---
 
@@ -387,8 +382,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, value: Mat2d) =
-            Stack { GL40C.nglUniformMatrix2dv(location, 1, false, value.toBuffer(it).adr) }
+    fun uniform(location: Int, value: Mat2d) = GL40C.nglUniformMatrix2dv(location, 1, false, value.toOffHeap())
 
     // --- [ glUniformMatrix3dv ] ---
 
@@ -401,8 +395,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, value: Mat3d) =
-            Stack { GL40C.nglUniformMatrix3dv(location, 1, false, value.toBuffer(it).adr) }
+    fun uniform(location: Int, value: Mat3d) = GL40C.nglUniformMatrix3dv(location, 1, false, value.toOffHeap())
 
     // --- [ glUniformMatrix4dv ] ---
 
@@ -415,8 +408,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniform">Reference Page</a>
      */
-    fun uniform(location: Int, value: Mat4d) =
-            Stack { GL40C.nglUniformMatrix4dv(location, 1, false, value.toBuffer(it).adr) }
+    fun uniform(location: Int, value: Mat4d) = GL40C.nglUniformMatrix4dv(location, 1, false, value.toOffHeap())
 
 //    // --- [ glUniformMatrix2x3dv ] --- TODO
 //
@@ -576,7 +568,7 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineUniformLocation">Reference Page</a>
      */
     fun getSubroutineUniformLocation(program: GlProgram, shaderType: ShaderType, name: CharSequence) =
-            Stack.asciiAdr(name) { GL40C.nglGetSubroutineUniformLocation(program.name, shaderType.i, it) }
+        stack.writeAsciiToAdr(name) { GL40C.nglGetSubroutineUniformLocation(program.name, shaderType.i, it.L) }
 
     // --- [ glGetSubroutineIndex ] ---
 
@@ -590,7 +582,7 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineIndex">Reference Page</a>
      */
     fun getSubroutineIndex(program: GlProgram, shaderType: ShaderType, name: CharSequence) =
-            Stack.asciiAdr(name) { GL40C.nglGetSubroutineIndex(program.name, shaderType.i, it) }
+        stack.writeAsciiToAdr(name) { GL40C.nglGetSubroutineIndex(program.name, shaderType.i, it.L) }
 
     // --- [ glGetSubroutineIndex / glGetSubroutineUniformLocation ] ---
 
@@ -603,7 +595,7 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineUniformLocation">Reference Page</a>
      */
     fun getSubroutine(program: GlProgram, shaderType: ShaderType, name: CharSequence): Subroutine =
-            Subroutine(getSubroutineIndex(program, shaderType, name) to getSubroutineUniformLocation(program, shaderType, name))
+        Subroutine(getSubroutineIndex(program, shaderType, name) to getSubroutineUniformLocation(program, shaderType, name))
 
     // --- [ glGetActiveSubroutineUniformiv ] ---
 
@@ -618,7 +610,7 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveSubroutineUniform">Reference Page</a>
      */
     fun getActiveSubroutineUniform(program: GlProgram, shaderType: ShaderType, index: Int, name: GetActiveSubroutineUniform): Int =
-            Stack.intAdr { GL40C.nglGetActiveSubroutineUniformiv(program.name, shaderType.i, index, name.i, it) }
+        readInt { GL40C.nglGetActiveSubroutineUniformiv(program.name, shaderType.i, index, name.i, it) }
 
     /**
      * @return GL_COMPATIBLE_SUBROUTINES of an active shader subroutine uniform.
@@ -630,12 +622,12 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveSubroutineUniform">Reference Page</a>
      */
     fun getActiveSubroutineUniformCompatibles(program: GlProgram, shaderType: ShaderType, index: Int): IntArray =
-            Stack { s ->
-                val size = s.intAdr { GL40C.nglGetActiveSubroutineUniformiv(program.name, shaderType.i, index, GL40C.GL_NUM_COMPATIBLE_SUBROUTINES, it) }
-                val ints = s.nmalloc(4, size * Int.BYTES)
-                GL40C.nglGetActiveSubroutineUniformiv(program.name, shaderType.i, index, GL40C.GL_COMPATIBLE_SUBROUTINES, ints)
-                IntArray(size) { memGetInt(ints + Int.BYTES * it) }
-            }
+        stack { s ->
+            val size = s.readIntFromAdr { GL40C.nglGetActiveSubroutineUniformiv(program.name, shaderType.i, index, GL40C.GL_NUM_COMPATIBLE_SUBROUTINES, it.L) }
+            val ints = s.nmalloc(4, size * Int.BYTES)
+            GL40C.nglGetActiveSubroutineUniformiv(program.name, shaderType.i, index, GL40C.GL_COMPATIBLE_SUBROUTINES, ints)
+            IntArray(size) { memGetInt(ints + Int.BYTES * it) }
+        }
 
     // --- [ glGetActiveSubroutineUniformName ] ---
 
@@ -651,9 +643,12 @@ interface gl40i {
      */
     fun getActiveSubroutineUniformName(program: GlProgram, shaderType: ShaderType, index: Int,
                                        bufSize: Int = getActiveSubroutineUniform(program, shaderType, index, GetActiveSubroutineUniform.UNIFORM_NAME_LENGTH)): String =
-            Stack.asciiAddress(bufSize) { pLentgh, pString ->
-                GL40C.nglGetActiveSubroutineUniformName(program.name, shaderType.i, index, bufSize, pLentgh, pString)
-            }
+        stack {
+            val pString = it.nmalloc(1, bufSize)
+            val pLength = it.nmalloc(Int.BYTES, Int.BYTES)
+            GL40C.nglGetActiveSubroutineUniformName(program.name, shaderType.i, index, bufSize, pLength, pString)
+            MemoryUtil.memASCII(pString, memGetInt(pLength))
+        }
 
     // --- [ glGetActiveSubroutineName ] ---
 
@@ -669,9 +664,12 @@ interface gl40i {
      */
     fun getActiveSubroutineName(program: GlProgram, shaderType: ShaderType, index: Int,
                                 bufSize: Int = GL40C.glGetProgramStagei(program.name, shaderType.i, GL40C.GL_ACTIVE_SUBROUTINE_MAX_LENGTH)): String =
-            Stack.asciiAddress(bufSize) { pLength, pString ->
-                GL40C.nglGetActiveSubroutineName(program.name, shaderType.i, index, bufSize, pLength, pString)
-            }
+        stack {
+            val pString = it.nmalloc(1, bufSize)
+            val pLength = it.nmalloc(Int.BYTES, Int.BYTES)
+            GL40C.nglGetActiveSubroutineName(program.name, shaderType.i, index, bufSize, pLength, pString)
+            MemoryUtil.memASCII(pString, memGetInt(pLength))
+        }
 
     // --- [ glUniformSubroutinesuiv ] ---
 
@@ -683,8 +681,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniformSubroutines">Reference Page</a>
      */
-    fun uniformSubroutinesuiv(shaderType: ShaderType, indices: IntBuffer) =
-            GL40C.nglUniformSubroutinesuiv(shaderType.i, indices.rem, indices.adr)
+    fun uniformSubroutinesuiv(shaderType: ShaderType, indices: IntBuffer) = GL40C.nglUniformSubroutinesuiv(shaderType.i, indices.rem, indices.adr.L)
 
     /**
      * Loads active subroutine uniforms.
@@ -693,8 +690,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUniformSubroutines">Reference Page</a>
      */
-    fun uniformSubroutinesui(shaderType: ShaderType, index: Int) =
-            Stack.intAdr(index) { GL40C.nglUniformSubroutinesuiv(shaderType.i, 1, it) }
+    fun uniformSubroutinesui(shaderType: ShaderType, index: Int) = GL40C.nglUniformSubroutinesuiv(shaderType.i, 1, index.toOffHeap())
 
     // --- [ glGetUniformSubroutineuiv ] ---
 
@@ -708,7 +704,7 @@ interface gl40i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformSubroutine">Reference Page</a>
      */
     fun getUniformSubroutineuiv(shaderType: ShaderType, location: UniformLocation, params: IntBuffer) =
-            GL40C.nglGetUniformSubroutineuiv(shaderType.i, location, params.adr)
+        GL40C.nglGetUniformSubroutineuiv(shaderType.i, location, params.adr.L)
 
     /**
      * Retrieves the value of a subroutine uniform of a given shader stage of the current program.
@@ -718,8 +714,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformSubroutine">Reference Page</a>
      */
-    fun getUniformSubroutineui(shaderType: ShaderType, location: UniformLocation): Int =
-            Stack.intAdr { GL40C.nglGetUniformSubroutineuiv(shaderType.i, location, it) }
+    fun getUniformSubroutineui(shaderType: ShaderType, location: UniformLocation): Int = readInt { GL40C.nglGetUniformSubroutineuiv(shaderType.i, location, it) }
 
     // --- [ glGetProgramStageiv ] ---
 
@@ -732,8 +727,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramStage">Reference Page</a>
      */
-    fun getProgramStage(program: GlProgram, shaderType: ShaderType, name: GetProgramStage): Int =
-            Stack.intAdr { GL40C.nglGetProgramStageiv(program.name, shaderType.i, name.i, it) }
+    fun getProgramStage(program: GlProgram, shaderType: ShaderType, name: GetProgramStage): Int = readInt { GL40C.nglGetProgramStageiv(program.name, shaderType.i, name.i, it) }
 
     // --- [ glPatchParameteri ] ---
 
@@ -756,7 +750,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glPatchParameter">Reference Page</a>
      */
-    fun patchParameter(name: PatchParameter, values: FloatBuffer) = GL40C.nglPatchParameterfv(name.i, values.adr)
+    fun patchParameter(name: PatchParameter, values: FloatBuffer) = GL40C.nglPatchParameterfv(name.i, values.adr.L)
 
     // --- [ glBindTransformFeedback ] ---
 
@@ -786,7 +780,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTransformFeedbacks">Reference Page</a>
      */
-    fun deleteTransformFeedbacks(id: GlTransformFeedback) = Stack.intAdr(id.name) { GL40C.nglDeleteTransformFeedbacks(1, it) }
+    fun deleteTransformFeedbacks(id: GlTransformFeedback) = GL40C.nglDeleteTransformFeedbacks(1, id.name.toOffHeap())
 
     // --- [ glGenTransformFeedbacks ] ---
 
@@ -825,7 +819,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTransformFeedbacks">Reference Page</a>
      */
-    fun genTransformFeedbacks(): GlTransformFeedback = GlTransformFeedback(Stack.intAdr { GL40C.nglGenTransformFeedbacks(1, it) })
+    fun genTransformFeedbacks(): GlTransformFeedback = GlTransformFeedback(readInt { GL40C.nglGenTransformFeedbacks(1, it) })
 
     // --- [ glIsTransformFeedback ] ---
 

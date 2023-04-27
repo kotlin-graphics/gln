@@ -82,7 +82,7 @@ interface gl14i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawArrays">Reference Page</a>
      */
     fun multiDrawArrays(mode: DrawMode, first: IntBuffer, count: IntBuffer) {
-        GL14C.nglMultiDrawArrays(mode.i, first.adr, count.adr, first.rem)
+        GL14C.nglMultiDrawArrays(mode.i, first.adr.L, count.adr.L, first.rem)
     }
 
     /**
@@ -94,7 +94,7 @@ interface gl14i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawArrays">Reference Page</a>
      */
     fun multiDrawArrays(first: IntBuffer, count: IntBuffer) {
-        GL14C.nglMultiDrawArrays(GL11C.GL_TRIANGLES, first.adr, count.adr, first.rem)
+        GL14C.nglMultiDrawArrays(GL11C.GL_TRIANGLES, first.adr.L, count.adr.L, first.rem)
     }
 
     // --- [ glMultiDrawElements ] ---
@@ -112,7 +112,7 @@ interface gl14i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElements">Reference Page</a>
      */
     fun multiDrawElements(mode: DrawMode, count: IntBuffer, type: IndexType, indices: PointerBuffer) =
-            GL14C.nglMultiDrawElements(mode.i, count.adr, type.i, indices.adr, count.rem)
+            GL14C.nglMultiDrawElements(mode.i, count.adr.L, type.i, indices.adr.L, count.rem)
 
     /**
      * Renders multiple sets of primitives by specifying indices of array data elements.
@@ -126,7 +126,7 @@ interface gl14i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElements">Reference Page</a>
      */
     fun multiDrawElements(count: IntBuffer, type: IndexType, indices: PointerBuffer) =
-        GL14C.nglMultiDrawElements(GL11C.GL_TRIANGLES, count.adr, type.i, indices.adr, count.rem)
+        GL14C.nglMultiDrawElements(GL11C.GL_TRIANGLES, count.adr.L, type.i, indices.adr.L, count.rem)
 
     // --- [ glPointParameterf ] ---
 

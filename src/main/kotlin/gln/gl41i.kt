@@ -28,7 +28,9 @@ import gln.identifiers.GlProgram
 import gln.program.GlPipeline
 import gln.program.GlPipelines
 import kool.*
+import org.lwjgl.opengl.GL40C
 import org.lwjgl.opengl.GL41C
+import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.NULL
 import org.lwjgl.system.MemoryUtil.memGetInt
 import unsigned.Uint
@@ -77,7 +79,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderBinary">Reference Page</a>
      */
     fun shaderBinary(shaders: IntBuffer, binaryFormat: BinaryFormat, binary: ByteBuffer) =
-            GL41C.nglShaderBinary(shaders.rem, shaders.adr, binaryFormat, binary.adr, binary.rem)
+        GL41C.nglShaderBinary(shaders.rem, shaders.adr.L, binaryFormat, binary.adr.L, binary.rem)
 
     // --- [ glGetShaderPrecisionFormat ] ---
 
@@ -91,12 +93,11 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShaderPrecisionFormat">Reference Page</a>
      */
-    fun getShaderPrecisionFormat(shaderType: ShaderType, precisionType: PrecisionType): ShaderPrecisionFormat =
-            Stack {
-                val adr = it.nmalloc(4, Int.BYTES * 3)
-                GL41C.nglGetShaderPrecisionFormat(shaderType.i, precisionType.i, adr, adr + Int.BYTES * 2)
-                ShaderPrecisionFormat(memGetInt(adr)..memGetInt(adr + Int.BYTES) to memGetInt(adr + Int.BYTES * 2))
-            }
+    fun getShaderPrecisionFormat(shaderType: ShaderType, precisionType: PrecisionType): ShaderPrecisionFormat {
+        val p = offHeapPtr.toPtr<Int>()
+        GL41C.nglGetShaderPrecisionFormat(shaderType.i, precisionType.i, offHeapAdr, offHeapAdr + Int.BYTES * 2)
+        return ShaderPrecisionFormat(p[0]..p[1] to p[2])
+    }
 
     // --- [ glDepthRangef ] ---
 
@@ -135,7 +136,7 @@ interface gl41i {
      */
     fun getProgramBinary(program: GlProgram): ProgramBinary {
         val data = ByteBuffer(program.binaryLength)
-        val format = Stack.intAdr { GL41C.nglGetProgramBinary(program.name, data.rem, NULL, it, data.adr) }
+        val format = readInt { GL41C.nglGetProgramBinary(program.name, data.rem, NULL, it, data.adr.L) }
         return ProgramBinary(data, format)
     }
 
@@ -150,8 +151,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramBinary">Reference Page</a>
      */
-    fun programBinary(program: GlProgram, binary: ProgramBinary) =
-            GL41C.nglProgramBinary(program.name, binary.format, binary.data.adr, binary.data.rem)
+    fun programBinary(program: GlProgram, binary: ProgramBinary) = GL41C.nglProgramBinary(program.name, binary.format, binary.data.adr.L, binary.data.rem)
 
     // --- [ glProgramParameteri ] ---
 
@@ -164,8 +164,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramParameteri">Reference Page</a>
      */
-    fun programParameter(program: GlProgram, name: ProgramParameter, value: Boolean) =
-            GL41C.glProgramParameteri(program.name, name.i, value.i)
+    fun programParameter(program: GlProgram, name: ProgramParameter, value: Boolean) = GL41C.glProgramParameteri(program.name, name.i, value.i)
 
     // --- [ glUseProgramStages ] ---
 
@@ -178,8 +177,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glUseProgramStages">Reference Page</a>
      */
-    fun useProgramStages(pipeline: GlPipeline, stages: Int, program: GlProgram) =
-            GL41C.glUseProgramStages(pipeline.name, stages, program.name)
+    fun useProgramStages(pipeline: GlPipeline, stages: Int, program: GlProgram) = GL41C.glUseProgramStages(pipeline.name, stages, program.name)
 
     // --- [ glActiveShaderProgram ] ---
 
@@ -230,11 +228,12 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateShaderProgramv">Reference Page</a>
      */
-    fun createShaderProgram(type: ShaderType, vararg strings: CharSequence): GlProgram = Stack {
-        val pStrings = it.PointerBuffer(strings.size)
-        for (i in strings.indices) pStrings[i] = it.UTF8(strings[i])
-        GlProgram(GL41C.nglCreateShaderProgramv(type.i, 1, pStrings.adr))
-    }
+    fun createShaderProgram(type: ShaderType, vararg strings: CharSequence): GlProgram =
+        stack {
+            val pStrings = it.PointerBuffer(strings.size)
+            for (i in strings.indices) pStrings[i] = it.UTF8(strings[i])
+            GlProgram(GL41C.nglCreateShaderProgramv(type.i, 1, pStrings.adr.L))
+        }
 
     // --- [ glBindProgramPipeline ] ---
 
@@ -256,14 +255,14 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteProgramPipelines">Reference Page</a>
      */
-    fun deleteProgramPipelines(pipelines: GlPipelines) = GL41C.nglDeleteProgramPipelines(pipelines.rem, pipelines.adr)
+    fun deleteProgramPipelines(pipelines: GlPipelines) = GL41C.nglDeleteProgramPipelines(pipelines.rem, pipelines.adr.L)
 
     /**
      * Deletes program pipeline objects.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteProgramPipelines">Reference Page</a>
      */
-    fun deleteProgramPipelines(pipeline: GlPipeline) = Stack.intAdr(pipeline.name) { GL41C.nglDeleteProgramPipelines(1, it) }
+    fun deleteProgramPipelines(pipeline: GlPipeline) = GL41C.nglDeleteProgramPipelines(1, pipeline.name.toOffHeap())
 
     // --- [ glGenProgramPipelines ] ---
 
@@ -274,7 +273,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenProgramPipelines">Reference Page</a>
      */
-    fun genProgramPipelines(pipelines: GlPipelines) = GL41C.nglGenProgramPipelines(pipelines.rem, pipelines.adr)
+    fun genProgramPipelines(pipelines: GlPipelines) = GL41C.nglGenProgramPipelines(pipelines.rem, pipelines.adr.L)
 
     /**
      * Reserves program pipeline object names.
@@ -290,7 +289,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenProgramPipelines">Reference Page</a>
      */
-    fun genProgramPipelines(pipeline: KMutableProperty0<GlPipeline>): GlPipeline{
+    fun genProgramPipelines(pipeline: KMutableProperty0<GlPipeline>): GlPipeline {
         pipeline.set(genProgramPipelines())
         return pipeline()
     }
@@ -300,7 +299,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenProgramPipelines">Reference Page</a>
      */
-    fun genProgramPipelines(): GlPipeline = GlPipeline(Stack.intAdr { GL41C.nglGenProgramPipelines(1, it) })
+    fun genProgramPipelines(): GlPipeline = GlPipeline(readInt { GL41C.nglGenProgramPipelines(1, it) })
 
     // --- [ glIsProgramPipeline ] ---
 
@@ -323,8 +322,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramPipeline">Reference Page</a>
      */
-    fun getProgramPipeline(pipeline: GlPipeline, name: GetProgramPipeline) =
-            Stack.intAdr { GL41C.nglGetProgramPipelineiv(pipeline.name, name.i, it) }
+    fun getProgramPipeline(pipeline: GlPipeline, name: GetProgramPipeline): Int = readInt { GL41C.nglGetProgramPipelineiv(pipeline.name, name.i, it) }
 
     // --- [ glProgramUniform1i ] ---
 
@@ -1117,7 +1115,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat2) =
-            Stack { GL41C.nglProgramUniformMatrix2fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+        GL41C.nglProgramUniformMatrix2fv(program.name, location, 1, false, value.toOffHeap())
 
     // --- [ glProgramUniformMatrix3fv ] ---
 
@@ -1132,7 +1130,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat3) =
-            Stack { GL41C.nglProgramUniformMatrix3fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+        GL41C.nglProgramUniformMatrix3fv(program.name, location, 1, false, value.toOffHeap())
 
     // --- [ glProgramUniformMatrix4fv ] ---
 
@@ -1147,7 +1145,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat4) =
-            Stack { GL41C.nglProgramUniformMatrix4fv(program.name, location, 1, false, value.toBuffer(it).adr) }
+        GL41C.nglProgramUniformMatrix4fv(program.name, location, 1, false, value.toOffHeap())
 
     // --- [ glProgramUniformMatrix2dv ] ---
 
@@ -1162,7 +1160,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat2d) =
-            Stack { GL41C.nglProgramUniformMatrix2dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+        GL41C.nglProgramUniformMatrix2dv(program.name, location, 1, false, value.toOffHeap())
 
     // --- [ glProgramUniformMatrix3dv ] ---
 
@@ -1177,7 +1175,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat3d) =
-            Stack { GL41C.nglProgramUniformMatrix3dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+        GL41C.nglProgramUniformMatrix3dv(program.name, location, 1, false, value.toOffHeap())
 
     // --- [ glProgramUniformMatrix4dv ] ---
 
@@ -1192,7 +1190,7 @@ interface gl41i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glProgramUniform">Reference Page</a>
      */
     fun programUniform(program: GlProgram, location: UniformLocation, value: Mat4d) =
-            Stack { GL41C.nglProgramUniformMatrix4dv(program.name, location, 1, false, value.toBuffer(it).adr) }
+        GL41C.nglProgramUniformMatrix4dv(program.name, location, 1, false, value.toOffHeap())
 
 //    // --- [ glProgramUniformMatrix2x3fv ] --- TODO
 //
@@ -1484,9 +1482,12 @@ interface gl41i {
      */
     fun getProgramPipelineInfoLog(pipeline: GlPipeline,
                                   bufSize: Int = getProgramPipeline(pipeline, GetProgramPipeline.INFO_LOG_LENGTH)): String =
-            Stack.asciiAddress(bufSize) { pLength, pString ->
-                GL41C.nglGetProgramPipelineInfoLog(pipeline.name, bufSize, pLength, pString)
-            }
+        stack {
+            val pString = it.nmalloc(1, bufSize)
+            val pLength = it.nmalloc(Int.BYTES, Int.BYTES)
+            GL41C.nglGetProgramPipelineInfoLog(pipeline.name, bufSize, pLength, pString)
+            MemoryUtil.memASCII(pString, memGetInt(pLength))
+        }
 
     // --- [ glVertexAttribL1d ] ---
 
@@ -1760,7 +1761,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glViewportArrayv">Reference Page</a>
      */
-    fun viewportArray(first: Int, v: FloatBuffer) = GL41C.nglViewportArrayv(first, v.rem shr 2, v.adr)
+    fun viewportArray(first: Int, v: FloatBuffer) = GL41C.nglViewportArrayv(first, v.rem shr 2, v.adr.L)
 
     // --- [ glViewportIndexedf ] ---
 
@@ -1797,7 +1798,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glViewportIndexed">Reference Page</a>
      */
-    fun viewportIndexed(index: Int, v: FloatBuffer) = GL41C.nglViewportIndexedfv(index, v.adr)
+    fun viewportIndexed(index: Int, v: FloatBuffer) = GL41C.nglViewportIndexedfv(index, v.adr.L)
 
     // --- [ glScissorArrayv ] ---
 
@@ -1809,7 +1810,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glScissorArrayv">Reference Page</a>
      */
-    fun scissorArray(first: Int, v: IntBuffer) = GL41C.nglScissorArrayv(first, v.rem shr 2, v.adr)
+    fun scissorArray(first: Int, v: IntBuffer) = GL41C.nglScissorArrayv(first, v.rem shr 2, v.adr.L)
 
     // --- [ glScissorIndexed ] ---
 
@@ -1846,7 +1847,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glScissorIndexed">Reference Page</a>
      */
-    fun scissorIndexed(index: Int, v: IntBuffer) = GL41C.nglScissorIndexedv(index, v.adr)
+    fun scissorIndexed(index: Int, v: IntBuffer) = GL41C.nglScissorIndexedv(index, v.adr.L)
 
     // --- [ glDepthRangeArrayv ] ---
 
@@ -1858,7 +1859,7 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDepthRangeArrayv">Reference Page</a>
      */
-    fun depthRangeArray(first: Int, v: DoubleBuffer) = GL41C.nglDepthRangeArrayv(first, v.rem shr 1, v.adr)
+    fun depthRangeArray(first: Int, v: DoubleBuffer) = GL41C.nglDepthRangeArrayv(first, v.rem shr 1, v.adr.L)
 
     // --- [ glDepthRangeIndexed ] ---
 

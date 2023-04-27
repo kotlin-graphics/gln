@@ -8,20 +8,16 @@ import gln.program.GlPipeline
 import gln.program.GlPipelines
 import gln.sampler.GlSampler
 import gln.sampler.GlSamplers
-import gln.identifiers.GlVertexArray
-import gln.identifiers.GlVertexArrays
 import kool.adr
-import kool.Stack
+import kool.rem
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL45C
 import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.nio.LongBuffer
-import kool.Ptr
-import kool.rem
 
-object dsaCore: dsaInterface {
+object dsaCore : dsaInterface {
     /**
      * Returns {@code n} previously unused vertex array object names in {@code arrays}.
      *
@@ -29,8 +25,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateVertexArrays">Reference Page</a>
      */
-    override infix fun createVertexArrays(arrays: GlVertexArrays) =
-            GL45C.nglCreateVertexArrays(arrays.rem, arrays.adr)
+    override infix fun createVertexArrays(arrays: GlVertexArrays) = GL45C.nglCreateVertexArrays(arrays.rem, arrays.adr.L)
 
     /**
      * Returns {@code n} previously unused vertex array object names in {@code arrays}.
@@ -46,8 +41,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateVertexArrays">Reference Page</a>
      */
-    override fun createVertexArrays(): GlVertexArray =
-            GlVertexArray(Stack.intAdr { GL45C.nglCreateVertexArrays(1, it) })
+    override fun createVertexArrays(): GlVertexArray = GlVertexArray(readInt { GL45C.nglCreateVertexArrays(1, it) })
 
     // TODO vertexArray* -> vertex*?
 
@@ -61,8 +55,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDisableVertexArrayAttrib">Reference Page</a>
      */
-    override fun disableVertexArrayAttrib(vaobj: GlVertexArray, index: VertexAttrIndex) =
-            GL45C.glDisableVertexArrayAttrib(vaobj.name, index)
+    override fun disableVertexArrayAttrib(vaobj: GlVertexArray, index: VertexAttrIndex) = GL45C.glDisableVertexArrayAttrib(vaobj.name, index)
 
     // --- [ glEnableVertexArrayAttrib ] ---
 
@@ -74,8 +67,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glEnableVertexArrayAttrib">Reference Page</a>
      */
-    override fun enableVertexArrayAttrib(vaobj: GlVertexArray, index: VertexAttrIndex) =
-            GL45C.glEnableVertexArrayAttrib(vaobj.name, index)
+    override fun enableVertexArrayAttrib(vaobj: GlVertexArray, index: VertexAttrIndex) = GL45C.glEnableVertexArrayAttrib(vaobj.name, index)
 
     // --- [ glVertexArrayElementBuffer ] ---
 
@@ -87,8 +79,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayElementBuffer">Reference Page</a>
      */
-    override fun vertexArrayElementBuffer(vaobj: GlVertexArray, buffer: GlBuffer) =
-            GL45C.glVertexArrayElementBuffer(vaobj.name, buffer.name)
+    override fun vertexArrayElementBuffer(vaobj: GlVertexArray, buffer: GlBuffer) = GL45C.glVertexArrayElementBuffer(vaobj.name, buffer.name)
 
     // --- [ glVertexArrayVertexBuffer ] ---
 
@@ -104,7 +95,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayVertexBuffer">Reference Page</a>
      */
     override fun vertexArrayVertexBuffer(vaobj: GlVertexArray, bindingIndex: Int, buffer: GlBuffer, offset: Int, stride: Int) =
-            GL45C.glVertexArrayVertexBuffer(vaobj.name, bindingIndex, buffer.name, offset.L, stride)
+        GL45C.glVertexArrayVertexBuffer(vaobj.name, bindingIndex, buffer.name, offset.L, stride)
 
     // --- [ glVertexArrayVertexBuffers ] ---
 
@@ -120,8 +111,8 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayVertexBuffers">Reference Page</a>
      */
     override fun vertexArrayVertexBuffers(vaobj: GlVertexArray, first: Int, buffers: GlBuffers?, offsets: LongBuffer?, strides: IntBuffer?) =
-            GL45C.nglVertexArrayVertexBuffers(vaobj.name, first, buffers?.rem ?: 0, buffers?.adr ?: MemoryUtil.NULL, offsets?.adr
-                    ?: MemoryUtil.NULL, strides?.adr ?: MemoryUtil.NULL)
+        GL45C.nglVertexArrayVertexBuffers(vaobj.name, first, buffers?.rem ?: 0, buffers?.adr?.toLong() ?: MemoryUtil.NULL,
+                                          offsets?.adr?.toLong() ?: MemoryUtil.NULL, strides?.adr?.toLong() ?: MemoryUtil.NULL)
 
     // --- [ glVertexArrayAttribFormat ] ---
 
@@ -139,7 +130,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayAttribFormat">Reference Page</a>
      */
     override fun vertexArrayAttribFormat(vaobj: GlVertexArray, attribIndex: VertexAttrIndex, size: Int, type: VertexAttrType, normalized: Boolean, relativeOffset: Int) =
-            GL45C.glVertexArrayAttribFormat(vaobj.name, attribIndex, size, type.i, normalized, relativeOffset)
+        GL45C.glVertexArrayAttribFormat(vaobj.name, attribIndex, size, type.i, normalized, relativeOffset)
 
     // --- [ glVertexArrayAttribIFormat ] ---
 
@@ -155,7 +146,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayAttribIFormat">Reference Page</a>
      */
     override fun vertexArrayAttribIFormat(vaobj: GlVertexArray, attribIndex: VertexAttrIndex, size: VertexAttrSize, type: VertexAttrType, relativeOffset: Int) =
-            GL45C.glVertexArrayAttribIFormat(vaobj.name, attribIndex, size, type.i, relativeOffset)
+        GL45C.glVertexArrayAttribIFormat(vaobj.name, attribIndex, size, type.i, relativeOffset)
 
     // --- [ glVertexArrayAttribLFormat ] ---
 
@@ -171,7 +162,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayAttribLFormat">Reference Page</a>
      */
     override fun vertexArrayAttribLFormat(vaobj: GlVertexArray, attribIndex: VertexAttrIndex, size: VertexAttrSize, type: VertexAttrType, relativeOffset: Int) =
-            GL45C.glVertexArrayAttribLFormat(vaobj.name, attribIndex, size, type.i, relativeOffset)
+        GL45C.glVertexArrayAttribLFormat(vaobj.name, attribIndex, size, type.i, relativeOffset)
 
     // --- [ glVertexArrayAttribBinding ] ---
 
@@ -185,7 +176,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayAttribBinding">Reference Page</a>
      */
     override fun vertexArrayAttribBinding(vaobj: GlVertexArray, attribIndex: VertexAttrIndex, bindingIndex: Int) =
-            GL45C.glVertexArrayAttribBinding(vaobj.name, attribIndex, bindingIndex)
+        GL45C.glVertexArrayAttribBinding(vaobj.name, attribIndex, bindingIndex)
 
     // --- [ glVertexArrayBindingDivisor ] ---
 
@@ -199,7 +190,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayBindingDivisor">Reference Page</a>
      */
     override fun vertexArrayBindingDivisor(vaobj: GlVertexArray, bindingIndex: Int, divisor: Int) =
-            GL45C.glVertexArrayBindingDivisor(vaobj.name, bindingIndex, divisor)
+        GL45C.glVertexArrayBindingDivisor(vaobj.name, bindingIndex, divisor)
 
     // --- [ glGetVertexArrayiv ] ---
 
@@ -213,7 +204,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArray">Reference Page</a>
      */
     override fun getVertexArrayElementBuffer(vaobj: GlVertexArray): GlBuffer =
-            GlBuffer(Stack.intAdr { GL45C.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
+        GlBuffer(readInt { GL45C.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
 
     // --- [ glGetVertexArrayIndexediv ] ---
     // inline reified
@@ -230,7 +221,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateSamplers">Reference Page</a>
      */
-    override fun createSamplers(samplers: GlSamplers) = GL45C.nglCreateSamplers(samplers.rem, samplers.adr)
+    override fun createSamplers(samplers: GlSamplers) = GL45C.nglCreateSamplers(samplers.rem, samplers.adr.L)
 
     /**
      * Returns {@code n} previously unused sampler names in {@code samplers}, each representing a new sampler object.
@@ -246,8 +237,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateSamplers">Reference Page</a>
      */
-    override fun createSamplers(): GlSampler =
-            GlSampler(Stack.intAdr { GL45C.nglCreateSamplers(1, it) })
+    override fun createSamplers(): GlSampler = GlSampler(readInt { GL45C.nglCreateSamplers(1, it) })
 
     // --- [ glCreateProgramPipelines ] ---
 
@@ -258,8 +248,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgramPipelines">Reference Page</a>
      */
-    override fun createProgramPipelines(pipelines: GlPipelines) =
-            GL45C.nglCreateProgramPipelines(pipelines.rem, pipelines.adr)
+    override fun createProgramPipelines(pipelines: GlPipelines) = GL45C.nglCreateProgramPipelines(pipelines.rem, pipelines.adr.L)
 
     /**
      * Returns {@code n} previously unused program pipeline names in {@code pipelines}, each representing a new program pipeline object.
@@ -275,8 +264,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgramPipelines">Reference Page</a>
      */
-    override fun createProgramPipelines(): GlPipeline =
-            GlPipeline(Stack.intAdr { GL45C.nglCreateProgramPipelines(1, it) })
+    override fun createProgramPipelines(): GlPipeline = GlPipeline(readInt { GL45C.nglCreateProgramPipelines(1, it) })
 
     // --- [ glCreateQueries ] ---
 
@@ -288,8 +276,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateQueries">Reference Page</a>
      */
-    override fun createQueries(target: QueryTarget, ids: GlQueries) =
-            GL45C.nglCreateQueries(target.i, ids.rem, ids.adr)
+    override fun createQueries(target: QueryTarget, ids: GlQueries) = GL45C.nglCreateQueries(target.i, ids.rem, ids.adr.L)
 
     /**
      * Returns {@code n} previously unused query object names in {@code ids}, each representing a new query object with the specified {@code target}.
@@ -308,8 +295,7 @@ object dsaCore: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateQueries">Reference Page</a>
      */
-    override infix fun createQueries(target: QueryTarget): GlQuery =
-            GlQuery(Stack.intAdr { GL45C.nglCreateQueries(target.i, 1, it) })
+    override infix fun createQueries(target: QueryTarget): GlQuery = GlQuery(readInt { GL45C.nglCreateQueries(target.i, 1, it) })
 
     /**
      * Obtains sub-regions of a texture image from a texture object.
@@ -325,7 +311,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureSubImage">Reference Page</a>
      */
     override fun getTextureSubImage(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i, format: TextureFormat3, type: TextureType2, pixels: ByteBuffer) =
-            GL45C.nglGetTextureSubImage(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, pixels.rem, pixels.adr)
+        GL45C.nglGetTextureSubImage(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, pixels.rem, pixels.adr.L)
 
     /**
      * DSA version of {@link GL13C#glGetCompressedTexImage GetCompressedTexImage}.
@@ -337,7 +323,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetCompressedTextureImage">Reference Page</a>
      */
     override fun getCompressedTexImage(texture: GlTexture, level: Int, pixels: ByteBuffer) =
-            GL45C.nglGetCompressedTextureImage(texture.name, level, pixels.rem, pixels.adr)
+        GL45C.nglGetCompressedTextureImage(texture.name, level, pixels.rem, pixels.adr.L)
 
     /**
      * Obtains a sub-region of a compressed texture image.
@@ -351,7 +337,7 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetCompressedTextureSubImage">Reference Page</a>
      */
     override fun getCompressedTextureSubImage(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i, pixels: ByteBuffer) =
-            GL45C.nglGetCompressedTextureSubImage(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, pixels.rem, pixels.adr)
+        GL45C.nglGetCompressedTextureSubImage(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, pixels.rem, pixels.adr.L)
 
     /**
      * Robust version of {@link GL11C#glGetTexImage GetTexImage}
@@ -365,5 +351,5 @@ object dsaCore: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetnTexImage">Reference Page</a>
      */
     override fun getnTexImage(tex: GlTexture, level: Int, format: TextureFormat2, type: TextureType2, img: ByteBuffer) =
-            GL45C.nglGetnTexImage(tex.name, level, format.i, type.i, img.rem, img.adr)
+        GL45C.nglGetnTexImage(tex.name, level, format.i, type.i, img.rem, img.adr.L)
 }

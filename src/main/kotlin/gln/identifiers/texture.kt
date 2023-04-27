@@ -13,7 +13,6 @@ import gln.texture.*
 import kool.IntBuffer
 import kool.adr
 import kool.rem
-import kool.Stack
 import org.lwjgl.opengl.*
 import java.nio.Buffer
 import java.nio.ByteBuffer
@@ -344,8 +343,8 @@ value class GlTexture(val name: Int = -1) {
     }
 
     inline var borderColor: Vec4
-        get() = Stack.vec4Address { GL11C.nglGetTexParameteriv(GlTextureDsl.target.i, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
-        set(value) = Stack.vec4Address(value) { GL11C.nglTexParameteriv(GlTextureDsl.target.i, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+        get() = readVec4 { GL11C.nglGetTexParameteriv(GlTextureDsl.target.i, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+        set(value) = GL11C.nglTexParameteriv(GlTextureDsl.target.i, GL11C.GL_TEXTURE_BORDER_COLOR, value.toOffHeap())
 
     var compareFunc: CompareFunction
         get() = CompareFunction(GL45C.glGetTextureParameteri(name, GL14.GL_TEXTURE_COMPARE_FUNC))
@@ -445,7 +444,7 @@ value class GlTextures(val names: IntBuffer) {
         get() = names.rem
 
     inline val adr: Long
-        get() = names.adr
+        get() = names.adr.L
 
     operator fun get(index: Int): GlTexture = GlTexture(names[index])
     operator fun <E : Enum<E>> get(e: E): GlTexture = GlTexture(names[e.ordinal])

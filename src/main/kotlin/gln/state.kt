@@ -1,11 +1,18 @@
 package gln
 
+import glm_.mat4x4.Mat4d
 import gln.dsa.dsaARB
 import gln.dsa.dsaCore
 import gln.dsa.dsaInterface
 import gln.identifiers.GlFramebuffer
-import gln.identifiers.GlFramebuffers
+import kool.ByteBuffer
+import kool.Ptr
+import kool.adr
 import org.lwjgl.opengl.GL11C
+
+val offHeap = ByteBuffer(Mat4d.size)
+val offHeapPtr = Ptr<Byte>(offHeap.adr)
+val offHeapAdr = offHeap.adr.L
 
 @FunctionalInterface
 private interface StateChangedCallback {

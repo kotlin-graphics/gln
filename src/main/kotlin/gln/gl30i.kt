@@ -6,7 +6,6 @@
 package gln
 
 import gli_.gl
-import glm_.BYTES
 import glm_.L
 import glm_.vec1.Vec1i
 import glm_.vec1.Vec1ui
@@ -19,13 +18,9 @@ import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.identifiers.*
-import gln.identifiers.GlRenderbuffer
-import gln.identifiers.GlRenderbuffers
-import gln.identifiers.GlVertexArray
-import gln.identifiers.GlVertexArrays
 import kool.BYTES
-import kool.Stack
 import kool.adr
+import kool.stack
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.system.MemoryUtil.*
 import unsigned.Uint
@@ -73,7 +68,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4i) = Stack.vec4iAddress { GL30C.nglClearBufferiv(buffer.i, drawbuffer, it) }
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4i) = GL30C.nglClearBufferiv(buffer.i, drawbuffer, value.toOffHeap())
 
     // --- [ glClearBufferuiv ] ---
 
@@ -86,7 +81,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4ui) = Stack.vec4uiAddress { GL30C.nglClearBufferuiv(buffer.i, drawbuffer, it) }
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4ui) = GL30C.nglClearBufferuiv(buffer.i, drawbuffer, value.toOffHeap())
 
     // --- [ glClearBufferfv ] ---
 
@@ -100,7 +95,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBuffer">Reference Page</a>
      */
-    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4) = Stack.vec4Address { GL30C.nglClearBufferfv(buffer.i, drawbuffer, it) }
+    fun clearBuffer(buffer: BufferType, drawbuffer: Int, value: Vec4) = GL30C.nglClearBufferfv(buffer.i, drawbuffer, value.toOffHeap())
 
     // --- [ glClearBufferfi ] ---
 
@@ -112,8 +107,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferfi">Reference Page</a>
      */
-    fun clearBufferDepthStencil(depth: Float, stencil: Int) =
-            GL30C.glClearBufferfi(GL30C.GL_DEPTH_STENCIL, 0, depth, stencil)
+    fun clearBufferDepthStencil(depth: Float, stencil: Int) = GL30C.glClearBufferfi(GL30C.GL_DEPTH_STENCIL, 0, depth, stencil)
 
     // --- [ glVertexAttribI1i ] ---
 
@@ -575,7 +569,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIPointer">Reference Page</a>
      */
     fun vertexAttribIPointer(index: Int, size: Int, type: Int, stride: Int, pointer: Int) =
-            GL30C.nglVertexAttribIPointer(index, size, type, stride, pointer.L)
+        GL30C.nglVertexAttribIPointer(index, size, type, stride, pointer.L)
 
     /**
      * Specifies the location and organization of a pure integer vertex attribute array.
@@ -640,7 +634,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
-    fun getVertexAttribI(index: Int, name: Int) = Stack.intAdr { GL30C.nglGetVertexAttribIiv(index, name, it) }
+    fun getVertexAttribI(index: Int, name: Int): Int = readInt { GL30C.nglGetVertexAttribIiv(index, name, it) }
 
     // --- [ glGetVertexAttribIuiv ] ---
 
@@ -652,7 +646,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexAttrib">Reference Page</a>
      */
-    fun getVertexAttribIu(index: Int, name: Int) = Uint(Stack.intAdr { GL30C.nglGetVertexAttribIuiv(index, name, it) })
+    fun getVertexAttribIu(index: Int, name: Int): UInt = readUInt { GL30C.nglGetVertexAttribIuiv(index, name, it) }
 
     // --- [ glUniform1ui ] ---
 
@@ -885,7 +879,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocation">Reference Page</a>
      */
     fun bindFragDataLocation(program: GlProgram, colorNumber: Int, name: CharSequence) =
-            Stack.asciiAdr(name) { GL30C.nglBindFragDataLocation(program.name, colorNumber, it) }
+        stack.writeAscii(name) { GL30C.nglBindFragDataLocation(program.name, colorNumber, it.adr.L) }
 
     // --- [ glGetFragDataLocation ] ---
 
@@ -897,10 +891,8 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataLocation">Reference Page</a>
      */
-    fun getFragDataLocation(program: GlProgram, name: CharSequence): Int = Stack {
-        it.nASCII(name, true)
-        GL30C.nglGetFragDataLocation(program.name, it.pointerAddress)
-    }
+    fun getFragDataLocation(program: GlProgram, name: CharSequence): Int =
+        stack.writeAscii(name) { GL30C.nglGetFragDataLocation(program.name, it.adr.L) }
 
     // --- [ glBeginConditionalRender ] ---
 
@@ -1004,14 +996,14 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteRenderbuffers">Reference Page</a>
      */
-    fun deleteRenderbuffers(renderbuffer: GlRenderbuffer) = Stack.intAdr(renderbuffer.name) { GL30C.nglDeleteRenderbuffers(1, it) }
+    fun deleteRenderbuffers(renderbuffer: GlRenderbuffer) = GL30C.nglDeleteRenderbuffers(1, renderbuffer.name.toOffHeap())
 
     /**
      * Deletes renderbuffer objects.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteRenderbuffers">Reference Page</a>
      */
-    fun deleteRenderbuffers(renderbuffers: GlRenderbuffers) = GL30C.nglDeleteRenderbuffers(renderbuffers.rem, renderbuffers.adr)
+    fun deleteRenderbuffers(renderbuffers: GlRenderbuffers) = GL30C.nglDeleteRenderbuffers(renderbuffers.rem, renderbuffers.adr.L)
 
     // --- [ glGenRenderbuffers ] ---
 
@@ -1022,7 +1014,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenRenderbuffers">Reference Page</a>
      */
-    fun genRenderbuffers(renderbuffers: GlRenderbuffers) = GL30C.nglGenRenderbuffers(renderbuffers.rem, renderbuffers.adr)
+    fun genRenderbuffers(renderbuffers: GlRenderbuffers) = GL30C.nglGenRenderbuffers(renderbuffers.rem, renderbuffers.adr.L)
 
     /**
      * Generates renderbuffer object names.
@@ -1161,7 +1153,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteFramebuffers">Reference Page</a>
      */
-    fun deleteFramebuffers(framebuffers: GlFramebuffers) = GL30C.nglDeleteFramebuffers(framebuffers.rem, framebuffers.adr)
+    fun deleteFramebuffers(framebuffers: GlFramebuffers) = GL30C.nglDeleteFramebuffers(framebuffers.rem, framebuffers.adr.L)
 
     /**
      * Deletes framebuffer objects.
@@ -1179,7 +1171,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenFramebuffers">Reference Page</a>
      */
-    fun genFramebuffers(framebuffers: GlFramebuffers) = GL30C.nglGenFramebuffers(framebuffers.rem, framebuffers.adr)
+    fun genFramebuffers(framebuffers: GlFramebuffers) = GL30C.nglGenFramebuffers(framebuffers.rem, framebuffers.adr.L)
 
     /**
      * Generates framebuffer object names.
@@ -1219,7 +1211,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCheckFramebufferStatus">Reference Page</a>
      */
     fun checkFramebufferStatus(target: FramebufferTarget = FramebufferTarget.DRAW): FramebufferStatus =
-            FramebufferStatus(GL30C.glCheckFramebufferStatus(target.i))
+        FramebufferStatus(GL30C.glCheckFramebufferStatus(target.i))
 
     // --- [ glFramebufferTexture1D ] ---
 
@@ -1235,7 +1227,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture1D">Reference Page</a>
      */
     fun framebufferTexture1D(target: FramebufferTarget, attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture1D(target.i, attachment.i, texTarget.i, texture.name, level)
+        GL30C.glFramebufferTexture1D(target.i, attachment.i, texTarget.i, texture.name, level)
 
     /**
      * Attaches a level of a 1D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1248,7 +1240,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture1D">Reference Page</a>
      */
     fun framebufferTexture1D(attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture1D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level)
+        GL30C.glFramebufferTexture1D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level)
 
     // --- [ glFramebufferTexture2D ] ---
 
@@ -1264,7 +1256,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture2D">Reference Page</a>
      */
     fun framebufferTexture2D(target: FramebufferTarget, attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture2D(target.i, attachment.i, texTarget.i, texture.name, level)
+        GL30C.glFramebufferTexture2D(target.i, attachment.i, texTarget.i, texture.name, level)
 
     /**
      * Attaches a level of a 2D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1277,7 +1269,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture2D">Reference Page</a>
      */
     fun framebufferTexture2D(attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int = 0) =
-            GL30C.glFramebufferTexture2D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level)
+        GL30C.glFramebufferTexture2D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level)
 
     // --- [ glFramebufferTexture3D ] ---
 
@@ -1294,7 +1286,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture3D">Reference Page</a>
      */
     fun framebufferTexture3D(target: FramebufferTarget, attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTexture3D(target.i, attachment.i, texTarget.i, texture.name, level, layer)
+        GL30C.glFramebufferTexture3D(target.i, attachment.i, texTarget.i, texture.name, level, layer)
 
     /**
      * Attaches a layer of a 3D texture object as a logical buffer to the currently bound framebuffer object.
@@ -1308,7 +1300,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture3D">Reference Page</a>
      */
     fun framebufferTexture3D(attachment: Attachment, texTarget: TextureTarget, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTexture3D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level, layer)
+        GL30C.glFramebufferTexture3D(GL30C.GL_FRAMEBUFFER, attachment.i, texTarget.i, texture.name, level, layer)
 
     // --- [ glFramebufferTextureLayer ] ---
 
@@ -1324,7 +1316,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
     fun framebufferTextureLayer(target: FramebufferTarget, attachment: Attachment, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTextureLayer(target.i, attachment.i, texture.name, level, layer)
+        GL30C.glFramebufferTextureLayer(target.i, attachment.i, texture.name, level, layer)
 
     /**
      * Attaches a single layer of a texture to a framebuffer
@@ -1337,7 +1329,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTextureLayer">Reference Page</a>
      */
     fun framebufferTextureLayer(attachment: Attachment, texture: GlTexture, level: Int, layer: Int) =
-            GL30C.glFramebufferTextureLayer(GL30C.GL_FRAMEBUFFER, attachment.i, texture.name, level, layer)
+        GL30C.glFramebufferTextureLayer(GL30C.GL_FRAMEBUFFER, attachment.i, texture.name, level, layer)
 
     // --- [ glFramebufferRenderbuffer ] ---
 
@@ -1352,7 +1344,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
     fun framebufferRenderbuffer(target: FramebufferTarget, attachment: Attachment, renderbuffer: GlRenderbuffer) =
-            GL30C.glFramebufferRenderbuffer(target.i, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
+        GL30C.glFramebufferRenderbuffer(target.i, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     /**
      * Attaches a renderbuffer as a logical buffer to the currently bound framebuffer object.
@@ -1364,7 +1356,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferRenderbuffer">Reference Page</a>
      */
     fun framebufferRenderbuffer(attachment: Attachment, renderbuffer: GlRenderbuffer) =
-            GL30C.glFramebufferRenderbuffer(GL30C.GL_FRAMEBUFFER, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
+        GL30C.glFramebufferRenderbuffer(GL30C.GL_FRAMEBUFFER, attachment.i, GL30C.GL_RENDERBUFFER, renderbuffer.name)
 
     // --- [ glGetFramebufferAttachmentParameteriv ] ---
 
@@ -1378,7 +1370,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
     fun getFramebufferAttachmentParameter(target: FramebufferTarget, attachment: Attachment, name: GetFramebufferAttachment): Int =
-            GL30C.glGetFramebufferAttachmentParameteri(target.i, attachment.i, name.i)
+        GL30C.glGetFramebufferAttachmentParameteri(target.i, attachment.i, name.i)
 
     /**
      * Retrievees information about attachments of a bound framebuffer object.
@@ -1389,7 +1381,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
     fun getFramebufferAttachmentParameter(attachment: Attachment, name: GetFramebufferAttachment): Int =
-            GL30C.glGetFramebufferAttachmentParameteri(GL30C.GL_FRAMEBUFFER, attachment.i, name.i)
+        GL30C.glGetFramebufferAttachmentParameteri(GL30C.GL_FRAMEBUFFER, attachment.i, name.i)
 
     // --- [ glBlitFramebuffer ] ---
 
@@ -1410,7 +1402,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
      */
     fun blitFramebuffer(srcX0: Int, srcY0: Int, srcX1: Int, srcY1: Int, dstX0: Int, dstY0: Int, dstX1: Int, dstY1: Int, mask: AttribMask, filter: MagFilter) =
-            GL30C.glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask.i, filter.i)
+        GL30C.glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask.i, filter.i)
 
     /**
      * Copies a block of pixels from the read framebuffer to the draw framebuffer.
@@ -1423,7 +1415,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
      */
     fun blitFramebuffer(src: Vec2i, dst: Vec2i, mask: AttribMask, filter: MagFilter) =
-            GL30C.glBlitFramebuffer(0, 0, src.x, src.y, 0, 0, dst.x, dst.y, mask.i, filter.i)
+        GL30C.glBlitFramebuffer(0, 0, src.x, src.y, 0, 0, dst.x, dst.y, mask.i, filter.i)
 
     /**
      * Copies a block of pixels from the read framebuffer to the draw framebuffer.
@@ -1435,7 +1427,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
      */
     fun blitFramebuffer(size: Vec2i, mask: AttribMask, filter: MagFilter) =
-            GL30C.glBlitFramebuffer(0, 0, size.x, size.y, 0, 0, size.x, size.y, mask.i, filter.i)
+        GL30C.glBlitFramebuffer(0, 0, size.x, size.y, 0, 0, size.x, size.y, mask.i, filter.i)
 
     /**
      * Copies a block of pixels from the read framebuffer to the draw framebuffer.
@@ -1447,7 +1439,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBlitFramebuffer">Reference Page</a>
      */
     fun blitFramebuffer(size: Vec2i, filter: MagFilter) =
-            GL30C.glBlitFramebuffer(0, 0, size.x, size.y, 0, 0, size.x, size.y, GL30C.GL_COLOR_BUFFER_BIT, filter.i)
+        GL30C.glBlitFramebuffer(0, 0, size.x, size.y, 0, 0, size.x, size.y, GL30C.GL_COLOR_BUFFER_BIT, filter.i)
 
     // --- [ glGenerateMipmap ] ---
 
@@ -1480,8 +1472,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
      */
-    fun texParameterI(target: TextureTarget, name: TexParameter, param: Vec4i) =
-            Stack.vec4iAddress(param) { GL30C.nglTexParameterIiv(target.i, name.i, it) }
+    fun texParameterI(target: TextureTarget, name: TexParameter, param: Vec4i) = GL30C.nglTexParameterIiv(target.i, name.i, param.toOffHeap())
 
     // --- [ glTexParameterIuiv ] ---
 
@@ -1493,8 +1484,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexParameter">Reference Page</a>
      */
-    fun texParameter(target: TextureTarget, name: TexParameter, param: Vec4ui) =
-            Stack.vec4uiAddress(param) { GL30C.nglTexParameterIuiv(target.i, name.i, it) }
+    fun texParameter(target: TextureTarget, name: TexParameter, param: Vec4ui) = GL30C.nglTexParameterIuiv(target.i, name.i, param.toOffHeap())
 
 //    // --- [ glGetTexParameterIiv ] ---
 //
@@ -1666,7 +1656,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindBufferRange">Reference Page</a>
      */
     fun bindBufferRange(target: BufferTarget2, index: Int, buffer: GlBuffer, offset: Int, size: Int) =
-            GL30C.glBindBufferRange(target.i, index, buffer.name, offset.L, size.L)
+        GL30C.glBindBufferRange(target.i, index, buffer.name, offset.L, size.L)
 
     // --- [ glBindBufferBase ] ---
 
@@ -1680,7 +1670,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindBufferBase">Reference Page</a>
      */
     fun bindBufferBase(target: BufferTarget2, index: Int, buffer: GlBuffer) =
-            GL30C.glBindBufferBase(target.i, index, buffer.name)
+        GL30C.glBindBufferBase(target.i, index, buffer.name)
 
     // --- [ glBeginTransformFeedback ] ---
 
@@ -1692,7 +1682,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBeginTransformFeedback">Reference Page</a>
      */
     fun beginTransformFeedback(primitiveMode: PrimitiveMode) =
-            GL30C.glBeginTransformFeedback(primitiveMode.i)
+        GL30C.glBeginTransformFeedback(primitiveMode.i)
 
     // --- [ glEndTransformFeedback ] ---
 
@@ -1715,7 +1705,7 @@ interface gl30i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTransformFeedbackVaryings">Reference Page</a>
      */
     fun transformFeedbackVaryings(program: GlProgram, varyings: Array<CharSequence>, bufferMode: TransformBufferMode) =
-            GL30C.glTransformFeedbackVaryings(program.name, varyings, bufferMode.i)
+        GL30C.glTransformFeedbackVaryings(program.name, varyings, bufferMode.i)
 
     // --- [ glGetTransformFeedbackVarying ] ---
 
@@ -1730,16 +1720,16 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedbackVarying">Reference Page</a>
      */
-    fun getTransformFeedbackVarying(program: GlProgram, index: Int): Triple<Int, Int, String> = Stack {
-        val max = program.transformFeedbackVaryingMaxLength
-        val pLength = it.nmalloc(4, Int.BYTES * 3)
-        val pSize = pLength + Int.BYTES
-        val pType = pSize + Int.BYTES
-        val pName = it.malloc(max)
-        GL30C.nglGetTransformFeedbackVarying(program.name, index, max, pLength, pSize, pType, pName.adr)
-        val name = memASCII(pName, memGetInt(pLength)) // TODO Ptr with new lwjgl once the needed method (Ptr, Lenght) gets public
-        Triple(memGetInt(pSize), memGetInt(pType), name)
-    }
+    fun getTransformFeedbackVarying(program: GlProgram, index: Int): Triple<Int, Int, String> =
+        stack {
+            val maxLength = program.transformFeedbackVaryingMaxLength
+            val pSize = it.nmalloc(Int.BYTES, 8)
+            val pType = pSize + Int.BYTES
+            val name = it.readAscii(maxLength) { ptr, length ->
+                GL30C.nglGetTransformFeedbackVarying(program.name, index, maxLength, length.adr.L, pSize, pType, ptr.adr.L)
+            }
+            Triple(memGetInt(pSize), memGetInt(pType), name)
+        }
 
     // --- [ glBindVertexArray ] ---
 
@@ -1761,14 +1751,14 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteVertexArrays">Reference Page</a>
      */
-    fun deleteVertexArrays(arrays: GlVertexArrays) = GL30C.nglDeleteVertexArrays(arrays.rem, arrays.adr)
+    fun deleteVertexArrays(arrays: GlVertexArrays) = GL30C.nglDeleteVertexArrays(arrays.rem, arrays.adr.L)
 
     /**
      * Deletes vertex array objects.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteVertexArrays">Reference Page</a>
      */
-    fun deleteVertexArrays(array: GlVertexArray) = Stack.intAdr(array.name) { GL30C.nglDeleteVertexArrays(1, it) }
+    fun deleteVertexArrays(array: GlVertexArray) = GL30C.nglDeleteVertexArrays(1, array.name.toOffHeap())
 
     // --- [ glGenVertexArrays ] ---
 
@@ -1779,7 +1769,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
      */
-    fun genVertexArrays(arrays: GlVertexArrays) = GL30C.nglGenVertexArrays(arrays.rem, arrays.adr)
+    fun genVertexArrays(arrays: GlVertexArrays) = GL30C.nglGenVertexArrays(arrays.rem, arrays.adr.L)
 
     /**
      * Generates vertex array object names.
@@ -1805,7 +1795,7 @@ interface gl30i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenVertexArrays">Reference Page</a>
      */
-    fun genVertexArrays() = GlVertexArray(Stack.intAdr { GL30C.nglGenVertexArrays(1, it) })
+    fun genVertexArrays() = GlVertexArray(readInt { GL30C.nglGenVertexArrays(1, it) })
 
     // --- [ glIsVertexArray ] ---
 

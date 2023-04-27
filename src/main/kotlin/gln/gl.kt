@@ -21,18 +21,17 @@ import gln.misc.BlendDsl
 import gln.misc.GlDebugSource
 import gln.transformFeedback.GlTransformFeedback
 import kool.*
-import kool.lib.toIntArray
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.memGetInt
 import unsigned.Uint
 
 object gl :
-        glGetSet, glEnable,
-        gl11i, gl12i, gl13i, gl14i, gl15i,
-        gl20i, gl21i,
-        gl30i, gl31i, gl32i, gl33i,
-        gl40i, gl41i, gl42i, gl43i, gl44i, gl45i, gl46i,
-        dsai {
+    glGetSet, glEnable,
+    gl11i, gl12i, gl13i, gl14i, gl15i,
+    gl20i, gl21i,
+    gl30i, gl31i, gl32i, gl33i,
+    gl40i, gl41i, gl42i, gl43i, gl44i, gl45i, gl46i,
+    dsai {
 
     val state = OpenGlState
 
@@ -51,15 +50,12 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetIntegerv">Reference Page</a>
      */
-    inline fun <reified T : Number> get(name: Int): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL11C.nglGetIntegerv(name, it) } as T
-                    Long::class -> s.longAdr { GL32C.nglGetInteger64v(name, it) } as T
-                    Float::class -> s.floatAdr { GL11C.nglGetFloatv(name, it) } as T
-                    else -> throw Exception("Invalid")
-                }
-            }
+    inline fun <reified T : Number> get(name: Int): T = when (T::class) {
+        Int::class -> readInt { GL11C.nglGetIntegerv(name, it) }
+        Long::class -> readLong { GL32C.nglGetInteger64v(name, it) }
+        Float::class -> readFloat { GL11C.nglGetFloatv(name, it) }
+        else -> throw Exception("Invalid")
+    } as T
 
     // --- [ glGetTexLevelParameter ] --- // TODO get rid of *Level* ?
 
@@ -72,15 +68,12 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
-    inline fun <reified T> getTexLevelParameter(target: TextureTarget, level: Int, name: TexLevelParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) } as T
-                    Float::class -> s.floatAdr { GL11C.nglGetTexLevelParameterfv(target.i, level, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) }.bool as T
-                    else -> throw Exception("Invalid")
-                }
-            }
+    inline fun <reified T> getTexLevelParameter(target: TextureTarget, level: Int, name: TexLevelParameter): T = when (T::class) {
+        Int::class -> readInt { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) }
+        Float::class -> readFloat { GL11C.nglGetTexLevelParameterfv(target.i, level, name.i, it) }
+        Boolean::class -> readBoolean { GL11C.nglGetTexLevelParameteriv(target.i, level, name.i, it) }
+        else -> throw Exception("Invalid")
+    } as T
 
     // --- [ glGetTexParameter ] ---
 
@@ -92,15 +85,12 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexLevelParameter">Reference Page</a>
      */
-    inline fun <reified T> getTexParameter(target: TextureTarget, name: TexParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL11C.nglGetTexParameteriv(target.i, name.i, it) } as T
-                    Float::class -> s.floatAdr { GL11C.nglGetTexParameterfv(target.i, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL11C.nglGetTexParameteriv(target.i, name.i, it) }.bool as T
-                    else -> throw Exception("Invalid")
-                }
-            }
+    inline fun <reified T> getTexParameter(target: TextureTarget, name: TexParameter): T = when (T::class) {
+        Int::class -> readInt { GL11C.nglGetTexParameteriv(target.i, name.i, it) }
+        Float::class -> readFloat { GL11C.nglGetTexParameterfv(target.i, name.i, it) }
+        Boolean::class -> readBoolean { GL11C.nglGetTexParameteriv(target.i, name.i, it) }
+        else -> throw Exception("Invalid")
+    } as T
 
     /**
      * Conditional rendering.
@@ -126,28 +116,25 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniform">Reference Page</a>
      */
-    inline fun <reified T> getUniform(program: GlProgram, location: UniformLocation): T =
-            Stack { s ->
-                when (T::class) {
-                    Float::class -> s.floatAdr { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec2::class -> s.vec2Address { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec3::class -> s.vec3Address { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec4::class -> s.vec4Address { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Int::class -> s.intAdr { GL20C.nglGetUniformiv(program.name, location, it) } as T
-                    Vec2i::class -> s.vec2iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec3i::class -> s.vec3iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec4i::class -> s.vec4iAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Uint::class -> Uint(s.intAdr { GL20C.nglGetUniformiv(program.name, location, it) }) as T
-                    Vec2ui::class -> s.vec2uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec3ui::class -> s.vec3uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec4ui::class -> s.vec4uiAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Double::class -> s.doubleAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec2d::class -> s.vec2dAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec3d::class -> s.vec3dAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    Vec4d::class -> s.vec4dAddress { GL20C.nglGetUniformfv(program.name, location, it) } as T
-                    else -> throw Exception("[gln.gl.getUniform] invalid T")
-                }
-            }
+    inline fun <reified T> getUniform(program: GlProgram, location: UniformLocation): T = when (T::class) {
+        Float::class -> readFloat { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec2::class -> readVec2 { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec3::class -> readVec3 { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec4::class -> readVec4 { GL20C.nglGetUniformfv(program.name, location, it) }
+        Int::class -> readInt { GL20C.nglGetUniformiv(program.name, location, it) }
+        Vec2i::class -> readVec2i { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec3i::class -> readVec3i { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec4i::class -> readVec4i { GL20C.nglGetUniformfv(program.name, location, it) }
+        Uint::class -> readUInt { GL20C.nglGetUniformiv(program.name, location, it) }
+        Vec2ui::class -> readVec2ui { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec3ui::class -> readVec3ui { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec4ui::class -> readVec4ui { GL20C.nglGetUniformfv(program.name, location, it) }
+        Double::class -> readDouble { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec2d::class -> readVec2d { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec3d::class -> readVec3d { GL20C.nglGetUniformfv(program.name, location, it) }
+        Vec4d::class -> readVec4d { GL20C.nglGetUniformfv(program.name, location, it) }
+        else -> throw Exception("[gln.gl.getUniform] invalid T")
+    } as T
 
     // --- [ glGetShaderiv ] ---
 
@@ -159,15 +146,12 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetShader">Reference Page</a>
      */
-    inline fun <reified T> getShader(shader: GlShader, name: GetShader): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL20C.nglGetShaderiv(shader.name, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL20C.nglGetShaderiv(shader.name, name.i, it) }.bool as T
-                    ShaderType::class -> ShaderType(s.intAdr { GL20C.nglGetShaderiv(shader.name, name.i, it) }) as T
-                    else -> throw Exception("[gln.gl.getShader] invalid T")
-                }
-            }
+    inline fun <reified T> getShader(shader: GlShader, name: GetShader): T = when (T::class) {
+        Int::class -> readInt { GL20C.nglGetShaderiv(shader.name, name.i, it) }
+        Boolean::class -> readBoolean { GL20C.nglGetShaderiv(shader.name, name.i, it) }
+        ShaderType::class -> ShaderType(readInt { GL20C.nglGetShaderiv(shader.name, name.i, it) })
+        else -> throw Exception("[gln.gl.getShader] invalid T")
+    } as T
 
     // --- [ glGetProgramiv ] ---
 
@@ -181,15 +165,12 @@ object gl :
      *
      * Everything except  GL_COMPUTE_WORK_GROUP_SIZE
      */
-    inline fun <reified T> getProgram(program: GlProgram, name: GetProgram): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL20C.nglGetProgramiv(program.name, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL20C.nglGetProgramiv(program.name, name.i, it) }.bool as T
-                    Vec3i::class -> s.vec3iAddress { GL20C.nglGetProgramiv(program.name, name.i, it) } as T // GL_COMPUTE_WORK_GROUP_SIZE
-                    else -> throw Exception("[gln.gl.getShader] invalid T")
-                }
-            }
+    inline fun <reified T> getProgram(program: GlProgram, name: GetProgram): T = when (T::class) {
+        Int::class -> readInt { GL20C.nglGetProgramiv(program.name, name.i, it) }
+        Boolean::class -> readBoolean { GL20C.nglGetProgramiv(program.name, name.i, it) }
+        Vec3i::class -> readVec3i { GL20C.nglGetProgramiv(program.name, name.i, it) } // GL_COMPUTE_WORK_GROUP_SIZE
+        else -> throw Exception("[gln.gl.getShader] invalid T")
+    } as T
 
     /**
      * Queries the T value of an indexed state variable.
@@ -237,15 +218,12 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
      */
-    inline fun <reified T> getBufferParameter(target: BufferTarget, param: BufferParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL15C.nglGetBufferParameteriv(target.i, param.i, it) } as T
-                    Long::class -> s.longAdr { GL32C.nglGetBufferParameteri64v(target.i, param.i, it) } as T
-                    Boolean::class -> s.intAdr { GL15C.nglGetBufferParameteriv(target.i, param.i, it) }.bool as T
-                    else -> throw Exception("[gln.gl.getBufferParameter(target, ..)] invalid T")
-                }
-            }
+    inline fun <reified T> getBufferParameter(target: BufferTarget, param: BufferParameter): T = when (T::class) {
+        Int::class -> readInt { GL15C.nglGetBufferParameteriv(target.i, param.i, it) }
+        Long::class -> readLong { GL32C.nglGetBufferParameteri64v(target.i, param.i, it) }
+        Boolean::class -> readBoolean { GL15C.nglGetBufferParameteriv(target.i, param.i, it) }
+        else -> throw Exception("[gln.gl.getBufferParameter(target, ..)] invalid T")
+    } as T
 
     // ========================= GL31C
 
@@ -261,20 +239,18 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveUniformBlock">Reference Page</a>
      */
-    inline fun <reified T> getActiveUniformBlockiv(program: GlProgram, uniformBlockIndex: UniformBlockIndex, name: GetActiveUniformBlock): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) }.bool as T
-                    IntArray::class -> {
-                        val size = s.intAdr { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, it) }
-                        val ints = s.IntBuffer(size)
-                        GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, ints.adr)
-                        ints.toIntArray() as T
-                    }
-                    else -> throw Exception("[gln.gl.getActiveUniformBlockiv] invalid T")
-                }
-            }
+    inline fun <reified T> getActiveUniformBlockiv(program: GlProgram, uniformBlockIndex: UniformBlockIndex, name: GetActiveUniformBlock): T = when (T::class) {
+        Int::class -> readInt { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) }
+        Boolean::class -> readBoolean { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, name.i, it) }
+        IntArray::class -> { // GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES
+            val size = readInt { GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, it) }
+            check(size <= offHeap.cap / Int.BYTES)
+            GL31C.nglGetActiveUniformBlockiv(program.name, uniformBlockIndex, GL31C.GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, offHeapAdr)
+            IntArray(size) { offHeapPtr.toPtr<Int>()[it] }
+        }
+
+        else -> throw Exception("[gln.gl.getActiveUniformBlockiv] invalid T")
+    } as T
 
     // --- [ glGetSamplerParameteriv ] ---
 
@@ -287,17 +263,14 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSamplerParameter">Reference Page</a>
      */
-    inline fun <reified T> getSamplerParameter(target: GlBuffer, param: SamplerParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) } as T
-                    Float::class -> s.floatAdr { GL33C.nglGetSamplerParameterfv(target.name, param.i, it) } as T
-                    Vec4i::class -> s.vec4iAddress { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) } as T
-                    Vec4ui::class -> s.vec4uiAddress { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) } as T
-                    Boolean::class -> s.intAdr { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) }.bool as T
-                    else -> throw Exception("[gln.gl.getBufferParam] invalid T")
-                }
-            }
+    inline fun <reified T> getSamplerParameter(target: GlBuffer, param: SamplerParameter): T = when (T::class) {
+        Int::class -> readInt { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) }
+        Float::class -> readFloat { GL33C.nglGetSamplerParameterfv(target.name, param.i, it) }
+        Vec4i::class -> readVec4i { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) }
+        Vec4ui::class -> readVec4ui { GL33C.nglGetSamplerParameterIiv(target.name, param.i, it) }
+        Boolean::class -> readInt { GL33C.nglGetSamplerParameteriv(target.name, param.i, it) }
+        else -> throw Exception("[gln.gl.getBufferParam] invalid T")
+    } as T
 
     // --- [ glBeginQueryIndexed / glEndQueryIndexed ] ---
 
@@ -326,14 +299,11 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetQueryIndexed">Reference Page</a>
      */
-    inline fun <reified T> getQueryIndexed(target: QueryIndexedTarget, index: Int): T =
-            Stack { s ->
-                when (T::class) {
-                    GlQuery::class -> GlQuery(s.intAdr { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_CURRENT_QUERY, it) }) as T
-                    Int::class -> s.intAdr { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_QUERY_COUNTER_BITS, it) } as T
-                    else -> throw Exception("[gln.gl.glGetQueryIndexediv] invalid T")
-                }
-            }
+    inline fun <reified T> getQueryIndexed(target: QueryIndexedTarget, index: Int): T = when (T::class) {
+        GlQuery::class -> GlQuery(readInt { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_CURRENT_QUERY, it) })
+        Int::class -> readInt { GL40C.nglGetQueryIndexediv(target.i, index, GL15C.GL_QUERY_COUNTER_BITS, it) }
+        else -> throw Exception("[gln.gl.glGetQueryIndexediv] invalid T")
+    } as T
 
     // --- [ glGet*i ] ---
 
@@ -346,16 +316,13 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFloati_v">Reference Page</a>
      */
-    inline fun <reified T> get(target: Int, index: Int): T =
-            Stack { s ->
-                when (T::class) {
-                    // --- [ glGetFloati_v ] ---
-                    Float::class -> s.floatAdr { GL41C.nglGetFloati_v(target, index, it) } as T
-                    // --- [ glGetDoublei_v ] ---
-                    Double::class -> s.doubleAddress { GL41C.nglGetDoublei_v(target, index, it) } as T
-                    else -> throw Exception("[gln.gl.get] invalid T")
-                }
-            }
+    inline fun <reified T> get(target: Int, index: Int): T = when (T::class) {
+        // --- [ glGetFloati_v ] ---
+        Float::class -> readFloat { GL41C.nglGetFloati_v(target, index, it) }
+        // --- [ glGetDoublei_v ] ---
+        Double::class -> readDouble { GL41C.nglGetDoublei_v(target, index, it) }
+        else -> throw Exception("[gln.gl.get] invalid T")
+    } as T
 
     // ===================== GL42
 
@@ -371,20 +338,18 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetActiveAtomicCounterBuffer">Reference Page</a>
      */
-    inline fun <reified T> getActiveAtomicCounterBufferiv(program: GlProgram, bufferIndex: Int, name: GetActiveAtomicCounterBuffer): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) }.bool as T
-                    IntArray::class -> {
-                        val size = s.intAdr { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTERS, it) }
-                        val ints = s.IntBuffer(size)
-                        GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTER_INDICES, ints.adr)
-                        ints.toIntArray() as T
-                    }
-                    else -> throw Exception("[gln.gl.getActiveAtomicCounterBufferiv] invalid T")
-                }
-            }
+    inline fun <reified T> getActiveAtomicCounterBufferiv(program: GlProgram, bufferIndex: Int, name: GetActiveAtomicCounterBuffer): T = when (T::class) {
+        Int::class -> readInt { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) }
+        Boolean::class -> readBoolean { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, name.i, it) }
+        IntArray::class -> {
+            val size = readInt { GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTERS, it) }
+            check(size <= offHeap.cap / Int.BYTES)
+            GL42C.nglGetActiveAtomicCounterBufferiv(program.name, bufferIndex, GL42C.GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTER_INDICES, offHeapAdr)
+            IntArray(size) { offHeapPtr.toPtr<Int>()[it] }
+        }
+
+        else -> throw Exception("[gln.gl.getActiveAtomicCounterBufferiv] invalid T")
+    } as T
 
     // --- [ glGetInternalformativ ] ---
 
@@ -397,20 +362,18 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetInternalformat">Reference Page</a>
      */
-    inline fun <reified T> getInternalformat(target: TextureTarget, internalformat: gl.InternalFormat, name: GetInternalFormat, bufSize: Int = 1): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) } as T
-                    Long::class -> s.longAdr { GL43C.nglGetInternalformati64v(target.i, internalformat.i, name.i, 1, it) } as T
-                    IntArray::class -> {
-                        val ints = s.nmalloc(4, bufSize * Int.BYTES)
-                        GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, bufSize, ints)
-                        IntArray(bufSize) { memGetInt(ints + it * Int.BYTES) } as T
-                    }
-                    Boolean::class -> s.intAdr { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) }.bool as T
-                    else -> throw Exception("[gln.gl.getInternalformat] invalid T")
-                }
-            }
+    inline fun <reified T> getInternalformat(target: TextureTarget, internalformat: gl.InternalFormat, name: GetInternalFormat, bufSize: Int = 1): T = when (T::class) {
+        Int::class -> readInt { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) }
+        Long::class -> readLong { GL43C.nglGetInternalformati64v(target.i, internalformat.i, name.i, 1, it) }
+        IntArray::class -> {
+            check(bufSize <= offHeap.cap / Int.BYTES)
+            GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, bufSize, offHeapAdr)
+            IntArray(bufSize) { offHeapPtr.toPtr<Int>()[it] }
+        }
+
+        Boolean::class -> readBoolean { GL42C.nglGetInternalformativ(target.i, internalformat.i, name.i, 1, it) }
+        else -> throw Exception("[gln.gl.getInternalformat] invalid T")
+    } as T
 
     // ================== GL43
 
@@ -450,17 +413,14 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferParameter">Reference Page</a>
      */
-    inline fun <reified T> getFramebufferParameter(target: FramebufferTarget, name: FramebufferParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }.bool as T
-                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
-                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
-                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAdr { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }) as T
-                    else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
-                }
-            }
+    inline fun <reified T> getFramebufferParameter(target: FramebufferTarget, name: FramebufferParameter): T = when (T::class) {
+        Int::class -> readInt { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }
+        Boolean::class -> readBoolean { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) }
+        FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(readInt { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) })
+        FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(readInt { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) })
+        FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(readInt { GL43C.nglGetFramebufferParameteriv(target.i, name.i, it) })
+        else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
+    } as T
 
     // ==================== GL45
 
@@ -474,14 +434,11 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedback">Reference Page</a>
      */
-    inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedback): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) }.bool as T
-                    else -> throw Exception("[gln.gl.getTransformFeedback] invalid T")
-                }
-            }
+    inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedback): T = when (T::class) {
+        Int::class -> readInt { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) }
+        Boolean::class -> readBoolean { GL45C.nglGetTransformFeedbackiv(xfb.name, name.i, it) }
+        else -> throw Exception("[gln.gl.getTransformFeedback] invalid T")
+    } as T
 
     // --- [ glGetTransformFeedbacki_v ] ---
 
@@ -494,14 +451,11 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTransformFeedbacki_v">Reference Page</a>
      */
-    inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedbackIndexed, index: Int): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL45C.nglGetTransformFeedbacki_v(xfb.name, name.i, index, it) } as T
-                    Long::class -> s.longAdr { GL45C.nglGetTransformFeedbacki64_v(xfb.name, name.i, index, it) } as T
-                    else -> throw Exception("[gln.gl.getTransformFeedback] invalid T")
-                }
-            }
+    inline fun <reified T> getTransformFeedback(xfb: GlTransformFeedback, name: GetTransformFeedbackIndexed, index: Int): T = when (T::class) {
+        Int::class -> readInt { GL45C.nglGetTransformFeedbacki_v(xfb.name, name.i, index, it) }
+        Long::class -> readLong { GL45C.nglGetTransformFeedbacki64_v(xfb.name, name.i, index, it) }
+        else -> throw Exception("[gln.gl.getTransformFeedback] invalid T")
+    } as T
 
     // --- [ glGetNamedBufferParameteriv / glGetNamedBufferParameteri64v ] ---
 
@@ -514,15 +468,12 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferParameter">Reference Page</a>
      */
-    inline fun <reified T> getBufferParameter(buffer: GlBuffer, param: BufferParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) } as T
-                    Long::class -> s.longAdr { GL45C.nglGetNamedBufferParameteri64v(buffer.name, param.i, it) } as T
-                    Boolean::class -> s.intAdr { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) }.bool as T
-                    else -> throw Exception("[gln.gl.getBufferParameter(buffer, ..)] invalid T")
-                }
-            }
+    inline fun <reified T> getBufferParameter(buffer: GlBuffer, param: BufferParameter): T = when (T::class) {
+        Int::class -> readInt { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) }
+        Long::class -> readLong { GL45C.nglGetNamedBufferParameteri64v(buffer.name, param.i, it) }
+        Boolean::class -> readInt { GL45C.nglGetNamedBufferParameteriv(buffer.name, param.i, it) }
+        else -> throw Exception("[gln.gl.getBufferParameter(buffer, ..)] invalid T")
+    } as T
 
     // --- [ glGetNamedFramebufferParameteriv ] ---
 
@@ -535,14 +486,11 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferParameter">Reference Page</a>
      */
-    inline fun <reified T> getFramebufferParameter(framebuffer: GlFramebuffer, name: FramebufferParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) }.bool as T
-                    else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
-                }
-            }
+    inline fun <reified T> getFramebufferParameter(framebuffer: GlFramebuffer, name: FramebufferParameter): T = when (T::class) {
+        Int::class -> readInt { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) }
+        Boolean::class -> readBoolean { GL45C.nglGetNamedFramebufferParameteriv(framebuffer.name, name.i, it) }
+        else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
+    } as T
 
     // --- [ glGetNamedFramebufferAttachmentParameteriv ] ---
 
@@ -555,17 +503,14 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFramebufferAttachmentParameter">Reference Page</a>
      */
-    inline fun <reified T> getFramebufferAttachmentParameter(framebuffer: GlFramebuffer, attachment: Attachment, name: GetFramebufferAttachment): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }.bool as T
-                    FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
-                    FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
-                    FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(s.intAdr { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }) as T
-                    else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
-                }
-            }
+    inline fun <reified T> getFramebufferAttachmentParameter(framebuffer: GlFramebuffer, attachment: Attachment, name: GetFramebufferAttachment): T = when (T::class) {
+        Int::class -> readInt { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }
+        Boolean::class -> readInt { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) }
+        FramebufferAttachmentObjectType::class -> FramebufferAttachmentObjectType(readInt { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) })
+        FramebufferAttachmentComponentType::class -> FramebufferAttachmentComponentType(readInt { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) })
+        FramebufferAttachmentColorEncoding::class -> FramebufferAttachmentColorEncoding(readInt { GL45C.nglGetNamedFramebufferAttachmentParameteriv(framebuffer.name, attachment.i, name.i, it) })
+        else -> throw Exception("[gln.gl.getFramebufferParameter] invalid T")
+    } as T
 
     // --- [ glGetTextureLevelParameterfv / glGetTextureLevelParameteriv ] ---
     /**
@@ -577,15 +522,12 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureLevelParameter">Reference Page</a>
      */
-    inline fun <reified T> getTexLevelParameter(texture: GlTexture, level: Int, name: TexLevelParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) }.bool as T
-                    Float::class -> s.intAdr { GL45C.nglGetTextureLevelParameterfv(texture.name, level, name.i, it) } as T
-                    else -> throw Exception("[gln.gl.getTexLevelParameter] invalid T")
-                }
-            }
+    inline fun <reified T> getTexLevelParameter(texture: GlTexture, level: Int, name: TexLevelParameter): T = when (T::class) {
+        Int::class -> readInt { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) }
+        Boolean::class -> readBoolean { GL45C.nglGetTextureLevelParameteriv(texture.name, level, name.i, it) }
+        Float::class -> readInt { GL45C.nglGetTextureLevelParameterfv(texture.name, level, name.i, it) }
+        else -> throw Exception("[gln.gl.getTexLevelParameter] invalid T")
+    } as T
 
     // --- [ glGetTextureParameterfv / glGetTextureParameteriv / glGetTextureParameterIiv / glGetTextureParameterIuiv ] ---
 
@@ -597,17 +539,14 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureParameter">Reference Page</a>
      */
-    inline fun <reified T> getTexParameter(texture: GlTexture, name: TexParameter): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) }.bool as T
-                    Float::class -> s.intAdr { GL45C.nglGetTextureParameterfv(texture.name, name.i, it) }.bool as T
-                    Vec4i::class -> s.vec4iAddress { GL45C.nglGetTextureParameterIiv(texture.name, name.i, it) } as T
-                    Vec4ui::class -> s.vec4uiAddress { GL45C.nglGetTextureParameterIuiv(texture.name, name.i, it) } as T
-                    else -> throw Exception("[gln.gl.getTexParameter DSA] invalid T")
-                }
-            }
+    inline fun <reified T> getTexParameter(texture: GlTexture, name: TexParameter): T = when (T::class) {
+        Int::class -> readInt { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) }
+        Boolean::class -> readBoolean { GL45C.nglGetTextureParameteriv(texture.name, name.i, it) }
+        Float::class -> readFloat { GL45C.nglGetTextureParameterfv(texture.name, name.i, it) }
+        Vec4i::class -> readVec4i { GL45C.nglGetTextureParameterIiv(texture.name, name.i, it) }
+        Vec4ui::class -> readVec4ui { GL45C.nglGetTextureParameterIuiv(texture.name, name.i, it) }
+        else -> throw Exception("[gln.gl.getTexParameter DSA] invalid T")
+    } as T
 
     // --- [ glGetVertexArrayIndexediv / glGetVertexArrayIndexed64iv ] ---
 
@@ -621,15 +560,12 @@ object gl :
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArrayIndexed">Reference Page</a>
      */
-    inline fun <reified T> getVertexArrayIndexed(vaobj: GlVertexArray, index: VertexAttrIndex, name: VertexAttrib): T =
-            Stack { s ->
-                when (T::class) {
-                    Int::class -> s.intAdr { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
-                    Boolean::class -> s.intAdr { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) } as T
-                    Long::class -> s.longAdr { GL45C.nglGetVertexArrayIndexed64iv(vaobj.name, index, name.i, it) } as T
-                    else -> throw Exception("[gln.gl.getVertexArrayIndexed DSA] invalid T")
-                }
-            }
+    inline fun <reified T> getVertexArrayIndexed(vaobj: GlVertexArray, index: VertexAttrIndex, name: VertexAttrib): T = when (T::class) {
+        Int::class -> readInt { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) }
+        Boolean::class -> readBoolean { GL45C.nglGetVertexArrayIndexediv(vaobj.name, index, name.i, it) }
+        Long::class -> readLong { GL45C.nglGetVertexArrayIndexed64iv(vaobj.name, index, name.i, it) }
+        else -> throw Exception("[gln.gl.getVertexArrayIndexed DSA] invalid T")
+    } as T
 
     // gl Enable/Disable
 
@@ -647,10 +583,10 @@ object gl :
     }
 
     inline fun blended(sFactor: BlendFactor, dFactor: BlendFactor, block: BlendDsl.() -> Unit) =
-            blended {
-                GL11C.glBlendFunc(sFactor.i, dFactor.i)
-                BlendDsl.block()
-            }
+        blended {
+            GL11C.glBlendFunc(sFactor.i, dFactor.i)
+            BlendDsl.block()
+        }
 
     inline fun cullFaced(mode: FaceMode, block: () -> Unit) {
         GL11C.glEnable(GL11C.GL_CULL_FACE)
@@ -662,7 +598,7 @@ object gl :
     // --- [ glDepthRange ] ---
 
     inline var depthRange: Vec2d
-        get() = Stack.vec2dAddress { GL11C.nglGetDoublev(GL11C.GL_DEPTH_RANGE, it) }
+        get() = readVec2d { GL11C.nglGetDoublev(GL11C.GL_DEPTH_RANGE, it) }
         set(value) = GL11C.glDepthRange(value.x, value.y)
 
     // --- [ glLineWidth ] ---

@@ -1,14 +1,12 @@
 package gln
 
 import gli_.gl
-import glm_.bool
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import gln.identifiers.GlTexture
 import kool.Ptr
 import kool.adr
 import kool.rem
-import kool.Stack
 import org.lwjgl.PointerBuffer
 import org.lwjgl.opengl.GL32C
 import org.lwjgl.system.MemoryUtil.NULL
@@ -52,8 +50,8 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsBaseVertex">Reference Page</a>
      */
-    fun drawElementsBaseVertex(mode: DrawMode, count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
-            GL32C.nglDrawElementsBaseVertex(mode.i, count, type.i, indices, baseVertex)
+    fun drawElementsBaseVertex(mode: DrawMode, count: Int, type: IndexType, indices: Ptr<*>, baseVertex: Int) =
+        GL32C.nglDrawElementsBaseVertex(mode.i, count, type.i, indices.adr.L, baseVertex)
 
     /**
      * Renders primitives from array data with a per-element offset.
@@ -66,8 +64,8 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsBaseVertex">Reference Page</a>
      */
-    fun drawElementsBaseVertex(count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
-            GL32C.nglDrawElementsBaseVertex(DrawMode.TRIANGLES.i, count, type.i, indices, baseVertex)
+    fun drawElementsBaseVertex(count: Int, type: IndexType, indices: Ptr<*>, baseVertex: Int) =
+        GL32C.nglDrawElementsBaseVertex(DrawMode.TRIANGLES.i, count, type.i, indices.adr.L, baseVertex)
 
 //    /** TODO?
 //     * Renders primitives from array data with a per-element offset.
@@ -137,8 +135,8 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElementsBaseVertex">Reference Page</a>
      */
-    fun drawRangeElementsBaseVertex(mode: DrawMode, start: Int, end: Int, count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
-            GL32C.nglDrawRangeElementsBaseVertex(mode.i, start, end, count, type.i, indices, baseVertex)
+    fun drawRangeElementsBaseVertex(mode: DrawMode, start: Int, end: Int, count: Int, type: IndexType, indices: Ptr<*>, baseVertex: Int) =
+        GL32C.nglDrawRangeElementsBaseVertex(mode.i, start, end, count, type.i, indices.adr.L, baseVertex)
 
     /**
      * Renders primitives from array data with a per-element offset.
@@ -152,8 +150,8 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawRangeElementsBaseVertex">Reference Page</a>
      */
-    fun drawRangeElementsBaseVertex(start: Int, end: Int, count: Int, type: IndexType, indices: Ptr, baseVertex: Int) =
-            GL32C.nglDrawRangeElementsBaseVertex(DrawMode.TRIANGLES.i, start, end, count, type.i, indices, baseVertex)
+    fun drawRangeElementsBaseVertex(start: Int, end: Int, count: Int, type: IndexType, indices: Ptr<*>, baseVertex: Int) =
+        GL32C.nglDrawRangeElementsBaseVertex(DrawMode.TRIANGLES.i, start, end, count, type.i, indices.adr.L, baseVertex)
 
     /**
      * Renders primitives from array data with a per-element offset.
@@ -246,8 +244,8 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsInstancedBaseVertex">Reference Page</a>
      */
-    fun drawElementsInstancedBaseVertex(mode: DrawMode, count: Int, type: IndexType, indices: Ptr, primCount: Int, baseVertex: Int) =
-            GL32C.nglDrawElementsInstancedBaseVertex(mode.i, count, type.i, indices, primCount, baseVertex)
+    fun drawElementsInstancedBaseVertex(mode: DrawMode, count: Int, type: IndexType, indices: Ptr<*>, primCount: Int, baseVertex: Int) =
+        GL32C.nglDrawElementsInstancedBaseVertex(mode.i, count, type.i, indices.adr.L, primCount, baseVertex)
 
     /**
      * Renders multiple instances of a set of primitives from array data with a per-element offset.
@@ -260,8 +258,8 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsInstancedBaseVertex">Reference Page</a>
      */
-    fun drawElementsInstancedBaseVertex(count: Int, type: IndexType, indices: Ptr, primCount: Int, baseVertex: Int) =
-            GL32C.nglDrawElementsInstancedBaseVertex(DrawMode.TRIANGLES.i, count, type.i, indices, primCount, baseVertex)
+    fun drawElementsInstancedBaseVertex(count: Int, type: IndexType, indices: Ptr<*>, primCount: Int, baseVertex: Int) =
+        GL32C.nglDrawElementsInstancedBaseVertex(DrawMode.TRIANGLES.i, count, type.i, indices.adr.L, primCount, baseVertex)
 
 //    /** TODO?
 //     * Renders multiple instances of a set of primitives from array data with a per-element offset.
@@ -336,7 +334,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsBaseVertex">Reference Page</a>
      */
     fun multiDrawElementsBaseVertex(mode: DrawMode, count: IntBuffer, type: IndexType, indices: PointerBuffer, baseVertex: IntBuffer) =
-            GL32C.nglMultiDrawElementsBaseVertex(mode.i, count.adr, type.i, indices.adr, count.rem, baseVertex.adr)
+        GL32C.nglMultiDrawElementsBaseVertex(mode.i, count.adr.L, type.i, indices.adr.L, count.rem, baseVertex.adr.L)
 
     /**
      * Renders multiple sets of primitives by specifying indices of array data elements and an offset to apply to each index.
@@ -351,7 +349,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsBaseVertex">Reference Page</a>
      */
     fun multiDrawElementsBaseVertex(count: IntBuffer, type: IndexType, indices: PointerBuffer, baseVertex: IntBuffer) =
-            GL32C.nglMultiDrawElementsBaseVertex(DrawMode.TRIANGLES.i, count.adr, type.i, indices.adr, count.rem, baseVertex.adr)
+        GL32C.nglMultiDrawElementsBaseVertex(DrawMode.TRIANGLES.i, count.adr.L, type.i, indices.adr.L, count.rem, baseVertex.adr.L)
 
     // --- [ glProvokingVertex ] ---
     // glGetSet
@@ -371,7 +369,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage2DMultisample">Reference Page</a>
      */
     fun texImage2dMS(samples: Int, internalformat: gl.InternalFormat, size: Vec2i, fixedSampleLocations: Boolean) =
-            GL32C.glTexImage2DMultisample(TextureTarget._2D_MULTISAMPLE.i, samples, internalformat.i, size.x, size.y, fixedSampleLocations)
+        GL32C.glTexImage2DMultisample(TextureTarget._2D_MULTISAMPLE.i, samples, internalformat.i, size.x, size.y, fixedSampleLocations)
 
     // --- [ glTexImage3DMultisample ] ---
 
@@ -388,7 +386,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage3DMultisample">Reference Page</a>
      */
     fun texImage3dMS(samples: Int, internalformat: gl.InternalFormat, size: Vec3i, fixedSampleLocations: Boolean) =
-            GL32C.glTexImage3DMultisample(TextureTarget._2D_MULTISAMPLE_ARRAY.i, samples, internalformat.i, size.x, size.y, size.z, fixedSampleLocations)
+        GL32C.glTexImage3DMultisample(TextureTarget._2D_MULTISAMPLE_ARRAY.i, samples, internalformat.i, size.x, size.y, size.z, fixedSampleLocations)
 
     // --- [ glGetMultisamplefv ] ---
 
@@ -400,7 +398,7 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetMultisample">Reference Page</a>
      */
-    fun getMultisample(index: Int): Float = Stack.floatAdr { GL32C.nglGetMultisamplefv(GL32C.GL_SAMPLE_POSITION, index, it) }
+    fun getMultisample(index: Int): Float = readFloat { GL32C.nglGetMultisamplefv(GL32C.GL_SAMPLE_POSITION, index, it) }
 
     // --- [ glSampleMaski ] ---
 
@@ -427,7 +425,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferTexture">Reference Page</a>
      */
     fun framebufferTexture(target: FramebufferTarget, attachment: Attachment, texture: GlTexture, level: Int) =
-            GL32C.glFramebufferTexture(target.i, attachment.i, texture.name, level)
+        GL32C.glFramebufferTexture(target.i, attachment.i, texture.name, level)
 
     // --- [ glFenceSync ] ---
 
@@ -486,7 +484,7 @@ interface gl32i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClientWaitSync">Reference Page</a>
      */
     fun clientWaitSync(sync: GlSync, flushFirst: Boolean, timeout: NanoSecond): SyncStatus =
-            SyncStatus(GL32C.nglClientWaitSync(sync.L, if (flushFirst) GL32C.GL_SYNC_FLUSH_COMMANDS_BIT else 0, timeout.L))
+        SyncStatus(GL32C.nglClientWaitSync(sync.L, if (flushFirst) GL32C.GL_SYNC_FLUSH_COMMANDS_BIT else 0, timeout.L))
 
     // --- [ glWaitSync ] ---
 
@@ -562,8 +560,5 @@ interface gl32i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSync">Reference Page</a>
      */
-    fun isSyncSignaled(sync: GlSync): Boolean =
-            Stack.intAdr {
-                GL32C.nglGetSynciv(sync.L, GL32C.GL_SYNC_STATUS, 1, NULL, it)
-            }.bool
+    fun isSyncSignaled(sync: GlSync): Boolean = readBoolean { GL32C.nglGetSynciv(sync.L, GL32C.GL_SYNC_STATUS, 1, NULL, it) }
 }

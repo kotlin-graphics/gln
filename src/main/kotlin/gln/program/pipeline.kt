@@ -1,6 +1,7 @@
 package gln.program
 
 import gln.GetProgramPipeline
+import gln.L
 import gln.gl
 import gln.identifiers.GlProgram
 import kool.Adr
@@ -28,7 +29,7 @@ value class GlPipelines(val names: IntBuffer) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteProgramPipelines">Reference Page</a>
      */
-    fun delete() = GL41C.nglDeleteProgramPipelines(rem, adr)
+    fun delete() = GL41C.nglDeleteProgramPipelines(rem, adr.L)
 
     // --- [ glCreateProgramPipelines ] ---
 

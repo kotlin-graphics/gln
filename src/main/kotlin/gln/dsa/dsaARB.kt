@@ -11,8 +11,8 @@ import gln.sampler.GlSamplers
 import gln.identifiers.GlVertexArray
 import gln.identifiers.GlVertexArrays
 import kool.adr
+import kool.get
 import kool.rem
-import kool.Stack
 import org.lwjgl.opengl.ARBDirectStateAccess
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.system.MemoryUtil
@@ -20,7 +20,7 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.nio.LongBuffer
 
-object dsaARB: dsaInterface {
+object dsaARB : dsaInterface {
     /**
      * Returns {@code n} previously unused vertex array object names in {@code arrays}.
      *
@@ -28,8 +28,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateVertexArrays">Reference Page</a>
      */
-    override infix fun createVertexArrays(arrays: GlVertexArrays) =
-            ARBDirectStateAccess.nglCreateVertexArrays(arrays.rem, arrays.adr)
+    override infix fun createVertexArrays(arrays: GlVertexArrays) = ARBDirectStateAccess.nglCreateVertexArrays(arrays.rem, arrays.adr.L)
 
     /**
      * Returns {@code n} previously unused vertex array object names in {@code arrays}.
@@ -46,7 +45,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateVertexArrays">Reference Page</a>
      */
     override fun createVertexArrays(): GlVertexArray =
-            GlVertexArray(Stack.intAdr { ARBDirectStateAccess.nglCreateVertexArrays(1, it) })
+            GlVertexArray(readInt { ARBDirectStateAccess.nglCreateVertexArrays(1, it) })
 
     // TODO vertexArray* -> vertex*?
 
@@ -60,8 +59,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDisableVertexArrayAttrib">Reference Page</a>
      */
-    override fun disableVertexArrayAttrib(vaobj: GlVertexArray, index: VertexAttrIndex) =
-            ARBDirectStateAccess.glDisableVertexArrayAttrib(vaobj.name, index)
+    override fun disableVertexArrayAttrib(vaobj: GlVertexArray, index: VertexAttrIndex) = ARBDirectStateAccess.glDisableVertexArrayAttrib(vaobj.name, index)
 
     // --- [ glEnableVertexArrayAttrib ] ---
 
@@ -73,8 +71,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glEnableVertexArrayAttrib">Reference Page</a>
      */
-    override fun enableVertexArrayAttrib(vaobj: GlVertexArray, index: VertexAttrIndex) =
-            ARBDirectStateAccess.glEnableVertexArrayAttrib(vaobj.name, index)
+    override fun enableVertexArrayAttrib(vaobj: GlVertexArray, index: VertexAttrIndex) = ARBDirectStateAccess.glEnableVertexArrayAttrib(vaobj.name, index)
 
     // --- [ glVertexArrayElementBuffer ] ---
 
@@ -86,8 +83,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayElementBuffer">Reference Page</a>
      */
-    override fun vertexArrayElementBuffer(vaobj: GlVertexArray, buffer: GlBuffer) =
-            ARBDirectStateAccess.glVertexArrayElementBuffer(vaobj.name, buffer.name)
+    override fun vertexArrayElementBuffer(vaobj: GlVertexArray, buffer: GlBuffer) = ARBDirectStateAccess.glVertexArrayElementBuffer(vaobj.name, buffer.name)
 
     // --- [ glVertexArrayVertexBuffer ] ---
 
@@ -103,7 +99,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayVertexBuffer">Reference Page</a>
      */
     override fun vertexArrayVertexBuffer(vaobj: GlVertexArray, bindingIndex: Int, buffer: GlBuffer, offset: Int, stride: Int) =
-            ARBDirectStateAccess.glVertexArrayVertexBuffer(vaobj.name, bindingIndex, buffer.name, offset.L, stride)
+        ARBDirectStateAccess.glVertexArrayVertexBuffer(vaobj.name, bindingIndex, buffer.name, offset.L, stride)
 
     // --- [ glVertexArrayVertexBuffers ] ---
 
@@ -119,8 +115,8 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayVertexBuffers">Reference Page</a>
      */
     override fun vertexArrayVertexBuffers(vaobj: GlVertexArray, first: Int, buffers: GlBuffers?, offsets: LongBuffer?, strides: IntBuffer?) =
-            ARBDirectStateAccess.nglVertexArrayVertexBuffers(vaobj.name, first, buffers?.rem ?: 0, buffers?.adr ?: MemoryUtil.NULL, offsets?.adr
-                    ?: MemoryUtil.NULL, strides?.adr ?: MemoryUtil.NULL)
+        ARBDirectStateAccess.nglVertexArrayVertexBuffers(vaobj.name, first, buffers?.rem ?: 0, buffers?.adr?.toLong() ?: MemoryUtil.NULL,
+                                                         offsets?.adr?.toLong() ?: MemoryUtil.NULL, strides?.adr?.toLong() ?: MemoryUtil.NULL)
 
     // --- [ glVertexArrayAttribFormat ] ---
 
@@ -138,7 +134,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayAttribFormat">Reference Page</a>
      */
     override fun vertexArrayAttribFormat(vaobj: GlVertexArray, attribIndex: VertexAttrIndex, size: Int, type: VertexAttrType, normalized: Boolean, relativeOffset: Int) =
-            ARBDirectStateAccess.glVertexArrayAttribFormat(vaobj.name, attribIndex, size, type.i, normalized, relativeOffset)
+        ARBDirectStateAccess.glVertexArrayAttribFormat(vaobj.name, attribIndex, size, type.i, normalized, relativeOffset)
 
     // --- [ glVertexArrayAttribIFormat ] ---
 
@@ -154,7 +150,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayAttribIFormat">Reference Page</a>
      */
     override fun vertexArrayAttribIFormat(vaobj: GlVertexArray, attribIndex: VertexAttrIndex, size: VertexAttrSize, type: VertexAttrType, relativeOffset: Int) =
-            ARBDirectStateAccess.glVertexArrayAttribIFormat(vaobj.name, attribIndex, size, type.i, relativeOffset)
+        ARBDirectStateAccess.glVertexArrayAttribIFormat(vaobj.name, attribIndex, size, type.i, relativeOffset)
 
     // --- [ glVertexArrayAttribLFormat ] ---
 
@@ -170,7 +166,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayAttribLFormat">Reference Page</a>
      */
     override fun vertexArrayAttribLFormat(vaobj: GlVertexArray, attribIndex: VertexAttrIndex, size: VertexAttrSize, type: VertexAttrType, relativeOffset: Int) =
-            ARBDirectStateAccess.glVertexArrayAttribLFormat(vaobj.name, attribIndex, size, type.i, relativeOffset)
+        ARBDirectStateAccess.glVertexArrayAttribLFormat(vaobj.name, attribIndex, size, type.i, relativeOffset)
 
     // --- [ glVertexArrayAttribBinding ] ---
 
@@ -184,7 +180,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayAttribBinding">Reference Page</a>
      */
     override fun vertexArrayAttribBinding(vaobj: GlVertexArray, attribIndex: VertexAttrIndex, bindingIndex: Int) =
-            ARBDirectStateAccess.glVertexArrayAttribBinding(vaobj.name, attribIndex, bindingIndex)
+        ARBDirectStateAccess.glVertexArrayAttribBinding(vaobj.name, attribIndex, bindingIndex)
 
     // --- [ glVertexArrayBindingDivisor ] ---
 
@@ -198,7 +194,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexArrayBindingDivisor">Reference Page</a>
      */
     override fun vertexArrayBindingDivisor(vaobj: GlVertexArray, bindingIndex: Int, divisor: Int) =
-            ARBDirectStateAccess.glVertexArrayBindingDivisor(vaobj.name, bindingIndex, divisor)
+        ARBDirectStateAccess.glVertexArrayBindingDivisor(vaobj.name, bindingIndex, divisor)
 
     // --- [ glGetVertexArrayiv ] ---
 
@@ -212,7 +208,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetVertexArray">Reference Page</a>
      */
     override fun getVertexArrayElementBuffer(vaobj: GlVertexArray): GlBuffer =
-            GlBuffer(Stack.intAdr { ARBDirectStateAccess.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
+            GlBuffer(readInt { ARBDirectStateAccess.nglGetVertexArrayiv(vaobj.name, GL15C.GL_ELEMENT_ARRAY_BUFFER_BINDING, it) })
 
     // --- [ glGetVertexArrayIndexediv ] ---
     // inline reified
@@ -229,7 +225,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateSamplers">Reference Page</a>
      */
-    override fun createSamplers(samplers: GlSamplers) = ARBDirectStateAccess.nglCreateSamplers(samplers.rem, samplers.adr)
+    override fun createSamplers(samplers: GlSamplers) = ARBDirectStateAccess.nglCreateSamplers(samplers.rem, samplers.adr.L)
 
     /**
      * Returns {@code n} previously unused sampler names in {@code samplers}, each representing a new sampler object.
@@ -245,8 +241,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateSamplers">Reference Page</a>
      */
-    override fun createSamplers(): GlSampler =
-            GlSampler(Stack.intAdr { ARBDirectStateAccess.nglCreateSamplers(1, it) })
+    override fun createSamplers(): GlSampler = GlSampler(readInt { ARBDirectStateAccess.nglCreateSamplers(1, it) })
 
     // --- [ glCreateProgramPipelines ] ---
 
@@ -257,8 +252,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgramPipelines">Reference Page</a>
      */
-    override fun createProgramPipelines(pipelines: GlPipelines) =
-            ARBDirectStateAccess.nglCreateProgramPipelines(pipelines.rem, pipelines.adr)
+    override fun createProgramPipelines(pipelines: GlPipelines) = ARBDirectStateAccess.nglCreateProgramPipelines(pipelines.rem, pipelines.adr.L)
 
     /**
      * Returns {@code n} previously unused program pipeline names in {@code pipelines}, each representing a new program pipeline object.
@@ -274,8 +268,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateProgramPipelines">Reference Page</a>
      */
-    override fun createProgramPipelines(): GlPipeline =
-            GlPipeline(Stack.intAdr { ARBDirectStateAccess.nglCreateProgramPipelines(1, it) })
+    override fun createProgramPipelines(): GlPipeline = GlPipeline(readInt { ARBDirectStateAccess.nglCreateProgramPipelines(1, it) })
 
     // --- [ glCreateQueries ] ---
 
@@ -287,8 +280,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateQueries">Reference Page</a>
      */
-    override fun createQueries(target: QueryTarget, ids: GlQueries) =
-            ARBDirectStateAccess.nglCreateQueries(target.i, ids.rem, ids.adr)
+    override fun createQueries(target: QueryTarget, ids: GlQueries) = ARBDirectStateAccess.nglCreateQueries(target.i, ids.rem, ids.adr.L)
 
     /**
      * Returns {@code n} previously unused query object names in {@code ids}, each representing a new query object with the specified {@code target}.
@@ -307,8 +299,7 @@ object dsaARB: dsaInterface {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateQueries">Reference Page</a>
      */
-    override infix fun createQueries(target: QueryTarget): GlQuery =
-            GlQuery(Stack.intAdr { ARBDirectStateAccess.nglCreateQueries(target.i, 1, it) })
+    override infix fun createQueries(target: QueryTarget): GlQuery = GlQuery(readInt { ARBDirectStateAccess.nglCreateQueries(target.i, 1, it) })
 
     /**
      * Obtains sub-regions of a texture image from a texture object.
@@ -324,7 +315,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureSubImage">Reference Page</a>
      */
     override fun getTextureSubImage(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i, format: TextureFormat3, type: TextureType2, pixels: ByteBuffer) =
-            ARBDirectStateAccess.nglTextureSubImage3D(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, pixels.adr)
+        ARBDirectStateAccess.nglTextureSubImage3D(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, pixels.adr.L)
 
     /**
      * DSA version of {@link GL13C#glGetCompressedTexImage GetCompressedTexImage}.
@@ -336,7 +327,7 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetCompressedTextureImage">Reference Page</a>
      */
     override fun getCompressedTexImage(texture: GlTexture, level: Int, pixels: ByteBuffer) =
-            ARBDirectStateAccess.nglGetCompressedTextureImage(texture.name, level, pixels.rem, pixels.adr)
+        ARBDirectStateAccess.nglGetCompressedTextureImage(texture.name, level, pixels.rem, pixels.adr.L)
 
     /**
      * Obtains a sub-region of a compressed texture image.
@@ -364,5 +355,5 @@ object dsaARB: dsaInterface {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetnTexImage">Reference Page</a>
      */
     override fun getnTexImage(tex: GlTexture, level: Int, format: TextureFormat2, type: TextureType2, img: ByteBuffer) =
-            ARBDirectStateAccess.nglGetTextureImage(tex.name, level, format.i, type.i, img.rem, img.adr)
+        ARBDirectStateAccess.nglGetTextureImage(tex.name, level, format.i, type.i, img.rem, img.adr.L)
 }

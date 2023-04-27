@@ -36,7 +36,7 @@ value class GlSamplers(val names: IntBuffer) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
-    fun delete() = GL33C.nglDeleteSamplers(rem, adr)
+    fun delete() = GL33C.nglDeleteSamplers(rem, adr.L)
 
     companion object {
         // --- [ glCreateSamplers ] ---
@@ -83,10 +83,8 @@ value class GlSampler(val name: Int = -1) {
     }
 
     var borderColor: Vec4
-        get() = Stack.vec4Address { GL33C.nglSamplerParameterfv(name, GL12C.GL_TEXTURE_BORDER_COLOR, it) }
-        set(value) {
-            Stack.vec4Address(value) { GL33C.nglSamplerParameterfv(name, GL12C.GL_TEXTURE_BORDER_COLOR, it) }
-        }
+        get() = readVec4 { GL33C.nglSamplerParameterfv(name, GL12C.GL_TEXTURE_BORDER_COLOR, it) }
+        set(value) = GL33C.nglSamplerParameterfv(name, GL12C.GL_TEXTURE_BORDER_COLOR, value.toOffHeap())
     var minLod: Float
         get() = GL33C.glGetSamplerParameterf(name, GL12C.GL_TEXTURE_MIN_LOD)
         set(value) = GL33C.glSamplerParameterf(name, GL12C.GL_TEXTURE_MIN_LOD, value)
@@ -148,7 +146,7 @@ value class GlSampler(val name: Int = -1) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteSamplers">Reference Page</a>
      */
-    fun delete() = Stack.intAdr(name) { GL33C.nglDeleteSamplers(1, it) }
+    fun delete() = GL33C.nglDeleteSamplers(1, name.toOffHeap())
 
     // --- [ glIsSampler ] ---
 
@@ -184,7 +182,7 @@ value class GlSampler(val name: Int = -1) {
          *
          * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
          */
-        fun gen(samplers: GlSamplers) = GL33C.nglGenSamplers(samplers.rem, samplers.adr)
+        fun gen(samplers: GlSamplers) = GL33C.nglGenSamplers(samplers.rem, samplers.adr.L)
 
         /**
          * Generates sampler object names.
@@ -200,7 +198,7 @@ value class GlSampler(val name: Int = -1) {
          *
          * @see <a target="_blank" href="http://docs.gl/gl4/glGenSamplers">Reference Page</a>
          */
-        fun gen() = GlSamplers(Stack.intAdr { GL33C.nglGenSamplers(1, it) })
+        fun gen() = GlSamplers(readInt { GL33C.nglGenSamplers(1, it) })
 
 
         inline fun create(block: GlSampler.() -> Unit): GlSampler = create().also(block)

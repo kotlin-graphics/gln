@@ -11,13 +11,11 @@ import glm_.vec3.Vec3i
 import glm_.vec4.Vec4
 import gln.*
 import gln.identifiers.GlTextures
-import kool.Stack
 import kool.adr
 import kool.pos
 import kool.rem
 import org.lwjgl.opengl.*
 import org.lwjgl.system.MemoryUtil.NULL
-import org.lwjgl.system.MemoryUtil.memAddress
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
@@ -32,24 +30,22 @@ object GlTextureDsl {
     // TODO remove *D since dimensionality is implicit in the parameter given?
 
     inline fun image1D(internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
-            image1D(0, internalFormat, width, format, type, pixels)
+        image1D(0, internalFormat, width, format, type, pixels)
 
     inline fun image1D(level: Int, internalFormat: gl.InternalFormat, width: Int, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
-            GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, pixels?.adr ?: NULL)
+        GL11C.nglTexImage1D(target.i, level, internalFormat.i, width, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     inline fun image2D(internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
-            image2D(0, internalFormat, size, format, type, pixels)
+        image2D(0, internalFormat, size, format, type, pixels)
 
     inline fun image2D(level: Int, internalFormat: gl.InternalFormat, size: Vec2i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
-            GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr
-                    ?: NULL)
+        GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     inline fun image3D(internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
-            image3D(0, internalFormat, size, format, type, pixels)
+        image3D(0, internalFormat, size, format, type, pixels)
 
     inline fun image3D(level: Int, internalFormat: gl.InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
-            GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr
-                    ?: NULL)
+        GL12C.nglTexImage3D(target.i, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
 
     // --- [ glGetTexParameterfv glGetTexParameteriv glGetTexParameterIiv glGetTexParameterIuiv ] ---
@@ -170,8 +166,8 @@ object GlTextureDsl {
     }
 
     inline var borderColor: Vec4
-        get() = Stack.vec4Address { GL11C.nglGetTexParameteriv(target.i, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
-        set(value) = Stack.vec4Address(value) { GL11C.nglTexParameteriv(target.i, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+        get() = readVec4 { GL11C.nglGetTexParameteriv(target.i, GL11C.GL_TEXTURE_BORDER_COLOR, it) }
+        set(value) = GL11C.nglTexParameteriv(target.i, GL11C.GL_TEXTURE_BORDER_COLOR, value.toOffHeap())
 
     var compareFunc: CompareFunction
         get() = CompareFunction(GL11C.glGetTexParameteri(target.i, GL14.GL_TEXTURE_COMPARE_FUNC))
@@ -310,11 +306,11 @@ object GlTextureDsl {
 
     // default target
     fun image3D(level: Int, internalFormat: InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
-            GL12C.nglTexImage3D(GL12C.GL_TEXTURE_3D, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr ?: NULL)
+        GL12C.nglTexImage3D(GL12C.GL_TEXTURE_3D, level, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     // default level
     fun image3D(internalFormat: InternalFormat, size: Vec3i, format: ExternalFormat, type: TypeFormat, pixels: Buffer? = null) =
-            GL12C.nglTexImage3D(GL12C.GL_TEXTURE_3D, 0, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr ?: NULL)
+        GL12C.nglTexImage3D(GL12C.GL_TEXTURE_3D, 0, internalFormat.i, size.x, size.y, size.z, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     // --- [ glTexSubImage3D ] ---
 
@@ -394,10 +390,10 @@ object GlTextureDsl {
     inline fun storage3D(levels: Int, internalFormat: gl.InternalFormat, size: Vec3i) = GL42.glTexStorage3D(target.i, levels, internalFormat.i, size.x, size.y, size.z)
 
     inline fun compressedSubImage2D(level: Int, size: Vec3i, format: gl.InternalFormat, data: ByteBuffer) =
-            compressedSubImage2D(level, 0, 0, size.x, size.y, format.i, data)
+        compressedSubImage2D(level, 0, 0, size.x, size.y, format.i, data)
 
     inline fun compressedSubImage2D(level: Int, xOffset: Int, yOffset: Int, width: Int, height: Int, format: Int, data: ByteBuffer) =
-            GL13.nglCompressedTexSubImage2D(target.i, level, xOffset, yOffset, width, height, format, data.rem, data.adr + data.pos)
+        GL13.nglCompressedTexSubImage2D(target.i, level, xOffset, yOffset, width, height, format, data.rem, data.adr + data.pos)
 
     inline fun levels(base: Int = 0, max: Int = 1_000) {
         GL11C.glTexParameteri(target.i, GL12.GL_TEXTURE_BASE_LEVEL, base)

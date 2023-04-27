@@ -5,9 +5,10 @@ package gln.misc
 import glm_.f
 import glm_.vec1.Vec1
 import glm_.vec4.Vec4
-import gln.vec4Address
-import kool.Stack
-import kool.ptrOf
+import gln.L
+import gln.at
+import gln.offHeapPtr
+import kool.set
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
@@ -43,17 +44,20 @@ inline fun glClearColorBuffer(drawbuffer: Int, red: Float = 0f, green: Float = 0
 inline fun glClearColorBuffer(red: Float = 0f, green: Float = 0f, blue: Float = 0f, alpha: Float = 1f) = glClearBuffer(GL11.GL_COLOR, 0, red, green, blue, alpha)
 
 inline fun glClearDepthBuffer(depth: Float = 1f) = glClearBuffer(GL11.GL_DEPTH, 0, depth)
-inline fun glClearStencilBuffer(stencil: Int = 0) = Stack.intBuffer(stencil) { GL30C.glClearBufferiv(GL11.GL_STENCIL, 0, it) }
+inline fun glClearStencilBuffer(stencil: Int = 0) = GL30C.nglClearBufferiv(GL11.GL_STENCIL, 0, stencil at offHeapPtr)
 inline fun glClearDepthStencilBuffer(depth: Float, stencil: Int = 0) = GL30C.glClearBufferfi(GL30C.GL_DEPTH_STENCIL, 0, depth, stencil)
 
 
-inline fun glClearBuffer(buffer: Int, value: Vec4) = Stack.vec4Address(value) { GL30.nglClearBufferfv(buffer, 0, it) }
+inline fun glClearBuffer(buffer: Int, value: Vec4) = GL30.nglClearBufferfv(buffer, 0, value at offHeapPtr)
 
-inline fun glClearBuffer(buffer: Int, drawbuffer: Int, value: Vec1) = Stack.floatAdr(value.x) { GL30.nglClearBufferfv(buffer, drawbuffer, it) }
+inline fun glClearBuffer(buffer: Int, drawbuffer: Int, value: Vec1) = GL30.nglClearBufferfv(buffer, drawbuffer, value at offHeapPtr)
 
 inline fun glClearBuffer(buffer: Int, drawbuffer: Int, color: Vec4) = glClearBuffer(buffer, drawbuffer, color.x, color.y, color.z, color.w)
 
-inline fun glClearBuffer(buffer: Int, drawbuffer: Int, float: Float) = Stack.floatAdr(float) { GL30.nglClearBufferfv(buffer, drawbuffer, it) }
+inline fun glClearBuffer(buffer: Int, drawbuffer: Int, float: Float) = GL30.nglClearBufferfv(buffer, drawbuffer, float at offHeapPtr)
 
-inline fun glClearBuffer(buffer: Int, drawbuffer: Int, red: Float, green: Float, blue: Float, alpha: Float) =
-    Stack { GL30.nglClearBufferfv(buffer, drawbuffer, it.ptrOf(red, green, blue, alpha).adr) }
+inline fun glClearBuffer(buffer: Int, drawbuffer: Int, red: Float, green: Float, blue: Float, alpha: Float) {
+    val p = offHeapPtr.toPtr<Float>()
+    p[0] = red; p[1] = green; p[2] = blue; p[3] = alpha
+    GL30.nglClearBufferfv(buffer, drawbuffer, p.adr.L)
+}

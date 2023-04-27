@@ -25,16 +25,12 @@ import glm_.vec4.Vec4ui
 import gln.*
 import gln.program.ProgramBase
 import gln.program.ProgramUse
-import gln.program.glDeleteProgram
 import kool.ByteBuffer
 import kool.adr
 import kool.rem
-import kool.Stack
 import org.lwjgl.opengl.*
-import org.lwjgl.opengl.GL20C
 import org.lwjgl.system.MemoryUtil
 import unsigned.Uint
-import java.lang.Exception
 import java.nio.IntBuffer
 
 @JvmInline
@@ -60,7 +56,7 @@ value class GlProgram(val name: Int) {
          */
         get() {
             val data = ByteBuffer(binaryLength)
-            val format = Stack.intAdr { GL41C.nglGetProgramBinary(name, data.rem, MemoryUtil.NULL, it, data.adr) }
+            val format = readInt { GL41C.nglGetProgramBinary(name, data.rem, MemoryUtil.NULL, it, data.adr.L) }
             return ProgramBinary(data, format)
         }
     // --- [ glProgramBinary ] ---
@@ -73,7 +69,7 @@ value class GlProgram(val name: Int) {
          *
          * @see <a target="_blank" href="http://docs.gl/gl4/glProgramBinary">Reference Page</a>
          */
-        set(value) = GL41C.nglProgramBinary(name, value.format, value.data.adr, value.data.rem)
+        set(value) = GL41C.nglProgramBinary(name, value.format, value.data.adr.L, value.data.rem)
 
     // --- [ glBindAttribLocation ] ---
 

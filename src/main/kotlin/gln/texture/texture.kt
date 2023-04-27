@@ -7,10 +7,10 @@ import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
-import kool.Stack
-import kool.adr
-import kool.pos
-import kool.ptrOf
+import gln.L
+import gln.offHeapPtr
+import gln.plus
+import kool.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.GL_TEXTURE_1D
 import org.lwjgl.opengl.GL11.GL_TEXTURE_2D
@@ -56,8 +56,11 @@ inline fun glTex2dParameter(name: Int, param: FloatArray) = GL11.glTexParameterf
 
 inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: Int) = GL11.glTexParameteri(target.i, name, param)
 inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: Float) = GL11.glTexParameterf(target.i, name, param)
-inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: gli_.gl.Swizzles) =
-    Stack { GL11.nglTexParameteriv(target.i, name, it.ptrOf(param[0].i, param[1].i, param[2].i, param[3].i).adr) }
+inline fun glTexParameter(target: gli_.gl.Target, name: Int, param: gli_.gl.Swizzles) {
+    val p = offHeapPtr.toPtr<Int>()
+    for (i in 0..3) p[i] = param[i].i
+    GL11.nglTexParameteriv(target.i, name, offHeapAdr)
+}
 
 inline fun glTexImage2D(level: Int, internalFormat: Int, width: Int, height: Int, format: Int, type: Int, pixels: ByteBuffer) {
     GL11.nglTexImage2D(GL11.GL_TEXTURE_2D, level, internalFormat, width, height, 0, format, type, pixels.adr + pixels.pos)

@@ -371,7 +371,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElements">Reference Page</a>
      */
-    fun drawElements(count: Int, type: IndexType = IndexType.UNSIGNED_INT, indices: Ptr = 0L) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices)
+    fun drawElements(count: Int, type: IndexType = IndexType.UNSIGNED_INT, indices: Ptr<*> = Ptr.NULL) = GL11C.nglDrawElements(GL11C.GL_TRIANGLES, count, type.i, indices.adr.L)
 
     // --- [ glFinish ] ---
 
@@ -448,7 +448,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGenTextures">Reference Page</a>
      */
-    fun genTextures(): GlTexture = GlTexture(Stack.intAdr { GL11C.nglGenTextures(1, it) })
+    fun genTextures(): GlTexture = GlTexture(readInt { GL11C.nglGenTextures(1, it) })
 
     // --- [ glDeleteTextures ] ---
 
@@ -478,7 +478,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDeleteTextures">Reference Page</a>
      */
-    infix fun deleteTexture(texture: GlTexture) = Stack.intAdr(texture.name) { GL11C.nglDeleteTextures(1, it) }
+    infix fun deleteTexture(texture: GlTexture) = GL11C.nglDeleteTextures(1, texture.name.toOffHeap())
 
     // --- [ glGetBooleanv / glGetFloatv / glGetIntegerv / glGetDoublev ] ---
     // inline reified
@@ -509,7 +509,7 @@ interface gl11i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTexImage">Reference Page</a>
      */
-    fun getTexImage(tex: TextureTarget, level: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) = GL11C.nglGetTexImage(tex.i, level, format.i, type.i, pixels.adr)
+    fun getTexImage(tex: TextureTarget, level: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) = GL11C.nglGetTexImage(tex.i, level, format.i, type.i, pixels.adr.L)
 
     // --- [ glGetTexLevelParameteriv, glGetTexLevelParameterfv ] ---
     // inline reified
@@ -661,7 +661,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glReadPixels">Reference Page</a>
      */
     fun readPixels(pos: Vec2i, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
-            GL11C.nglReadPixels(pos.x, pos.y, size.x, size.y, format.i, type.i, pixels.adr)
+            GL11C.nglReadPixels(pos.x, pos.y, size.x, size.y, format.i, type.i, pixels.adr.L)
 
     // --- [ glScissor ] ---
 
@@ -767,8 +767,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage1D">Reference Page</a>
      */
     fun texImage1D(level: Int, internalFormat: InternalFormat, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer? = null) =
-            GL11C.nglTexImage1D(GL11C.GL_TEXTURE_1D, level, internalFormat.i, width, 0, format.i, type.i, pixels?.adr
-                    ?: NULL)
+            GL11C.nglTexImage1D(GL11C.GL_TEXTURE_1D, level, internalFormat.i, width, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     /**
      * One-dimensional version of {@link #glTexImage2D TexImage2D}}.
@@ -782,7 +781,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage1D">Reference Page</a>
      */
     fun texImage1D(internalFormat: InternalFormat, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: ByteBuffer? = null) =
-        GL11C.nglTexImage1D(GL11C.GL_TEXTURE_1D, 0, internalFormat.i, width, 0, format.i, type.i, pixels?.adr ?: NULL)
+        GL11C.nglTexImage1D(GL11C.GL_TEXTURE_1D, 0, internalFormat.i, width, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     // --- [ glTexImage2D ] ---
 
@@ -800,7 +799,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage2D">Reference Page</a>
      */
     fun texImage2D(target: Tex2dTarget, level: Int, internalFormat: InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer? = null) =
-        GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr ?: NULL)
+        GL11C.nglTexImage2D(target.i, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     /**
      * Specifies a two-dimensional texture image.
@@ -815,7 +814,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage2D">Reference Page</a>
      */
     fun texImage2D(target: Tex2dTarget, internalFormat: InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer? = null) =
-        GL11C.nglTexImage2D(target.i, 0, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr ?: NULL)
+        GL11C.nglTexImage2D(target.i, 0, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     // --- [ glTexImage2D ] --- default target
 
@@ -832,8 +831,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage2D">Reference Page</a>
      */
     fun texImage2D(level: Int, internalFormat: InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer? = null) =
-        GL11C.nglTexImage2D(GL11C.GL_TEXTURE_2D, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr
-                ?: NULL)
+        GL11C.nglTexImage2D(GL11C.GL_TEXTURE_2D, level, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     /**
      * Specifies a two-dimensional texture image.
@@ -847,8 +845,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexImage2D">Reference Page</a>
      */
     fun texImage2D(internalFormat: InternalFormat, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer? = null) =
-        GL11C.nglTexImage2D(GL11C.GL_TEXTURE_2D, 0, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr
-                ?: NULL)
+        GL11C.nglTexImage2D(GL11C.GL_TEXTURE_2D, 0, internalFormat.i, size.x, size.y, 0, format.i, type.i, pixels?.adr?.L ?: NULL)
 
     // --- [ glCopyTexImage1D ] --- TODO custom InternalFormat?
 
@@ -1015,7 +1012,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexSubImage1D">Reference Page</a>
      */
     fun texSubImage1D(level: Int, xOffset: Int, width: Int, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
-        GL11C.nglTexSubImage1D(GL11C.GL_TEXTURE_1D, level, xOffset, width, format.i, type.i, pixels.adr)
+        GL11C.nglTexSubImage1D(GL11C.GL_TEXTURE_1D, level, xOffset, width, format.i, type.i, pixels.adr.L)
 
     // --- [ glTexSubImage2D ] ---
 
@@ -1034,7 +1031,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexSubImage2D">Reference Page</a>
      */
     fun texSubImage2D(target: TextureTarget, level: Int, offset: Vec2i, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
-        GL11C.nglTexSubImage2D(target.i, level, offset.x, offset.y, size.x, size.y, format.i, type.i, pixels.adr)
+        GL11C.nglTexSubImage2D(target.i, level, offset.x, offset.y, size.x, size.y, format.i, type.i, pixels.adr.L)
 
     // default target
 
@@ -1052,7 +1049,7 @@ interface gl11i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexSubImage2D">Reference Page</a>
      */
     fun texSubImage2D(level: Int, offset: Vec2i, size: Vec2i, format: gl.ExternalFormat, type: gl.TypeFormat, pixels: Buffer) =
-        GL11C.nglTexSubImage2D(GL11C.GL_TEXTURE_2D, level, offset.x, offset.y, size.x, size.y, format.i, type.i, pixels.adr)
+        GL11C.nglTexSubImage2D(GL11C.GL_TEXTURE_2D, level, offset.x, offset.y, size.x, size.y, format.i, type.i, pixels.adr.L)
 
     // --- [ glViewport ] ---
 

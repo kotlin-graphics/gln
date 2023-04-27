@@ -6,7 +6,7 @@ import gln.GL_COMPRESSED_RGB_FXT1_3DFX
 import gln.GL_ETC1_RGB8_OES
 import gln.glGetVec2
 import kool.IntBuffer
-import kool.lib.toList
+import kool.toIntArray
 import kool.use
 import org.lwjgl.opengl.ATITextureCompression3DC.GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI
 import org.lwjgl.opengl.EXTTextureCompressionLATC.*
@@ -1158,7 +1158,7 @@ class Caps(val profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Bool
         private val compressed by lazy {
             IntBuffer(limits.NUM_COMPRESSED_TEXTURE_FORMATS).use { buffer ->
                 glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, buffer)
-                buffer.toList()
+                buffer.toIntArray()
             }
         }
 
@@ -1315,7 +1315,7 @@ class Caps(val profile: Profile = Profile.COMPATIBILITY, forwardCompatible: Bool
         @JvmField
         val ETC1_RGB8_OES = has(GL_ETC1_RGB8_OES)
 
-        private fun has(i: Int) = compressed.contains(i)
+        private fun has(i: Int) = i in compressed
 
         fun write(w: PrintWriter) = this::class.memberProperties.filter { it.visibility == KVisibility.PUBLIC }.map {
             w.println("${it.name} = ${it.getter.call(this)}")

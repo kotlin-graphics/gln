@@ -28,8 +28,8 @@ import glm_.vec4.Vec4
 import glm_.vec4.Vec4bool
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4t
-import gln.*
-import kool.Stack
+import gln.toOffHeap
+import gln.write
 import org.lwjgl.opengl.GL20C
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL40
@@ -374,7 +374,7 @@ fun glUniform4i(location: Int, vec4: Vec4bool) = GL20C.glUniform4i(location, vec
 
 // inferred length and type
 
-fun glUniform(location: Int, mat2: Mat2) = Stack.mat2Address(mat2) { GL20C.nglUniformMatrix2fv(location, 1, false, it) }
+fun glUniform(location: Int, mat2: Mat2) = GL20C.nglUniformMatrix2fv(location, 1, false, mat2.toOffHeap())
 
 fun glUniform(location: Int, mat2x3: Mat2x3) {
     TODO()
@@ -392,7 +392,7 @@ fun glUniform(location: Int, mat3x2: Mat3x2) {
 //    GL21.glUniformMatrix3x2fv(location, false, mat3x2 to m32Buf)
 }
 
-fun glUniform(location: Int, mat3: Mat3) = Stack.mat3Address(mat3) { GL20C.nglUniformMatrix3fv(location, 1, false, it) }
+fun glUniform(location: Int, mat3: Mat3) = GL20C.nglUniformMatrix3fv(location, 1, false, mat3.toOffHeap())
 
 fun glUniform(location: Int, mat3x4: Mat3x4) {
     TODO()
@@ -409,7 +409,7 @@ fun glUniform(location: Int, mat4x3: Mat4x3) {
 //    GL21.glUniformMatrix4x3fv(location, false, mat4x3 to m43Buf)
 }
 
-fun glUniform(location: Int, mat4: Mat4) = Stack.mat4Address(mat4) { GL20C.nglUniformMatrix4fv(location, 1, false, it) }
+fun glUniform(location: Int, mat4: Mat4) = GL20C.nglUniformMatrix4fv(location, 1, false, mat4.toOffHeap())
 
 // TODO double mat and vectors
 //fun glUniform(location: Int, mat2: Mat2) = GL40.glUniformMatrix2dv(location, false, mat2 to m2Buf)

@@ -5,10 +5,9 @@ package gln.framebuffer
 import gln.Attachment
 import gln.ColorEncoding
 import gln.FramebufferTarget
-import gln.identifiers.GlTexture
 import gln.identifiers.GlRenderbuffer
+import gln.identifiers.GlTexture
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL32
 import java.nio.IntBuffer

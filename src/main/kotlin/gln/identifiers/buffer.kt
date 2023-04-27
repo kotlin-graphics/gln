@@ -89,8 +89,7 @@ value class GlBuffer(val name: Int = -1) {
         return GlBufferDsl.block()
     }
 
-    inline fun <R> bound(target: BufferTarget, block: GlBufferDsl.() -> R): R =
-            bind(target, block).also { GL15C.glBindBuffer(target.i, 0) }
+    inline fun <R> bound(target: BufferTarget, block: GlBufferDsl.() -> R): R = bind(target, block).also { GL15C.glBindBuffer(target.i, 0) }
 
     fun bindBase(target: BufferTarget, index: Int) = GL30.glBindBufferBase(target.i, index, name)
 
@@ -105,14 +104,14 @@ value class GlBuffer(val name: Int = -1) {
 
     fun data(target: BufferTarget, size: Int, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, size.L, NULL, usage.i)
 
-    fun data(target: BufferTarget, data: Buffer, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remByte.L, data.adr, usage.i)
+    fun data(target: BufferTarget, data: Buffer, usage: Usage = Usage.STATIC_DRAW) = GL15C.nglBufferData(target.i, data.remByte.L, data.adr.L, usage.i)
 
     // --- [ glBufferStorage ] ---
 
     fun storage(target: BufferTarget, data: Buffer, flags: BufferStorageFlags) = gl.bufferStorage(target, data, flags)
 
-    fun subData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remByte.L, data.adr)
-    fun subData(target: BufferTarget, data: Buffer) = GL15C.nglBufferSubData(target.i, 0, data.remByte.L, data.adr)
+    fun subData(target: BufferTarget, offset: Int, data: Buffer) = GL15C.nglBufferSubData(target.i, offset.L, data.remByte.L, data.adr.L)
+    fun subData(target: BufferTarget, data: Buffer) = GL15C.nglBufferSubData(target.i, 0, data.remByte.L, data.adr.L)
 
     fun map(target: BufferTarget, access: BufferAccess): ByteBuffer? {
         val ptr = GL15C.nglMapBuffer(target.i, access.i)
@@ -125,7 +124,7 @@ value class GlBuffer(val name: Int = -1) {
 
     // --- [ glInvalidateBufferSubData ] ---
 
-    fun invalidateSubData(offset: Ptr, length: Ptr) = gl.invalidateBufferSubData(this, offset, length)
+    fun invalidateSubData(offset: Ptr<Byte>, length: Ptr<Byte>) = gl.invalidateBufferSubData(this, offset, length)
 
     // --- [ glInvalidateBufferData ] ---
 
@@ -173,8 +172,8 @@ value class GlBuffer(val name: Int = -1) {
 
     // --- [ glGetNamedBufferPointerv ] ---
 
-    val pointer: Ptr
-        get() = GL15C.glGetBufferPointer(name, GL15C.GL_BUFFER_MAP_POINTER)
+    val pointer: Ptr<Byte>
+        get() = GL15C.glGetBufferPointer(name, GL15C.GL_BUFFER_MAP_POINTER).toPtr()
 
 
     companion object {
@@ -231,7 +230,7 @@ value class GlBuffers(val names: IntBuffer) {
 
     // --- [ glDeleteBuffers ] ---
 
-    fun delete() = GL15C.nglDeleteBuffers(names.rem, names.adr)
+    fun delete() = GL15C.nglDeleteBuffers(names.rem, names.adr.L)
 
     operator fun get(index: Int): GlBuffer = GlBuffer(names[index])
     operator fun set(index: Int, buffer: GlBuffer) {

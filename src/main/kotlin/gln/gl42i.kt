@@ -134,8 +134,8 @@ interface gl42i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsInstancedBaseInstance">Reference Page</a>
      */
-    fun drawElementsInstancedBaseInstance(mode: DrawMode, count: Int, type: IndexType, indices: Ptr, primCount: Int, baseInstance: Int) =
-        GL42C.nglDrawElementsInstancedBaseInstance(mode.i, count, type.i, indices, primCount, baseInstance)
+    fun drawElementsInstancedBaseInstance(mode: DrawMode, count: Int, type: IndexType, indices: Ptr<*>, primCount: Int, baseInstance: Int) =
+        GL42C.nglDrawElementsInstancedBaseInstance(mode.i, count, type.i, indices.adr.L, primCount, baseInstance)
 
 //    /** TODO?
 //     * Draws multiple instances of a set of elements with an offset applied to instanced attributes
@@ -209,8 +209,8 @@ interface gl42i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDrawElementsInstancedBaseVertexBaseInstance">Reference Page</a>
      */
-    fun drawElementsInstancedBaseVertexBaseInstance(mode: DrawMode, count: Int, type: IndexType, indices: Ptr, primCount: Int, baseVertex: Int, baseInstance: Int) =
-            GL42C.nglDrawElementsInstancedBaseVertexBaseInstance(mode.i, count, type.i, indices, primCount, baseVertex, baseInstance)
+    fun drawElementsInstancedBaseVertexBaseInstance(mode: DrawMode, count: Int, type: IndexType, indices: Ptr<*>, primCount: Int, baseVertex: Int, baseInstance: Int) =
+            GL42C.nglDrawElementsInstancedBaseVertexBaseInstance(mode.i, count, type.i, indices.adr.L, primCount, baseVertex, baseInstance)
 
 //    /**
 //     * Renders multiple instances of a set of primitives from array data with a per-element offset.

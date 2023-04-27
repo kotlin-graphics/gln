@@ -2,6 +2,7 @@ package gln.transformFeedback
 
 import gln.DrawMode
 import gln.GetTransformFeedback
+import gln.L
 import gln.gl
 import gln.identifiers.GlBuffer
 import kool.IntBuffer
@@ -18,7 +19,7 @@ value class GlTransformFeedbacks(val names: IntBuffer) {
         get() = names.rem
 
     inline val adr: Long
-        get() = names.adr
+        get() = names.adr.L
 
     // --- [ glCreateTransformFeedbacks ] ---
 
