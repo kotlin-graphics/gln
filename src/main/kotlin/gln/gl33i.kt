@@ -45,8 +45,8 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocationIndexed">Reference Page</a>
      */
-    fun bindFragDataLocationIndexed(program: GlProgram, colorNumber: Int, index: Int, name: CharSequence) =
-            stack.writeAsciiToAdr(name) { GL33C.nglBindFragDataLocationIndexed(program.name, colorNumber, index, it.L) }
+    fun bindFragDataLocationIndexed(program: GlProgram, colorNumber: Int, index: Int, name: String) =
+            stack.writeAscii(name) { GL33C.nglBindFragDataLocationIndexed(program.name, colorNumber, index, it.adr.L) }
 
     // --- [ glGetFragDataIndex ] ---
 
@@ -58,8 +58,8 @@ interface gl33i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataIndex">Reference Page</a>
      */
-    fun getFragDataIndex(program: GlProgram, name: CharSequence) =
-            stack.writeAsciiToAdr(name) { GL33C.nglGetFragDataIndex(program.name, it.L) }
+    fun getFragDataIndex(program: GlProgram, name: String) =
+            stack.writeAscii(name) { GL33C.nglGetFragDataIndex(program.name, it.adr.L) }
 
     // --- [ glGenSamplers ] ---
 

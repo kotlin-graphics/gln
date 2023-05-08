@@ -567,8 +567,8 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineUniformLocation">Reference Page</a>
      */
-    fun getSubroutineUniformLocation(program: GlProgram, shaderType: ShaderType, name: CharSequence) =
-        stack.writeAsciiToAdr(name) { GL40C.nglGetSubroutineUniformLocation(program.name, shaderType.i, it.L) }
+    fun getSubroutineUniformLocation(program: GlProgram, shaderType: ShaderType, name: String) =
+        stack.writeAscii(name) { GL40C.nglGetSubroutineUniformLocation(program.name, shaderType.i, it.adr.L) }
 
     // --- [ glGetSubroutineIndex ] ---
 
@@ -581,8 +581,8 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineIndex">Reference Page</a>
      */
-    fun getSubroutineIndex(program: GlProgram, shaderType: ShaderType, name: CharSequence) =
-        stack.writeAsciiToAdr(name) { GL40C.nglGetSubroutineIndex(program.name, shaderType.i, it.L) }
+    fun getSubroutineIndex(program: GlProgram, shaderType: ShaderType, name: String) =
+        stack.writeAscii(name) { GL40C.nglGetSubroutineIndex(program.name, shaderType.i, it.adr.L) }
 
     // --- [ glGetSubroutineIndex / glGetSubroutineUniformLocation ] ---
 
@@ -594,7 +594,7 @@ interface gl40i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineUniformLocation">Reference Page</a>
      */
-    fun getSubroutine(program: GlProgram, shaderType: ShaderType, name: CharSequence): Subroutine =
+    fun getSubroutine(program: GlProgram, shaderType: ShaderType, name: String): Subroutine =
         Subroutine(getSubroutineIndex(program, shaderType, name) to getSubroutineUniformLocation(program, shaderType, name))
 
     // --- [ glGetActiveSubroutineUniformiv ] ---
@@ -643,11 +643,8 @@ interface gl40i {
      */
     fun getActiveSubroutineUniformName(program: GlProgram, shaderType: ShaderType, index: Int,
                                        bufSize: Int = getActiveSubroutineUniform(program, shaderType, index, GetActiveSubroutineUniform.UNIFORM_NAME_LENGTH)): String =
-        stack {
-            val pString = it.nmalloc(1, bufSize)
-            val pLength = it.nmalloc(Int.BYTES, Int.BYTES)
-            GL40C.nglGetActiveSubroutineUniformName(program.name, shaderType.i, index, bufSize, pLength, pString)
-            MemoryUtil.memASCII(pString, memGetInt(pLength))
+        stack.readAscii(bufSize) { pName, pSize ->
+            GL40C.nglGetActiveSubroutineUniformName(program.name, shaderType.i, index, bufSize, pSize.adr.L, pName.adr.L)
         }
 
     // --- [ glGetActiveSubroutineName ] ---
@@ -664,11 +661,8 @@ interface gl40i {
      */
     fun getActiveSubroutineName(program: GlProgram, shaderType: ShaderType, index: Int,
                                 bufSize: Int = GL40C.glGetProgramStagei(program.name, shaderType.i, GL40C.GL_ACTIVE_SUBROUTINE_MAX_LENGTH)): String =
-        stack {
-            val pString = it.nmalloc(1, bufSize)
-            val pLength = it.nmalloc(Int.BYTES, Int.BYTES)
-            GL40C.nglGetActiveSubroutineName(program.name, shaderType.i, index, bufSize, pLength, pString)
-            MemoryUtil.memASCII(pString, memGetInt(pLength))
+        stack.readAscii(bufSize) { pName, pSize ->
+            GL40C.nglGetActiveSubroutineName(program.name, shaderType.i, index, bufSize, pSize.adr.L, pName.adr.L)
         }
 
     // --- [ glUniformSubroutinesuiv ] ---

@@ -23,6 +23,7 @@ import glm_.vec4.Vec4d
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
 import gln.*
+import gln.glnIdentifiers.Variable
 import gln.program.ProgramBase
 import gln.program.ProgramUse
 import kool.ByteBuffer
@@ -90,7 +91,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindFragDataLocationIndexed">Reference Page</a>
      */
-    fun bindFragDataLocationIndexed(colorNumber: Int, index: Int, name: CharSequence) = gl.bindFragDataLocationIndexed(this, colorNumber, index, name)
+    fun bindFragDataLocationIndexed(colorNumber: Int, index: Int, name: String) = gl.bindFragDataLocationIndexed(this, colorNumber, index, name)
 
     // --- [ glDeleteProgram ] ---
 
@@ -104,7 +105,11 @@ value class GlProgram(val name: Int) {
 
     // --- [ glGetActiveAttrib ] ---
 
-    fun getActiveAttrib(index: Int): Triple<String, Int, AttributeType> = gl.getActiveAttrib(this, index)
+    infix fun getActiveAttrib(index: Int): Variable.ActiveAttribute = gl.getActiveAttrib(this, index)
+
+    // [gln]
+    val attribs: Array<Variable.ActiveAttribute>
+        get() = Array(activeUniforms) { Variable.ActiveAttribute(this, it) }
 
     // --- [ glGetActiveSubroutineName ] ---
 
@@ -157,7 +162,11 @@ value class GlProgram(val name: Int) {
 
     // --- [ glGetActiveUniform ] ---
 
-    infix fun getActiveUniform(index: Int): Triple<String, Int, UniformType> = gl.getActiveUniform(this, index)
+    infix fun getActiveUniform(index: Int): Variable.ActiveUniform = gl.getActiveUniform(this, index)
+
+    // [gln]
+    val uniforms: Array<Variable.ActiveUniform>
+        get() = Array(activeUniforms) { Variable.ActiveUniform(this, it) }
 
     // --- [ glGetAttachedShaders ] ---
 
@@ -177,7 +186,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetFragDataIndex">Reference Page</a>
      */
-    infix fun getFragDataIndex(name: CharSequence): Int = gl.getFragDataIndex(this, name)
+    infix fun getFragDataIndex(name: String): Int = gl.getFragDataIndex(this, name)
 
     // --- [ glGetProgramiv ] ---
 
@@ -253,7 +262,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResource">Reference Page</a>
      */
-    fun getResource(programInterface: ProgramInterface, index: Int, props: Int): Int = gl.getProgramResource(this, programInterface, index, props)
+    fun getResource(programInterface: ProgramInterface, index: Int, props: ProgramProperty): Int = gl.getProgramResource(this, programInterface, index, props)
 
     /**
      * Retrieves values for multiple properties of a single active resource within a program object.
@@ -278,7 +287,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceIndex">Reference Page</a>
      */
-    fun getResourceIndex(programInterface: ProgramInterface, name: CharSequence): Int = gl.getProgramResourceIndex(this, programInterface, name)
+    fun getResourceIndex(programInterface: ProgramInterface, name: String): Int = gl.getProgramResourceIndex(this, programInterface, name)
 
     // --- [ glGetProgramResourceLocation ] ---
 
@@ -291,7 +300,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceLocation">Reference Page</a>
      */
-    fun getResourceLocation(programInterface: ProgramInterface, name: CharSequence): Int = gl.getProgramResourceLocation(this, programInterface, name)
+    fun getResourceLocation(programInterface: ProgramInterface, name: String): Int = gl.getProgramResourceLocation(this, programInterface, name)
 
     // --- [ glGetProgramResourceLocationIndex ] ---
 
@@ -303,7 +312,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceLocationIndex">Reference Page</a>
      */
-    fun getResourceLocationIndex(programInterface: ProgramInterface, name: CharSequence) = gl.getProgramResourceLocationIndex(this, programInterface, name)
+    fun getResourceLocationIndex(programInterface: ProgramInterface, name: String) = gl.getProgramResourceLocationIndex(this, programInterface, name)
 
     // --- [ glGetProgramResourceName ] ---
 
@@ -316,7 +325,8 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceName">Reference Page</a>
      */
-    fun getResourceName(programInterface: ProgramInterface, index: Int, bufSize: Int = getProgramInterface(programInterface, GetProgramInterface.MAX_NAME_LENGTH)): String = gl.getProgramResourceName(this, programInterface, index, bufSize)
+    fun getResourceName(programInterface: ProgramInterface, index: Int, bufSize: Int = getProgramInterface(programInterface, GetProgramInterface.MAX_NAME_LENGTH)): String =
+            gl.getProgramResourceName(this, programInterface, index, bufSize)
 
     // --- [ glGetProgramStageiv ] ---
 
@@ -340,7 +350,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineIndex">Reference Page</a>
      */
-    fun getSubroutineIndex(shaderType: ShaderType, name: CharSequence): Int = gl.getSubroutineIndex(this, shaderType, name)
+    fun getSubroutineIndex(shaderType: ShaderType, name: String): Int = gl.getSubroutineIndex(this, shaderType, name)
 
     // --- [ glGetSubroutineUniformLocation ] ---
 
@@ -352,7 +362,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineUniformLocation">Reference Page</a>
      */
-    fun getSubroutineUniformLocation(shaderType: ShaderType, name: CharSequence): Int = gl.getSubroutineUniformLocation(this, shaderType, name)
+    fun getSubroutineUniformLocation(shaderType: ShaderType, name: String): Int = gl.getSubroutineUniformLocation(this, shaderType, name)
 
     // --- [ glGetSubroutineIndex / glGetSubroutineUniformLocation ] ---
 
@@ -364,7 +374,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetSubroutineUniformLocation">Reference Page</a>
      */
-    fun getSubroutine(shaderType: ShaderType, name: CharSequence): Subroutine = gl.getSubroutine(this, shaderType, name)
+    fun getSubroutine(shaderType: ShaderType, name: String): Subroutine = gl.getSubroutine(this, shaderType, name)
 
     // --- [ glGetUniform* ] ---
 
@@ -499,7 +509,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformIndices">Reference Page</a>
      */
-    fun getUniformIndices(uniformNames: Array<CharSequence>): IntArray = gl.getUniformIndices(this, uniformNames)
+    fun getUniformIndices(uniformNames: Array<String>): IntArray = gl.getUniformIndices(this, uniformNames)
 
     // --- [ glGetActiveUniformsiv ] --- TODO rename?
 
@@ -545,7 +555,7 @@ value class GlProgram(val name: Int) {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetUniformBlockIndex">Reference Page</a>
      */
-    infix fun getUniformBlockIndex(uniformBlockName: CharSequence): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
+    infix fun getUniformBlockIndex(uniformBlockName: String): UniformBlockIndex = gl.getUniformBlockIndex(this, uniformBlockName)
 
     // --- [ glGetActiveUniformBlockiv ] ---
 

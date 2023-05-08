@@ -6667,44 +6667,45 @@ value class VertexAttrType(val i: Int) { // TODO -> VertexAttribType?
 
 //###############################################################################
 
-@JvmInline
-value class AttributeType(val i: Int) {
-    companion object {
-        val FLOAT = AttributeType(GL11.GL_FLOAT)
-        val FLOAT_VEC2 = AttributeType(GL20.GL_FLOAT_VEC2)
-        val FLOAT_VEC3 = AttributeType(GL20.GL_FLOAT_VEC3)
-        val FLOAT_VEC4 = AttributeType(GL20.GL_FLOAT_VEC4)
-        val FLOAT_MAT2 = AttributeType(GL20.GL_FLOAT_MAT2)
-        val FLOAT_MAT3 = AttributeType(GL20.GL_FLOAT_MAT3)
-        val FLOAT_MAT4 = AttributeType(GL20.GL_FLOAT_MAT4)
-        val FLOAT_MAT2x3 = AttributeType(GL21.GL_FLOAT_MAT2x3)
-        val FLOAT_MAT2x4 = AttributeType(GL21.GL_FLOAT_MAT2x4)
-        val FLOAT_MAT3x2 = AttributeType(GL21.GL_FLOAT_MAT3x2)
-        val FLOAT_MAT3x4 = AttributeType(GL21.GL_FLOAT_MAT3x4)
-        val FLOAT_MAT4x2 = AttributeType(GL21.GL_FLOAT_MAT4x2)
-        val FLOAT_MAT4x3 = AttributeType(GL21.GL_FLOAT_MAT4x3)
-        val INT_VEC2 = AttributeType(GL20.GL_INT_VEC2)
-        val INT_VEC3 = AttributeType(GL20.GL_INT_VEC3)
-        val INT_VEC4 = AttributeType(GL20.GL_INT_VEC4)
-        val UNSIGNED_INT = AttributeType(GL11.GL_UNSIGNED_INT)
-        val UNSIGNED_INT_VEC2 = AttributeType(GL30.GL_UNSIGNED_INT_VEC2)
-        val UNSIGNED_INT_VEC3 = AttributeType(GL30.GL_UNSIGNED_INT_VEC3)
-        val UNSIGNED_INT_VEC4 = AttributeType(GL30.GL_UNSIGNED_INT_VEC4)
-        val DOUBLE = AttributeType(GL11.GL_DOUBLE)
-        val DOUBLE_VEC2 = AttributeType(GL40.GL_DOUBLE_VEC2)
-        val DOUBLE_VEC3 = AttributeType(GL40.GL_DOUBLE_VEC3)
-        val DOUBLE_VEC4 = AttributeType(GL40.GL_DOUBLE_VEC4)
-        val DOUBLE_MAT2 = AttributeType(GL40.GL_DOUBLE_MAT2)
-        val DOUBLE_MAT3 = AttributeType(GL40.GL_DOUBLE_MAT3)
-        val DOUBLE_MAT4 = AttributeType(GL40.GL_DOUBLE_MAT4)
-        val DOUBLE_MAT2x3 = AttributeType(GL40.GL_DOUBLE_MAT2x3)
-        val DOUBLE_MAT2x4 = AttributeType(GL40.GL_DOUBLE_MAT2x4)
-        val DOUBLE_MAT3x2 = AttributeType(GL40.GL_DOUBLE_MAT3x2)
-        val DOUBLE_MAT3x4 = AttributeType(GL40.GL_DOUBLE_MAT3x4)
-        val DOUBLE_MAT4x2 = AttributeType(GL40.GL_DOUBLE_MAT4x2)
-        val DOUBLE_MAT4x3 = AttributeType(GL40.GL_DOUBLE_MAT4x3)
-    }
-}
+// AttributeType -> Attribute.Type
+//@JvmInline
+//value class AttributeType(val i: Int) {
+//    companion object {
+//        val FLOAT = AttributeType(GL11.GL_FLOAT)
+//        val FLOAT_VEC2 = AttributeType(GL20.GL_FLOAT_VEC2)
+//        val FLOAT_VEC3 = AttributeType(GL20.GL_FLOAT_VEC3)
+//        val FLOAT_VEC4 = AttributeType(GL20.GL_FLOAT_VEC4)
+//        val FLOAT_MAT2 = AttributeType(GL20.GL_FLOAT_MAT2)
+//        val FLOAT_MAT3 = AttributeType(GL20.GL_FLOAT_MAT3)
+//        val FLOAT_MAT4 = AttributeType(GL20.GL_FLOAT_MAT4)
+//        val FLOAT_MAT2x3 = AttributeType(GL21.GL_FLOAT_MAT2x3)
+//        val FLOAT_MAT2x4 = AttributeType(GL21.GL_FLOAT_MAT2x4)
+//        val FLOAT_MAT3x2 = AttributeType(GL21.GL_FLOAT_MAT3x2)
+//        val FLOAT_MAT3x4 = AttributeType(GL21.GL_FLOAT_MAT3x4)
+//        val FLOAT_MAT4x2 = AttributeType(GL21.GL_FLOAT_MAT4x2)
+//        val FLOAT_MAT4x3 = AttributeType(GL21.GL_FLOAT_MAT4x3)
+//        val INT_VEC2 = AttributeType(GL20.GL_INT_VEC2)
+//        val INT_VEC3 = AttributeType(GL20.GL_INT_VEC3)
+//        val INT_VEC4 = AttributeType(GL20.GL_INT_VEC4)
+//        val UNSIGNED_INT = AttributeType(GL11.GL_UNSIGNED_INT)
+//        val UNSIGNED_INT_VEC2 = AttributeType(GL30.GL_UNSIGNED_INT_VEC2)
+//        val UNSIGNED_INT_VEC3 = AttributeType(GL30.GL_UNSIGNED_INT_VEC3)
+//        val UNSIGNED_INT_VEC4 = AttributeType(GL30.GL_UNSIGNED_INT_VEC4)
+//        val DOUBLE = AttributeType(GL11.GL_DOUBLE)
+//        val DOUBLE_VEC2 = AttributeType(GL40.GL_DOUBLE_VEC2)
+//        val DOUBLE_VEC3 = AttributeType(GL40.GL_DOUBLE_VEC3)
+//        val DOUBLE_VEC4 = AttributeType(GL40.GL_DOUBLE_VEC4)
+//        val DOUBLE_MAT2 = AttributeType(GL40.GL_DOUBLE_MAT2)
+//        val DOUBLE_MAT3 = AttributeType(GL40.GL_DOUBLE_MAT3)
+//        val DOUBLE_MAT4 = AttributeType(GL40.GL_DOUBLE_MAT4)
+//        val DOUBLE_MAT2x3 = AttributeType(GL40.GL_DOUBLE_MAT2x3)
+//        val DOUBLE_MAT2x4 = AttributeType(GL40.GL_DOUBLE_MAT2x4)
+//        val DOUBLE_MAT3x2 = AttributeType(GL40.GL_DOUBLE_MAT3x2)
+//        val DOUBLE_MAT3x4 = AttributeType(GL40.GL_DOUBLE_MAT3x4)
+//        val DOUBLE_MAT4x2 = AttributeType(GL40.GL_DOUBLE_MAT4x2)
+//        val DOUBLE_MAT4x3 = AttributeType(GL40.GL_DOUBLE_MAT4x3)
+//    }
+//}
 
 //###############################################################################
 
@@ -7321,6 +7322,42 @@ value class FramebufferParameter(val i: Int) {
         val DEFAULT_LAYERS = FramebufferParameter(GL43C.GL_FRAMEBUFFER_DEFAULT_LAYERS)
         val DEFAULT_SAMPLES = FramebufferParameter(GL43C.GL_FRAMEBUFFER_DEFAULT_SAMPLES)
         val DEFAULT_FIXED_SAMPLE_LOCATIONS = FramebufferParameter(GL43C.GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS)
+    }
+}
+
+@JvmInline
+value class ProgramProperty(val i: Int) {
+    companion object {
+        val NAME_LENGTH = ProgramProperty(GL43.GL_NAME_LENGTH)
+        val TYPE = ProgramProperty(GL43.GL_TYPE)
+        val ARRAY_SIZE = ProgramProperty(GL43.GL_ARRAY_SIZE)
+        val OFFSET = ProgramProperty(GL43.GL_OFFSET)
+        val BLOCK_INDEX = ProgramProperty(GL43.GL_BLOCK_INDEX)
+        val ARRAY_STRIDE = ProgramProperty(GL43.GL_ARRAY_STRIDE)
+        val MATRIX_STRIDE = ProgramProperty(GL43.GL_MATRIX_STRIDE)
+        val IS_ROW_MAJOR = ProgramProperty(GL43.GL_IS_ROW_MAJOR)
+        val ATOMIC_COUNTER_BUFFER_INDEX = ProgramProperty(GL43.GL_ATOMIC_COUNTER_BUFFER_INDEX)
+        val TEXTURE_BUFFER = ProgramProperty(GL43.GL_TEXTURE_BUFFER)
+        val BUFFER_BINDING = ProgramProperty(GL43.GL_BUFFER_BINDING)
+        val BUFFER_DATA_SIZE = ProgramProperty(GL43.GL_BUFFER_DATA_SIZE)
+        val NUM_ACTIVE_VARIABLES = ProgramProperty(GL43.GL_NUM_ACTIVE_VARIABLES)
+        val ACTIVE_VARIABLES = ProgramProperty(GL43.GL_ACTIVE_VARIABLES)
+        val REFERENCED_BY_VERTEX_SHADER = ProgramProperty(GL43.GL_REFERENCED_BY_VERTEX_SHADER)
+        val REFERENCED_BY_TESS_CONTROL_SHADER = ProgramProperty(GL43.GL_REFERENCED_BY_TESS_CONTROL_SHADER)
+        val REFERENCED_BY_TESS_EVALUATION_SHADER = ProgramProperty(GL43.GL_REFERENCED_BY_TESS_EVALUATION_SHADER)
+        val REFERENCED_BY_GEOMETRY_SHADER = ProgramProperty(GL43.GL_REFERENCED_BY_GEOMETRY_SHADER)
+        val REFERENCED_BY_FRAGMENT_SHADER = ProgramProperty(GL43.GL_REFERENCED_BY_FRAGMENT_SHADER)
+        val REFERENCED_BY_COMPUTE_SHADER = ProgramProperty(GL43.GL_REFERENCED_BY_COMPUTE_SHADER)
+        val NUM_COMPATIBLE_SUBROUTINES = ProgramProperty(GL43.GL_NUM_COMPATIBLE_SUBROUTINES)
+        val COMPATIBLE_SUBROUTINES = ProgramProperty(GL43.GL_COMPATIBLE_SUBROUTINES)
+        val TOP_LEVEL_ARRAY_SIZE = ProgramProperty(GL43.GL_TOP_LEVEL_ARRAY_SIZE)
+        val TOP_LEVEL_ARRAY_STRIDE = ProgramProperty(GL43.GL_TOP_LEVEL_ARRAY_STRIDE)
+        val LOCATION = ProgramProperty(GL43.GL_LOCATION)
+        val LOCATION_INDEX = ProgramProperty(GL43.GL_LOCATION_INDEX)
+        val IS_PER_PATCH = ProgramProperty(GL43.GL_IS_PER_PATCH)
+        val LOCATION_COMPONENT = ProgramProperty(GL44.GL_LOCATION_COMPONENT)
+        val TRANSFORM_FEEDBACK_BUFFER_INDEX = ProgramProperty(GL44.GL_TRANSFORM_FEEDBACK_BUFFER_INDEX)
+        val TRANSFORM_FEEDBACK_BUFFER_STRIDE = ProgramProperty(GL44.GL_TRANSFORM_FEEDBACK_BUFFER_STRIDE)
     }
 }
 

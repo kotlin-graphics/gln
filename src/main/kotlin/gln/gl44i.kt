@@ -89,7 +89,7 @@ interface gl44i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferStorage">Reference Page</a>
      */
     fun bufferStorage(target: BufferTarget, data: Buffer, flags: BufferStorageFlags) =
-            GL44C.nglBufferStorage(target.i, data.rem.L, data.adr, flags)
+            GL44C.nglBufferStorage(target.i, data.rem.L, data.adr.L, flags)
 
     // --- [ glClearTexSubImage ] ---
 
@@ -120,8 +120,8 @@ interface gl44i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearTexSubImage">Reference Page</a>
      */
     fun clearTexSubImage(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i, format: TextureFormat, type: TextureType, data: Buffer? = null) =
-            GL44C.nglClearTexSubImage(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i, data?.adr
-                    ?: NULL)
+            GL44C.nglClearTexSubImage(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format.i, type.i,
+                    data?.adr?.L ?: NULL)
 
     // --- [ glClearTexImage ] ---
 
@@ -141,7 +141,7 @@ interface gl44i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearTexImage">Reference Page</a>
      */
     fun clearTexImage(texture: GlTexture, level: Int, format: TextureFormat, type: TextureType, data: Buffer? = null) =
-            GL44C.nglClearTexImage(texture.name, level, format.i, type.i, data?.adr ?: NULL)
+            GL44C.nglClearTexImage(texture.name, level, format.i, type.i, data?.adr?.L ?: NULL)
 
     // --- [ glBindBuffersBase ] ---
 
@@ -168,7 +168,7 @@ interface gl44i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindBuffersBase">Reference Page</a>
      */
     fun bindBuffersBase(target: BufferTarget, first: Int, buffers: GlBuffers?) =
-            GL44C.nglBindBuffersBase(target.i, first, buffers?.rem ?: 0, buffers?.adr ?: NULL)
+            GL44C.nglBindBuffersBase(target.i, first, buffers?.rem ?: 0, buffers?.adr?.L ?: NULL)
 
     // --- [ glBindBuffersRange ] ---
 
@@ -203,7 +203,8 @@ interface gl44i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindBuffersRange">Reference Page</a>
      */
     fun bindBuffersRange(target: BufferTarget, first: Int, buffers: GlBuffers?, offsets: IntBuffer? = null, sizes: IntBuffer? = null) =
-            GL44C.nglBindBuffersRange(target.i, first, buffers?.rem ?: 0, buffers?.adr ?: NULL, offsets?.adr ?: NULL, sizes?.adr ?: NULL)
+            GL44C.nglBindBuffersRange(target.i, first, buffers?.rem ?: 0, buffers?.adr?.L ?: NULL,
+                    offsets?.adr?.L ?: NULL, sizes?.adr?.L ?: NULL)
 
     // --- [ glBindTextures ] ---
 
@@ -279,7 +280,7 @@ interface gl44i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindSamplers">Reference Page</a>
      */
     fun bindSamplers(first: Int, samplers: GlSamplers? = null) =
-            GL44C.nglBindSamplers(first, samplers?.rem ?: 0, samplers?.adr ?: NULL)
+            GL44C.nglBindSamplers(first, samplers?.rem ?: 0, samplers?.adr?.L ?: NULL)
 
     // --- [ glBindImageTextures ] ---
 
@@ -357,5 +358,6 @@ interface gl44i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindVertexBuffers">Reference Page</a>
      */
     fun bindVertexBuffers(first: Int, buffers: GlBuffers? = null, offsets: LongBuffer? = null, strides: IntBuffer? = null) =
-            GL44C.nglBindVertexBuffers(first, buffers?.rem ?: 0, buffers?.adr ?: NULL, offsets?.adr ?: NULL, strides?.adr ?: NULL)
+            GL44C.nglBindVertexBuffers(first, buffers?.rem ?: 0, buffers?.adr?.L ?: NULL,
+                    offsets?.adr?.L ?: NULL, strides?.adr?.L ?: NULL)
 }

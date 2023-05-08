@@ -8,6 +8,7 @@ import glm_.vec3.Vec3i
 import glm_.vec4.Vec4
 import glm_.vec4.Vec4i
 import gln.L
+import gln.offHeapAdr
 import gln.offHeapPtr
 import gln.plus
 import kool.*

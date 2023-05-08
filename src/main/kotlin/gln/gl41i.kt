@@ -31,8 +31,7 @@ import kool.*
 import org.lwjgl.opengl.GL40C
 import org.lwjgl.opengl.GL41C
 import org.lwjgl.system.MemoryUtil
-import org.lwjgl.system.MemoryUtil.NULL
-import org.lwjgl.system.MemoryUtil.memGetInt
+import org.lwjgl.system.MemoryUtil.*
 import unsigned.Uint
 import java.nio.ByteBuffer
 import java.nio.DoubleBuffer
@@ -228,11 +227,14 @@ interface gl41i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateShaderProgramv">Reference Page</a>
      */
-    fun createShaderProgram(type: ShaderType, vararg strings: CharSequence): GlProgram =
+    fun createShaderProgram(type: ShaderType, vararg strings: String): GlProgram =
         stack {
-            val pStrings = it.PointerBuffer(strings.size)
-            for (i in strings.indices) pStrings[i] = it.UTF8(strings[i])
-            GlProgram(GL41C.nglCreateShaderProgramv(type.i, 1, pStrings.adr.L))
+            val pStrings = it.nmalloc(8, strings.size shl 3)
+            for (i in strings.indices) {
+                it.nUTF8(strings[i], true)
+                memPutLong(pStrings + i * 8, it.pointerAddress)
+            }
+            GlProgram(GL41C.nglCreateShaderProgramv(type.i, 1, pStrings))
         }
 
     // --- [ glBindProgramPipeline ] ---
@@ -1482,11 +1484,8 @@ interface gl41i {
      */
     fun getProgramPipelineInfoLog(pipeline: GlPipeline,
                                   bufSize: Int = getProgramPipeline(pipeline, GetProgramPipeline.INFO_LOG_LENGTH)): String =
-        stack {
-            val pString = it.nmalloc(1, bufSize)
-            val pLength = it.nmalloc(Int.BYTES, Int.BYTES)
-            GL41C.nglGetProgramPipelineInfoLog(pipeline.name, bufSize, pLength, pString)
-            MemoryUtil.memASCII(pString, memGetInt(pLength))
+        stack.readAscii(bufSize) { pString, pLength ->
+            GL41C.nglGetProgramPipelineInfoLog(pipeline.name, bufSize, pLength.adr.L, pString.adr.L)
         }
 
     // --- [ glVertexAttribL1d ] ---

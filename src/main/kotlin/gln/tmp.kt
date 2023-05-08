@@ -1,6 +1,7 @@
 package gln
 
 import glm_.b
+import glm_.bool
 import glm_.mat2x2.Mat2
 import glm_.mat2x2.Mat2d
 import glm_.mat3x3.Mat3
@@ -15,10 +16,8 @@ import glm_.vec3.Vec3
 import glm_.vec3.Vec3d
 import glm_.vec3.Vec3i
 import glm_.vec3.Vec3ui
-import glm_.vec4.Vec4
-import glm_.vec4.Vec4d
+import glm_.vec4.*
 import glm_.vec4.Vec4i
-import glm_.vec4.Vec4ui
 import kool.*
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
@@ -157,6 +156,12 @@ fun Vec3.toOffHeap(): Long {
 inline fun readVec4i(block: (Long) -> Unit): Vec4i {
     block(offHeapAdr)
     return Vec4i(offHeapPtr.toPtr())
+}
+
+inline fun readVec4bool(block: (Long) -> Unit): Vec4bool {
+    block(offHeapAdr)
+    val p = offHeapPtr.toPtr<Byte>()
+    return Vec4bool { p[it].bool }
 }
 
 fun Vec4i.toOffHeap(): Long {
@@ -336,7 +341,7 @@ inline infix fun Mat4.write(block: (Long) -> Unit) {
 //inline fun MemoryStack.vec3uiAddress(block: (Ptr) -> Unit): Vec3ui = Vec3ui.fromPointer(nmalloc(4, Vec3ui.size).also(block))
 //inline fun MemoryStack.vec4uiAddress(block: (Ptr) -> Unit): Vec4ui = Vec4ui.fromPointer(nmalloc(4, Vec4ui.size).also(block))
 
-inline fun <R> stack.writeAscii(text: CharSequence, nullTerminated: Boolean = true, block: (Ptr<String>) -> R) = with {
+inline fun <R> stack.writeAscii(text: String, nullTerminated: Boolean = true, block: (Ptr<String>) -> R) = with {
     nASCII(text, nullTerminated)
     block(Ptr(pointerAddress))
 }
@@ -348,8 +353,7 @@ inline fun MemoryStack.readAscii(maxSize: Int, block: (ptr: Ptr<String>, size: P
     return MemoryUtil.memASCII(pText, pSize[0])
 }
 
-inline fun stack.readAscii(maxSize: Int, block: (Ptr<String>) -> Unit): String = with {readAscii(maxSize)
-}
+inline fun stack.readAscii(maxSize: Int, block: (ptr: Ptr<String>, size: Ptr<Int>) -> Unit): String = with { readAscii(maxSize, block) }
 
 //inline fun asciiAddress(givenSize: Int, block: (pLength: Ptr<Int>, address: Ptr<Char>) -> Unit): String =
 //    stack {
@@ -371,16 +375,23 @@ inline fun stack.readAscii(maxSize: Int, block: (Ptr<String>) -> Unit): String =
 //    }
 //}
 
-inline fun <R> stack.readUtf8(size: Int, block: (Ptr<String>) -> R): String = with {
+inline fun <R> stack.writeUtf8(text: String, nullTerminated: Boolean = true, block: (Ptr<String>) -> R) = with {
+    nUTF8(text, nullTerminated)
+    block(Ptr(pointerAddress))
+}
+
+inline fun <R> stack.readUtf8(size: Int, block: (Ptr<String>, Ptr<Int>) -> R): String = with {
     val adr = nmalloc(1, size)
-    block(Ptr(adr))
+    val pSize = nmalloc(Int.BYTES, Int.BYTES).toPtr<Int>()
+    block(Ptr(adr), pSize)
     return MemoryUtil.memUTF8(adr, size)
 }
-inline fun <R> stack.readUtf8Max(maxSize: Int, block: (Ptr<String>) -> R): String = with {
-    val adr = nmalloc(1, maxSize)
-    block(Ptr(adr))
-    return MemoryUtil.memUTF8(adr, strlen64NT1(adr, maxSize))
-}
+//
+//inline fun <R> stack.readUtf8Max(maxSize: Int, block: (Ptr<String>) -> R): String = with {
+//    val adr = nmalloc(1, maxSize)
+//    block(Ptr(adr))
+//    return MemoryUtil.memUTF8(adr, strlen64NT1(adr, maxSize))
+//}
 
 //inline fun stack.utf8Address(givenSize: Int, block: (pLength: Ptr, address: Ptr) -> Unit): String =
 //    Stack {

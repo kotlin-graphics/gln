@@ -2,6 +2,7 @@ package gln.misc
 
 import gln.CompareFunction
 import gln.L
+import gln.offHeapAdr
 import gln.offHeapPtr
 import kool.get
 import org.lwjgl.opengl.GL11C

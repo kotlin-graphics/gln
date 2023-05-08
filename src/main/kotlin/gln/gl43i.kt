@@ -73,7 +73,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferData">Reference Page</a>
      */
     fun clearBufferData(target: BufferTarget, internalFormat: InternalFormat, format: gl.ExternalFormat, type: gl.TypeFormat, data: Buffer? = null) =
-        GL43C.nglClearBufferData(target.i, internalFormat.i, format.i, type.i, data?.adr?.L ?: NULL)
+            GL43C.nglClearBufferData(target.i, internalFormat.i, format.i, type.i, data?.adr?.L ?: NULL)
 
     // --- [ glClearBufferSubData ] ---
 
@@ -93,7 +93,8 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferSubData">Reference Page</a>
      */
     fun clearBufferSubData(target: BufferTarget, internalFormat: InternalFormat, offset: Int, size: Int, format: gl.ExternalFormat, type: gl.TypeFormat, data: Buffer? = null) =
-        GL43C.nglClearBufferSubData(target.i, internalFormat.i, offset.L, size.L, format.i, type.i, data?.adr?.L ?: NULL)
+            GL43C.nglClearBufferSubData(target.i, internalFormat.i, offset.L, size.L, format.i, type.i, data?.adr?.L
+                    ?: NULL)
 
     // --- [ glDispatchCompute ] ---
 
@@ -162,7 +163,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCopyImageSubData">Reference Page</a>
      */
     fun copyImageSubData(srcName: GlTexture, srcTarget: TextureTarget, srcLevel: Int, srcRegion: Vec3i, dstName: GlTexture, dstTarget: TextureTarget, dstLevel: Int, dstRegion: Vec3i, srcSize: Vec3i) =
-        GL43C.glCopyImageSubData(srcName.name, srcTarget.i, srcLevel, srcRegion.x, srcRegion.y, srcRegion.z, dstName.name, dstTarget.i, dstLevel, dstRegion.x, dstRegion.y, dstRegion.z, srcSize.x, srcSize.y, srcSize.z)
+            GL43C.glCopyImageSubData(srcName.name, srcTarget.i, srcLevel, srcRegion.x, srcRegion.y, srcRegion.z, dstName.name, dstTarget.i, dstLevel, dstRegion.x, dstRegion.y, dstRegion.z, srcSize.x, srcSize.y, srcSize.z)
 
     // --- [ glDebugMessageControl ] ---
 
@@ -201,7 +202,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDebugMessageControl">Reference Page</a>
      */
     fun debugMessageControl(source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, ids: IntBuffer?, enabled: Boolean) =
-        GL43C.nglDebugMessageControl(source.i, type.i, severity.i, ids?.rem ?: 0, ids?.adr?.L ?: NULL, enabled)
+            GL43C.nglDebugMessageControl(source.i, type.i, severity.i, ids?.rem ?: 0, ids?.adr?.L ?: NULL, enabled)
 
     /**
      * Controls the volume of debug output in the active debug group, by disabling specific or groups of messages.
@@ -237,7 +238,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glDebugMessageControl">Reference Page</a>
      */
     fun debugMessageControl(source: GlDebugSource, type: GlDebugType, severity: GlDebugSeverity, id: Int, enabled: Boolean) =
-        GL43C.nglDebugMessageControl(source.i, type.i, severity.i, 1, id.toOffHeap(), enabled)
+            GL43C.nglDebugMessageControl(source.i, type.i, severity.i, 1, id.toOffHeap(), enabled)
 
     // --- [ glDebugMessageInsert ] ---
 
@@ -262,8 +263,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDebugMessageInsert">Reference Page</a>
      */
-    fun debugMessageInsert(source: GlDebugSource, type: GlDebugType, id: Int, severity: GlDebugSeverity, message: CharSequence) =
-        stack.writeUtf8ToAdr(message) { GL43C.nglDebugMessageInsert(source.i, type.i, id, severity.i, message.length, it.L) }
+    fun debugMessageInsert(source: GlDebugSource, type: GlDebugType, id: Int, severity: GlDebugSeverity, message: String) =
+            stack.writeUtf8(message) { GL43C.nglDebugMessageInsert(source.i, type.i, id, severity.i, message.length, it.adr.L) }
 
     // --- [ glDebugMessageCallback ] ---
 
@@ -300,7 +301,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDebugMessageCallback">Reference Page</a>
      */
-    fun debugMessageCallback(callback: GLDebugMessageCallbackI?, userParam: Ptr<*>) = GL43C.nglDebugMessageCallback(callback?.adr?.L ?: NULL, userParam.adr.L)
+    fun debugMessageCallback(callback: GLDebugMessageCallbackI?, userParam: Ptr<*>) = GL43C.nglDebugMessageCallback(callback?.adr?.L
+            ?: NULL, userParam.adr.L)
 
     // --- [ glGetDebugMessageLog ] ---
 
@@ -340,8 +342,9 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetDebugMessageLog">Reference Page</a>
      */
     fun getDebugMessageLog(count: Int, sources: IntBuffer?, types: IntBuffer?, ids: IntBuffer?, severities: IntBuffer?, lengths: IntBuffer?, messageLog: ByteBuffer?): Int =
-        GL43C.nglGetDebugMessageLog(count, messageLog?.rem ?: 0, sources?.adr?.L ?: NULL, types?.adr?.L ?: NULL, ids?.adr?.L ?: NULL,
-                                    severities?.adr?.L ?: NULL, lengths?.adr?.L ?: NULL, messageLog?.adr?.L ?: NULL)
+            GL43C.nglGetDebugMessageLog(count, messageLog?.rem ?: 0, sources?.adr?.L ?: NULL, types?.adr?.L
+                    ?: NULL, ids?.adr?.L ?: NULL,
+                    severities?.adr?.L ?: NULL, lengths?.adr?.L ?: NULL, messageLog?.adr?.L ?: NULL)
 
     // --- [ glPushDebugGroup ] ---
 
@@ -363,11 +366,11 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glPushDebugGroup">Reference Page</a>
      */
-    fun pushDebugGroup(source: GlDebugSource, id: Int, message: CharSequence) =
-        stack {
-            it.nUTF8(message, true)
-            GL43C.nglPushDebugGroup(source.i, id, message.length, it.pointerAddress)
-        }
+    fun pushDebugGroup(source: GlDebugSource, id: Int, message: String) =
+            stack {
+                it.nUTF8(message, true)
+                GL43C.nglPushDebugGroup(source.i, id, message.length, it.pointerAddress)
+            }
 
     // --- [ glPopDebugGroup ] ---
 
@@ -395,8 +398,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glObjectLabel">Reference Page</a>
      */
-    fun glObjectLabel(identifier: GlIdentifier, name: Int, label: CharSequence) =
-        stack.writeUtf8ToAdr(label) { GL43C.nglObjectLabel(identifier.i, name, label.length, it) }
+    fun glObjectLabel(identifier: GlIdentifier, name: Int, label: String) =
+            stack.writeUtf8(label) { GL43C.nglObjectLabel(identifier.i, name, label.length, it.adr.L) }
 
     // --- [ glGetObjectLabel ] ---
 
@@ -410,12 +413,9 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetObjectLabel">Reference Page</a>
      */
     fun getObjectLabel(identifier: GlIdentifier, name: Int, bufSize: Int = gln.gl.get(GL43C.GL_MAX_LABEL_LENGTH)): String =
-        stack {
-            val pLabel = it.nmalloc(1, bufSize)
-            val p = offHeapPtr.toPtr<Int>()
-            GL43C.nglGetObjectLabel(identifier.i, name, bufSize, offHeapAdr, pLabel)
-            MemoryUtil.memUTF8(pLabel, p[0])
-        }
+            stack.readUtf8(bufSize) { pLabel, pSize ->
+                GL43C.nglGetObjectLabel(identifier.i, name, bufSize, pSize.adr.L, pLabel.adr.L)
+            }
 
     // --- [ glObjectPtrLabel ] ---
 
@@ -427,7 +427,7 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glObjectPtrLabel">Reference Page</a>
      */
-    fun objectPtrLabel(ptr: Ptr<*>, label: CharSequence) = stack.writeUtf8ToAdr(label) { GL43C.nglObjectPtrLabel(ptr.adr.L, label.length, it.L) }
+    fun objectPtrLabel(ptr: Ptr<*>, label: String) = stack.writeUtf8(label) { GL43C.nglObjectPtrLabel(ptr.adr.L, label.length, it.adr.L) }
 
     // --- [ glGetObjectPtrLabel ] ---
 
@@ -440,12 +440,9 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetObjectPtrLabel">Reference Page</a>
      */
     fun getObjectPtrLabel(ptr: Ptr<*>, bufSize: Int = gln.gl.get(GL43C.GL_MAX_LABEL_LENGTH)): String =
-        stack {
-            val pLabel = it.nmalloc(1, bufSize)
-            val p = offHeapPtr.toPtr<Int>()
-            GL43C.nglGetObjectPtrLabel(ptr.adr.L, bufSize, offHeapAdr, pLabel)
-            MemoryUtil.memUTF8(pLabel, p[0])
-        }
+            stack.readUtf8(bufSize) { pLabel, pSize ->
+                GL43C.nglGetObjectPtrLabel(ptr.adr.L, bufSize, pSize.adr.L, pLabel.adr.L)
+            }
 
     // --- [ glFramebufferParameteri ] ---
 
@@ -479,7 +476,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateTexSubImage">Reference Page</a>
      */
     fun invalidateTexSubImage(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i) =
-        GL43C.glInvalidateTexSubImage(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z)
+            GL43C.glInvalidateTexSubImage(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z)
 
     // --- [ glInvalidateTexImage ] ---
 
@@ -541,8 +538,7 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebuffer">Reference Page</a>
      */
-    fun invalidateFramebuffer(target: FramebufferTarget, attachment: Attachment) =
-        Stack.intAdr(attachment.i) { GL43C.nglInvalidateFramebuffer(target.i, 1, it) }
+    fun invalidateFramebuffer(target: FramebufferTarget, attachment: Attachment) = GL43C.nglInvalidateFramebuffer(target.i, 1, attachment.i.toOffHeap())
 
     // --- [ glInvalidateSubFramebuffer ] ---
 
@@ -557,7 +553,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateSubFramebuffer">Reference Page</a>
      */
     fun invalidateSubFramebuffer(target: FramebufferTarget, offset: Vec2i, size: Vec2i, vararg attachments: Int) =
-        Stack { GL43C.nglInvalidateSubFramebuffer(target.i, attachments.size, it.ints(*attachments).adr, offset.x, offset.y, size.x, size.y) }
+            GL43C.nglInvalidateSubFramebuffer(target.i, attachments.size, attachments.toOffHeap(), offset.x, offset.y, size.x, size.y)
 
     /**
      * Invalidates the content of a region of some or all of a framebuffer object's attachments.
@@ -569,7 +565,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateSubFramebuffer">Reference Page</a>
      */
     fun invalidateSubFramebuffer(target: FramebufferTarget, offset: Vec2i, size: Vec2i, attachment: Attachment) =
-        Stack.intAdr(attachment.i) { GL43C.nglInvalidateSubFramebuffer(target.i, 1, it, offset.x, offset.y, size.x, size.y) }
+            GL43C.nglInvalidateSubFramebuffer(target.i, 1, attachment.i.toOffHeap(), offset.x, offset.y, size.x, size.y)
 
     // --- [ glMultiDrawArraysIndirect ] ---
 
@@ -606,7 +602,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawArraysIndirect">Reference Page</a>
      */
     fun multiDrawArraysIndirect(mode: DrawMode, indirect: ByteBuffer, primCount: Int, stride: Int) =
-        GL43C.nglMultiDrawArraysIndirect(mode.i, indirect.adr, primCount, stride)
+            GL43C.nglMultiDrawArraysIndirect(mode.i, indirect.adr.L, primCount, stride)
 
     /**
      * Renders multiple sets of primitives from array data, taking parameters from memory.
@@ -641,7 +637,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawArraysIndirect">Reference Page</a>
      */
     fun multiDrawArraysIndirect(mode: DrawMode, indirect: IntBuffer, primCount: Int, stride: Int) =
-        GL43C.nglMultiDrawArraysIndirect(mode.i, indirect.adr, primCount, stride)
+            GL43C.nglMultiDrawArraysIndirect(mode.i, indirect.adr.L, primCount, stride)
 
     // --- [ glMultiDrawElementsIndirect ] ---
 
@@ -680,7 +676,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsIndirect">Reference Page</a>
      */
     fun multiDrawElementsIndirect(mode: DrawMode, type: IndexType, indirect: ByteBuffer, primCount: Int, stride: Int) =
-        GL43C.nglMultiDrawElementsIndirect(mode.i, type.i, indirect.adr, primCount, stride)
+            GL43C.nglMultiDrawElementsIndirect(mode.i, type.i, indirect.adr.L, primCount, stride)
 
     /**
      * Renders multiple indexed primitives from array data, taking parameters from memory.
@@ -717,7 +713,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsIndirect">Reference Page</a>
      */
     fun multiDrawElementsIndirect(mode: DrawMode, type: IndexType, indirect: IntBuffer, primCount: Int, stride: Int) =
-        GL43C.nglMultiDrawElementsIndirect(mode.i, type.i, indirect.adr, primCount, stride)
+            GL43C.nglMultiDrawElementsIndirect(mode.i, type.i, indirect.adr.L, primCount, stride)
 
     // --- [ glGetProgramInterfaceiv ] ---
 
@@ -731,7 +727,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramInterface">Reference Page</a>
      */
     fun getProgramInterface(program: GlProgram, programInterface: ProgramInterface, name: GetProgramInterface): Int =
-        Stack.intAdr { GL43C.nglGetProgramInterfaceiv(program.name, programInterface.i, name.i, it) }
+            readInt { GL43C.nglGetProgramInterfaceiv(program.name, programInterface.i, name.i, it) }
 
     // --- [ glGetProgramResourceIndex ] ---
 
@@ -744,8 +740,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceIndex">Reference Page</a>
      */
-    fun getProgramResourceIndex(program: GlProgram, programInterface: ProgramInterface, name: CharSequence): Int =
-        Stack.utf8Address(name) { pName -> GL43C.nglGetProgramResourceIndex(program.name, programInterface.i, pName) }
+    fun getProgramResourceIndex(program: GlProgram, programInterface: ProgramInterface, name: String): Int =
+            stack.writeUtf8(name) { GL43C.nglGetProgramResourceIndex(program.name, programInterface.i, it.adr.L) }
 
     // --- [ glGetProgramResourceName ] ---
 
@@ -759,10 +755,11 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceName">Reference Page</a>
      */
-    fun getProgramResourceName(program: GlProgram, programInterface: ProgramInterface, index: Int, bufSize: Int = getProgramInterface(program, programInterface, GetProgramInterface.MAX_NAME_LENGTH)): String =
-        Stack.asciiAddress(bufSize) { pLength, pName ->
-            GL43C.nglGetProgramResourceName(program.name, programInterface.i, index, bufSize, pLength, pName)
-        }
+    fun getProgramResourceName(program: GlProgram, programInterface: ProgramInterface, index: Int,
+                               bufSize: Int = getProgramInterface(program, programInterface, GetProgramInterface.MAX_NAME_LENGTH)): String =
+            stack.readAscii(bufSize) { pLength, pName ->
+                GL43C.nglGetProgramResourceName(program.name, programInterface.i, index, bufSize, pLength.adr.L, pName.adr.L)
+            }
 
 
     // --- [ glGetProgramResourceiv ] ---
@@ -779,12 +776,11 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResource">Reference Page</a>
      */
-    fun getProgramResource(program: GlProgram, programInterface: ProgramInterface, index: Int, props: Int): Int =
-        Stack { s ->
-            s.intAdr { pParam ->
-                GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, 1, s.intAdr(props), 1, NULL, pParam)
-            }
-        }
+    fun getProgramResource(program: GlProgram, programInterface: ProgramInterface, index: Int, props: ProgramProperty): Int {
+        val p = offHeapPtr.toPtr<Int>()
+        p[1] = props.i
+        return readInt { GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, 1, (p + 1).adr.L, 1, NULL, it) }
+    }
 
     /**
      * Retrieves values for multiple properties of a single active resource within a program object.
@@ -799,8 +795,8 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResource">Reference Page</a>
      */
     fun getProgramResource(program: GlProgram, programInterface: ProgramInterface, index: Int, props: IntBuffer, length: IntBuffer?, params: IntBuffer) =
-        GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, props.rem, props.adr, params.rem, length?.adr
-            ?: NULL, params.adr)
+            GL43C.nglGetProgramResourceiv(program.name, programInterface.i, index, props.rem, props.adr.L, params.rem,
+                    length?.adr?.L ?: NULL, params.adr.L)
 
     // --- [ glGetProgramResourceLocation ] ---
 
@@ -813,8 +809,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceLocation">Reference Page</a>
      */
-    fun getProgramResourceLocation(program: GlProgram, programInterface: ProgramInterface, name: CharSequence): Int =
-        Stack.asciiAdr(name) { GL43C.nglGetProgramResourceLocation(program.name, programInterface.i, it) }
+    fun getProgramResourceLocation(program: GlProgram, programInterface: ProgramInterface, name: String): Int =
+            stack.writeAscii(name) { GL43C.nglGetProgramResourceLocation(program.name, programInterface.i, it.adr.L) }
 
     // --- [ glGetProgramResourceLocationIndex ] ---
 
@@ -827,8 +823,8 @@ interface gl43i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetProgramResourceLocationIndex">Reference Page</a>
      */
-    fun getProgramResourceLocationIndex(program: GlProgram, programInterface: ProgramInterface, name: CharSequence) =
-        Stack.asciiAdr(name) { GL43C.nglGetProgramResourceLocationIndex(program.name, programInterface.i, it) }
+    fun getProgramResourceLocationIndex(program: GlProgram, programInterface: ProgramInterface, name: String) =
+            stack.writeAscii(name) { GL43C.nglGetProgramResourceLocationIndex(program.name, programInterface.i, it.adr.L) }
 
     // --- [ glShaderStorageBlockBinding ] ---
 
@@ -842,7 +838,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glShaderStorageBlockBinding">Reference Page</a>
      */
     fun shaderStorageBlockBinding(program: GlProgram, storageBlockIndex: StorageBlockIndex, storageBlockBinding: Int) =
-        GL43C.glShaderStorageBlockBinding(program.name, storageBlockIndex, storageBlockBinding)
+            GL43C.glShaderStorageBlockBinding(program.name, storageBlockIndex, storageBlockBinding)
 
     // --- [ glTexBufferRange ] --- TODO -> GlBuffer?
 
@@ -858,7 +854,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTexBufferRange">Reference Page</a>
      */
     fun texBufferRange(internalFormat: InternalFormat, buffer: GlBuffer, offset: Int, size: Int) =
-        GL43C.glTexBufferRange(GL31C.GL_TEXTURE_BUFFER, internalFormat.i, buffer.name, offset.L, size.L)
+            GL43C.glTexBufferRange(GL31C.GL_TEXTURE_BUFFER, internalFormat.i, buffer.name, offset.L, size.L)
 
     // --- [ glTexStorage2DMultisample ] ---
 
@@ -925,7 +921,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glBindVertexBuffer">Reference Page</a>
      */
     fun bindVertexBuffer(bindingIndex: Int, buffer: GlBuffer, offset: Int, stride: Int) =
-        GL43C.glBindVertexBuffer(bindingIndex, buffer.name, offset.L, stride)
+            GL43C.glBindVertexBuffer(bindingIndex, buffer.name, offset.L, stride)
 
     // --- [ glVertexAttribFormat ] ---
 
@@ -942,7 +938,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribFormat">Reference Page</a>
      */
     fun vertexAttribFormat(attribIndex: Int, size: VertexAttrSize, type: VertexAttrType, normalized: Boolean, relativeOffset: Int) =
-        GL43C.glVertexAttribFormat(attribIndex, size, type.i, normalized, relativeOffset)
+            GL43C.glVertexAttribFormat(attribIndex, size, type.i, normalized, relativeOffset)
 
     // --- [ glVertexAttribIFormat ] ---
 
@@ -957,7 +953,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribIFormat">Reference Page</a>
      */
     fun vertexAttribIFormat(attribIndex: Int, size: VertexAttrSize, type: VertexAttrType, relativeOffset: Int) =
-        GL43C.glVertexAttribIFormat(attribIndex, size, type.i, relativeOffset)
+            GL43C.glVertexAttribIFormat(attribIndex, size, type.i, relativeOffset)
 
     // --- [ glVertexAttribLFormat ] ---
 
@@ -972,7 +968,7 @@ interface gl43i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glVertexAttribLFormat">Reference Page</a>
      */
     fun vertexAttribLFormat(attribIndex: Int, size: VertexAttrSize, type: VertexAttrType, relativeOffset: Int) =
-        GL43C.glVertexAttribLFormat(attribIndex, size, type.i, relativeOffset)
+            GL43C.glVertexAttribLFormat(attribIndex, size, type.i, relativeOffset)
 
     // --- [ glVertexAttribBinding ] --- TODO attribIndex and bindingIndex inline?
 

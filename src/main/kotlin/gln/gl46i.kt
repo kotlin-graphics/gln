@@ -4,7 +4,7 @@ import gln.identifiers.GlShader
 import kool.Ptr
 import kool.adr
 import kool.rem
-import kool.Stack
+import kool.stack
 import org.lwjgl.opengl.GL46C
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
@@ -49,8 +49,8 @@ interface gl46i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawArraysIndirectCount">Reference Page</a>
      */
-    fun multiDrawArraysIndirectCount(mode: DrawMode, indirect: ByteBuffer, drawCount: Ptr, maxDrawCount: Int, stride: Int) =
-            GL46C.nglMultiDrawArraysIndirectCount(mode.i, indirect.adr, drawCount, maxDrawCount, stride)
+    fun multiDrawArraysIndirectCount(mode: DrawMode, indirect: ByteBuffer, drawCount: Ptr<Byte>, maxDrawCount: Int, stride: Int) =
+            GL46C.nglMultiDrawArraysIndirectCount(mode.i, indirect.adr.L, drawCount.adr.L, maxDrawCount, stride)
 
     /**
      * Behaves similarly to {@link GL43C#glMultiDrawArraysIndirect MultiDrawArraysIndirect}, except that {@code drawCount} defines an offset (in bytes) into the buffer object bound to the
@@ -67,8 +67,8 @@ interface gl46i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawArraysIndirectCount">Reference Page</a>
      */
-    fun multiDrawArraysIndirectCount(mode: DrawMode, indirect: IntBuffer, drawCount: Ptr, maxDrawCount: Int, stride: Int) =
-            GL46C.nglMultiDrawArraysIndirectCount(mode.i, indirect.adr, drawCount, maxDrawCount, stride)
+    fun multiDrawArraysIndirectCount(mode: DrawMode, indirect: IntBuffer, drawCount: Ptr<Byte>, maxDrawCount: Int, stride: Int) =
+            GL46C.nglMultiDrawArraysIndirectCount(mode.i, indirect.adr.L, drawCount.adr.L, maxDrawCount, stride)
 
     // --- [ glMultiDrawElementsIndirectCount ] ---
 
@@ -88,8 +88,8 @@ interface gl46i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsIndirectCount">Reference Page</a>
      */
-    fun multiDrawElementsIndirectCount(mode: DrawMode, type: IndexType, indirect: ByteBuffer, drawCount: Ptr, maxDrawCount: Int, stride: Int) =
-            GL46C.nglMultiDrawElementsIndirectCount(mode.i, type.i, indirect.adr, drawCount, maxDrawCount, stride)
+    fun multiDrawElementsIndirectCount(mode: DrawMode, type: IndexType, indirect: ByteBuffer, drawCount: Ptr<Byte>, maxDrawCount: Int, stride: Int) =
+            GL46C.nglMultiDrawElementsIndirectCount(mode.i, type.i, indirect.adr.L, drawCount.adr.L, maxDrawCount, stride)
 
     /**
      * Behaves similarly to {@link GL43C#glMultiDrawElementsIndirect MultiDrawElementsIndirect}, except that {@code drawCount} defines an offset (in bytes) into the buffer object bound to the
@@ -107,8 +107,8 @@ interface gl46i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glMultiDrawElementsIndirectCount">Reference Page</a>
      */
-    fun multiDrawElementsIndirectCount(mode: DrawMode, type: IndexType, indirect: IntBuffer, drawCount: Ptr, maxDrawCount: Int, stride: Int) =
-            GL46C.nglMultiDrawElementsIndirectCount(mode.i, type.i, indirect.adr, drawCount, maxDrawCount, stride)
+    fun multiDrawElementsIndirectCount(mode: DrawMode, type: IndexType, indirect: IntBuffer, drawCount: Ptr<Byte>, maxDrawCount: Int, stride: Int) =
+            GL46C.nglMultiDrawElementsIndirectCount(mode.i, type.i, indirect.adr.L, drawCount.adr.L, maxDrawCount, stride)
 
     // --- [ glPolygonOffsetClamp ] ---
 
@@ -165,8 +165,8 @@ interface gl46i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glSpecializeShader">Reference Page</a>
      */
-    fun specializeShader(shader: GlShader, entryPoint: CharSequence, pConstantIndex: IntBuffer, pConstantValue: IntBuffer) =
-            Stack.utf8Address(entryPoint) { pEntryPoint ->
-                GL46C.nglSpecializeShader(shader.name, pEntryPoint, pConstantIndex.rem, pConstantIndex.adr, pConstantValue.adr)
+    fun specializeShader(shader: GlShader, entryPoint: String, pConstantIndex: IntBuffer, pConstantValue: IntBuffer) =
+            stack.writeUtf8(entryPoint) { pEntryPoint ->
+                GL46C.nglSpecializeShader(shader.name, pEntryPoint.adr.L, pConstantIndex.rem, pConstantIndex.adr.L, pConstantValue.adr.L)
             }
 }

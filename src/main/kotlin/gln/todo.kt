@@ -41,6 +41,3 @@ infix fun Mat4.at(ptr: Ptr<Byte>): Long {
 infix operator fun ULong.plus(int: Int): Long = toLong() + int
 val ULong.L: Long
     get() = toLong()
-
-inline operator fun Ptr<Int>.minus(offset: Int): Ptr<Int> = plus(offset.toULong())
-inline operator fun Ptr<*>.minus(offset: Int): Ptr<*> = plus(offset.toULong())

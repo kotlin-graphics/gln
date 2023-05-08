@@ -9,7 +9,7 @@ import gln.identifiers.GlRenderbuffer
 import gln.identifiers.GlVertexArray
 import gln.sampler.GlSampler
 import kool.Ptr
-import kool.Stack
+import kool.stack
 import org.lwjgl.opengl.*
 
 interface glGetSet {
@@ -19,14 +19,14 @@ interface glGetSet {
     private fun bool(pName: Int) = GL30C.glGetInteger(pName).bool
     private fun long(pName: Int) = GL32C.glGetInteger64(pName)
     private fun long(pName: Int, index: Int) = GL32C.glGetInteger64i(pName, index)
-    private fun pointer(pName: Int): Ptr = Stack.pointerAdr { GL11C.nglGetPointerv(pName, it) }
+    private fun pointer(pName: Int): Ptr<*> = readPointer { GL11C.nglGetPointerv(pName, it) }
 
     fun float(pName: Int) = GL11C.glGetFloat(pName)
 
 
-    fun vec2(pName: Int): Vec2 = Stack.vec2Address { GL11C.nglGetFloatv(pName, it) }
+    fun vec2(pName: Int): Vec2 = readVec2 { GL11C.nglGetFloatv(pName, it) }
 
-    fun vec4(pName: Int): Vec4 = Stack.vec4Address { GL11C.nglGetFloatv(pName, it) }
+    fun vec4(pName: Int): Vec4 = readVec4 { GL11C.nglGetFloatv(pName, it) }
 
 
     val arrayBufferBinding: Int
@@ -135,8 +135,7 @@ interface glGetSet {
     val sampleCoverageInvert: Boolean
         get() = bool(GL13.GL_SAMPLE_COVERAGE_INVERT)
 
-    fun sampleMaskValue(index: Int): Int =
-            Stack.intAdr { GL30.nglGetIntegeri_v(GL32.GL_SAMPLE_MASK_VALUE, index, it) }
+    fun sampleMaskValue(index: Int): Int = readInt { GL30.nglGetIntegeri_v(GL32.GL_SAMPLE_MASK_VALUE, index, it) }
 
     val samplerBinding: GlSampler
         get() = GlSampler(int(GL33.GL_SAMPLER_BINDING))
@@ -275,33 +274,33 @@ interface glGetSet {
 
     // glGetPointerv
 
-    val colorArrayPointer: Ptr
+    val colorArrayPointer: Ptr<*>
         get() = pointer(GL11.GL_COLOR_ARRAY_POINTER)
 
-    val edgeFlagArrayPointer: Ptr
+    val edgeFlagArrayPointer: Ptr<*>
         get() = pointer(GL11.GL_EDGE_FLAG_ARRAY_POINTER)
 
-    val feedbackBufferPointer: Ptr
+    val feedbackBufferPointer: Ptr<*>
         get() = pointer(GL11.GL_FEEDBACK_BUFFER_POINTER)
 
-    val indexArrayPointer: Ptr
+    val indexArrayPointer: Ptr<*>
         get() = pointer(GL11.GL_INDEX_ARRAY_POINTER)
 
-    val normalArrayPointer: Ptr
+    val normalArrayPointer: Ptr<*>
         get() = pointer(GL11.GL_NORMAL_ARRAY_POINTER)
 
-    val textureCoordArrayPointer: Ptr
+    val textureCoordArrayPointer: Ptr<*>
         get() = pointer(GL11.GL_TEXTURE_COORD_ARRAY_POINTER)
 
-    val selectionBufferPointer: Ptr
+    val selectionBufferPointer: Ptr<*>
         get() = pointer(GL11.GL_SELECTION_BUFFER_POINTER)
 
-    val vertexArrayPointer: Ptr
+    val vertexArrayPointer: Ptr<*>
         get() = pointer(GL11.GL_VERTEX_ARRAY_POINTER)
 
-    val debugCallbackFunction: Ptr
+    val debugCallbackFunction: Ptr<*>
         get() = pointer(GL43.GL_DEBUG_CALLBACK_FUNCTION)
 
-    val debugCallbackUserParam: Ptr
+    val debugCallbackUserParam: Ptr<*>
         get() = pointer(GL43.GL_DEBUG_CALLBACK_USER_PARAM)
 }

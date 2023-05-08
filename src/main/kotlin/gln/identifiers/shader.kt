@@ -27,9 +27,9 @@ value class GlShader(val name: Int) {
 
     // --- [ glShaderSource ] ---
 
-    infix fun source(source: CharSequence) = gl.shaderSource(this, source)
+    infix fun source(source: String) = gl.shaderSource(this, source)
 
-    fun source(vararg sources: CharSequence) = gl.shaderSource(this, *sources)
+    fun source(vararg sources: String) = gl.shaderSource(this, *sources)
 
     // --- [ glGetShaderiv ] ---
 
@@ -60,7 +60,7 @@ value class GlShader(val name: Int) {
 
     // --- [ glSpecializeShader ] ---
 
-    fun specialize(entryPoint: CharSequence, pConstantIndex: IntBuffer, pConstantValue: IntBuffer) = gl.specializeShader(this, entryPoint, pConstantIndex, pConstantValue)
+    fun specialize(entryPoint: String, pConstantIndex: IntBuffer, pConstantValue: IntBuffer) = gl.specializeShader(this, entryPoint, pConstantIndex, pConstantValue)
 
     companion object {
         // --- [ glCreateShader ] ---

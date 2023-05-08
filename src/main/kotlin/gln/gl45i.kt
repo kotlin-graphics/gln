@@ -5,17 +5,13 @@ import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 import glm_.vec4.Vec4i
 import glm_.vec4.Vec4ui
-import gln.identifiers.GlFramebuffer
-import gln.identifiers.GlFramebuffers
 import gln.identifiers.*
-import gln.identifiers.GlRenderbuffer
-import gln.identifiers.GlRenderbuffers
 import gln.transformFeedback.GlTransformFeedback
 import gln.transformFeedback.GlTransformFeedbacks
 import kool.Ptr
 import kool.adr
 import kool.rem
-import kool.Stack
+import kool.toPtr
 import org.lwjgl.opengl.GL15C
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL45C
@@ -80,8 +76,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTransformFeedbacks">Reference Page</a>
      */
-    fun createTransformFeedbacks(): GlTransformFeedback =
-            GlTransformFeedback(Stack.intAdr { GL45C.nglCreateTransformFeedbacks(1, it) })
+    fun createTransformFeedbacks(): GlTransformFeedback = GlTransformFeedback(readInt { GL45C.nglCreateTransformFeedbacks(1, it) })
 
     // --- [ glTransformFeedbackBufferBase ] ---
 
@@ -94,8 +89,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTransformFeedbackBufferBase">Reference Page</a>
      */
-    fun transformFeedbackBufferBase(xfb: GlTransformFeedback, index: Int, buffer: GlBuffer) =
-            GL45C.glTransformFeedbackBufferBase(xfb.name, index, buffer.name)
+    fun transformFeedbackBufferBase(xfb: GlTransformFeedback, index: Int, buffer: GlBuffer) = GL45C.glTransformFeedbackBufferBase(xfb.name, index, buffer.name)
 
     // --- [ glTransformFeedbackBufferRange ] ---
 
@@ -132,7 +126,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateBuffers">Reference Page</a>
      */
-    fun createBuffers(buffers: GlBuffers) = GL45C.nglCreateBuffers(buffers.rem, buffers.adr)
+    fun createBuffers(buffers: GlBuffers) = GL45C.nglCreateBuffers(buffers.rem, buffers.adr.L)
 
     /**
      * Returns {@code n} previously unused buffer names in {@code buffers}, each representing a new buffer object initialized as if it had been bound to an
@@ -140,7 +134,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateBuffers">Reference Page</a>
      */
-    fun createBuffers(): GlBuffer = GlBuffer(Stack.intAdr { GL45C.nglCreateBuffers(1, it) })
+    fun createBuffers(): GlBuffer = GlBuffer(readInt { GL45C.nglCreateBuffers(1, it) })
 //
 //    // --- [ glNamedBufferStorage ] --- TODO
 //
@@ -464,7 +458,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferData">Reference Page</a>
      */
-    fun bufferData(buffer: GlBuffer, data: Buffer, usage: Usage) = GL45C.nglNamedBufferData(buffer.name, data.rem.L, data.adr, usage.i)
+    fun bufferData(buffer: GlBuffer, data: Buffer, usage: Usage) = GL45C.nglNamedBufferData(buffer.name, data.rem.L, data.adr.L, usage.i)
 
     // --- [ glNamedBufferSubData ] ---
 
@@ -476,8 +470,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glBufferSubData">Reference Page</a>
      */
-    fun bufferSubData(buffer: GlBuffer, offset: Int, data: Buffer) =
-            GL45C.nglNamedBufferSubData(buffer.name, offset.L, data.rem.L, data.adr)
+    fun bufferSubData(buffer: GlBuffer, offset: Int, data: Buffer) = GL45C.nglNamedBufferSubData(buffer.name, offset.L, data.rem.L, data.adr.L)
 
     // --- [ glCopyNamedBufferSubData ] ---
 
@@ -511,7 +504,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferData">Reference Page</a>
      */
     fun clearBufferData(buffer: GlBuffer, internalFormat: InternalFormat, format: Int, type: Int, data: Buffer? = null) =
-            GL45C.nglClearNamedBufferData(buffer.name, internalFormat.i, format, type, data?.adr ?: NULL)
+            GL45C.nglClearNamedBufferData(buffer.name, internalFormat.i, format, type, data?.adr?.L ?: NULL)
 
     // --- [ glClearNamedBufferSubData ] --- TODO format and type
 
@@ -531,7 +524,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearBufferSubData">Reference Page</a>
      */
     fun clearBufferSubData(buffer: GlBuffer, internalformat: Int, offset: Int, size: Int, format: Int, type: Int, data: Buffer? = null) =
-            GL45C.nglClearNamedBufferSubData(buffer.name, internalformat, offset.L, size.L, format, type, data?.adr
+            GL45C.nglClearNamedBufferSubData(buffer.name, internalformat, offset.L, size.L, format, type, data?.adr?.L
                     ?: NULL)
 
     // --- [ glMapNamedBuffer ] ---
@@ -607,8 +600,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferPointerv">Reference Page</a>
      */
-    infix fun getBufferPointer(buffer: GlBuffer): Ptr =
-            Stack.pointerAdr { GL45C.nglGetNamedBufferPointerv(buffer.name, GL15C.GL_BUFFER_MAP_POINTER, it) }
+    infix fun getBufferPointer(buffer: GlBuffer): Ptr<*> = readPointer { GL45C.nglGetNamedBufferPointerv(buffer.name, GL15C.GL_BUFFER_MAP_POINTER, it) }
 
     // --- [ glGetNamedBufferSubData ] ---
 
@@ -621,8 +613,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetBufferSubData">Reference Page</a>
      */
-    fun getBufferSubData(buffer: GlBuffer, offset: Int, data: Buffer) =
-            GL45C.nglGetNamedBufferSubData(buffer.name, offset.L, data.rem.L, data.adr)
+    fun getBufferSubData(buffer: GlBuffer, offset: Int, data: Buffer) = GL45C.nglGetNamedBufferSubData(buffer.name, offset.L, data.rem.L, data.adr.L)
 
     // --- [ glCreateFramebuffers ] ---
 
@@ -633,8 +624,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateFramebuffers">Reference Page</a>
      */
-    fun createFramebuffers(framebuffers: GlFramebuffers) =
-            GL45C.nglCreateFramebuffers(framebuffers.rem, framebuffers.adr)
+    fun createFramebuffers(framebuffers: GlFramebuffers) = GL45C.nglCreateFramebuffers(framebuffers.rem, framebuffers.adr.L)
 
     /**
      * Returns {@code n} previously unused framebuffer names in {@code framebuffers}, each representing a new framebuffer object.
@@ -650,8 +640,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateFramebuffers">Reference Page</a>
      */
-    fun createFramebuffers(): GlFramebuffer =
-            GlFramebuffer(Stack.intAdr { GL45C.nglCreateFramebuffers(1, it) })
+    fun createFramebuffers(): GlFramebuffer = GlFramebuffer(readInt { GL45C.nglCreateFramebuffers(1, it) })
 
     // --- [ glNamedFramebufferRenderbuffer ] ---
 
@@ -723,8 +712,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferDrawBuffer">Reference Page</a>
      */
-    fun framebufferDrawBuffer(framebuffer: GlFramebuffer, buf: Int) =
-            GL45C.glNamedFramebufferDrawBuffer(framebuffer.name, buf)
+    fun framebufferDrawBuffer(framebuffer: GlFramebuffer, buf: Int) = GL45C.glNamedFramebufferDrawBuffer(framebuffer.name, buf)
 
     // --- [ glNamedFramebufferDrawBuffers ] ---
 
@@ -736,8 +724,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferDrawBuffers">Reference Page</a>
      */
-    fun framebufferDrawBuffers(framebuffer: GlFramebuffer, bufs: IntBuffer) =
-            GL45C.nglNamedFramebufferDrawBuffers(framebuffer.name, bufs.rem, bufs.adr)
+    fun framebufferDrawBuffers(framebuffer: GlFramebuffer, bufs: IntBuffer) = GL45C.nglNamedFramebufferDrawBuffers(framebuffer.name, bufs.rem, bufs.adr.L)
 
     /**
      * DSA version of {@link GL20C#glDrawBuffers DrawBuffers}. TODO rename to framebufferDrawBuffer?
@@ -746,8 +733,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferDrawBuffers">Reference Page</a>
      */
-    fun framebufferDrawBuffers(framebuffer: GlFramebuffer, buf: Int) =
-            Stack.intAdr(buf) { GL45C.nglNamedFramebufferDrawBuffers(framebuffer.name, 1, it) }
+    fun framebufferDrawBuffers(framebuffer: GlFramebuffer, buf: Int) = GL45C.nglNamedFramebufferDrawBuffers(framebuffer.name, 1, buf.toOffHeap())
 
     // --- [ glNamedFramebufferReadBuffer ] ---
 
@@ -759,8 +745,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glFramebufferReadBuffer">Reference Page</a>
      */
-    fun framebufferReadBuffer(framebuffer: GlFramebuffer, src: Int) =
-            GL45C.glNamedFramebufferReadBuffer(framebuffer.name, src)
+    fun framebufferReadBuffer(framebuffer: GlFramebuffer, src: Int) = GL45C.glNamedFramebufferReadBuffer(framebuffer.name, src)
 
     // --- [ glInvalidateNamedFramebufferData ] ---
 
@@ -773,7 +758,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferData">Reference Page</a>
      */
     fun invalidateFramebufferData(framebuffer: GlFramebuffer, attachments: IntBuffer) =
-            GL45C.nglInvalidateNamedFramebufferData(framebuffer.name, attachments.rem, attachments.adr)
+            GL45C.nglInvalidateNamedFramebufferData(framebuffer.name, attachments.rem, attachments.adr.L)
 
     /**
      * DSA version of {@link GL43C#glInvalidateFramebuffer InvalidateFramebuffer}.
@@ -783,7 +768,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferData">Reference Page</a>
      */
     fun invalidateFramebufferData(framebuffer: GlFramebuffer, attachment: Attachment) =
-            Stack.intAdr(attachment.i) { GL45C.nglInvalidateNamedFramebufferData(framebuffer.name, 1, it) }
+            GL45C.nglInvalidateNamedFramebufferData(framebuffer.name, 1, attachment.i.toOffHeap())
 
     // --- [ glInvalidateNamedFramebufferSubData ] ---
 
@@ -798,7 +783,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
      */
     fun invalidateFramebufferSubData(framebuffer: GlFramebuffer, attachments: IntBuffer, offset: Vec2i, size: Vec2i) =
-            GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, attachments.rem, attachments.adr, offset.x, offset.y, size.x, size.y)
+            GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, attachments.rem, attachments.adr.L, offset.x, offset.y, size.x, size.y)
 
     /**
      * DSA version of {@link GL43C#glInvalidateSubFramebuffer InvalidateSubFramebuffer}.
@@ -810,7 +795,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glInvalidateFramebufferSubData">Reference Page</a>
      */
     fun invalidateFramebufferSubData(framebuffer: GlFramebuffer, attachment: Attachment, offset: Vec2i, size: Vec2i) =
-            Stack.intAdr(attachment.i) { GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, it, offset.x, offset.y, size.x, size.y) }
+            GL45C.nglInvalidateNamedFramebufferSubData(framebuffer.name, 1, attachment.i.toOffHeap(), offset.x, offset.y, size.x, size.y)
 
     // --- [ glClearNamedFramebufferiv ] ---
 
@@ -826,7 +811,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
      */
     fun clearFramebuffer(framebuffer: GlFramebuffer, buffer: BufferType, drawBuffer: Int, value: IntBuffer) =
-            GL45C.nglClearNamedFramebufferiv(framebuffer.name, buffer.i, drawBuffer, value.adr)
+            GL45C.nglClearNamedFramebufferiv(framebuffer.name, buffer.i, drawBuffer, value.adr.L)
 
     // --- [ glClearNamedFramebufferuiv ] ---
 
@@ -857,7 +842,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glClearFramebuffer">Reference Page</a>
      */
     fun clearFramebuffer(framebuffer: GlFramebuffer, buffer: BufferType, drawbuffer: Int, value: FloatBuffer) =
-            GL45C.nglClearNamedFramebufferfv(framebuffer.name, buffer.i, drawbuffer, value.adr)
+            GL45C.nglClearNamedFramebufferfv(framebuffer.name, buffer.i, drawbuffer, value.adr.L)
 
     // --- [ glClearNamedFramebufferfi ] ---
 
@@ -918,16 +903,14 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateRenderbuffers">Reference Page</a>
      */
-    fun createRenderbuffers(renderbuffers: GlRenderbuffers) =
-            GL45C.nglCreateRenderbuffers(renderbuffers.rem, renderbuffers.adr)
+    fun createRenderbuffers(renderbuffers: GlRenderbuffers) = GL45C.nglCreateRenderbuffers(renderbuffers.rem, renderbuffers.adr.L)
 
     /**
      * Returns {@code n} previously unused renderbuffer names in {@code renderbuffers}, each representing a new renderbuffer object.
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateRenderbuffers">Reference Page</a>
      */
-    fun createRenderbuffers(): GlRenderbuffer =
-            GlRenderbuffer(Stack.intAdr { GL45C.nglCreateRenderbuffers(1, it) })
+    fun createRenderbuffers(): GlRenderbuffer = GlRenderbuffer(readInt { GL45C.nglCreateRenderbuffers(1, it) })
 
     // --- [ glNamedRenderbufferStorage ] ---
 
@@ -939,8 +922,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glRenderbufferStorage">Reference Page</a>
      */
-    fun renderbufferStorage(renderbuffer: GlRenderbuffer, internalFormat: Int, size: Vec2i) =
-            GL45C.glNamedRenderbufferStorage(renderbuffer.name, internalFormat, size.x, size.y)
+    fun renderbufferStorage(renderbuffer: GlRenderbuffer, internalFormat: Int, size: Vec2i) = GL45C.glNamedRenderbufferStorage(renderbuffer.name, internalFormat, size.x, size.y)
 
     // --- [ glNamedRenderbufferStorageMultisample ] ---
 
@@ -966,8 +948,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetRenderbufferParameter">Reference Page</a>
      */
-    fun getRenderbufferParameter(renderbuffer: GlRenderbuffer, name: GetRenderbuffer): Int =
-            Stack.intAdr { GL45C.nglGetNamedRenderbufferParameteriv(renderbuffer.name, name.i, it) }
+    fun getRenderbufferParameter(renderbuffer: GlRenderbuffer, name: GetRenderbuffer): Int = readInt { GL45C.nglGetNamedRenderbufferParameteriv(renderbuffer.name, name.i, it) }
 
     // --- [ glCreateTextures ] ---
 
@@ -979,8 +960,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
      */
-    fun createTextures(target: TextureTarget, textures: GlTextures) =
-            GL45C.nglCreateTextures(target.i, textures.rem, textures.adr)
+    fun createTextures(target: TextureTarget, textures: GlTextures) = GL45C.nglCreateTextures(target.i, textures.rem, textures.adr)
 
     /**
      * Returns {@code n} previously unused texture names in {@code textures}, each representing a new texture object.
@@ -989,8 +969,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glCreateTextures">Reference Page</a>
      */
-    fun createTextures(target: TextureTarget): GlTexture =
-            GlTexture(Stack.intAdr { GL45C.nglCreateTextures(target.i, 1, it) })
+    fun createTextures(target: TextureTarget): GlTexture = GlTexture(readInt { GL45C.nglCreateTextures(target.i, 1, it) })
 
     // --- [ glTextureBuffer ] ---
 
@@ -1003,8 +982,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTextureBuffer">Reference Page</a>
      */
-    fun texBuffer(texture: GlTexture, internalFormat: InternalFormat, buffer: GlBuffer) =
-            GL45C.glTextureBuffer(texture.name, internalFormat.i, buffer.name)
+    fun texBuffer(texture: GlTexture, internalFormat: InternalFormat, buffer: GlBuffer) = GL45C.glTextureBuffer(texture.name, internalFormat.i, buffer.name)
 
     // --- [ glTextureBufferRange ] ---
 
@@ -1120,7 +1098,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTextureSubImage1D">Reference Page</a>
      */
     fun texSubImage1D(texture: GlTexture, level: Int, offset: Int, width: Int, format: Int, type: Int, pixels: Buffer) =
-            GL45C.nglTextureSubImage1D(texture.name, level, offset, width, format, type, pixels.adr)
+            GL45C.nglTextureSubImage1D(texture.name, level, offset, width, format, type, pixels.adr.L)
 
     // --- [ glTextureSubImage2D ] ---
 
@@ -1138,7 +1116,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTextureSubImage2D">Reference Page</a>
      */
     fun texSubImage2D(texture: GlTexture, level: Int, offset: Vec2i, size: Vec2i, format: Int, type: Int, pixels: Buffer) =
-        GL45C.nglTextureSubImage2D(texture.name, level, offset.x, offset.y, size.x, size.y, format, type, pixels.adr)
+            GL45C.nglTextureSubImage2D(texture.name, level, offset.x, offset.y, size.x, size.y, format, type, pixels.adr.L)
 
     // --- [ glTextureSubImage3D ] ---
 
@@ -1156,7 +1134,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glTextureSubImage3D">Reference Page</a>
      */
     fun texSubImage3D(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i, format: Int, type: Int, pixels: Buffer) =
-        GL45C.nglTextureSubImage3D(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format, type, pixels.adr)
+            GL45C.nglTextureSubImage3D(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format, type, pixels.adr.L)
 
     // --- [ glCompressedTextureSubImage1D ] ---
 
@@ -1173,7 +1151,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTextureSubImage1D">Reference Page</a>
      */
     fun compressedTexSubImage1D(texture: GlTexture, level: Int, offset: Int, width: Int, format: Int, data: ByteBuffer) =
-        GL45C.nglCompressedTextureSubImage1D(texture.name, level, offset, width, format, data.rem, data.adr)
+            GL45C.nglCompressedTextureSubImage1D(texture.name, level, offset, width, format, data.rem, data.adr.L)
 
     // --- [ glCompressedTextureSubImage2D ] ---
 
@@ -1191,7 +1169,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTextureSubImage2D">Reference Page</a>
      */
     fun compressedTexSubImage2D(texture: GlTexture, level: Int, offset: Vec2i, size: Vec2i, format: Int, data: ByteBuffer) =
-        GL45C.nglCompressedTextureSubImage2D(texture.name, level, offset.x, offset.y, size.x, size.y, format, data.rem, data.adr)
+            GL45C.nglCompressedTextureSubImage2D(texture.name, level, offset.x, offset.y, size.x, size.y, format, data.rem, data.adr.L)
 
     // --- [ glCompressedTextureSubImage3D ] ---
 
@@ -1208,7 +1186,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glCompressedTextureSubImage3D">Reference Page</a>
      */
     fun compressedTexSubImage3D(texture: GlTexture, level: Int, offset: Vec3i, size: Vec3i, format: Int, data: ByteBuffer) =
-        GL45C.nglCompressedTextureSubImage3D(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format, data.rem, data.adr)
+            GL45C.nglCompressedTextureSubImage3D(texture.name, level, offset.x, offset.y, offset.z, size.x, size.y, size.z, format, data.rem, data.adr.L)
 
     // --- [ glCopyTextureSubImage1D ] ---
 
@@ -1318,8 +1296,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTextureParameter">Reference Page</a>
      */
-    fun texParameterI(texture: GlTexture, name: TexParameter, param: Vec4i) =
-            Stack.vec4iAddress(param) { GL45C.nglTextureParameterIiv(texture.name, name.i, it) }
+    fun texParameterI(texture: GlTexture, name: TexParameter, param: Vec4i) = GL45C.nglTextureParameterIiv(texture.name, name.i, param.toOffHeap())
 
     // --- [ glTextureParameterIuiv ] ---
 
@@ -1332,8 +1309,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glTextureParameter">Reference Page</a>
      */
-    fun texParameterI(texture: GlTexture, name: TexParameter, param: Vec4ui) =
-            Stack.vec4uiAddress(param) { GL45C.nglTextureParameterIuiv(texture.name, name.i, it) }
+    fun texParameterI(texture: GlTexture, name: TexParameter, param: Vec4ui) = GL45C.nglTextureParameterIuiv(texture.name, name.i, param.toOffHeap())
 
 //    // --- [ glTextureParameteriv ] ---
 //
@@ -1397,7 +1373,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetTextureImage">Reference Page</a>
      */
     fun getTexImage(texture: GlTexture, level: Int, format: TextureFormat2, type: TextureType2, pixels: ByteBuffer) =
-            GL45C.nglGetTextureImage(texture.name, level, format.i, type.i, pixels.rem, pixels.adr)
+            GL45C.nglGetTextureImage(texture.name, level, format.i, type.i, pixels.rem, pixels.adr.L)
 
 //    /** TODO?
 //     * DSA version of {@link GL11C#glGetTexImage GetTexImage}.
@@ -1852,7 +1828,7 @@ interface gl45i {
      * @see <a target="_blank" href="http://docs.gl/gl4/glReadnPixels">Reference Page</a>
      */
     fun readnPixels(pixel: Vec2i, size: Vec2i, format: TextureFormat3, type: TextureType2, pixels: ByteBuffer) =
-        GL45C.nglReadnPixels(pixel.x, pixel.y, size.x, size.y, format.i, type.i, pixels.rem, pixels.adr)
+            GL45C.nglReadnPixels(pixel.x, pixel.y, size.x, size.y, format.i, type.i, pixels.rem, pixels.adr.L)
 
 //    /** TODO?
 //     * Behaves identically to {@link GL11C#glReadPixels ReadPixels} except that it does not write more than {@code bufSize} bytes into {@code data}
@@ -1916,8 +1892,7 @@ interface gl45i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glGetnCompressedTexImage">Reference Page</a>
      */
-    fun getnCompressedTexImage(target: TextureTarget, level: Int, img: ByteBuffer) =
-        GL45C.nglGetnCompressedTexImage(target.i, level, img.rem, img.adr)
+    fun getnCompressedTexImage(target: TextureTarget, level: Int, img: ByteBuffer) = GL45C.nglGetnCompressedTexImage(target.i, level, img.rem, img.adr.L)
 
 //    // --- [ glGetnUniformfv ] --- TODO?
 //

@@ -1,7 +1,6 @@
 package gln
 
 import glm_.bool
-import kool.Stack
 import kool.adr
 import kool.rem
 import org.lwjgl.opengl.GL32C
@@ -24,9 +23,7 @@ value class GlSync(val L: Long) {
             SyncStatus(GL32C.nglClientWaitSync(L, if (flushFirst) GL32C.GL_SYNC_FLUSH_COMMANDS_BIT else 0, timeout.L))
 
     val isSignaled: Boolean
-        get() = Stack.intAdr {
-            GL32C.nglGetSynciv(L, GL32C.GL_SYNC_STATUS, 1, NULL, it)
-        }.bool
+        get() = readInt { GL32C.nglGetSynciv(L, GL32C.GL_SYNC_STATUS, 1, NULL, it) }.bool
 
     companion object {
         fun new() = GlSync(GL32C.glFenceSync(GL32C.GL_SYNC_GPU_COMMANDS_COMPLETE, 0))
@@ -81,5 +78,5 @@ value class UintBuffer(val data: IntBuffer) {
         get() = data.rem
 
     inline val adr: Long
-        get() = data.adr
+        get() = data.adr.L
 }
