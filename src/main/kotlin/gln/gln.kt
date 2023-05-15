@@ -30,6 +30,7 @@ inline fun glBlitFramebuffer(size: Vec2i) = GL30.glBlitFramebuffer(
         GL11.GL_COLOR_BUFFER_BIT, GL11.GL_LINEAR)
 
 
+// TODO move to `gl`
 inline fun glClearColor() = GL11.glClearColor(0f, 0f, 0f, 1f)
 inline fun glClearColor(float: Float) = GL11.glClearColor(float, float, float, float)
 inline fun glClearColor(color: Color) = GL11.glClearColor(color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f)
