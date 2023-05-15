@@ -1377,7 +1377,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glEnableVertexAttribArray">Reference Page</a>
      */
-    fun enableVertexAttribArray(index: Int) = GL20C.glEnableVertexAttribArray(index)
+    infix fun enableVertexAttribArray(index: Int) = GL20C.glEnableVertexAttribArray(index)
 
     /**
      * Enables a generic vertex attribute array.
@@ -1386,7 +1386,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glEnableVertexAttribArray">Reference Page</a>
      */
-    fun enableVertexAttribArray(attribute: VertexAttribute) = GL20C.glEnableVertexAttribArray(attribute.index)
+    infix fun enableVertexAttribArray(attribute: VertexAttribute) = GL20C.glEnableVertexAttribArray(attribute.index)
 
     /**
      * Enables a generic vertex attribute array.
@@ -1395,8 +1395,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glEnableVertexAttribArray">Reference Page</a>
      */
-    fun enableVertexAttribArray(vertexLayout: VertexLayout) =
-            vertexLayout.attributes.forEach { GL20C.glEnableVertexAttribArray(it.index) }
+    infix fun enableVertexAttribArray(vertexLayout: VertexLayout) = vertexLayout.attributes.forEach { GL20C.glEnableVertexAttribArray(it.index) }
 
     // --- [ glDisableVertexAttribArray ] ---
 
@@ -1407,7 +1406,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDisableVertexAttribArray">Reference Page</a>
      */
-    fun disableVertexAttribArray(index: Int) = GL20C.glDisableVertexAttribArray(index)
+    infix fun disableVertexAttribArray(index: Int) = GL20C.glDisableVertexAttribArray(index)
 
     /**
      * Disables a generic vertex attribute array.
@@ -1416,7 +1415,7 @@ interface gl20i {
      *
      * @see <a target="_blank" href="http://docs.gl/gl4/glDisableVertexAttribArray">Reference Page</a>
      */
-    fun disableVertexAttribArray(attribute: VertexAttribute) = GL20C.glDisableVertexAttribArray(attribute.index)
+    infix fun disableVertexAttribArray(attribute: VertexAttribute) = GL20C.glDisableVertexAttribArray(attribute.index)
 
     // --- [ glBindAttribLocation ] ---
 
